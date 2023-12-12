@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>albianj-framework</groupId>
+    <artifactId>Albianj</artifactId>
+    <version>10009</version>
+    <modules>
+        <module>Albianj.Commons</module>
+        <module>Albianj.Kernel</module>
+        <module>Albianj.Kernel.Impl</module>
+        <module>Albianj.Loader</module>
+        <module>Albianj.Persistence</module>
+        <module>Albianj.Persistence.Impl</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <scm>
+        <developerConnection>scm:git:http://gitlab.inner.yuewen.local/albianj-framework/albianj-framework.git
+        </developerConnection>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.locales>zh_CN</project.build.locales>
+<!--        <project.build.jdk>1.7</project.build.jdk>-->
+        <common.lang3.version>3.4</common.lang3.version>
+        <common.io.version>2.4</common.io.version>
+        <common.codec.version>1.9</common.codec.version>
+        <jedis.version>2.7.2</jedis.version>
+        <slf4j-api.version>1.7.21</slf4j-api.version>
+        <junit.version>4.12</junit.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api.version}</version>
+                <optional>true</optional>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${common.lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${common.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${common.codec.version}</version>
+            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>redis.clients</groupId>-->
+<!--                <artifactId>jedis</artifactId>-->
+<!--                <version>${jedis.version}</version>-->
+<!--            </dependency>-->
+        </dependencies>
+    </dependencyManagement>
+
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>yw-qa</id>-->
+<!--            <name>yw-qa</name>-->
+<!--            <url>http://qdnexus.inner.yuewen.local/nexus/content/groups/public/</url>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+<!--      -->
+<!--        <repository>-->
+<!--            <id>nrzx-nexus</id>-->
+<!--            <name>nrzx-nexus</name>-->
+<!--            <url>http://maven.yuewen.com/nexus/content/groups/nrzx/</url>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--            </snapshots>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>yw-qa</id>-->
+<!--            <name>QA team nrzx</name>-->
+<!--            <url>http://qdnexus.inner.yuewen.local/nexus/content/repositories/nrzx-releases/</url>-->
+<!--        </repository>-->
+
+<!--        <snapshotRepository>-->
+<!--            <id>yw-qa-snapshot</id>-->
+<!--            <name>QA team nrzx-snapshot</name>-->
+<!--            <url>http://qdnexus.inner.yuewen.local/nexus/content/repositories/snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>15</source>
+                    <target>15</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <!-- 要将源码放上去，需要加入这个插件 -->
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

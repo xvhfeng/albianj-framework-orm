@@ -10,6 +10,11 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# Build Artifacts
+.gradle/
+build/
+target/
+
 # Package Files #
 *.jar
 *.war
@@ -22,3 +27,22 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Eclipse Project Files
+
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA Files
+
+*.iml
+*.ipr
+*.iws
+*.idea
+
+#vs
+settings.json
+
+*.DS_Store
+Thumbs.db
