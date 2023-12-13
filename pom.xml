@@ -6,7 +6,7 @@
 
     <groupId>albianj-framework</groupId>
     <artifactId>Albianj</artifactId>
-    <version>10009</version>
+    <version>10009-dev</version>
     <modules>
         <module>Albianj.Commons</module>
         <module>Albianj.Kernel</module>

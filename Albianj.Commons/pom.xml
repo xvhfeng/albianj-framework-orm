@@ -5,12 +5,12 @@
     <parent>
         <artifactId>Albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>10009</version>
+        <version>10009-dev</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Albianj.Commons</artifactId>
-    <version>10009</version>
+    <version>10009-dev</version>
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
