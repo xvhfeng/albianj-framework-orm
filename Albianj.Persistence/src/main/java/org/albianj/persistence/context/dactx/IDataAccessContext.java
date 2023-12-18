@@ -4,6 +4,8 @@ import org.albianj.persistence.context.IPersistenceCompensateNotify;
 import org.albianj.persistence.context.IPersistenceNotify;
 import org.albianj.persistence.object.IAlbianObject;
 
+import java.util.List;
+
 /*
     对于单个数据库，单表，支持in
     PreparedStatement statement = connection.prepareStatement("Select * from test where field in (?)");
@@ -14,6 +16,12 @@ statement.setArray(1, array);
  */
 
 public interface IDataAccessContext {
+
+    IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity);
+
+    IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias);
+
+    IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias, String tableAlias);
 
     IDataAccessContext add(int opt, IAlbianObject entiry);
 

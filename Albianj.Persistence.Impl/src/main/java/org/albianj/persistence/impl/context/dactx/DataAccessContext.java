@@ -30,6 +30,42 @@ public class DataAccessContext implements IDataAccessContext {
         entitis = new ArrayList<>();
     }
 
+     @Override
+     public IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity) {
+        entity.forEach(e -> {
+            IAlbianObjectWarp warp = new AlbianObjectWarp();
+            warp.setEntry(e);
+            warp.setPersistenceOpt(opt);
+            entitis.add(warp);
+        });
+
+        return this;
+    }
+
+    @Override
+    public IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias) {
+         entity.forEach(e -> {
+            IAlbianObjectWarp warp = new AlbianObjectWarp();
+            warp.setEntry(e);
+            warp.setPersistenceOpt(opt);
+             warp.setStorageAliasName(storageAlias);
+            entitis.add(warp);
+        });
+        return this;
+    }
+
+    @Override
+    public IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias, String tableAlias) {
+        entity.forEach(e -> {
+            IAlbianObjectWarp warp = new AlbianObjectWarp();
+            warp.setEntry(e);
+            warp.setPersistenceOpt(opt);
+             warp.setStorageAliasName(storageAlias);
+             warp.setTableAliasName(tableAlias);
+            entitis.add(warp);
+        });
+        return this;
+    }
 
     @Override
     public IDataAccessContext add(int opt, IAlbianObject entity) {
