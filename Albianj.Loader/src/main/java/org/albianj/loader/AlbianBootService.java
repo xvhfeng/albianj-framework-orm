@@ -76,6 +76,17 @@ public class AlbianBootService {
     }
 
     public static boolean start(String classpath, String kernelPath, String configPath) {
+
+        /* keep save load log4j2
+        LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
+        File conFile = new File("C:\\SJMZ20200301\\DriveA\\09_dev\\conf\\log4j2.xml");
+        logContext.setConfigLocation(conFile.toURI());
+        logContext.reconfigure();
+        */
+
+
+
+
 //        String sVersion = null;
 //        String epath = System.getProperty("java.ext.dirs");
 //        File dir = new File(classpath);

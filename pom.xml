@@ -25,13 +25,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locales>zh_CN</project.build.locales>
-<!--        <project.build.jdk>1.7</project.build.jdk>-->
         <common.lang3.version>3.4</common.lang3.version>
         <common.io.version>2.4</common.io.version>
         <common.codec.version>1.9</common.codec.version>
-        <jedis.version>2.7.2</jedis.version>
-        <slf4j-api.version>1.7.21</slf4j-api.version>
+        <slf4j-api.version>2.0.9</slf4j-api.version>
         <junit.version>4.12</junit.version>
+        <log4j.version>2.22.0</log4j.version>
+        <slf4j-log4j.version>2.22.0</slf4j-log4j.version>
     </properties>
 
     <dependencyManagement>
@@ -42,6 +42,17 @@
                 <version>${slf4j-api.version}</version>
                 <optional>true</optional>
                 <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <!-- 日志桥接包   桥接包的版本须对应log4j2的版本 -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>${log4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -64,50 +75,8 @@
                 <artifactId>commons-codec</artifactId>
                 <version>${common.codec.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>redis.clients</groupId>-->
-<!--                <artifactId>jedis</artifactId>-->
-<!--                <version>${jedis.version}</version>-->
-<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
-
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>yw-qa</id>-->
-<!--            <name>yw-qa</name>-->
-<!--            <url>http://qdnexus.inner.yuewen.local/nexus/content/groups/public/</url>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--      -->
-<!--        <repository>-->
-<!--            <id>nrzx-nexus</id>-->
-<!--            <name>nrzx-nexus</name>-->
-<!--            <url>http://maven.yuewen.com/nexus/content/groups/nrzx/</url>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--            </releases>-->
-<!--        </repository>-->
-<!--    </repositories>-->
-<!--    <distributionManagement>-->
-<!--        <repository>-->
-<!--            <id>yw-qa</id>-->
-<!--            <name>QA team nrzx</name>-->
-<!--            <url>http://qdnexus.inner.yuewen.local/nexus/content/repositories/nrzx-releases/</url>-->
-<!--        </repository>-->
-
-<!--        <snapshotRepository>-->
-<!--            <id>yw-qa-snapshot</id>-->
-<!--            <name>QA team nrzx-snapshot</name>-->
-<!--            <url>http://qdnexus.inner.yuewen.local/nexus/content/repositories/snapshots/</url>-->
-<!--        </snapshotRepository>-->
-<!--    </distributionManagement>-->
-
 
     <build>
         <plugins>
