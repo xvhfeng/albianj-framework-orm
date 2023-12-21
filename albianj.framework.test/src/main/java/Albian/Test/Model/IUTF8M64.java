@@ -1,6 +1,7 @@
 package Albian.Test.Model;
 
-import org.albianj.persistence.object.IAlbianObject;
+
+import org.albianj.orm.object.IAlbianObject;
 
 public interface IUTF8M64 extends IAlbianObject {
     int getId();

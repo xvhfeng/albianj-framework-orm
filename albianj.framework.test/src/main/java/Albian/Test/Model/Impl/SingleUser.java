@@ -1,9 +1,9 @@
 package Albian.Test.Model.Impl;
 
 import Albian.Test.Model.ISingleUser;
-import org.albianj.persistence.object.FreeAlbianObject;
-import org.albianj.persistence.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.persistence.object.rants.AlbianObjectRant;
+import org.albianj.orm.object.FreeAlbianObject;
+import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.orm.object.rants.AlbianObjectRant;
 
 import java.math.BigInteger;
 

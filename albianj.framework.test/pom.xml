@@ -15,7 +15,7 @@
 
         <dependency>
             <groupId>albianj-framework</groupId>
-            <artifactId>albianj.framework.persistence.Impl</artifactId>
+            <artifactId>albianj.framework</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

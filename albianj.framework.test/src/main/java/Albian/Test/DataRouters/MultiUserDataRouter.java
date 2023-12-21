@@ -1,7 +1,8 @@
 package Albian.Test.DataRouters;
 
 import Albian.Test.Model.IMultiUser;
-import org.albianj.persistence.object.*;
+import org.albianj.orm.object.*;
+
 
 import java.util.ArrayList;
 import java.util.List;

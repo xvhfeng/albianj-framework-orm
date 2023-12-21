@@ -1,7 +1,7 @@
 package Albian.Test.Model.Impl;
 
 import Albian.Test.Model.IOrgSingleUser;
-import org.albianj.persistence.object.FreeAlbianObject;
+import org.albianj.orm.object.FreeAlbianObject;
 
 import java.math.BigInteger;
 
