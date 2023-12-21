@@ -3,7 +3,7 @@ package org.albianj.logger;
 /**
  * Created by xuhaifeng on 17/2/9.
  */
-public enum AlbianLoggerLevel {
+public enum LogLevel {
     Debug("DEBUG", 0),
     Info("INFO", 1),
     Warn("WARN", 2),
@@ -13,7 +13,7 @@ public enum AlbianLoggerLevel {
     private String tag = "D";
     private int level = 0;
 
-    AlbianLoggerLevel(String tag, int level) {
+    LogLevel(String tag, int level) {
         this.level = level;
         this.tag = tag;
     }

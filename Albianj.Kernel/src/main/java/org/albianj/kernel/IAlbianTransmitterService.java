@@ -42,6 +42,8 @@ import java.util.Date;
 public interface IAlbianTransmitterService {
     static String Name = "AlbianKernelBootService";
 
+
+
     Date getStartDateTime();
 
     String getSerialId();
@@ -55,7 +57,7 @@ public interface IAlbianTransmitterService {
      * @param path
      * @throws Exception
      */
-    void start(String configUrl) throws Exception;
+    void start(String configUrl) throws Throwable;
 
     /**
      * ??????Albianj?????????kernel?????????????????????????????????????????????
@@ -65,9 +67,9 @@ public interface IAlbianTransmitterService {
      * @param configPath
      * @throws Exception
      */
-    void start(String kernelpath, String configPath) throws Exception;
+    void start(String kernelpath, String configPath) throws Throwable;
 
-    public void doStart() throws Exception;
+    public void doStart() throws Throwable;
 
     /**
      * ??????albianj
@@ -80,11 +82,11 @@ public interface IAlbianTransmitterService {
      *
      * @throws Exception
      */
-    void start() throws Exception;
+    void start() throws Throwable;
 
     String requestHandlerContext();
 
-    void unload() throws Exception;
+    void unload() throws Throwable;
 
     void makeEnvironment();
 }

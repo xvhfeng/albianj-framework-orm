@@ -41,9 +41,8 @@ import org.albianj.aop.AlbianAopAttribute;
 import org.albianj.io.Path;
 import org.albianj.kernel.AlbianKernel;
 import org.albianj.kernel.KernelSetting;
-import org.albianj.service.parser.AlbianParserException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 
 import java.io.File;
 
@@ -55,7 +54,6 @@ import java.io.File;
 @AlbianKernel
 public abstract class FreeAlbianService implements IAlbianService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreeAlbianService.class);
     boolean enableProxy = false;
     IAlbianService service = null;
     private AlbianServiceLifetime state = AlbianServiceLifetime.Normal;
@@ -73,7 +71,7 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void loading() throws AlbianServiceException, AlbianParserException {
+    public void loading() throws Throwable {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Loading;
     }
@@ -104,7 +102,7 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void init() throws AlbianParserException {
+    public void init() throws Throwable {
         // TODO Auto-generated method stub
 
     }
@@ -169,7 +167,7 @@ public abstract class FreeAlbianService implements IAlbianService {
      * @return
      */
     @AlbianAopAttribute(avoid = true)
-    protected String findConfigFile(String filename) {
+    protected String findConfigFile(String filename) throws Throwable {
         try {
             File f = new File(filename);
             if (f.exists()){
@@ -181,21 +179,19 @@ public abstract class FreeAlbianService implements IAlbianService {
                 return f.getAbsolutePath();
             }
 
-            //throw new RuntimeException("not found the filename:."+filename);
-            logger.error("not found the config filename:{}", filename);
-            if("storage.xml".equals(filename)|| "persistence.xml".equals(filename)){
-                throw new RuntimeException("not found the filename."+filename);
-            }
+            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                    "not found the config filename:{}", filename);
             return null;
         } catch (Exception e) {
-            logger.error("not found the config filename:{}", filename);
-            throw new RuntimeException("not found the filename."+filename);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                    "not found the config filename:{}", filename);
         }
+        return filename;
     }
 
     @AlbianAopAttribute(avoid = true)
     @Deprecated
-    protected String confirmConfigFile(String filename) {
+    protected String confirmConfigFile(String filename) throws Throwable {
         return findConfigFile(filename);
     }
 

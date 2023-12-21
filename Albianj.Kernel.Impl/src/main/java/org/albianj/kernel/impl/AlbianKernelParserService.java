@@ -37,13 +37,15 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl;
 
-import org.albianj.except.AlbianRuntimeException;
 import org.albianj.io.Path;
 import org.albianj.kernel.AlbianLevel;
 import org.albianj.kernel.AlbianStartupMode;
 import org.albianj.kernel.KernelSetting;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.service.AlbianBuiltinServiceNamePair;
 import org.albianj.service.AlbianServiceRant;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.FreeAlbianParserService;
 import org.albianj.service.parser.IAlbianParserService;
 import org.albianj.verify.Validate;
@@ -64,14 +66,15 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
         this.file = fileName;
     }
 
-    public void init() {
+    public void init() throws Throwable {
         try {
             Properties props = PropertiesParser.load(Path
                     .getExtendResourcePath(KernelSetting
                             .getAlbianKernelConfigFilePath() + file));
             parser(props);
         } catch (Exception e) {
-            throw new AlbianRuntimeException("load the kernel properties is fail.pls look at the file:"+file);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                    "load the kernel properties is fail.pls look at the file:{} ", file);
         }
     }
 
@@ -93,14 +96,14 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
         if (Validate.isNullOrEmptyOrAllSpace(coreSize)) {
             KernelSetting.setThreadPoolCoreSize(5);
         } else {
-            KernelSetting.setThreadPoolCoreSize(new Integer(coreSize));
+            KernelSetting.setThreadPoolCoreSize(Integer.parseInt(coreSize));
         }
         String maxSize = PropertiesParser.getValue(props, "ThreadPoolMaxSize");
         if (Validate.isNullOrEmptyOrAllSpace(maxSize)) {
             KernelSetting.setThreadPoolMaxSize(Runtime.getRuntime()
                     .availableProcessors() * 2 + 1);
         } else {
-            KernelSetting.setThreadPoolMaxSize(new Integer(maxSize));
+            KernelSetting.setThreadPoolMaxSize(Integer.parseInt(maxSize));
         }
 
         String sLevel = PropertiesParser.getValue(props, "Level");

@@ -76,7 +76,7 @@ import java.util.List;
  * <pre>
  *   <code>
  * private static IAlbianPersistenceService getPersistenceService() {
- * IAlbianPersistenceService aps = AlbianServiceRouter.getSingletonService(IAlbianPersistenceService.class,
+ * IAlbianPersistenceService aps = AlbianServiceRouter.getService(IAlbianPersistenceService.class,
  * IAlbianPersistenceService.Name, true);
  * return aps;
  * }
@@ -107,7 +107,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return 是否完成删除
      * @throws AlbianDataServiceException
      */
-    boolean remove(String sessionId, IAlbianObject object) throws AlbianDataServiceException;
+    boolean remove(String sessionId, IAlbianObject object) throws Throwable;
 
     /**
      * 从存储中删除指定的对象
@@ -127,7 +127,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws AlbianDataServiceException;
+                   Object compensateCallbackObject) throws Throwable;
 
     /**
      * 从存储中删除指定的对象集合
@@ -141,7 +141,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return 是否完成删除
      * @throws AlbianDataServiceException
      */
-    boolean remove(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException;
+    boolean remove(String sessionId, List<? extends IAlbianObject> objects) throws Throwable;
 
     /**
      * 从存储中删除指定的对象集合
@@ -161,7 +161,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws AlbianDataServiceException;
+                   Object compensateCallbackObject) throws Throwable;
 
 
     /**
@@ -178,7 +178,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return 是否保存成功
      * @throws AlbianDataServiceException
      */
-    boolean save(String sessionId, IAlbianObject object) throws AlbianDataServiceException;
+    boolean save(String sessionId, IAlbianObject object) throws Throwable;
 
     /**
      * 保存对象到存储层
@@ -201,7 +201,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
     boolean save(String sessionId, IAlbianObject object,
                  IPersistenceNotify notifyCallback, Object notifyCallbackObject,
                  IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 保存对象集合到存储层
@@ -217,7 +217,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return 是否保存成功
      * @throws AlbianDataServiceException
      */
-    boolean save(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException;
+    boolean save(String sessionId, List<? extends IAlbianObject> objects) throws Throwable;
 
     /**
      * 保存对象集合到存储层
@@ -239,7 +239,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                  Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                 Object compensateCallbackObject) throws AlbianDataServiceException;
+                 Object compensateCallbackObject) throws Throwable;
 
     /**
      * 从存储层加载数据
@@ -252,7 +252,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层加载数据
@@ -266,7 +266,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, String rountingName, IChainExpression wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层加载数据
@@ -284,7 +284,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
-                                           Statement statement) throws AlbianDataServiceException;
+                                           Statement statement) throws Throwable;
 
     /**
      * 从存储层批量加载数据
@@ -297,7 +297,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层批量加载数据
@@ -313,7 +313,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   IChainExpression f, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层批量加载数据
@@ -328,7 +328,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   IChainExpression f, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层批量加载数据
@@ -346,7 +346,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
-                                                  Statement statement) throws AlbianDataServiceException;
+                                                  Statement statement) throws Throwable;
 
     /**
      * 从存储层批量加载数据
@@ -362,7 +362,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, IChainExpression f)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层批量加载数据
@@ -379,7 +379,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层批量加载数据
@@ -397,7 +397,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层获取满足条件的对象数量
@@ -410,7 +410,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     /**
      * 从存储层获取满足条件的对象数量
@@ -425,53 +425,53 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType,
                                                     String rountingName, IChainExpression wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, String rountingName, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType,
                                                     String rountingName, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
 
     /**
@@ -481,7 +481,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     @Deprecated
-    boolean create(String sessionId, IAlbianObject object) throws AlbianDataServiceException;
+    boolean create(String sessionId, IAlbianObject object) throws Throwable;
 
     /**
      * @param sessionId
@@ -496,7 +496,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
     @Deprecated
     boolean create(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws AlbianDataServiceException;
+                   Object compensateCallbackObject) throws Throwable;
 
     /**
      * @param sessionId
@@ -505,7 +505,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     @Deprecated
-    boolean create(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException;
+    boolean create(String sessionId, List<? extends IAlbianObject> objects) throws Throwable;
 
     /**
      * @param sessionId
@@ -520,7 +520,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
     @Deprecated
     boolean create(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws AlbianDataServiceException;
+                   Object compensateCallbackObject) throws Throwable;
 
     /**
      * @param sessionId
@@ -529,7 +529,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     @Deprecated
-    boolean modify(String sessionId, IAlbianObject object) throws AlbianDataServiceException;
+    boolean modify(String sessionId, IAlbianObject object) throws Throwable;
 
     /**
      * @param sessionId
@@ -544,7 +544,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
     @Deprecated
     boolean modify(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws AlbianDataServiceException;
+                   Object compensateCallbackObject) throws Throwable;
 
     /**
      * @param sessionId
@@ -553,7 +553,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     @Deprecated
-    boolean modify(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException;
+    boolean modify(String sessionId, List<? extends IAlbianObject> objects) throws Throwable;
 
     /**
      * @param sessionId
@@ -568,97 +568,97 @@ public interface IAlbianPersistenceService extends IAlbianService {
     @Deprecated
     boolean modify(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws AlbianDataServiceException;
+                   Object compensateCallbackObject) throws Throwable;
 
     String makeDetailLogSessionId(String sessionId);
 
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
                                                   LoadType loadType, String rountingName, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, String rountingName, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
                                                   LoadType loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     @Deprecated
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
 
 }

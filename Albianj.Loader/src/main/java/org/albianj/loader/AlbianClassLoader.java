@@ -46,4 +46,8 @@ public class AlbianClassLoader extends ClassLoader {
     public static synchronized ClassLoader getInstance() {
         return Thread.currentThread().getContextClassLoader();
     }
+
+    public static synchronized String getResourcePath() {
+        return Thread.currentThread().getContextClassLoader().getResource("").getPath();
+    }
 }

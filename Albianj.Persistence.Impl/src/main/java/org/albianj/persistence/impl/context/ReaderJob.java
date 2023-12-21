@@ -59,7 +59,7 @@ public class ReaderJob implements IReaderJob {
 
     public ReaderJob(String sessionId) {
         if (Validate.isNullOrEmptyOrAllSpace(sessionId)) {
-            this.id = AlbianServiceRouter.getLogIdService().makeLoggerId();
+            this.id = AlbianServiceRouter.make32UUID();
         } else {
             this.id = sessionId;
         }

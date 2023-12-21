@@ -5,12 +5,11 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.albianj.aop.*;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.logger.AlbianLoggerLevel;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.IAlbianService;
 import org.albianj.verify.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -20,12 +19,12 @@ import java.util.Map;
  */
 public class AlbianServiceAopProxy implements MethodInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(AlbianServiceAopProxy.class);
     IAlbianService _service = null;
     Map<String, IAlbianServiceAopAttribute> _aopAttributes = null;
+    String sessionId = null;
 
 
-    public Object newInstance(IAlbianService service, Map<String, IAlbianServiceAopAttribute> aopAttributes) {
+    public Object newInstance(String sessionId,IAlbianService service, Map<String, IAlbianServiceAopAttribute> aopAttributes) throws Throwable {
         this._service = service;
         this._aopAttributes = aopAttributes;
         try {
@@ -38,7 +37,8 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
             Object proxy = enhancer.create(); //创建代理类
             return proxy;
         } catch (Exception e) {
-            logger.error("AlbianServiceAopProxy newInstance is error ",e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "AlbianServiceAopProxy newInstance is error ");
         }
         return null;
     }
@@ -72,7 +72,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
 
         Object rc = null;
         for (IAlbianServiceAopAttribute asaa : _aopAttributes.values()) {
-            IAlbianAopService aas = AlbianServiceRouter.getSingletonService(
+            IAlbianAopService aas = AlbianServiceRouter.getService(sessionId,
                     IAlbianAopService.class, asaa.getServiceName(), false);
             if (null == aas) continue;
 
@@ -80,8 +80,9 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
                 try {
                     aas.before(ctx, _service, method, args);
                 } catch (Throwable e) {
-                    logger.error("AOPService AlbianRuntime execute before method in the aop service:{} "
-                        + "for real service:{} is fail.", asaa.getServiceName(), this._service.getServiceName(), e);
+                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+                            "AOPService AlbianRuntime execute before method in the aop service:{} for real service:{} is fail.",
+                            asaa.getServiceName(), this._service.getServiceName());
                 }
             }
         }
@@ -91,12 +92,13 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
             rc = methodProxy.invokeSuper(proxy, args);
         } catch (Throwable e) {
             throwable = e;
-            logger.error("AOPService AlbianRuntime exception in proxy service:{} method:{} ",
-                this._service.getServiceName(), mName, e);
+            AlbianServiceRouter.log(sessionId,LogTarget.Running,LogLevel.Error,e,
+                    "AOPService AlbianRuntime exception in proxy service:{} method:{} ",
+                    this._service.getServiceName(), mName);
         }
 
         for (IAlbianServiceAopAttribute asaa : _aopAttributes.values()) {
-            IAlbianAopService aas = AlbianServiceRouter.getSingletonService(
+            IAlbianAopService aas = AlbianServiceRouter.getService(sessionId,
                     IAlbianAopService.class, asaa.getServiceName(), false);
             if (null == aas) continue;
 
@@ -104,8 +106,9 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
                 try {
                     aas.after(ctx, _service, method, rc, throwable, args);
                 } catch (Throwable e) {
-                    logger.error("AOPService AlbianRuntime exception in the after method in the aop service:{} "
-                        + "for real service:{}is fail. ", asaa.getServiceName(), this._service.getServiceName(), e);
+                    AlbianServiceRouter.log(sessionId,LogTarget.Running,LogLevel.Warn,e,
+                            "AOPService AlbianRuntime exception in the after method in the aop service:{} for real service:{} is fail. ",
+                            asaa.getServiceName(), this._service.getServiceName());
                 }
             }
         }

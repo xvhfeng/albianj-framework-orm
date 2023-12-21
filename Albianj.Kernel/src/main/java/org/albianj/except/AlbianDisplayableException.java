@@ -15,6 +15,10 @@ public class AlbianDisplayableException extends Exception {
     private String brief;
     private int code = ExceptionUtil.ExceptForWarn;
 
+    public AlbianDisplayableException(String msg){
+        this.msg = msg;
+    }
+
     /**
      * 创建一个新异常
      * @param brief : 简短的异常描述,通常可以包括异常的id,唯一性指标,业务/模块名称等等

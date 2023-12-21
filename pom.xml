@@ -28,10 +28,10 @@
         <common.lang3.version>3.4</common.lang3.version>
         <common.io.version>2.4</common.io.version>
         <common.codec.version>1.9</common.codec.version>
-        <slf4j-api.version>2.0.9</slf4j-api.version>
         <junit.version>4.12</junit.version>
+        <slf4j-api.version>2.0.9</slf4j-api.version>
         <log4j.version>2.22.0</log4j.version>
-        <slf4j-log4j.version>2.22.0</slf4j-log4j.version>
+        <lombok.version>1.18.30</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -75,6 +75,12 @@
                 <artifactId>commons-codec</artifactId>
                 <version>${common.codec.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -108,5 +114,19 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

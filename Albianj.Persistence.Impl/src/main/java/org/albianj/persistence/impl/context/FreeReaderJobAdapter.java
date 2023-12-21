@@ -55,7 +55,7 @@ import java.util.Map;
 
 public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
-    protected abstract StringBuilder makeSltCmdTxt(int sbStyle, StringBuilder sbCols, String tableName,
+    protected abstract StringBuilder makeSltCmdTxt(String sessionId,int sbStyle, StringBuilder sbCols, String tableName,
                                                    StringBuilder sbWhere, StringBuilder sbOrderby,
                                                    int start, int step, String idxName);
 
@@ -64,7 +64,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
     protected abstract StringBuilder makeSltCmdCols(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle);
 
-    protected abstract IStorageAttribute makeReaderToStorageCtx(IAlbianObjectAttribute objAttr,
+    protected abstract IStorageAttribute makeReaderToStorageCtx(String sessionId,IAlbianObjectAttribute objAttr,
                                                                 boolean isExact,
                                                                 String storageAlias,
                                                                 String tableAlias,
@@ -103,7 +103,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(objAttr, isExact, null, null, drouterAlias,
+        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         StringBuilder sbCols = makeSltCmdCols(sessionId, objAttr, stgAttr.getDatabaseStyle());
@@ -114,7 +114,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
         StringBuilder sbOdrs = makeSltCmdOdrs(sessionId, objAttr, orderbys, stgAttr.getDatabaseStyle());
 
-        StringBuilder sbCmdTxt = makeSltCmdTxt(stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
+        StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhrs, sbOdrs, start, step, idxName);
 
         IPersistenceCommand cmd = new PersistenceCommand();
@@ -148,7 +148,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(objAttr, isExact, null, null, drouterAlias,
+        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         StringBuilder sbCols = makeSltCmdCount(stgAttr.getDatabaseStyle());
@@ -159,7 +159,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
         StringBuilder sbOdrs = makeSltCmdOdrs(sessionId, objAttr, orderbys, stgAttr.getDatabaseStyle());
 
-        StringBuilder sbCmdTxt = makeSltCmdTxt(stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
+        StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhrs, sbOdrs, -1, -1, idxName);
 
         IPersistenceCommand cmd = new PersistenceCommand();
@@ -193,7 +193,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(objAttr, isExact, storageAlias, tableAlias, drouterAlias,
+        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         Map<String, ISqlParameter> paras = new HashMap<>();
@@ -204,7 +204,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         ChainExpressionParser.toConditionText(sessionId, implClzz, objAttr, stgAttr, f, sbWhere, paras);
         StringBuilder sbOdrs = makeSltCmdOdrs(sessionId, objAttr, orderbys, stgAttr.getDatabaseStyle());
 
-        StringBuilder sbCmdTxt = makeSltCmdTxt(stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
+        StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhere, sbOdrs, start, step, idxName);
 
         IPersistenceCommand cmd = new PersistenceCommand();
@@ -237,7 +237,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(objAttr, isExact, storageAlias, tableAlias, drouterAlias,
+        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         Map<String, ISqlParameter> paras = new HashMap<>();
@@ -248,7 +248,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         ChainExpressionParser.toConditionText(sessionId, implClzz, objAttr, stgAttr, f, sbWhere, paras);
         StringBuilder sbOdrs = makeSltCmdOdrs(sessionId, objAttr, orderbys, stgAttr.getDatabaseStyle());
 
-        StringBuilder sbCmdTxt = makeSltCmdTxt(stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
+        StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhere, sbOdrs, -1, -1, idxName);
 
         IPersistenceCommand cmd = new PersistenceCommand();

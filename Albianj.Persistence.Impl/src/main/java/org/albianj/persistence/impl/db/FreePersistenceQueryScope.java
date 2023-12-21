@@ -37,6 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.impl.db;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.context.IReaderJob;
 import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.db.PersistenceCommandType;
@@ -51,70 +53,74 @@ import java.util.List;
 public abstract class FreePersistenceQueryScope implements IPersistenceQueryScope {
 
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     IReaderJob job) throws AlbianDataServiceException {
+                                                     IReaderJob job) throws Throwable {
         try {
             perExecute(job);
             executing(job);
             List<T> list = executed(cls, job);
             return list;
         } catch (Throwable e) {
-            throw new AlbianDataServiceException("execute data query is fail.", e);
+            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Sql, LogLevel.Error,e,
+                    "execute data query is fail.");
         } finally {
             unloadExecute(job);
         }
-        //return null;
+        return null;
     }
 
     public Object execute(
-            IReaderJob job) throws AlbianDataServiceException {
+            IReaderJob job) throws Throwable {
         try {
             perExecute(job);
             executing(job);
             Object o = executed(job.getId(), job);
             return o;
-        } catch (AlbianDataServiceException e) {
-            throw new AlbianDataServiceException("execute data query is fail.", e);
+        } catch (Throwable e) {
+            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Sql, LogLevel.Error,e,
+                    "execute data query is fail.");
         } finally {
             unloadExecute(job);
         }
-        //return null;
+        return null;
     }
 
     public <T extends IAlbianObject> List<T> execute(String sessionId, Class<T> cls,
-                                                     PersistenceCommandType cmdType, Statement statement) throws AlbianDataServiceException {
+                                                     PersistenceCommandType cmdType, Statement statement) throws Throwable {
         ResultSet result = null;
         List<T> list = null;
         try {
             result = executing(sessionId, cmdType, statement);
-            list = executed(cls, AlbianServiceRouter.getLogIdService().makeJobId(), result);
+            list = executed(cls, AlbianServiceRouter.make32UUID(), result);
         } catch (AlbianDataServiceException e) {
-            throw new AlbianDataServiceException("execute data query is fail.", e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                    "execute data query is fail.");
         } finally {
             if (null != result)
                 try {
                     result.close();
                 } catch (SQLException e) {
-                    throw new AlbianDataServiceException("close the ResultSet from database is error.", e);
+                    AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                            "close the ResultSet from database is error.");
                 }
         }
         return list;
     }
 
-    protected abstract void perExecute(IReaderJob job) throws AlbianDataServiceException;
+    protected abstract void perExecute(IReaderJob job) throws Throwable;
 
-    protected abstract void executing(IReaderJob job) throws AlbianDataServiceException;
+    protected abstract void executing(IReaderJob job) throws Throwable;
 
     protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls,
-                                                                  IReaderJob job) throws AlbianDataServiceException;
+                                                                  IReaderJob job) throws Throwable;
 
     protected abstract Object executed(String jobId, IReaderJob job)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     protected abstract void unloadExecute(IReaderJob job) throws AlbianDataServiceException;
 
     protected abstract ResultSet executing(String sessionId, PersistenceCommandType cmdType,
-                                           Statement statement) throws AlbianDataServiceException;
+                                           Statement statement) throws Throwable;
 
     protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls, String jobId,
-                                                                  ResultSet result) throws AlbianDataServiceException;
+                                                                  ResultSet result) throws Throwable;
 }

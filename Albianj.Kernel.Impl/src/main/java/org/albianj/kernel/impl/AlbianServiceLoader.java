@@ -2,23 +2,21 @@ package org.albianj.kernel.impl;
 
 import ognl.Ognl;
 import org.albianj.aop.impl.AlbianServiceAopProxy;
-import org.albianj.except.AlbianRuntimeException;
 import org.albianj.loader.AlbianClassLoader;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.reflection.AlbianTypeConvert;
 import org.albianj.service.*;
 import org.albianj.verify.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class AlbianServiceLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(AlbianServiceLoader.class);
     private static String sessionId = "AlbianServiceLoader";
 
     public static IAlbianService makeupService(IAlbianServiceAttribute serviceAttr,
-        Map<String, IAlbianServiceAttribute> servAttrs) {
+        Map<String, IAlbianServiceAttribute> servAttrs) throws Throwable {
         String sImplClzz = serviceAttr.getType();
         String id = serviceAttr.getId();
         IAlbianService rtnService = null;
@@ -27,25 +25,28 @@ public class AlbianServiceLoader {
         try {
             Class<?> cla = AlbianClassLoader.getInstance().loadClass(sImplClzz);
             if (null == cla) {
-                throw new AlbianRuntimeException("load impl class :" + sImplClzz + " is null for service :" + id);
+                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                        "load impl class : {}  is null for service : {} " ,sImplClzz, id);
             }
 
             if (!IAlbianService.class.isAssignableFrom(cla)) {
-                throw new AlbianRuntimeException(
-                    "Service :" + id + "class:" + sImplClzz + "is not extends IAlbianServise");
+                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                    "Service :{}  class:{}  is not extends IAlbianServise",id,sImplClzz);
             }
 
             Class<?> itf = null;
             if (!Validate.isNullOrEmptyOrAllSpace(sInterface)) {
                 itf = AlbianClassLoader.getInstance().loadClass(sInterface);
                 if (!itf.isAssignableFrom(cla)) {
-                    throw new AlbianRuntimeException(
-                        "Service :" + id + "class:" + sImplClzz + "is not impl from itf :" + sInterface);
+                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                            "Service :{}  class: {}  is not extends is not impl from itf : {} ",
+                            id,sImplClzz,sInterface);
                 }
 
                 if (!IAlbianService.class.isAssignableFrom(itf)) {
-                    throw new AlbianRuntimeException(
-                        "Service :" + id + "itf：" + sInterface + "is not extends IAlbianSercvice.");
+                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                            "Service :{}  itf: {}  is not extends IAlbianSercvice ",
+                            id,sInterface);
                 }
             }
 
@@ -60,7 +61,7 @@ public class AlbianServiceLoader {
                 rtnService = service;
             } else {
                 AlbianServiceAopProxy proxy = new AlbianServiceAopProxy();
-                IAlbianService serviceProxy = (IAlbianService) proxy.newInstance(service, serviceAttr.getAopAttributes());
+                IAlbianService serviceProxy = (IAlbianService) proxy.newInstance(sessionId,service, serviceAttr.getAopAttributes());
                 serviceProxy.setRealService(service);
                 serviceProxy.beforeLoad();
                 serviceProxy.loading();
@@ -68,13 +69,13 @@ public class AlbianServiceLoader {
                 rtnService = serviceProxy;
             }
         } catch (Exception e) {
-            throw new AlbianRuntimeException("load and init service:" + id + "with class:" + sImplClzz + " is fail.",
-                e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "load and init service:{} with class:{} is fail.",id,sImplClzz);
         }
         return rtnService;
     }
 
-    public static void setServiceFields(IAlbianService serv, IAlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, IAlbianServiceAttribute> servAttrs) {
+    public static void setServiceFields(IAlbianService serv, IAlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, IAlbianServiceAttribute> servAttrs) throws Throwable {
         if(Validate.isNullOrEmpty(servAttr.getServiceFields())) {
             return;
         }
@@ -88,8 +89,8 @@ public class AlbianServiceLoader {
                     fAttr.getField().set(serv, o);
                     fAttr.setReady(true);
                 } catch (Exception e) {
-                    throw new AlbianRuntimeException(
-                        "set field" + servAttr.getId()+"." + fAttr.getName() + " =" + fAttr.getValue() + "is fail.", e);
+                    AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                            "set field {}.{} = {} is fail.",servAttr.getId(),fAttr.getName(),fAttr.getValue());
                 }
                 continue;
             }
@@ -98,11 +99,11 @@ public class AlbianServiceLoader {
             Object realObject = null;
             int indexof = value.indexOf(".");
             if (-1 == indexof) { // real ref service
-                realObject = AlbianServiceRouter.getSingletonService(IAlbianService.class, value, false);
+                realObject = AlbianServiceRouter.getService(sessionId,IAlbianService.class, value, false);
                 if (!fAttr.getAllowNull() && null == realObject) {
-                    throw new AlbianRuntimeException(
-                        "not fund ref Service :" + value + "to set field :" + fAttr.getName() + "in servise:" + servAttr
-                            .getId());
+                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                    "not found ref service:{} to set field:{} in service:{}",
+                    value,fAttr.getName(),servAttr.getId());
                     //continue;
                 }
 
@@ -111,9 +112,9 @@ public class AlbianServiceLoader {
                         fAttr.getField().set(serv, realObject);
                         fAttr.setReady(true);
                     } catch (Exception e) {
-                        throw new AlbianRuntimeException(
-                            "set field" + servAttr.getId()+"." + fAttr.getName() + " = " + fAttr.getValue()
-                                + " is fail.the field type is ref.", e);
+                        AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                        "set field {}.{} = {} is fail.the field type is ref.",
+                        servAttr.getId(),fAttr.getName(),fAttr.getValue());
                     }
                 }
                 continue;
@@ -122,13 +123,12 @@ public class AlbianServiceLoader {
             String refServiceId = value.substring(0, indexof);
             String exp = value.substring(indexof + 1);
             IAlbianService refService =
-                AlbianServiceRouter.getSingletonService(IAlbianService.class, refServiceId, false);
+                AlbianServiceRouter.getService(sessionId,IAlbianService.class, refServiceId, false);
 
             if (!fAttr.getAllowNull() && null == refService) {
-                throw new AlbianRuntimeException(
-                    servAttr.getId() +"."+ fAttr.getName() + "=" + refServiceId +"."+ exp + "is fail . not found ref Service :"
-                        + exp);
-                //continue;
+                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                "{}.{} = {}.{} is fail.not found ref srvice:{}",
+                servAttr.getId(),fAttr.getName(),refServiceId,exp,exp);
             }
 
             if (null != refService) {
@@ -137,22 +137,23 @@ public class AlbianServiceLoader {
                 try {
                     realObject = Ognl.getValue(exp, refRealObj);// get read value from full-sgin ref service
                 } catch (Exception e) {
-                    throw new AlbianRuntimeException( servAttr.getId()+"."+fAttr.getName()+" ="+refServiceId+"."
-                        +exp+ " is fail. not found exp ->"+exp+"in ref service ->"+refServiceId+". ",e);
-                    //continue;
+                    AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                            "{}.{} = {}.{} is fail.not found exp {} in ref srvice:{}",
+                            servAttr.getId(),fAttr.getName(),refServiceId,exp,exp,refServiceId);
                 }
                 if (null == realObject && !fAttr.getAllowNull()) {
-                    throw new AlbianRuntimeException(servAttr.getId()+"." + fAttr.getName() + "= " + refServiceId +"."+ exp
-                        + "is fail ,not found ref service :" + exp);
-                    //continue;
+                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                            "{}.{} = {}.{} is fail.not found  ref srvice:{}",
+                            servAttr.getId(),fAttr.getName(),refServiceId,exp,exp);
                 }
                 if (null != realObject) {
                     try {
                         fAttr.getField().set(serv, realObject);
                         fAttr.setReady(true);
                     } catch (Exception e) {
-                        throw new AlbianRuntimeException(
-                            servAttr.getId()+"." + fAttr.getName() + " = " + refServiceId +"."+ exp + " is fail.", e);
+                        AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                                "{}.{} = {}.{} is fail.",
+                                servAttr.getId(),fAttr.getName(),refServiceId,exp);
                     }
                 }
             }

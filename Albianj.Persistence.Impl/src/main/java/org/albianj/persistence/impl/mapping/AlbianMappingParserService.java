@@ -38,6 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.persistence.impl.mapping;
 
 import org.albianj.loader.AlbianClassLoader;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.impl.object.AlbianObjectAttribute;
 import org.albianj.persistence.impl.object.DataRouterAttribute;
@@ -52,13 +54,12 @@ import org.albianj.persistence.service.IAlbianMappingParserService;
 import org.albianj.persistence.service.MappingAttributeException;
 import org.albianj.reflection.AlbianReflect;
 import org.albianj.service.AlbianServiceRant;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.AlbianParserException;
 import org.albianj.text.StringHelper;
 import org.albianj.verify.Validate;
 import org.albianj.xml.XmlParser;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -69,7 +70,6 @@ import java.util.Map;
 @AlbianServiceRant(Id = IAlbianMappingParserService.Name, Interface = IAlbianMappingParserService.class)
 public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AlbianMappingParserService.class);
     private static final String cacheTagName = "Cache";
     private static final String memberTagName = "Members/Member";
 
@@ -115,19 +115,19 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             fieldAttr.setSqlFieldName(fieldName);
         }
         if (!Validate.isNullOrEmpty(allowNull)) {
-            fieldAttr.setAllowNull(new Boolean(allowNull));
+            fieldAttr.setAllowNull( Boolean.parseBoolean(allowNull));
         }
         if (!Validate.isNullOrEmpty(length)) {
-            fieldAttr.setLength(new Integer(length));
+            fieldAttr.setLength( Integer.parseInt(length));
         }
         if (!Validate.isNullOrEmpty(primaryKey)) {
-            fieldAttr.setPrimaryKey(new Boolean(primaryKey));
+            fieldAttr.setPrimaryKey( Boolean.parseBoolean(primaryKey));
         }
         if (!Validate.isNullOrEmpty(dbType)) {
             fieldAttr.setDatabaseType(Convert.toSqlType(dbType));
         }
         if (!Validate.isNullOrEmpty(isSave)) {
-            fieldAttr.setIsSave(new Boolean(isSave));
+            fieldAttr.setIsSave( Boolean.parseBoolean(isSave));
         }
 //        if(Validate.isNullOrEmptyOrAllSpace(varField)){
 //            member.setVarField(StringHelper.lowercasingFirstLetter(name));
@@ -167,19 +167,19 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             member.setSqlFieldName(fieldName);
         }
         if (!Validate.isNullOrEmpty(allowNull)) {
-            member.setAllowNull(new Boolean(allowNull));
+            member.setAllowNull(Boolean.parseBoolean(allowNull));
         }
         if (!Validate.isNullOrEmpty(length)) {
-            member.setLength(new Integer(length));
+            member.setLength( Integer.parseInt(length));
         }
         if (!Validate.isNullOrEmpty(primaryKey)) {
-            member.setPrimaryKey(new Boolean(primaryKey));
+            member.setPrimaryKey( Boolean.parseBoolean(primaryKey));
         }
         if (!Validate.isNullOrEmpty(dbType)) {
             member.setDatabaseType(Convert.toSqlType(dbType));
         }
         if (!Validate.isNullOrEmpty(isSave)) {
-            member.setIsSave(new Boolean(isSave));
+            member.setIsSave( Boolean.parseBoolean(isSave));
         }
         if (Validate.isNullOrEmptyOrAllSpace(varField)) {
             member.setVarField(StringHelper.lowercasingFirstLetter(name));
@@ -187,7 +187,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             member.setVarField(varField);
         }
         if (!Validate.isNullOrEmptyOrAllSpace(autoGenKey)) {
-            member.setAutoGenKey(new Boolean(autoGenKey));
+            member.setAutoGenKey( Boolean.parseBoolean(autoGenKey));
         }
     }
 
@@ -195,8 +195,11 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         Method mr = propertyDescriptor.getReadMethod();
         Method mw = propertyDescriptor.getWriteMethod();
         if (null == mr || null == mw) {
-            logger.error("property::{} of type::{} is not exist readerMethod or write Method.",
-                propertyDescriptor.getName(), type);
+//            logger.error("property::{} of type::{} is not exist readerMethod or write Method.",
+//                propertyDescriptor.getName(), type);
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,"property::{} of type::{} is not exist readerMethod or write Method.",
+                    propertyDescriptor.getName(), type
+                    );
             return null;
         }
         AlbianObjectMemberAttribute attr = null;
@@ -251,7 +254,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     }
 
     @Override
-    protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes) throws AlbianParserException {
+    protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes) throws Throwable {
         if (Validate.isNullOrEmpty(nodes)) {
             throw new IllegalArgumentException("nodes");
         }
@@ -262,7 +265,8 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             try {
                 parserAlbianObject(ele);
             } catch (Exception e) {
-                throw new AlbianDataServiceException("parser persisten node is fail,xml:" + ele.asXML(),e);
+                AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                "parser persisten node is fail,xml:{}" ,ele.asXML());
             }
 //            if (null == albianObjectAttribute) {
 //                AlbianServiceRouter.getLogger2().logAndThrow(IAlbianLoggerService2.AlbianRunningLoggerName,
@@ -277,7 +281,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     }
 
-    protected void parserAlbianObject(Element node) throws AlbianParserException {
+    protected void parserAlbianObject(Element node) throws Throwable {
         String type = XmlParser.getAttributeValue(node, "Type");
         if (Validate.isNullOrEmptyOrAllSpace(type)) {
             throw new AlbianDataServiceException("The AlbianObject's type is empty in persistence.xml");
@@ -322,7 +326,8 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
 
         } catch (ClassNotFoundException e1) {
-            throw new AlbianDataServiceException("the type:" + type + " is not found",e1);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e1,
+                    "the type:{} is not found",type);
         }
 
         pkgEntityAttr.setImplClzz(implClzz);
@@ -347,7 +352,9 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         try {
             csn = AlbianReflect.getClassSimpleName(AlbianClassLoader.getInstance(), type);
         } catch (ClassNotFoundException e) {
-            throw new AlbianDataServiceException("the type:" + type + " is not found",e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+
+                    "the type:{} is not found",type);
         }
         if (null != csn) {
             defaultRouting.setTableName(csn);
@@ -382,13 +389,15 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         return;
     }
 
-    private Map<String, IMemberAttribute> reflexAlbianObjectMembers(String type) throws AlbianParserException {
+    private Map<String, IMemberAttribute> reflexAlbianObjectMembers(String type) throws Throwable {
         Map<String, IMemberAttribute> map = new LinkedHashMap<String, IMemberAttribute>();
         PropertyDescriptor[] propertyDesc = null;
         try {
             propertyDesc = AlbianReflect.getBeanPropertyDescriptor(AlbianClassLoader.getInstance(), type);
         } catch (Exception e) {
-            throw new AlbianDataServiceException("the type:" + type + " is not found",e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+
+                    "the type:{} is not found",type);
         }
         if (null == propertyDesc) {
             throw new AlbianDataServiceException("the type:" + type + " is not found");

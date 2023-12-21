@@ -37,18 +37,18 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.impl.mapping;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.impl.rant.AlbianEntityRantScaner;
 import org.albianj.persistence.service.AlbianEntityMetadata;
 import org.albianj.persistence.service.IAlbianMappingParserService;
-import org.albianj.service.parser.AlbianParserException;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.FreeAlbianParserService;
 import org.albianj.verify.Validate;
 import org.albianj.xml.XmlParser;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyDescriptor;
 import java.util.HashMap;
@@ -56,7 +56,6 @@ import java.util.List;
 
 public abstract class FreeAlbianMappingParserService extends FreeAlbianParserService implements IAlbianMappingParserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreeAlbianMappingParserService.class);
     private final static String tagName = "AlbianObjects/AlbianObject";
     private String file = "persistence.xml";
     //    private HashMap<String, IAlbianObjectAttribute> _objAttrs = null;
@@ -67,7 +66,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         this.file = fileName;
     }
 
-    public void init() throws AlbianParserException {
+    public void init() throws Throwable {
 //        _objAttrs = new HashMap<>();
 //        _class2Inter = new HashMap<>();
         _bpd = new HashMap<>();
@@ -76,18 +75,20 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         try {
             parserFile(file);
         } catch (Exception e) {
-            throw new AlbianDataServiceException("loading the persisten.xml is error.", e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+           "loading the persisten.xml is error.");
         }
         return;
     }
 
-    private void parserFile(String filename) throws AlbianParserException {
+    private void parserFile(String filename) throws Throwable {
         Document doc = null;
         try {
             String fname = findConfigFile(filename);
             doc = XmlParser.load(fname);
         } catch (Exception e) {
-            throw new AlbianDataServiceException("loading the persisten.xml is error.", e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                    "loading the persisten.xml is error.");
 
         }
         if (null == doc) {
@@ -117,7 +118,8 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                 if (!Validate.isNullOrEmptyOrAllSpace(enable)) {
                     boolean b = Boolean.parseBoolean(enable);
                     if (!b) {
-                        logger.error("Path -> :{} in the Package enable is false,so not load it.",
+                        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                                "Path -> :{} in the Package enable is false,so not load it.",
                             Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
                         continue;// not load pkg
                     }
@@ -133,8 +135,8 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                             AlbianEntityMetadata.putAll(pkgMap);//merger the metedata
                         }
                     } catch (Exception e) {
-                        throw new AlbianDataServiceException(
-                            "loading the persistence.xml is error. Path -> " + pkg + " in Package is fail.",e);
+                        AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                                "loading the persisten.xml is error.path:{} ",pkg);
                     }
                 }
 
@@ -158,7 +160,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
     protected abstract void parserAlbianObjects(
             @SuppressWarnings("rawtypes") List nodes)
-            throws AlbianParserException;
+            throws Throwable;
 
 //    protected abstract IAlbianObjectAttribute parserAlbianObject(Element node)
 //            throws AlbianParserException;

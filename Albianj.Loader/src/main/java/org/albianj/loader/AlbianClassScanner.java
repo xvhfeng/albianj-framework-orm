@@ -2,7 +2,6 @@ package org.albianj.loader;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -30,7 +29,7 @@ public class AlbianClassScanner {
                                                  String pkgName,
                                                  IAlbianClassFilter filter,
                                                  IAlbianClassExcavator excavator)
-            throws ClassNotFoundException, IOException {
+            throws Throwable {
 
         // 第一个class类的集合
         HashMap<String, Object> classes = new HashMap<String, Object>();
@@ -84,7 +83,7 @@ public class AlbianClassScanner {
                                   String packageName,
                                   String className,
                                   IAlbianClassExcavator excavator)
-            throws ClassNotFoundException {
+            throws Throwable {
         String fullClassName = packageName + '.' + className;
         Class<?> cls = classLoader.loadClass(fullClassName);
         if (filter.verify(cls)) {
@@ -109,7 +108,7 @@ public class AlbianClassScanner {
                                                         HashMap<String, Object> classes,
                                                         IAlbianClassFilter filter,
                                                         IAlbianClassExcavator excavator)
-            throws ClassNotFoundException {
+            throws Throwable {
         File dir = new File(packagePath);
         if (!dir.exists() || !dir.isDirectory()) {
             return;

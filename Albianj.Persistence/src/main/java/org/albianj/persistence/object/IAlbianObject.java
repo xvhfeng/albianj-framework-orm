@@ -102,6 +102,6 @@ public interface IAlbianObject extends Serializable {
 
     boolean needUpdate() throws AlbianDataServiceException;
 
-    boolean needUpdate(String sessionId) throws AlbianDataServiceException;
+    boolean needUpdate(Object sessionId) throws Throwable;
 
 }

@@ -41,7 +41,6 @@ import org.albianj.concurrent.IAlbianThreadPoolService;
 import org.albianj.kernel.KernelSetting;
 import org.albianj.service.AlbianServiceRant;
 import org.albianj.service.FreeAlbianService;
-import org.albianj.service.parser.AlbianParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,7 @@ public class AlbianThreadPoolService extends FreeAlbianService implements IAlbia
     }
 
     public void loading()
-            throws RuntimeException, AlbianParserException {
+            throws Throwable {
         threadPool = new ThreadPoolExecutor(
                 KernelSetting.getThreadPoolCoreSize(),
                 KernelSetting.getThreadPoolMaxSize(), 300, TimeUnit.SECONDS,

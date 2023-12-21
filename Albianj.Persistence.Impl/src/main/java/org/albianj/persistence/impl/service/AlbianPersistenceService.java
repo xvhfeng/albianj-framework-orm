@@ -41,7 +41,6 @@ import org.albianj.persistence.context.IPersistenceCompensateNotify;
 import org.albianj.persistence.context.IPersistenceNotify;
 import org.albianj.persistence.context.IReaderJob;
 import org.albianj.persistence.context.IWriterJob;
-import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.db.PersistenceCommandType;
 import org.albianj.persistence.impl.context.IReaderJobAdapter;
 import org.albianj.persistence.impl.context.IWriterJobAdapter;
@@ -72,7 +71,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     protected static <T extends IAlbianObject> T doLoadObject(String sessionId,
                                                               Class<T> cls, boolean isExact,
                                                               String routingName, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, null);
         if (Validate.isNullOrEmpty(list))
             return null;
@@ -84,7 +83,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                                      Class<T> cls, boolean isExact, String routingName, int start, int step,
                                                                      LinkedList<IFilterCondition> wheres,
                                                                      LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
         IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName, start, step,
@@ -99,7 +98,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                                        Class<T> cls, boolean isExact, String routingName,
                                                                        LinkedList<IFilterCondition> wheres,
                                                                        LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName,
                 wheres, orderbys, idxName);
@@ -117,14 +116,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean create(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public boolean create(String sessionId, IAlbianObject object) throws Throwable {
         return create(sessionId, object, null, null, null, null);
     }
 
     @Deprecated
     public boolean create(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                          Object compensateCallbackObject) throws AlbianDataServiceException {
+                          Object compensateCallbackObject) throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildCreation(sessionId, object);
         if (null != notifyCallback)
@@ -140,14 +139,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean create(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public boolean create(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         return this.create(sessionId, objects, null, null, null, null);
     }
 
     @Deprecated
     public boolean create(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                          Object compensateCallbackObject) throws AlbianDataServiceException {
+                          Object compensateCallbackObject) throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildCreation(sessionId, objects);
         if (null != notifyCallback)
@@ -163,14 +162,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean modify(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public boolean modify(String sessionId, IAlbianObject object) throws Throwable {
         return this.modify(sessionId, object, null, null, null, null);
     }
 
     @Deprecated
     public boolean modify(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                          Object compensateCallbackObject) throws AlbianDataServiceException {
+                          Object compensateCallbackObject) throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildModification(sessionId, object);
         if (null != notifyCallback)
@@ -186,7 +185,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean modify(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public boolean modify(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         return this.modify(sessionId, objects, null, null, null, null);
     }
 
@@ -194,7 +193,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public boolean modify(String sessionId, List<? extends IAlbianObject> objects,
                           IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                          Object compensateCallbackObject) throws AlbianDataServiceException {
+                          Object compensateCallbackObject) throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildModification(sessionId, objects);
         if (null != notifyCallback)
@@ -209,13 +208,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean remove(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public boolean remove(String sessionId, IAlbianObject object) throws Throwable {
         return this.remove(sessionId, object, null, null, null, null);
     }
 
     public boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                          Object compensateCallbackObject) throws AlbianDataServiceException {
+                          Object compensateCallbackObject) throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildRemoved(sessionId, object);
         if (null != notifyCallback)
@@ -230,13 +229,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean remove(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public boolean remove(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         return this.remove(sessionId, objects, null, null, null, null);
     }
 
     public boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                          Object compensateCallbackObject) throws AlbianDataServiceException {
+                          Object compensateCallbackObject) throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildRemoved(sessionId, objects);
         if (null != notifyCallback)
@@ -251,14 +250,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean save(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public boolean save(String sessionId, IAlbianObject object) throws Throwable {
         return this.save(sessionId, object, null, null, null, null);
     }
 
     public boolean save(String sessionId, IAlbianObject object,
                         IPersistenceNotify notifyCallback, Object notifyCallbackObject,
                         IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
-            throws AlbianDataServiceException {
+            throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildSaving(sessionId, object);
         if (null != notifyCallback)
@@ -273,13 +272,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean save(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public boolean save(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         return this.save(sessionId, objects, null, null, null, null);
     }
 
     public boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                         Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                        Object compensateCallbackObject) throws AlbianDataServiceException {
+                        Object compensateCallbackObject) throws Throwable {
         IWriterJobAdapter ja = new WriterJobAdapter();
         IWriterJob job = ja.buildSaving(sessionId, objects);
         if (null != notifyCallback)
@@ -295,13 +294,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObject(sessionId, cls, loadType, null, wheres);
     }
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
                                                   LoadType loadType, String rountingName, IChainExpression wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, null);
             if (Validate.isNullOrEmpty(list))
@@ -330,37 +329,37 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, null, wheres, null);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
             if (Validate.isNullOrEmpty(list))
@@ -389,13 +388,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, IChainExpression wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres);
     }
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, String rountingName, IChainExpression wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         long count = 0;
         if (LoadType.exact == loadType) {
             count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, null);
@@ -420,14 +419,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObject(sessionId, cls, loadType, null, wheres);
     }
 
     @Deprecated
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
                                                   LoadType loadType, String rountingName, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, null);
             if (Validate.isNullOrEmpty(list))
@@ -456,7 +455,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
-                                                  Statement statement) throws AlbianDataServiceException {
+                                                  Statement statement) throws Throwable {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (Validate.isNullOrEmpty(list))
             return null;
@@ -465,26 +464,26 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, null, null);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, rountingName, 0, 0, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
-                                                         Statement statement) throws AlbianDataServiceException {
+                                                         Statement statement) throws Throwable {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (Validate.isNullOrEmpty(list))
             return null;
@@ -494,21 +493,21 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
             if (Validate.isNullOrEmpty(list))
@@ -538,14 +537,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     @Deprecated
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres);
     }
 
     @Deprecated
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, String rountingName, LinkedList<IFilterCondition> wheres)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             long count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, null);
             return count;
@@ -568,7 +567,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
                                                               Class<T> cls, PersistenceCommandType cmdType, Statement statement)
-            throws AlbianDataServiceException {
+            throws Throwable {
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         List<T> list = null;
         list = scope.execute(sessionId, cls, cmdType, statement);
@@ -577,7 +576,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     protected <T extends IAlbianObject> T doLoadObject(String sessionId, Class<T> cls,
                                                        PersistenceCommandType cmdType, Statement statement)
-            throws AlbianDataServiceException {
+            throws Throwable {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (Validate.isNullOrEmpty(list))
             return null;
@@ -587,7 +586,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     protected <T extends IAlbianObject> T doLoadObject(String sessionId,
                                                        Class<T> cls, boolean isExact,
                                                        String routingName, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, idxName);
         if (Validate.isNullOrEmpty(list))
             return null;
@@ -598,7 +597,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                               Class<T> cls, boolean isExact, String routingName, int start, int step,
                                                               IChainExpression wheres,
                                                               LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
         IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName, start, step,
@@ -612,7 +611,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                                 Class<T> cls, boolean isExact, String routingName,
                                                                 IChainExpression wheres,
                                                                 LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
                 wheres, orderbys, idxName);
@@ -625,13 +624,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 //----- add by 木木，强行指定索引名字
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObject(sessionId, cls, loadType, null, wheres, idxName);
     }
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
                                                   LoadType loadType, String rountingName, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, idxName);
             if (Validate.isNullOrEmpty(list))
@@ -660,37 +659,37 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, null, wheres, null, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);
             if (Validate.isNullOrEmpty(list))
@@ -719,13 +718,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres, idxName);
     }
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, String rountingName, IChainExpression wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         long count = 0;
         if (LoadType.exact == loadType) {
             count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, idxName);
@@ -750,14 +749,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObject(sessionId, cls, loadType, null, wheres, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
                                                   LoadType loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, idxName);
             if (Validate.isNullOrEmpty(list))
@@ -787,21 +786,21 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, null, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return loadObjects(sessionId, cls, loadType, rountingName, 0, 0, wheres, orderbys, idxName);
     }
 
@@ -809,21 +808,21 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);
             if (Validate.isNullOrEmpty(list))
@@ -853,14 +852,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     @Deprecated
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
-            throws AlbianDataServiceException {
+            throws Throwable {
         if (LoadType.exact == loadType) {
             long count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, idxName);
             return count;

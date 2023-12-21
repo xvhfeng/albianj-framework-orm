@@ -39,40 +39,39 @@ package org.albianj.persistence.impl.context;
 
 import org.albianj.persistence.context.IWriterJob;
 import org.albianj.persistence.context.dactx.IAlbianObjectWarp;
-import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.object.IAlbianObject;
 
 import java.util.List;
 
 public interface IWriterJobAdapter {
     public IWriterJob buildCreation(String sessionId, IAlbianObject object)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public IWriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public IWriterJob buildModification(String sessionId, IAlbianObject object)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
 //    public IWriterJob buildModification(String sessionId, IAlbianObject object, String[] members)
 //            throws AlbianDataServiceException;
 
     public IWriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public IWriterJob buildRemoved(String sessionId, IAlbianObject object)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public IWriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public IWriterJob buildSaving(String sessionId, IAlbianObject object)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
     IWriterJob buildWriterJob(String sessionId, List<IAlbianObjectWarp> entities, boolean rollbackOnError)
-            throws AlbianDataServiceException;
+            throws Throwable;
 
 }

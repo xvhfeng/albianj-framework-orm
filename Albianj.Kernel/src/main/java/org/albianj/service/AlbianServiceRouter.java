@@ -37,35 +37,20 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.service;
 
-import org.albianj.datetime.AlbianDateTime;
-import org.albianj.except.AlbianRuntimeException;
-import org.albianj.kernel.IAlbianLogicIdService;
-import org.albianj.logger.AlbianLoggerLevel;
 import org.albianj.logger.IAlbianLoggerService;
-import org.albianj.logger.IAlbianLoggerService2;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.verify.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  * albianj的service管理类，交由albianj托管的service全部由这个类提供获取service。
  */
 public class AlbianServiceRouter extends ServiceContainer {
 
-    private static final Logger logger = LoggerFactory.getLogger(AlbianServiceRouter.class);
-    public static String AlbianRuntimeLogName = "AlbianRuntime";
-    // 时间 级别 call-chain fmt -args
-    private static String logFmt = ":{} :{} SessionId::{} Thread:%d CallChain:[:{}] ctx:[:{}]";
-    private static String logExceptionFmt = ":{} :{} SessionId::{} Thread:%d CallChain:[:{}] except:[type::{} msg::{}] ctx:[:{}]";
-
-    @Deprecated
-    public static IAlbianLoggerService getLogger() {
-        return getSingletonService(IAlbianLoggerService.class, IAlbianLoggerService.Name, false);
-    }
-
-    public static IAlbianLogicIdService getLogIdService() {
-        return getSingletonService(IAlbianLogicIdService.class, IAlbianLogicIdService.Name, false);
-    }
+    public static final String __StartupSessionId = "Albian-Startup";
 
     /**
      * 获取service.xml中配置的service.
@@ -78,179 +63,92 @@ public class AlbianServiceRouter extends ServiceContainer {
      * @return 返回获取的service
      * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
      */
-    public static <T extends IAlbianService> T getSingletonService(Class<T> cla, String id, boolean isThrowIfException)
-            throws IllegalArgumentException {
+    public static <T extends IAlbianService> T getService(Object sessionId,Class<T> cla, String id, boolean isThrowIfException) {
+        IAlbianLoggerService ls = (IAlbianLoggerService) ServiceContainer.getService(IAlbianLoggerService.FullName);
         if (Validate.isNullOrEmptyOrAllSpace(id)) {
-            throw new AlbianRuntimeException("Kernel is error. service id is null or empty,and can not found.");
+            ls.log(sessionId,LogTarget.Running,LogLevel.Error,
+                    "Kernel is error. service id is null or empty,and can not found.");
+            return null;
         }
 
         try {
-            IAlbianService service = (IAlbianService) ServiceContainer.getService(id);
+            IAlbianService service = ServiceContainer.getService(id);
             if (null == service)
                 return null;
             return cla.cast(service);
-        } catch (IllegalArgumentException exc) {
-            logger.error("Get service:{} is error.", id);
-            if (isThrowIfException)
-                throw exc;
-        }
-        return null;
-    }
-
-    /**
-     * 获取service.xml中配置的service.
-     * 注意： 1：获取的service都是单例模式
-     * 2：这个方法已经被废弃，不再进行维护，请使用getSingletonService替代
-     *
-     * @param <T> 获取serivce的定义接口类
-     * @param cla 获取serivce的定义接口类的class信息
-     * @param id  service。xml中配置的id
-     * @return 返回获取的service，在获取service出错或者没有获取service时候抛出异常
-     * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
-     */
-    public static <T extends IAlbianService> T getSingletonService(Class<T> cla, String id) {
-        return getSingletonService(cla, id, false);
-    }
-
-    /**
-     * 获取service.xml中配置的service.
-     * 注意： 1：获取的service都是单例模式
-     * 2：这个方法已经被废弃，不再进行维护，请使用getSingletonService替代
-     *
-     * @param <T>                获取serivce的定义接口类
-     * @param cla                获取serivce的定义接口类的class信息
-     * @param id                 service。xml中配置的id
-     * @param isThrowIfException 是否在获取service出错或者没有获取service时候抛出异常，true为抛出异常；false不抛出异常，但是service返回null
-     * @return 返回获取的service
-     * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
-     */
-    @Deprecated
-    public static <T extends IAlbianService> T getService(Class<T> cla, String id, boolean isThrowIfException)
-            throws IllegalArgumentException {
-        if (Validate.isNullOrEmptyOrAllSpace(id)) {
-            throw new AlbianRuntimeException("Kernel is error. service id is null or empty,and can not found.");
-        }
-
-        try {
-            IAlbianService service = (IAlbianService) ServiceContainer.getService(id);
-            if (null == service)
-                return null;
-            return cla.cast(service);
-        } catch (IllegalArgumentException exc) {
-            logger.error("Get service:{} is error.", id,exc);
-            if (isThrowIfException)
-                throw exc;
-        }
-        return null;
-    }
-
-    /**
-     * 获取service.xml中配置的service.
-     * 注意： 1：获取的service都是单例模式
-     * 2：这个方法已经被废弃，不再进行维护，请使用getSingletonService替代
-     *
-     * @param <T> 获取serivce的定义接口类
-     * @param cla 获取serivce的定义接口类的class信息
-     * @param id  service。xml中配置的id
-     * @return 返回获取的service，在获取service出错或者没有获取service时候抛出异常
-     * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
-     */
-    @Deprecated
-    public static <T extends IAlbianService> T getService(Class<T> cla, String id) {
-        return getService(cla, id, false);
-    }
-
-    @Deprecated
-    public static IAlbianLoggerService2 getLogger2() {
-        return getSingletonService(IAlbianLoggerService2.class, IAlbianLoggerService2.Name, false);
-    }
-
-    public static void addLog(String sessionId, String logName, AlbianLoggerLevel logLevel, String fmt, Object... args) {
-        StackTraceElement[] stes = Thread.currentThread().getStackTrace();
-        int count = stes.length >= 7 ? 7 : stes.length;
-        StringBuilder sb = new StringBuilder();
-        for (int i = 2; i < count; i++) {
-            StackTraceElement ste = stes[i];
-            sb.append(ste.getFileName())
-                    .append("$").append(ste.getMethodName())
-                    .append("$").append(ste.getLineNumber())
-                    .append(" -> ");
-        }
-        if (0 != sb.length()) {
-            sb.delete(sb.length() - 4, sb.length() - 1);
-        }
-
-
-        IAlbianLoggerService2 log = getSingletonService(IAlbianLoggerService2.class, IAlbianLoggerService2.Name, false);
-        if (null != log) {
-            String msg = String.format(logFmt, AlbianDateTime.fmtCurrentLongDatetime(), logLevel.getTag(), sessionId,
-                    Thread.currentThread().getId(), sb, String.format(fmt, args));
-            log.log3(logName, logLevel, msg);
-        }
-    }
-
-    /*public static void addLog(String sessionId, String logName, AlbianLoggerLevel logLevel, Throwable t, String fmt, Object... args) {
-        StackTraceElement[] stes = t.getStackTrace();
-        int count = stes.length >= 6 ? 6 : stes.length;
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < count; i++) {
-            StackTraceElement ste = stes[i];
-            sb.append(ste.getFileName())
-                    .append("$").append(ste.getMethodName())
-                    .append("$").append(ste.getLineNumber())
-                    .append(" -> ");
-        }
-        if (0 != sb.length()) {
-            sb.delete(sb.length() - 4, sb.length() - 1);
-        }
-
-       IAlbianLoggerService2 log = getSingletonService(IAlbianLoggerService2.class, IAlbianLoggerService2.Name, false);
-        if (null != log) {
-            String msg = String.format(logExceptionFmt, AlbianDateTime.fmtCurrentLongDatetime(), logLevel.getTag(), sessionId,
-                    Thread.currentThread().getId(), sb, t.getClass().getName(), t.getMessage(), String.format(fmt, args));
-            log.log3(logName, logLevel, msg);
-        }
-    }*/
-
-    public static void throwException(String sessionId, String logName, Throwable throwable) {
-        throwException(sessionId, logName, "throw", throwable, true);
-    }
-
-    public static void throwException(String sessionId, String logName, String brief, Throwable throwable) {
-        throwException(sessionId, logName, brief, throwable, true);
-    }
-
-    public static void throwException(String sessionId, String logName, String brief, Throwable throwable, boolean throwsOut) {
-        if (AlbianRuntimeException.class.isAssignableFrom(throwable.getClass())) {
-            //warp once over,and not again
-            logger.warn("throw exception ->:{}", throwable.getClass().getName());
-            if (throwsOut) {
-                throw ((AlbianRuntimeException) throwable);
+        } catch (Throwable exc) {
+            ls.log(sessionId, LogTarget.Running,LogLevel.Warn,exc,
+                    "get service {} for class {} is fail.",id,cla.getName());
+            if(isThrowIfException) {
+                throw  exc;
             }
-            return;
         }
-        AlbianRuntimeException thw = new AlbianRuntimeException(throwable);
-        logger.warn("brief-> :{} warp excetion -> :{} with msg ->:{} to new AlbianRuntimeException.",
-            brief, throwable.getClass().getName(), throwable.getMessage());
-        if (throwsOut) {
-            throw thw;
+        return null;
+    }
+
+    /**
+     * 获取service.xml中配置的service.
+     * 注意： 1：获取的service都是单例模式
+     *
+     * @param <T> 获取serivce的定义接口类
+     * @param cla 获取serivce的定义接口类的class信息
+     * @param id  service。xml中配置的id
+     * @return 返回获取的service，在获取service出错或者没有获取service时候抛出异常
+     * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
+     */
+    public static <T extends IAlbianService> T getService(Object sessionId,Class<T> cla, String id) {
+        return getService(sessionId,cla, id, false);
+    }
+
+
+
+    public static void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras)  {
+        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if(null != ls) {
+            ls.log(sessionId,target,level,format,paras);
         }
     }
 
-    public static void throwException(String sessionId, String logName, String brief, String msg) {
-        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
-        AlbianRuntimeException thw = new AlbianRuntimeException(stacks[2].getClassName(), stacks[2].getMethodName(), stacks[2].getLineNumber(), msg);
-        logger.warn("brief-> :{} new excetion with msg ->:{} to AlbianRuntimeException.",
-            brief, msg);
-        throw thw;
+    public static void log(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras)  {
+        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if(null != ls) {
+            ls.log(sessionId,target,level,t,format,paras);
+        }
     }
 
-    public static void throwException(String sessionId, String logName, String msg) {
-        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
-        AlbianRuntimeException thw = new AlbianRuntimeException(stacks[2].getClassName(), stacks[2].getMethodName(), stacks[2].getLineNumber(), msg);
-        logger.warn("new excetion with msg ->:{} to AlbianRuntimeException.",
-            msg);
-        throw thw;
+    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) throws Throwable {
+        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if(null != ls) {
+            ls.logAndThrowNew(sessionId,target,level,format,paras);
+        }
+    }
+
+    public static void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras) throws Throwable{
+        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if(null != ls) {
+            ls.logAndThrowAgain(sessionId,target,level,t,format,paras);
+        }
+    }
+
+    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras) throws Throwable{
+        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if(null != ls) {
+            ls.logAndThrowNew(sessionId,target,level,newThrow,format,paras);
+        }
+    }
+
+    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable t, Throwable newThrow, String format, Object... paras) throws Throwable{
+        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if(null != ls) {
+            ls.logAndThrowNew(sessionId,target,level, newThrow, t, format,paras);
+        }
+    }
+
+    public static synchronized String make32UUID() {
+        return UUID.randomUUID().randomUUID().toString().replaceAll("-", "");
+    }
+
+    public static synchronized BigInteger makeBatchId(){
+        return new BigInteger(make32UUID());
     }
 }

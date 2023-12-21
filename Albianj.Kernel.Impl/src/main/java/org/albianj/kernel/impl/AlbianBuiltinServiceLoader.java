@@ -1,22 +1,19 @@
 package org.albianj.kernel.impl;
 
+import org.albianj.argument.KeyValuePair;
 import org.albianj.except.AlbianRuntimeException;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.service.AlbianBuiltinServiceNamePair;
-import org.albianj.service.IAlbianService;
-import org.albianj.service.IAlbianServiceAttribute;
-import org.albianj.service.ServiceContainer;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
+import org.albianj.service.*;
 import org.albianj.service.impl.AlbianServiceRantParser;
 import org.albianj.verify.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AlbianBuiltinServiceLoader {
 
-    private static final Logger loggeer = LoggerFactory.getLogger(AlbianBuiltinServiceLoader.class);
     private LinkedHashMap<String, AlbianBuiltinServiceAttribute> bltServ = null;
     private Map<String, IAlbianServiceAttribute> bltSrvAttrs = null;
 
@@ -25,12 +22,12 @@ public class AlbianBuiltinServiceLoader {
         bltServ = new LinkedHashMap<>();
         bltSrvAttrs = new LinkedHashMap<>();
         // kernel
-        bltServ.put(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
-                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
-                        AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[1], true));
-        bltServ.put(AlbianBuiltinServiceNamePair.AlbianLoggerService2Pair[0],
-                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerService2Pair[0],
-                        AlbianBuiltinServiceNamePair.AlbianLoggerService2Pair[1], true));
+//        bltServ.put(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
+//                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
+//                        AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[1], true));
+//        bltServ.put(AlbianBuiltinServiceNamePair.AlbianLoggerService2Pair[0],
+//                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerService2Pair[0],
+//                        AlbianBuiltinServiceNamePair.AlbianLoggerService2Pair[1], true));
         bltServ.put(AlbianBuiltinServiceNamePair.AlbianKernelServicePair[0],
                 new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianKernelServicePair[0],
                         AlbianBuiltinServiceNamePair.AlbianKernelServicePair[1], true));
@@ -40,9 +37,9 @@ public class AlbianBuiltinServiceLoader {
 //        bltServ.put(AlbianBuiltinServiceNamePair.AlbianThreadPoolServicePair[0],
 //                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianThreadPoolServicePair[0],
 //                        AlbianBuiltinServiceNamePair.AlbianThreadPoolServicePair[1], true));
-//        bltServ.put(AlbianBuiltinServiceNamePair.AlbianSecurityServicePair[0],
-//                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianSecurityServicePair[0],
-//                        AlbianBuiltinServiceNamePair.AlbianSecurityServicePair[1], true));
+        bltServ.put(AlbianBuiltinServiceNamePair.AlbianSecurityServicePair[0],
+                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianSecurityServicePair[0],
+                        AlbianBuiltinServiceNamePair.AlbianSecurityServicePair[1], true));
 
         // persistence
         bltServ.put(AlbianBuiltinServiceNamePair.AlbianStorageServicePair[0],
@@ -88,9 +85,9 @@ public class AlbianBuiltinServiceLoader {
                         AlbianBuiltinServiceNamePair.AlbianServiceParserPair[1], true));
     }
 
-    public void loadServices() {
+    public void loadServices(String sessionId) throws Throwable {
 
-        Map<String,IAlbianServiceAttribute> bltServMap = sacnService();
+        Map<String,IAlbianServiceAttribute> bltServMap = sacnService(sessionId);
         String id = null;
         String sImplClzz = null;
         int failCount = 0;
@@ -145,12 +142,14 @@ public class AlbianBuiltinServiceLoader {
 
                 if (pluginServiceFail) {
                     // plugin service load fail is not throw exception
-                    loggeer.warn("loader plugin service：{} is error",sbFailPluginServiceBiref);
+                    AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Warn,
+                            "loader plugin service：{} is error",sbFailPluginServiceBiref);
                 } //can not return,check required service
                 if (requiredServiceFail) {
                     //required service can not load fail.
-                    loggeer.error("loader plugin ReService：{} is error",sbFailReqServiceBiref);
-                    throw new AlbianRuntimeException("loader required service is fail.sbFailReqServiceBiref:"+sbFailReqServiceBiref);
+                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                            new AlbianRuntimeException("loader required service is fail.sbFailReqServiceBiref:" + sbFailReqServiceBiref),
+                            "loader plugin ReService：{} is error",sbFailReqServiceBiref);
                 }
                 return;
             }
@@ -161,25 +160,63 @@ public class AlbianBuiltinServiceLoader {
         return this.bltSrvAttrs;
     }
 
-    public Map<String,IAlbianServiceAttribute> sacnService(){
+    public Map<String,IAlbianServiceAttribute> sacnService(String sessionId) throws Throwable {
         bltSrvAttrs = new LinkedHashMap<>();
         for (AlbianBuiltinServiceAttribute bltSerAttr : this.bltServ.values()) {
-            String id = bltSerAttr.getId();
-            String sImplClzz = bltSerAttr.getImplClzz();
+//            String id = bltSerAttr.getId();
+//            String sImplClzz = bltSerAttr.getImplClzz();
             try {
-                Class<?> implClzz = AlbianClassLoader.getInstance().loadClass(sImplClzz);
-                IAlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
-                bltSrvAttrs.put(id,attr);
+//                Class<?> implClzz = AlbianClassLoader.getInstance().loadClass(sImplClzz);
+//                IAlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
+//                bltSrvAttrs.put(id,attr);
+                KeyValuePair<String,IAlbianServiceAttribute> kvp = sacnService(bltSerAttr);
+                bltSrvAttrs.put(kvp.getKey(),kvp.getValue());
             }catch (Exception e){
                 if(bltSerAttr.isRequired()) {
-                    throw new AlbianRuntimeException("loader builtin  service:"+bltSerAttr.getId()+"is fail.",e);
+                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                            new AlbianRuntimeException("loader builtin  service:"+bltSerAttr.getId()+" is fail."),
+                            "BuiltinServiceLoader loader builtin  service:{} is fail. but it is must load.",bltSerAttr.getId());
                 } else {
-                    loggeer.error("BuiltinServiceLoader loader builtin  service:{}is fail. but it is not must load.",bltSerAttr.getId());
+                    AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Warn,
+                            new AlbianRuntimeException("loader builtin  service:"+bltSerAttr.getId()+" is fail."),
+                            "BuiltinServiceLoader loader builtin  service:{} is fail. but it is not must load.",bltSerAttr.getId());
                 }
             }
         }
         if(Validate.isNullOrEmpty(bltSrvAttrs))  return null;
         return bltSrvAttrs;
+    }
+
+    /**
+     * 解析单个service attribute
+     * @param servAttr
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public KeyValuePair<String,IAlbianServiceAttribute> sacnService(AlbianBuiltinServiceAttribute servAttr) throws ClassNotFoundException {
+            String id = servAttr.getId();
+            String sImplClzz = servAttr.getImplClzz();
+            KeyValuePair kvp = null;
+            try {
+                Class<?> implClzz = AlbianClassLoader.getInstance().loadClass(sImplClzz);
+                IAlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
+                kvp = new KeyValuePair(id,attr);
+            }catch (Throwable e){
+                throw e;
+            }
+
+            return kvp;
+    }
+
+    /**
+     * 单独建立日志service，必须在startup方法的第一条就调用，以便后续启动的时候日志可以记录
+     * @throws ClassNotFoundException
+     */
+    public void loadLoggerService() throws Throwable {
+        KeyValuePair<String,IAlbianServiceAttribute>  logServAttr =  sacnService(new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
+                                                                    AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[1],true));
+        IAlbianService service = AlbianServiceLoader.makeupService(logServAttr.getValue(),null);
+        ServiceContainer.addService(logServAttr.getKey(), service);
     }
 
 }

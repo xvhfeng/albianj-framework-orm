@@ -18,7 +18,7 @@ import java.util.*;
 
 public class AlbianServiceRantParser {
 
-    public static HashMap<String, Object> scanPackage(String pkgName) throws IOException, ClassNotFoundException {
+    public static HashMap<String, Object> scanPackage(String pkgName) throws Throwable {
         return AlbianClassScanner.filter(AlbianClassLoader.getInstance(),
                 pkgName,
 

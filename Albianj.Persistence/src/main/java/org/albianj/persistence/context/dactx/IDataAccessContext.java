@@ -37,7 +37,7 @@ public interface IDataAccessContext {
 
     IDataAccessContext setRollBackOnError();
 
-    boolean commit(String sessionId);
+    boolean commit(String sessionId) throws Throwable;
 
     void reset();
 }

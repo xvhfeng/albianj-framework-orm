@@ -58,7 +58,7 @@ public class WriterJob implements IWriterJob {
     public WriterJob(String sessionId) {
         // TODO Auto-generated constructor stub
         if (Validate.isNullOrEmptyOrAllSpace(sessionId)) {
-            this.id = AlbianServiceRouter.getLogIdService().makeLoggerId();
+            this.id = AlbianServiceRouter.make32UUID();
         } else {
             this.id = sessionId;
         }

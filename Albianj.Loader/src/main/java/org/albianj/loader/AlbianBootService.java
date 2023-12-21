@@ -37,19 +37,23 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.loader;
 
-import org.albianj.kernel.AlbianState;
 import org.albianj.kernel.IAlbianTransmitterService;
 import org.albianj.net.MemoryToIOStream;
 import org.albianj.verify.Validate;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class AlbianBootService {
     private static final Logger logger = LoggerFactory.getLogger(AlbianBootService.class);
+    private static final String AlbianStarter = "org.albianj.kernel.impl.AlbianTransmitterService";
     @SuppressWarnings("resource")
     private static ArrayList<byte[]> unpack(FileInputStream fis) {
         ArrayList<byte[]> list = null;
@@ -75,115 +79,82 @@ public class AlbianBootService {
         return null;
     }
 
-    public static boolean start(String classpath, String kernelPath, String configPath) {
+    private static URI lookupLoggerConfigFile(String configPath){
+        String[] filenames = {
+                "log4j2.xml",
+                "log4j2.properties",
+                "log4j2.yaml",
+                "log4j2.prop",
+                "log4j.xml",
+                "log4j.properties",
+                "log4j.yaml",
+                "log4j.prop",
+        };
 
-        /* keep save load log4j2
-        LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
-        File conFile = new File("C:\\SJMZ20200301\\DriveA\\09_dev\\conf\\log4j2.xml");
-        logContext.setConfigLocation(conFile.toURI());
-        logContext.reconfigure();
-        */
+        for (String filename : filenames) {
+            String logConfigFile = null;
+            if (configPath.endsWith(File.separator)) {
+                logConfigFile = configPath + filename;
+            } else {
+                logConfigFile = configPath + File.separator + filename;
+            }
+            File f =  new File(logConfigFile);
+            if(f.exists()){
+                return f.toURI();
+            }
+        }
+        return null;
+    }
 
+    public static boolean start(String configPath) {
 
+        String cfPath = configPath;
+        if(Validate.isNullOrEmptyOrAllSpace(configPath)) {
+            cfPath = AlbianClassLoader.getResourcePath();
+        }
 
+        URI cfFileName = lookupLoggerConfigFile(cfPath);
+        if (null != cfFileName) {
+            LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
+            logContext.setConfigLocation(cfFileName);
+            logContext.reconfigure();
 
-//        String sVersion = null;
-//        String epath = System.getProperty("java.ext.dirs");
-//        File dir = new File(classpath);
-//        if (!dir.isDirectory()) {
-//            return false;
-//        }
-//        File jarf = null;
-//        File[] files = dir.listFiles(new FilenameFilter() {
-//            @Override
-//            public boolean accept(File dir, String name) {
-//                return (name.endsWith(".spx"));
-//            }
-//        });
-//        if (0 != files.length) {
-//            jarf = files[0];
-//        } else {
-//            dir = new File(epath);
-//            files = dir.listFiles(new FilenameFilter() {
-//                @Override
-//                public boolean accept(File dir, String name) {
-//                    return (name.endsWith(".spx"));
-//                }
-//            });
-//            if (0 != files.length) {
-//                jarf = files[0];
-//            }
-//        }
-//
-//        if (null == jarf) {
-//            System.out.println("not found Albian's spx file.please put spx file to classpath or exts-path.");
-//            return false;
-//        }
-//        String fname = jarf.getName();
-//        int begin = fname.indexOf("Albianj_");
-//        int end = fname.indexOf(".spx");
-//        sVersion = fname.substring(begin + "Albianj_".length(), end);
-//
-//        FileInputStream fis = null;
-//        try {
-//            fis = new FileInputStream(jarf);
-//            byte[] bVersion = new byte[14];
-//            fis.read(bVersion);
-//            String sFVersion = bVersion.toString();
-//            if (!sFVersion.equalsIgnoreCase(sVersion)) {
-//
-//            }
-//
-//            ArrayList<byte[]> list = unpack(fis);
-//            if (Validate.isNullOrEmpty(list)) {
-//                System.err.println("unzip the jars is null. ");
-//                return false;
-//            }
-//            for (byte[] bs : list) {
-//                AlbianClassLoader.getInstance().regeditPlugin(bs);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        } finally {
-//            if (null != fis) {
-//                try {
-//                    fis.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
+        /* 上面不行的话，换这个试试
+         InputStream inputStream = new FileInputStream("C:/path/to/log4j2.xml");
+        ConfigurationSource source = new ConfigurationSource(inputStream);
+        Configurator.initialize(null, source);
+
+        -----
+
+           File log4j2File = new File("C:/path/to/log4j2.xml");
+        System.setProperty("log4j2.configurationFile", log4j2File.toURI().toString());
+
+         -----
+
+        Configurator.initialize(null, "/full_path/conf/logger.xml");
+
+         */
+        }
 
         try {
-            Class<?> clss = AlbianClassLoader.getInstance()
-                    .loadClass("org.albianj.kernel.impl.AlbianTransmitterService");
+            Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
             IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
-            if (!Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
-                abs.start(kernelPath, configPath);
-            } else if (Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
-                abs.start(configPath);
-            } else {
-                abs.start();
-            }
-            if (AlbianState.Running != abs.getLifeState()) {
-                return false;
-            }
-        } catch (Exception e) {
+            abs.start(cfPath);
+
+//            if (!Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
+//                abs.start(kernelPath, configPath);
+//            } else if (Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
+//            } else {
+//                abs.start();
+//            }
+//            if (AlbianState.Running != abs.getLifeState()) {
+//                return false;
+//            }
+        } catch (Throwable e) {
             // TODO Auto-generated catch block
             logger.error("AlbianBootService start is error ",e);
             return false;
         }
         return true;
     }
-
-    public static boolean start(String classpath, String configPath) {
-        return start(classpath, configPath);
-    }
-
-    public static boolean start(String configPath) {
-        return start(null, configPath, configPath);
-    }
-
 }

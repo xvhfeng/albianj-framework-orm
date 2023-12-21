@@ -40,7 +40,6 @@ package org.albianj.persistence.impl.context;
 import org.albianj.persistence.context.IWriterJob;
 import org.albianj.persistence.context.dactx.AlbianDataAccessOpt;
 import org.albianj.persistence.context.dactx.IAlbianObjectWarp;
-import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.impl.db.CreateCommandAdapter;
 import org.albianj.persistence.impl.db.IPersistenceUpdateCommand;
 import org.albianj.persistence.impl.db.ModifyCommandAdapter;
@@ -50,57 +49,57 @@ import org.albianj.persistence.object.IAlbianObject;
 import java.util.List;
 
 public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
-    public IWriterJob buildCreation(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public IWriterJob buildCreation(String sessionId, IAlbianObject object) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
-        buildWriterJob(job, object, null, null, cca);
+        buildWriterJob(sessionId, job, object, null, null, cca);
         return job;
     }
 
-    public IWriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public IWriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         for (IAlbianObject object : objects) {
-            buildWriterJob(job, object, null, null, cca);
+            buildWriterJob(sessionId, job, object, null, null, cca);
         }
         return job;
     }
 
-    public IWriterJob buildModification(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public IWriterJob buildModification(String sessionId, IAlbianObject object) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
-        buildWriterJob(job, object, null, null, mca);
+        buildWriterJob(sessionId, job, object, null, null, mca);
         return job;
     }
 
-    public IWriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public IWriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
         for (IAlbianObject object : objects) {
-            buildWriterJob(job, object, null, null, mca);
+            buildWriterJob(sessionId, job, object, null, null, mca);
 
         }
         return job;
     }
 
-    public IWriterJob buildRemoved(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public IWriterJob buildRemoved(String sessionId, IAlbianObject object) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
-        buildWriterJob(job, object, null, null, rca);
+        buildWriterJob(sessionId, job, object, null, null, rca);
 
         return job;
     }
 
-    public IWriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public IWriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
         for (IAlbianObject object : objects) {
-            buildWriterJob(job, object, null, null, rca);
+            buildWriterJob(sessionId, job, object, null, null, rca);
         }
         return job;
     }
 
-    public IWriterJob buildSaving(String sessionId, IAlbianObject object) throws AlbianDataServiceException {
+    public IWriterJob buildSaving(String sessionId, IAlbianObject object) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand iuc;
         if (object.getIsAlbianNew()) {
@@ -109,26 +108,26 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
             iuc = new ModifyCommandAdapter();
         }
 
-        buildWriterJob(job, object, null, null, iuc);
+        buildWriterJob(sessionId, job, object, null, null, iuc);
         return job;
     }
 
-    public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects) throws AlbianDataServiceException {
+    public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
         for (IAlbianObject object : objects) {
             if (object.getIsAlbianNew()) {
-                buildWriterJob(job, object, null, null, cca);
+                buildWriterJob(sessionId, job, object, null, null, cca);
             } else {
-                buildWriterJob(job, object, null, null, mca);
+                buildWriterJob(sessionId, job, object, null, null, mca);
             }
         }
         return job;
     }
 
     public IWriterJob buildWriterJob(String sessionId, List<IAlbianObjectWarp> entities, boolean rollbackOnError)
-            throws AlbianDataServiceException {
+            throws Throwable {
         IWriterJob job = new WriterJob(sessionId);
         job.setRollbackOnError(rollbackOnError);
         IPersistenceUpdateCommand crtCmd = new CreateCommandAdapter();
@@ -137,23 +136,23 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         for (IAlbianObjectWarp entity : entities) {
             switch (entity.getPersistenceOpt()) {
                 case (AlbianDataAccessOpt.Create): {
-                    buildWriterJob(job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), crtCmd);
+                    buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), crtCmd);
                     break;
                 }
                 case AlbianDataAccessOpt.Update: {
-                    buildWriterJob(job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), mdfCmd);
+                    buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), mdfCmd);
                     break;
                 }
                 case AlbianDataAccessOpt.Delete: {
-                    buildWriterJob(job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), dltCmd);
+                    buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), dltCmd);
                     break;
                 }
                 case AlbianDataAccessOpt.Save:
                 default: {
                     if (entity.getEntry().getIsAlbianNew()) {
-                        buildWriterJob(job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), crtCmd);
+                        buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), crtCmd);
                     } else {
-                        buildWriterJob(job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), mdfCmd);
+                        buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), mdfCmd);
                     }
                     break;
                 }
@@ -163,9 +162,9 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    protected abstract void buildWriterJob(IWriterJob job, IAlbianObject entity,
+    protected abstract void buildWriterJob(String sessionId,IWriterJob job, IAlbianObject entity,
                                            String storageAlias, String tableAlias,
-                                           IPersistenceUpdateCommand cmd);
+                                           IPersistenceUpdateCommand cmd) throws Throwable;
 
 
 }

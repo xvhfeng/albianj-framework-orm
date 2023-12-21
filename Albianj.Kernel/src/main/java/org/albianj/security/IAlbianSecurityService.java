@@ -44,37 +44,37 @@ public interface IAlbianSecurityService extends IAlbianService {
 
     final String Name = AlbianBuiltinServiceNamePair.AlbianSecurityServiceName;
 
-    public String decryptDES(String message) throws RuntimeException;
+    public String decryptDES(Object sessionId,String message) throws Throwable;
 
-    public String decryptDES(String key, String message) throws RuntimeException;
+    public String decryptDES(Object sessionId,String key, String message) throws Throwable;
 
-    public String encryptDES(String message) throws RuntimeException;
+    public String encryptDES(Object sessionId,String message) throws Throwable;
 
-    public String encryptDES(String key, String message) throws RuntimeException;
-
-
-    public byte[] decryptBASE64(String key) throws RuntimeException;
-
-    public String encryptBASE64(byte[] key) throws RuntimeException;
-
-    public String encryptMD5(String data) throws RuntimeException;
-
-    public String encryptSHA(String data) throws RuntimeException;
+    public String encryptDES(Object sessionId,String key, String message) throws Throwable;
 
 
-    public String initMacKey() throws RuntimeException;
+    public byte[] decryptBASE64(Object sessionId,String key) throws Throwable;
 
-    public String initMacKey(MACStyle style) throws RuntimeException;
+    public String encryptBASE64(Object sessionId,byte[] key) throws Throwable;
 
-    public String encryptHMAC(String key, MACStyle style, byte[] data)
-            throws RuntimeException;
+    public String encryptMD5(Object sessionId,String data) throws Throwable;
 
-    public String encryptHMAC(String key, MACStyle style, String data)
-            throws RuntimeException;
+    public String encryptSHA(Object sessionId,String data) throws Throwable;
 
-    public String encryptHMAC(String key, byte[] data) throws RuntimeException;
 
-    public String encryptHMAC(String key, String data) throws RuntimeException;
+    public String initMacKey(Object sessionId) throws Throwable;
+
+    public String initMacKey(Object sessionId,MACStyle style) throws Throwable;
+
+    public String encryptHMAC(Object sessionId,String key, MACStyle style, byte[] data)
+            throws Throwable;
+
+    public String encryptHMAC(Object sessionId,String key, MACStyle style, String data)
+            throws Throwable;
+
+    public String encryptHMAC(Object sessionId,String key, byte[] data) throws Throwable;
+
+    public String encryptHMAC(Object sessionId,String key, String data) throws Throwable;
 
 
 }

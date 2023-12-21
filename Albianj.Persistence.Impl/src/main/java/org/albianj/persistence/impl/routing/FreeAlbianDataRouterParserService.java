@@ -37,19 +37,19 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.impl.routing;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.object.IDataRouterAttribute;
 import org.albianj.persistence.object.IDataRoutersAttribute;
 import org.albianj.persistence.service.IAlbianDataRouterParserService;
-import org.albianj.service.parser.AlbianParserException;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.FreeAlbianParserService;
 import org.albianj.verify.Validate;
 import org.albianj.xml.XmlParser;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +58,6 @@ import java.util.Map;
 public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParserService
     implements IAlbianDataRouterParserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreeAlbianDataRouterParserService.class);
     private final static String tagName = "AlbianObjects/AlbianObject";
     private String file = "drouter.xml";
     private HashMap<String, IDataRoutersAttribute> _cached = null;
@@ -68,29 +67,32 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
     }
 
     @Override
-    public void init() throws AlbianParserException {
+    public void init() throws Throwable {
         _cached = new HashMap<>();
         try {
             parserFile(file);
         } catch (Exception e) {
-            throw new AlbianDataServiceException("loading the drouter.xml is error.", e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                    "loading the drouter.xml is error.");
         }
         return;
 
     }
 
-    private void parserFile(String filename) throws AlbianParserException {
+    private void parserFile(String filename) throws Throwable {
         Document doc = null;
         try {
             String fname = findConfigFile(filename);
             //配置文件不存在则不用加载，不报错
             if(StringUtils.isBlank(fname)){
-                logger.error("loading the drouter.xml is error. drouter.xml is not exist");
+                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                        "loading the drouter.xml is error. drouter.xml is not exist");
                 return;
             }
             doc = XmlParser.load(fname);
         } catch (Exception e) {
-            throw new AlbianDataServiceException("loading the drouter.xml is error.", e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                    "loading the drouter.xml is error.");
         }
         if (null == doc) {
             throw new AlbianDataServiceException("loading the drouter.xml is error.");
@@ -110,7 +112,8 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         @SuppressWarnings("rawtypes")
         List objNodes = XmlParser.selectNodes(doc, tagName);
         if (Validate.isNullOrEmpty(objNodes)) {
-            logger.warn("parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Warn,
+                    "parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
                 tagName);
             return;
         }
@@ -118,6 +121,6 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
     }
 
     protected abstract Map<String, IDataRouterAttribute> parserRoutings(
-            @SuppressWarnings("rawtypes") List nodes) throws AlbianParserException;
+            @SuppressWarnings("rawtypes") List nodes) throws Throwable;
 
 }

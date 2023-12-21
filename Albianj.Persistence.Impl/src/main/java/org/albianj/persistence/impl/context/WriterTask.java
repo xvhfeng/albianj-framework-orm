@@ -38,10 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.persistence.impl.context;
 
 import org.albianj.persistence.context.IWriterTask;
+import org.albianj.persistence.context.PersistenceStatement;
 import org.albianj.persistence.db.IDataBasePool;
 import org.albianj.persistence.db.IPersistenceCommand;
 import org.albianj.persistence.db.localize.IDBClientSection;
-import org.albianj.persistence.context.PersistenceStatement;
 import org.albianj.persistence.object.IRunningStorageAttribute;
 
 import java.sql.Connection;

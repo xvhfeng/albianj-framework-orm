@@ -37,20 +37,20 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.impl.storage;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.object.IRunningStorageAttribute;
 import org.albianj.persistence.object.IStorageAttribute;
 import org.albianj.persistence.object.PersistenceDatabaseStyle;
 import org.albianj.persistence.service.IAlbianStorageParserService;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.AlbianParserException;
 import org.albianj.service.parser.FreeAlbianParserService;
-import org.albianj.text.StringHelper;
 import org.albianj.verify.Validate;
 import org.albianj.xml.XmlParser;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +58,6 @@ import java.util.List;
 public abstract class FreeAlbianStorageParserService extends FreeAlbianParserService
     implements IAlbianStorageParserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreeAlbianStorageParserService.class);
     private final static String tagName = "Storages/Storage";
     private String file = "storage.xml";
     private HashMap<String, IStorageAttribute> cached = null;
@@ -66,7 +65,8 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     public static String generateConnectionUrl(
             IRunningStorageAttribute rsa) {
         if (null == rsa) {
-            logger.warn("The argument storageAttribute is null.");
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                    "The argument storageAttribute is null.");
             return null;
         }
 
@@ -122,25 +122,27 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     }
 
     @Override
-    public void init() throws AlbianParserException {
+    public void init() throws Throwable {
         Document doc = null;
         cached = new HashMap<String, IStorageAttribute>();
         try {
             parserFile(file);
-        } catch (Exception e) {
-            throw new AlbianDataServiceException("loading the storage.xml is error.", e);
+        } catch (Throwable e) {
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                    "loading the storage.xml is error." );
         }
         return;
     }
 
-    private void parserFile(String filename) throws AlbianParserException {
+    private void parserFile(String filename) throws Throwable {
         Document doc = null;
         cached = new HashMap<String, IStorageAttribute>();
         try {
             String fname = findConfigFile(filename);
             doc = XmlParser.load(fname);
         } catch (Exception e) {
-            throw new AlbianDataServiceException("loading the storage.xml is error.", e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                    "loading the storage.xml is error.");
         }
         if (null == doc) {
             throw new AlbianDataServiceException("loading the storage.xml is error.");

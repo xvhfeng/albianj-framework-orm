@@ -1,6 +1,5 @@
 package org.albianj.persistence.context.dactx;
 
-import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.object.IAlbianObject;
 import org.albianj.persistence.object.IOrderByCondition;
 import org.albianj.persistence.object.filter.IChainExpression;
@@ -33,11 +32,11 @@ public interface IQueryContext {
     IQueryContext byRouter(String drouterAlias);
 
 
-    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression where) throws AlbianDataServiceException;
+    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression where) throws Throwable;
 
-    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression where) throws AlbianDataServiceException;
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression where) throws Throwable;
 
-    long loadCounts(String sessionId, Class<? extends IAlbianObject> itfClzz, LoadType loadType, IChainExpression where) throws AlbianDataServiceException;
+    long loadCounts(String sessionId, Class<? extends IAlbianObject> itfClzz, LoadType loadType, IChainExpression where) throws Throwable;
 
     void reset();
 }

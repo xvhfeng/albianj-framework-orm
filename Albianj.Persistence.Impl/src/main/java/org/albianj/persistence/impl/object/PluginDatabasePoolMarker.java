@@ -1,10 +1,11 @@
 package org.albianj.persistence.impl.object;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.db.IDataBasePool;
 import org.albianj.persistence.object.DatabasePoolMaker;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.ServiceLoaderUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +17,6 @@ import java.util.List;
  * @ccversion 新建 - liyuqi 2019-07-01 17:29</br>
  */
 public class PluginDatabasePoolMarker implements DatabasePoolMaker {
-    private static final Logger logger = LoggerFactory.getLogger(PluginDatabasePoolMarker.class);
     private List<DatabasePoolMaker> supportMarkers = new ArrayList<>();
 
     public PluginDatabasePoolMarker() {
@@ -26,7 +26,8 @@ public class PluginDatabasePoolMarker implements DatabasePoolMaker {
                 supportMarkers.add(its.next());
             }
         } catch (Throwable t) {
-            logger.error("load databasePoolMarker error", t);
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,t,
+                    "load databasePoolMarker error");
         }
     }
 

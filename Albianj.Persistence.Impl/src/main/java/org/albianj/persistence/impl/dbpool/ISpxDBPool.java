@@ -17,7 +17,7 @@ public interface ISpxDBPool extends DataSource {
     /**
      * 销毁清空当前连接池
      */
-    public void destroy();
+    public void destroy(String sessionId);
 
     /**
      * 连接池可用状态
@@ -40,7 +40,7 @@ public interface ISpxDBPool extends DataSource {
      */
     public int getFreeCount();
 
-    public ISpxDBPoolConfig getConfig();
+//    public ISpxDBPoolConfig getConfig();
 
     void setConfig(ISpxDBPoolConfig config);
 
@@ -49,6 +49,7 @@ public interface ISpxDBPool extends DataSource {
 
     public void setPoolName(String name);
 
+    Connection getConnection(String username, String password) throws SQLException;
     Connection getConnection(String sessionId) throws SQLException;
 
 //    public int getCurrRemedyConnectionsCount() ;
