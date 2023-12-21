@@ -18,10 +18,10 @@ import org.albianj.persistence.object.rants.AlbianObjectDataRouterRant;
 import org.albianj.persistence.object.rants.AlbianObjectDataRoutersRant;
 import org.albianj.persistence.object.rants.AlbianObjectRant;
 import org.albianj.persistence.service.AlbianEntityMetadata;
-import org.albianj.reflection.AlbianReflect;
+import org.albianj.utils.ReflectUtil;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.text.StringHelper;
-import org.albianj.verify.Validate;
+import org.albianj.utils.StringsUtil;
+import org.albianj.utils.CheckUtil;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -73,7 +73,7 @@ public class AlbianEntityRantScaner {
                         objAttr.setImplClzz(clzz);
 
                         Map<String, IAlbianEntityFieldAttribute> fields = scanFields(clzz);
-                        if (!Validate.isNullOrEmpty(fields)) {
+                        if (!CheckUtil.isNullOrEmpty(fields)) {
                             objAttr.setFields(fields);
                         }
 
@@ -158,10 +158,10 @@ public class AlbianEntityRantScaner {
                 dra.setName(odrr.Name());
                 dra.setStorageName(odrr.StorageName());
 
-                if (!Validate.isNullOrEmptyOrAllSpace(odrr.TableOwner())) {
+                if (!CheckUtil.isNullOrEmptyOrAllSpace(odrr.TableOwner())) {
                     dra.setOwner(odrr.TableOwner());
                 }
-                if (!Validate.isNullOrEmptyOrAllSpace(odrr.TableName())) {
+                if (!CheckUtil.isNullOrEmptyOrAllSpace(odrr.TableName())) {
                     dra.setTableName(odrr.TableName());
                 } else {
                     dra.setTableName(clzz.getSimpleName());
@@ -196,17 +196,17 @@ public class AlbianEntityRantScaner {
                 f.setAccessible(true);
                 fAttr.setEntityField(f);
                 String propertyName = null;
-                if (Validate.isNullOrEmptyOrAllSpace(fr.PropertyName())) {
+                if (CheckUtil.isNullOrEmptyOrAllSpace(fr.PropertyName())) {
                     propertyName = FieldConvert.fieldName2PropertyName(f.getName());
                     fAttr.setPropertyName(propertyName);
                 } else {
-                    propertyName = StringHelper.lowercasingFirstLetter(fr.PropertyName());
+                    propertyName = StringsUtil.lowercasingFirstLetter(fr.PropertyName());
                     fAttr.setPropertyName(propertyName);
                 }
 
 
-                if (Validate.isNullOrEmptyOrAllSpace(fr.FieldName())) {
-                    fAttr.setSqlFieldName(StringHelper.uppercasingFirstLetter(propertyName));
+                if (CheckUtil.isNullOrEmptyOrAllSpace(fr.FieldName())) {
+                    fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
                 } else {
                     fAttr.setSqlFieldName(fr.FieldName());
                 }
@@ -223,7 +223,7 @@ public class AlbianEntityRantScaner {
                 fAttr.setPrimaryKey(fr.IsPrimaryKey());
                 fAttr.setAutoGenKey(fr.IsAutoGenKey());
                 try {
-                    PropertyDescriptor pd = AlbianReflect.getBeanPropertyDescriptor(clzz, propertyName);
+                    PropertyDescriptor pd = ReflectUtil.getBeanPropertyDescriptor(clzz, propertyName);
                     if (null != pd) {
                         if (null != pd.getReadMethod()) {
                             fAttr.setPropertyGetter(pd.getReadMethod());
@@ -241,11 +241,11 @@ public class AlbianEntityRantScaner {
                 fAttr.setName(f.getName());
                 String propertyName = FieldConvert.fieldName2PropertyName(f.getName());
                 fAttr.setPropertyName(propertyName);
-                fAttr.setSqlFieldName(StringHelper.uppercasingFirstLetter(propertyName));
+                fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
                 fAttr.setDatabaseType(Convert.toSqlType(f.getType()));
                 fAttr.setEntityField(f);
                 try {
-                    PropertyDescriptor pd = AlbianReflect.getBeanPropertyDescriptor(clzz, propertyName);
+                    PropertyDescriptor pd = ReflectUtil.getBeanPropertyDescriptor(clzz, propertyName);
                     if (null != pd) {
                         if (null != pd.getReadMethod()) {
                             fAttr.setPropertyGetter(pd.getReadMethod());

@@ -41,7 +41,7 @@ import org.albianj.persistence.context.IInternalManualCommand;
 import org.albianj.persistence.context.IManualCommand;
 import org.albianj.persistence.context.InternalManualCommand;
 import org.albianj.persistence.db.IPersistenceCommand;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +68,7 @@ public class PersistenceNamedParameter {
         cmd.setCommandText(cmdText);
         cmd.setParameterMapper(paramsMap);
 
-        if (!Validate.isNullOrEmptyOrAllSpace(cmd.getRollbackCommandText())) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(cmd.getRollbackCommandText())) {
             String rollbackText = cmd.getRollbackCommandText();
             Matcher rm = p.matcher(rollbackText);
             Map<Integer, String> rollbackParamsMap = new HashMap<Integer, String>();

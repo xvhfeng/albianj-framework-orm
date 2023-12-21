@@ -53,7 +53,7 @@ import org.albianj.persistence.object.IRunningStorageAttribute;
 import org.albianj.persistence.object.IStorageAttribute;
 import org.albianj.persistence.service.IAlbianStorageParserService;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -66,7 +66,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void preExecute(IWriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Opening);
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new AlbianDataServiceException("the task for the job is null or empty.");
         }
 
@@ -90,7 +90,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         storage.getName());
             }
             List<IPersistenceCommand> cmds = t.getCommands();
-            if (Validate.isNullOrEmpty(cmds)) {
+            if (CheckUtil.isNullOrEmpty(cmds)) {
                 throw new AlbianDataServiceException("The commands for task is empty or null");
             }
 
@@ -110,7 +110,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                             psDb.addBatch();
                         }
                         Map<Integer, String> map = cmd.getParameterMapper();
-                        if (Validate.isNullOrEmpty(map)) {
+                        if (CheckUtil.isNullOrEmpty(map)) {
                             continue;
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
@@ -130,7 +130,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         PreparedStatement prepareStatement = t
                                 .getConnection().prepareStatement(cmdTxt);
                         Map<Integer, String> map = cmd.getParameterMapper();
-                        if (Validate.isNullOrEmpty(map)) {
+                        if (CheckUtil.isNullOrEmpty(map)) {
                             continue;
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
@@ -241,7 +241,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void executeHandler(IWriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Running);
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new AlbianDataServiceException("The task is null or empty.");
         }
 
@@ -319,7 +319,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void commit(IWriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Commiting);
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new AlbianDataServiceException("The task is null or empty.");
         }
         for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
@@ -341,7 +341,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void exceptionHandler(IWriterJob writerJob) throws AlbianDataServiceException {
         boolean isThrow = false;
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new AlbianDataServiceException("The task is null or empty.");
         }
         for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
@@ -379,7 +379,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void unLoadExecute(IWriterJob writerJob) throws AlbianDataServiceException {
         boolean isThrow = false;
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new AlbianDataServiceException("The task is null or empty.");
         }
         IWriterTask t = null;
@@ -410,7 +410,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     private void manualRollbackPreExecute(IWriterJob writerJob)  {
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new AlbianDataServiceException("the task for the job is null or empty when manual rollbacking.");
         }
 
@@ -419,7 +419,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             if (!t.getIsCommited()) continue;// not commit then use auto rollback
 
             List<IPersistenceCommand> cmds = t.getCommands();
-            if (Validate.isNullOrEmpty(cmds)) {
+            if (CheckUtil.isNullOrEmpty(cmds)) {
                 throw new AlbianDataServiceException("The commands for task is empty or null when manual rollbacking.");
             }
             List<Statement> statements = new Vector<Statement>();
@@ -430,7 +430,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     PreparedStatement prepareStatement = t
                             .getConnection().prepareStatement(cmd.getRollbackCommandText());
                     Map<Integer, String> map = cmd.getRollbackParameterMapper();
-                    if (Validate.isNullOrEmpty(map)) {
+                    if (CheckUtil.isNullOrEmpty(map)) {
                         continue;
                     } else {
                         for (int i = 1; i <= map.size(); i++) {
@@ -451,7 +451,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
                     "make sql command for task is empty or null when maunal rollbacking.");
             }
-            if (!Validate.isNullOrEmpty(statements)) {
+            if (!CheckUtil.isNullOrEmpty(statements)) {
                 t.setRollbackStatements(statements);
                 t.setRollbackCommands(rbkCmds);
                 t.setCompensating(true);
@@ -461,7 +461,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     private void manualRollbackExecuteHandler(IWriterJob writerJob)  {
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new AlbianDataServiceException("The task is null or empty.");
         }
 
@@ -472,7 +472,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
             List<Statement> statements = t.getRollbackStatements();
             List<IPersistenceCommand> cmds = t.getRollbackCommands();
-            if (Validate.isNullOrEmpty(statements)) continue;
+            if (CheckUtil.isNullOrEmpty(statements)) continue;
             ;
             for (int i = 0; i < statements.size(); i++) {
                 try {
@@ -493,7 +493,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     private void manualRollbackCommit(IWriterJob writerJob)  {
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
         for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {

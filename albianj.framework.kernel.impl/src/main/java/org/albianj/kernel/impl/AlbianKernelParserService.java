@@ -48,8 +48,8 @@ import org.albianj.service.AlbianServiceRant;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.FreeAlbianParserService;
 import org.albianj.service.parser.IAlbianParserService;
-import org.albianj.verify.Validate;
-import org.albianj.xml.PropertiesParser;
+import org.albianj.utils.CheckUtil;
+import org.albianj.utils.PropUtil;
 
 import java.util.Properties;
 
@@ -68,7 +68,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
 
     public void init()  {
         try {
-            Properties props = PropertiesParser.load(Path
+            Properties props = PropUtil.load(Path
                     .getExtendResourcePath(KernelSetting
                             .getAlbianKernelConfigFilePath() + file));
             parser(props);
@@ -79,51 +79,51 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
     }
 
     public void parser(Properties props) {
-        String id = PropertiesParser.getValue(props, "Id");
-        if (Validate.isNullOrEmptyOrAllSpace(id)) {
+        String id = PropUtil.getValue(props, "Id");
+        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
             KernelSetting.setKernelId("001");
         } else {
             KernelSetting.setKernelId(id);
         }
 
-        String appName = PropertiesParser.getValue(props, "AppName");
-        if (!Validate.isNullOrEmptyOrAllSpace(appName)) {
+        String appName = PropUtil.getValue(props, "AppName");
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(appName)) {
             KernelSetting.setAppName(appName);
         }
 
-        String coreSize = PropertiesParser
+        String coreSize = PropUtil
                 .getValue(props, "ThreadPoolCoreSize");
-        if (Validate.isNullOrEmptyOrAllSpace(coreSize)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(coreSize)) {
             KernelSetting.setThreadPoolCoreSize(5);
         } else {
             KernelSetting.setThreadPoolCoreSize(Integer.parseInt(coreSize));
         }
-        String maxSize = PropertiesParser.getValue(props, "ThreadPoolMaxSize");
-        if (Validate.isNullOrEmptyOrAllSpace(maxSize)) {
+        String maxSize = PropUtil.getValue(props, "ThreadPoolMaxSize");
+        if (CheckUtil.isNullOrEmptyOrAllSpace(maxSize)) {
             KernelSetting.setThreadPoolMaxSize(Runtime.getRuntime()
                     .availableProcessors() * 2 + 1);
         } else {
             KernelSetting.setThreadPoolMaxSize(Integer.parseInt(maxSize));
         }
 
-        String sLevel = PropertiesParser.getValue(props, "Level");
-        if (Validate.isNullOrEmptyOrAllSpace(sLevel)
+        String sLevel = PropUtil.getValue(props, "Level");
+        if (CheckUtil.isNullOrEmptyOrAllSpace(sLevel)
                 || sLevel.equalsIgnoreCase("debug")) {
             KernelSetting.setAlbianLevel(AlbianLevel.Debug);
         } else {
             KernelSetting.setAlbianLevel(AlbianLevel.Release);
         }
 
-        String sMode = PropertiesParser.getValue(props, "StartupMode");
-        if (Validate.isNullOrEmptyOrAllSpace(sMode)
+        String sMode = PropUtil.getValue(props, "StartupMode");
+        if (CheckUtil.isNullOrEmptyOrAllSpace(sMode)
                 || sMode.equalsIgnoreCase("normal")) {
             KernelSetting.setAlbianStartupMode(AlbianStartupMode.Normal);
         } else {
             KernelSetting.setAlbianStartupMode(AlbianStartupMode.Async);
         }
 
-        String sMachineKey = PropertiesParser.getValue(props, "MachineKey");
-        if (!Validate.isNullOrEmptyOrAllSpace(sMachineKey)) {
+        String sMachineKey = PropUtil.getValue(props, "MachineKey");
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sMachineKey)) {
             KernelSetting.setMachineKey(sMachineKey);
         }
     }

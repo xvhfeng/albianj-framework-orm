@@ -1,7 +1,7 @@
 package org.albianj.persistence.impl.db.localize;
 
 import org.albianj.persistence.db.localize.IDBClientSection;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -84,7 +84,7 @@ public class MysqlClientSection implements IDBClientSection {
                 case '\u20a9':
                     Charset charset = null;
                     try {
-                        if(!Validate.isNullOrEmptyOrAllSpace(charsetName)) {
+                        if(!CheckUtil.isNullOrEmptyOrAllSpace(charsetName)) {
                             charset = Charset.forName(charsetName);
                         }
                     }catch (Exception e){

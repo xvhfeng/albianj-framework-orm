@@ -52,8 +52,8 @@ import org.albianj.persistence.service.IAlbianStorageParserService;
 import org.albianj.service.AlbianServiceRant;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.AlbianParserException;
-import org.albianj.verify.Validate;
-import org.albianj.xml.XmlParser;
+import org.albianj.utils.CheckUtil;
+import org.albianj.utils.XmlUtil;
 import org.dom4j.Element;
 
 import java.sql.Connection;
@@ -99,7 +99,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     @Override
     protected void parserStorages(@SuppressWarnings("rawtypes") List nodes) throws AlbianParserException {
-        if (Validate.isNullOrEmpty(nodes)) {
+        if (CheckUtil.isNullOrEmpty(nodes)) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                     "Storage node is null or size is 0.");
             return;
@@ -119,47 +119,47 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     @Override
     protected IStorageAttribute parserStorage(Element node) {
-        String name = XmlParser.getSingleChildNodeValue(node, "Name");
+        String name = XmlUtil.getSingleChildNodeValue(node, "Name");
         if (null == name) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "There is no name attribute in the storage node.");
             return null;
         }
-        String databaseStyle = XmlParser.getSingleChildNodeValue(node, "DatabaseStyle");
-        String server = XmlParser.getSingleChildNodeValue(node, "Server");
+        String databaseStyle = XmlUtil.getSingleChildNodeValue(node, "DatabaseStyle");
+        String server = XmlUtil.getSingleChildNodeValue(node, "Server");
         if (null == server) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "There is no server attribute in the storage node.");
             return null;
         }
-        String database = XmlParser.getSingleChildNodeValue(node, "Database");
+        String database = XmlUtil.getSingleChildNodeValue(node, "Database");
         if (null == database) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "There is no database attribute in the storage node.");
             return null;
         }
-        String user = XmlParser.getSingleChildNodeValue(node, "User");
+        String user = XmlUtil.getSingleChildNodeValue(node, "User");
         if (null == user) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "There is no uid attribute in the storage node.");
             return null;
         }
-        String password = XmlParser.getSingleChildNodeValue(node, "Password");
-        String pooling = XmlParser.getSingleChildNodeValue(node, "Pooling");
-        String minPoolSize = XmlParser.getSingleChildNodeValue(node, "MinPoolSize");
-        String maxPoolSize = XmlParser.getSingleChildNodeValue(node, "MaxPoolSize");
-        String timeout = XmlParser.getSingleChildNodeValue(node, "Timeout");
-        String charset = XmlParser.getSingleChildNodeValue(node, "Charset");
-        String transactional = XmlParser.getSingleChildNodeValue(node, "Transactional");
-        String transactionLevel = XmlParser.getSingleChildNodeValue(node, "TransactionLevel");
-        String port = XmlParser.getSingleChildNodeValue(node, "Port");
+        String password = XmlUtil.getSingleChildNodeValue(node, "Password");
+        String pooling = XmlUtil.getSingleChildNodeValue(node, "Pooling");
+        String minPoolSize = XmlUtil.getSingleChildNodeValue(node, "MinPoolSize");
+        String maxPoolSize = XmlUtil.getSingleChildNodeValue(node, "MaxPoolSize");
+        String timeout = XmlUtil.getSingleChildNodeValue(node, "Timeout");
+        String charset = XmlUtil.getSingleChildNodeValue(node, "Charset");
+        String transactional = XmlUtil.getSingleChildNodeValue(node, "Transactional");
+        String transactionLevel = XmlUtil.getSingleChildNodeValue(node, "TransactionLevel");
+        String port = XmlUtil.getSingleChildNodeValue(node, "Port");
 
-        String options = XmlParser.getSingleChildNodeValue(node, "Options");
+        String options = XmlUtil.getSingleChildNodeValue(node, "Options");
 
-        String sidleTime = XmlParser.getSingleChildNodeValue(node, "AliveTime");
+        String sidleTime = XmlUtil.getSingleChildNodeValue(node, "AliveTime");
 
-        String sDatabasePoolStyle = XmlParser.getSingleChildNodeValue(node, "PoolStyle");
-        String sUrlParaments = XmlParser.getSingleChildNodeValue(node, "UrlParaments");
+        String sDatabasePoolStyle = XmlUtil.getSingleChildNodeValue(node, "PoolStyle");
+        String sUrlParaments = XmlUtil.getSingleChildNodeValue(node, "UrlParaments");
 
         IStorageAttribute storage = new StorageAttribute();
         storage.setName(name);
@@ -173,49 +173,49 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         storage.setServer(server);
         storage.setDatabase(database);
         storage.setUser(user);
-        storage.setPassword(Validate.isNullOrEmptyOrAllSpace(password) ? "" : password);
-        storage.setPooling(Validate.isNullOrEmptyOrAllSpace(pooling) ? true :  Boolean.parseBoolean(pooling));
-        int minsize = Validate.isNullOrEmptyOrAllSpace(minPoolSize) ? 2 : Integer.parseInt(minPoolSize);
+        storage.setPassword(CheckUtil.isNullOrEmptyOrAllSpace(password) ? "" : password);
+        storage.setPooling(CheckUtil.isNullOrEmptyOrAllSpace(pooling) ? true :  Boolean.parseBoolean(pooling));
+        int minsize = CheckUtil.isNullOrEmptyOrAllSpace(minPoolSize) ? 2 : Integer.parseInt(minPoolSize);
         minsize = 2 < minsize ? 2 : minsize;
         storage.setMinSize(minsize);//固定数据库链接池最小的链接为2
-        storage.setMaxSize(Validate.isNullOrEmptyOrAllSpace(maxPoolSize) ? 20 : Integer.parseInt(maxPoolSize));
-        storage.setTimeout(Validate.isNullOrEmptyOrAllSpace(timeout) ? 30 : Integer.parseInt(timeout));
-        storage.setCharset(Validate.isNullOrEmptyOrAllSpace(charset) ? null : charset);
-        storage.setTransactional(Validate.isNullOrEmptyOrAllSpace(transactional) ? true :  Boolean.parseBoolean(transactional));
-        storage.setAliveTime(Validate.isNullOrEmptyOrAllSpace(sidleTime) ? 120 : Integer.parseInt(sidleTime));
+        storage.setMaxSize(CheckUtil.isNullOrEmptyOrAllSpace(maxPoolSize) ? 20 : Integer.parseInt(maxPoolSize));
+        storage.setTimeout(CheckUtil.isNullOrEmptyOrAllSpace(timeout) ? 30 : Integer.parseInt(timeout));
+        storage.setCharset(CheckUtil.isNullOrEmptyOrAllSpace(charset) ? null : charset);
+        storage.setTransactional(CheckUtil.isNullOrEmptyOrAllSpace(transactional) ? true :  Boolean.parseBoolean(transactional));
+        storage.setAliveTime(CheckUtil.isNullOrEmptyOrAllSpace(sidleTime) ? 120 : Integer.parseInt(sidleTime));
         storage.setDatabasePoolStyle(
-            Validate.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? DBCP.name() : sDatabasePoolStyle);
+            CheckUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? DBCP.name() : sDatabasePoolStyle);
         storage.setUrlParaments(sUrlParaments);
 
-        String sWaitTimeWhenGetMs = XmlParser.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");
-        String sLifeCycleTime = XmlParser.getSingleChildNodeValue(node, "LifeCycleTime");
-        String sWaitInFreePoolMs = XmlParser.getSingleChildNodeValue(node, "WaitInFreePoolMs");
-        String sMaxRemedyConnectionCount = XmlParser.getSingleChildNodeValue(node, "MaxRemedyConnectionCount");
-        String sCleanupTimestampMs = XmlParser.getSingleChildNodeValue(node, "CleanupTimestampMs");
-        String sMaxRequestTimeMs = XmlParser.getSingleChildNodeValue(node, "MaxRequestTimeMs");
+        String sWaitTimeWhenGetMs = XmlUtil.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");
+        String sLifeCycleTime = XmlUtil.getSingleChildNodeValue(node, "LifeCycleTime");
+        String sWaitInFreePoolMs = XmlUtil.getSingleChildNodeValue(node, "WaitInFreePoolMs");
+        String sMaxRemedyConnectionCount = XmlUtil.getSingleChildNodeValue(node, "MaxRemedyConnectionCount");
+        String sCleanupTimestampMs = XmlUtil.getSingleChildNodeValue(node, "CleanupTimestampMs");
+        String sMaxRequestTimeMs = XmlUtil.getSingleChildNodeValue(node, "MaxRequestTimeMs");
 
-        if (!Validate.isNullOrEmptyOrAllSpace(sWaitTimeWhenGetMs)) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sWaitTimeWhenGetMs)) {
             storage.setWaitTimeWhenGetMs(Integer.parseInt(sWaitTimeWhenGetMs));
         }
-        if (!Validate.isNullOrEmptyOrAllSpace(sLifeCycleTime)) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sLifeCycleTime)) {
             storage.setLifeCycleTime(Integer.parseInt(sLifeCycleTime));
         }
-        if (!Validate.isNullOrEmptyOrAllSpace(sWaitInFreePoolMs)) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sWaitInFreePoolMs)) {
             storage.setWaitInFreePoolMs(Integer.parseInt(sWaitInFreePoolMs));
         }
-        if (!Validate.isNullOrEmptyOrAllSpace(sMaxRemedyConnectionCount)) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sMaxRemedyConnectionCount)) {
             storage.setMaxRemedyConnectionCount(Integer.parseInt(sMaxRemedyConnectionCount));
         }
-        if (!Validate.isNullOrEmptyOrAllSpace(sCleanupTimestampMs)) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sCleanupTimestampMs)) {
             storage.setCleanupTimestampMs(Integer.parseInt(sCleanupTimestampMs));
         }
-        if (!Validate.isNullOrEmptyOrAllSpace(sMaxRequestTimeMs)) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sMaxRequestTimeMs)) {
             storage.setMaxRequestTimeMs(Integer.parseInt(sMaxRequestTimeMs));
         }
         storage.setOptions(options);
 
         if (storage.getTransactional()) {
-            if (Validate.isNullOrEmpty(transactionLevel)) {
+            if (CheckUtil.isNullOrEmpty(transactionLevel)) {
                 // default level and do not means no suppert tran
                 storage.setTransactionLevel(Connection.TRANSACTION_NONE);
             } else {
@@ -234,7 +234,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
             }
         }
 
-        if (!Validate.isNullOrEmptyOrAllSpace(port)) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(port)) {
             storage.setPort(Integer.parseInt(port));
         }
 

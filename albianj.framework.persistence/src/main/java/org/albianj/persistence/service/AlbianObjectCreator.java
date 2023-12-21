@@ -6,7 +6,7 @@ import org.albianj.logger.LogTarget;
 import org.albianj.persistence.object.IAlbianObject;
 import org.albianj.persistence.object.IAlbianObjectAttribute;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 /**
  * Created by xuhaifeng on 17/3/14.
@@ -20,7 +20,7 @@ public class AlbianObjectCreator {
                     "can not found interface:{} attribute,please lookup persistence config.",itf);
         }
         String className = attr.getType();
-        if (Validate.isNullOrEmptyOrAllSpace(className)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(className)) {
             AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
                     " can not found impl-class for interface:{},please lookup persistence config.", itf);
         }

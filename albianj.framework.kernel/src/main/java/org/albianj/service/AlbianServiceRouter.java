@@ -40,7 +40,7 @@ package org.albianj.service;
 import org.albianj.logger.IAlbianLoggerService;
 import org.albianj.logger.LogLevel;
 import org.albianj.logger.LogTarget;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -65,7 +65,7 @@ public class AlbianServiceRouter extends ServiceContainer {
      */
     public static <T extends IAlbianService> T getService(Object sessionId,Class<T> cla, String id, boolean isThrowIfException) {
         IAlbianLoggerService ls = (IAlbianLoggerService) ServiceContainer.getService(IAlbianLoggerService.FullName);
-        if (Validate.isNullOrEmptyOrAllSpace(id)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
             ls.log(sessionId,LogTarget.Running,LogLevel.Error,
                     "Kernel is error. service id is null or empty,and can not found.");
             return null;

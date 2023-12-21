@@ -46,7 +46,7 @@ import org.albianj.persistence.impl.toolkit.EnumMapping;
 import org.albianj.persistence.object.*;
 import org.albianj.persistence.service.IAlbianStorageParserService;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -59,8 +59,8 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         IStorageAttribute stgAttr = null;
         IAlbianStorageParserService asps = AlbianServiceRouter
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        if (Validate.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
-            if (Validate.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback
+        if (CheckUtil.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
+            if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback
                 IDataRoutersAttribute drsAttr = objAttr.getDataRouters();
                 IAlbianObjectDataRouter drouter = drsAttr.getDataRouter();
                 if (isExact) {
@@ -82,7 +82,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                 stgAttr = asps.getStorageAttribute(storageAlias);
                 dbName.setValue(stgAttr.getDatabase());
                 tableName.setValue(
-                    Validate.isNullOrEmptyOrAllSpace(tableAlias) ? objAttr.getImplClzz().getSimpleName() : tableAlias);
+                    CheckUtil.isNullOrEmptyOrAllSpace(tableAlias) ? objAttr.getImplClzz().getSimpleName() : tableAlias);
             }
         } else { // do fix drouter
             IDataRoutersAttribute drsAttr = objAttr.getDataRouters();
@@ -170,11 +170,11 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         } else {
             sbCmdTxt.append("[").append(tableName).append("]");
         }
-        if (PersistenceDatabaseStyle.MySql == sbStyle && !Validate
+        if (PersistenceDatabaseStyle.MySql == sbStyle && !CheckUtil
             .isNullOrEmptyOrAllSpace(idxName)) { //按照木木的要求，增加强行执行索引行为，只为mysql使用
             sbCmdTxt.append(" FORCE INDEX (").append(idxName).append(") ");
         }
-        if (!Validate.isNullOrEmptyOrAllSpace(sbWhere.toString())) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sbWhere.toString())) {
             sbCmdTxt.append(" WHERE ").append(sbWhere);
         }
         if (0 != sbOrderby.length()) {
@@ -211,7 +211,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                     sbWhrs.append("[").append(member.getSqlFieldName()).append("]");
                 }
                 sbWhrs.append(EnumMapping.toLogicalOperation(where.getLogicalOperation())).append("#").append(
-                    Validate.isNullOrEmptyOrAllSpace(where.getAliasName()) ? member.getSqlFieldName() :
+                    CheckUtil.isNullOrEmptyOrAllSpace(where.getAliasName()) ? member.getSqlFieldName() :
                         where.getAliasName())
                     //	.append(member.getSqlFieldName())
                     .append("#").append(where.isCloseSub() ? ")" : "");
@@ -225,7 +225,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                 }
                 para.setValue(where.getValue());
                 paras.put(String.format("#%1$s#",
-                    Validate.isNullOrEmptyOrAllSpace(where.getAliasName()) ? member.getSqlFieldName() :
+                    CheckUtil.isNullOrEmptyOrAllSpace(where.getAliasName()) ? member.getSqlFieldName() :
                         where.getAliasName()), para);
             }
         }

@@ -45,8 +45,8 @@ import org.albianj.persistence.service.AlbianEntityMetadata;
 import org.albianj.persistence.service.IAlbianMappingParserService;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.FreeAlbianParserService;
-import org.albianj.verify.Validate;
-import org.albianj.xml.XmlParser;
+import org.albianj.utils.CheckUtil;
+import org.albianj.utils.XmlUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -85,7 +85,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         Document doc = null;
         try {
             String fname = findConfigFile(filename);
-            doc = XmlParser.load(fname);
+            doc = XmlUtil.load(fname);
         } catch (Exception e) {
             AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the persisten.xml is error.");
@@ -96,36 +96,36 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         }
 
         @SuppressWarnings("rawtypes")
-        List nodes = XmlParser.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-        if (!Validate.isNullOrEmpty(nodes)) {
+        List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
+        if (!CheckUtil.isNullOrEmpty(nodes)) {
             for (Object node : nodes) {
-                Element elt = XmlParser.toElement(node);
-                String path = XmlParser.getAttributeValue(elt, "Filename");
-                if (Validate.isNullOrEmptyOrAllSpace(path)) continue;
+                Element elt = XmlUtil.toElement(node);
+                String path = XmlUtil.getAttributeValue(elt, "Filename");
+                if (CheckUtil.isNullOrEmptyOrAllSpace(path)) continue;
                 parserFile(path);
             }
         }
 
         // add rant scaner
-        List pkgNodes = XmlParser.selectNodes(doc, "AlbianObjects/Packages/Package");
-        if (!Validate.isNullOrEmpty(pkgNodes)) {
+        List pkgNodes = XmlUtil.selectNodes(doc, "AlbianObjects/Packages/Package");
+        if (!CheckUtil.isNullOrEmpty(pkgNodes)) {
             for (Object node : pkgNodes) {
-                Element elt = XmlParser.toElement(node);
+                Element elt = XmlUtil.toElement(node);
 
-                String enable = XmlParser.getAttributeValue(elt, "Enable");
-                String pkg = XmlParser.getAttributeValue(elt, "Path");
+                String enable = XmlUtil.getAttributeValue(elt, "Enable");
+                String pkg = XmlUtil.getAttributeValue(elt, "Path");
 
-                if (!Validate.isNullOrEmptyOrAllSpace(enable)) {
+                if (!CheckUtil.isNullOrEmptyOrAllSpace(enable)) {
                     boolean b = Boolean.parseBoolean(enable);
                     if (!b) {
                         AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                                 "Path -> :{} in the Package enable is false,so not load it.",
-                            Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+                            CheckUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
                         continue;// not load pkg
                     }
                 }
 
-                if (Validate.isNullOrEmptyOrAllSpace(pkg)) {
+                if (CheckUtil.isNullOrEmptyOrAllSpace(pkg)) {
                     throw new AlbianDataServiceException(
                         "loading the persistence.xml is error. 'Path' attribute in  Package config-item is null or empty.");
                 } else {
@@ -143,8 +143,8 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
             }
         }
 
-        List objNodes = XmlParser.selectNodes(doc, tagName);
-        if (!Validate.isNullOrEmpty(objNodes)) {
+        List objNodes = XmlUtil.selectNodes(doc, tagName);
+        if (!CheckUtil.isNullOrEmpty(objNodes)) {
             parserAlbianObjects(objNodes);
 //            AlbianServiceRouter.getLogger2().logAndThrow(IAlbianLoggerService2.AlbianRunningLoggerName,
 //                    IAlbianLoggerService2.InnerThreadName, AlbianLoggerLevel.Error,null,

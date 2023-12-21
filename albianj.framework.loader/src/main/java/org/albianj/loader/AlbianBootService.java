@@ -39,7 +39,7 @@ package org.albianj.loader;
 
 import org.albianj.kernel.IAlbianTransmitterService;
 import org.albianj.net.MemoryToIOStream;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -109,7 +109,7 @@ public class AlbianBootService {
     public static boolean start(String configPath) {
 
         String cfPath = configPath;
-        if(Validate.isNullOrEmptyOrAllSpace(configPath)) {
+        if(CheckUtil.isNullOrEmptyOrAllSpace(configPath)) {
             cfPath = AlbianClassLoader.getResourcePath();
         }
 

@@ -44,7 +44,7 @@ import org.albianj.persistence.context.IWriterJob;
 import org.albianj.persistence.context.IWriterTask;
 import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.Map;
 
@@ -77,7 +77,7 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
     public StringBuilder writerJobCommandToString(IWriterJob writerJob) throws AlbianDataServiceException {
         StringBuilder sb = new StringBuilder();
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (Validate.isNullOrEmpty(tasks)) {
+        if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
 

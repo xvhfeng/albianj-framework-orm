@@ -45,8 +45,8 @@ import org.albianj.persistence.object.IDataRoutersAttribute;
 import org.albianj.persistence.service.IAlbianDataRouterParserService;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.FreeAlbianParserService;
-import org.albianj.verify.Validate;
-import org.albianj.xml.XmlParser;
+import org.albianj.utils.CheckUtil;
+import org.albianj.utils.XmlUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -89,7 +89,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
                         "loading the drouter.xml is error. drouter.xml is not exist");
                 return;
             }
-            doc = XmlParser.load(fname);
+            doc = XmlUtil.load(fname);
         } catch (Exception e) {
             AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the drouter.xml is error.");
@@ -99,19 +99,19 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         }
 
         @SuppressWarnings("rawtypes")
-        List nodes = XmlParser.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-        if (!Validate.isNullOrEmpty(nodes)) {
+        List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
+        if (!CheckUtil.isNullOrEmpty(nodes)) {
             for (Object node : nodes) {
-                Element elt = XmlParser.toElement(node);
-                String path = XmlParser.getAttributeValue(elt, "Filename");
-                if (Validate.isNullOrEmptyOrAllSpace(path)) continue;
+                Element elt = XmlUtil.toElement(node);
+                String path = XmlUtil.getAttributeValue(elt, "Filename");
+                if (CheckUtil.isNullOrEmptyOrAllSpace(path)) continue;
                 parserFile(path);
             }
         }
 
         @SuppressWarnings("rawtypes")
-        List objNodes = XmlParser.selectNodes(doc, tagName);
-        if (Validate.isNullOrEmpty(objNodes)) {
+        List objNodes = XmlUtil.selectNodes(doc, tagName);
+        if (CheckUtil.isNullOrEmpty(objNodes)) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Warn,
                     "parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
                 tagName);

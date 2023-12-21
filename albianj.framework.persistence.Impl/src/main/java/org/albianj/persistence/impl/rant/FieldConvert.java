@@ -1,6 +1,6 @@
 package org.albianj.persistence.impl.rant;
 
-import org.albianj.text.StringHelper;
+import org.albianj.utils.StringsUtil;
 
 public class FieldConvert {
 
@@ -15,6 +15,6 @@ public class FieldConvert {
                 fieldNames[1] += 32;
             return new String(fieldNames, 1, fieldNames.length - 1);
         }
-        return StringHelper.lowercasingFirstLetter(fieldName);
+        return StringsUtil.lowercasingFirstLetter(fieldName);
     }
 }

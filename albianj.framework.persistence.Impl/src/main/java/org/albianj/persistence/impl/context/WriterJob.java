@@ -39,7 +39,7 @@ package org.albianj.persistence.impl.context;
 
 import org.albianj.persistence.context.*;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.Map;
 
@@ -57,7 +57,7 @@ public class WriterJob implements IWriterJob {
 
     public WriterJob(String sessionId) {
         // TODO Auto-generated constructor stub
-        if (Validate.isNullOrEmptyOrAllSpace(sessionId)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(sessionId)) {
             this.id = AlbianServiceRouter.make32UUID();
         } else {
             this.id = sessionId;

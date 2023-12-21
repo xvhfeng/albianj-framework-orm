@@ -35,9 +35,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.text;
+package org.albianj.utils;
 
-import org.albianj.verify.Validate;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
@@ -45,7 +44,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringHelper extends StringUtils {
+public class StringsUtil extends StringUtils {
     /*
      * Turns a hex encoded string into a byte array. It is specifically meant to
      * "reverse" the toHex(byte[]) method.
@@ -129,7 +128,7 @@ public class StringHelper extends StringUtils {
     }
 
     public static String censoredZero(String s) {
-        if (Validate.isNullOrEmptyOrAllSpace(s)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(s)) {
             return null;
         }
         int idx = s.lastIndexOf("0");

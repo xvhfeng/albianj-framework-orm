@@ -47,8 +47,8 @@ import org.albianj.persistence.service.IAlbianStorageParserService;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.parser.AlbianParserException;
 import org.albianj.service.parser.FreeAlbianParserService;
-import org.albianj.verify.Validate;
-import org.albianj.xml.XmlParser;
+import org.albianj.utils.CheckUtil;
+import org.albianj.utils.XmlUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -108,7 +108,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append("&connectTimeout=").append(timeout * 1000).append("&socketTimeout=").append(timeout * 1000);
                 }
                 sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&maxReconnect=3&autoReconnectForPools=true&rewriteBatchedStatements=true&useSSL=true&serverTimezone=CTT");
-                if(!Validate.isNullOrEmptyOrAllSpace(rsa.getStorageAttribute().getUrlParaments())){
+                if(!CheckUtil.isNullOrEmptyOrAllSpace(rsa.getStorageAttribute().getUrlParaments())){
                     sb.append("&").append(rsa.getStorageAttribute().getUrlParaments());
                 }
 //                sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull");
@@ -139,7 +139,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         cached = new HashMap<String, IStorageAttribute>();
         try {
             String fname = findConfigFile(filename);
-            doc = XmlParser.load(fname);
+            doc = XmlUtil.load(fname);
         } catch (Exception e) {
             AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the storage.xml is error.");
@@ -149,19 +149,19 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         }
 
         @SuppressWarnings("rawtypes")
-        List nodes = XmlParser.selectNodes(doc, "Storages/IncludeSet/Include");
-        if (!Validate.isNullOrEmpty(nodes)) {
+        List nodes = XmlUtil.selectNodes(doc, "Storages/IncludeSet/Include");
+        if (!CheckUtil.isNullOrEmpty(nodes)) {
             for (Object node : nodes) {
-                Element elt = XmlParser.toElement(node);
-                String path = XmlParser.getAttributeValue(elt, "Filename");
-                if (Validate.isNullOrEmptyOrAllSpace(path)) continue;
+                Element elt = XmlUtil.toElement(node);
+                String path = XmlUtil.getAttributeValue(elt, "Filename");
+                if (CheckUtil.isNullOrEmptyOrAllSpace(path)) continue;
                 parserFile(path);
             }
         }
 
         @SuppressWarnings("rawtypes")
-        List objNodes = XmlParser.selectNodes(doc, tagName);
-        if (Validate.isNullOrEmpty(objNodes)) {
+        List objNodes = XmlUtil.selectNodes(doc, tagName);
+        if (CheckUtil.isNullOrEmpty(objNodes)) {
             throw new AlbianDataServiceException("parser the node tags:" + tagName
                 + " in the storage.xml is error. the node of the tags is null or empty.");
         }

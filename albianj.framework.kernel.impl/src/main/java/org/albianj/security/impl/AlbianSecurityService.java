@@ -46,8 +46,8 @@ import org.albianj.security.StyleMapping;
 import org.albianj.service.AlbianServiceRant;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.FreeAlbianService;
-import org.albianj.text.StringHelper;
-import org.albianj.verify.Validate;
+import org.albianj.utils.StringsUtil;
+import org.albianj.utils.CheckUtil;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.*;
@@ -72,7 +72,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     public void init()  {
         super.init();
         String mkey = KernelSetting.getMachineKey();
-        if (Validate.isNullOrEmptyOrAllSpace(mkey)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(mkey)) {
             return;
         }
         if (40 <= mkey.length()) {
@@ -92,7 +92,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
     public String decryptDES(Object sessionId,String key, String message)  {
-        String k = StringHelper.padLeft(key, 8);
+        String k = StringsUtil.padLeft(key, 8);
         byte[] bytesrc = decryptBASE64(sessionId,message);
         try {
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
@@ -117,7 +117,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
     public String encryptDES(Object sessionId,String key, String message)  {
-        String k = StringHelper.padLeft(key, 8);
+        String k = StringsUtil.padLeft(key, 8);
         try {
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
             DESKeySpec desKeySpec = new DESKeySpec(k.getBytes("UTF-8"));

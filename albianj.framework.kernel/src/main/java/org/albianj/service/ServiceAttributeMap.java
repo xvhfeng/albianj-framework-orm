@@ -37,15 +37,16 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.service;
 
-import org.albianj.localmap.ILocalMap;
-import org.albianj.localmap.LocalSortMap;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public final class ServiceAttributeMap {
-    private static ILocalMap cached = new LocalSortMap();
+    private static Map<String, Object> cached = new LinkedHashMap<String, Object>();
 
     public synchronized static boolean exist(String key)
             throws IllegalArgumentException {
-        return cached.exist(key);
+        return cached.containsKey(key);
     }
 
     public static Object get(String key) throws IllegalArgumentException {
@@ -54,7 +55,7 @@ public final class ServiceAttributeMap {
 
     public synchronized static void insert(String key, Object value)
             throws IllegalArgumentException {
-        cached.insert(key, value);
+        cached.put(key, value);
     }
 
     public synchronized static void remove(String key)

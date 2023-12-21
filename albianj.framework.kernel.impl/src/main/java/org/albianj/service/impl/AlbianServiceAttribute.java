@@ -41,7 +41,7 @@ import org.albianj.aop.IAlbianServiceAopAttribute;
 import org.albianj.service.IAlbianService;
 import org.albianj.service.IAlbianServiceAttribute;
 import org.albianj.service.IAlbianServiceFieldAttribute;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.Map;
 
@@ -60,7 +60,7 @@ public class AlbianServiceAttribute implements IAlbianServiceAttribute {
     }
 
     public void setId(String id) throws IllegalArgumentException {
-        if (Validate.isNullOrEmptyOrAllSpace(id)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
             throw new IllegalArgumentException("id");
         }
         this.id = id;
@@ -71,7 +71,7 @@ public class AlbianServiceAttribute implements IAlbianServiceAttribute {
     }
 
     public void setType(String type) throws IllegalArgumentException {
-        if (Validate.isNullOrEmptyOrAllSpace(type)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
             throw new IllegalArgumentException("type");
         }
         this.type = type;

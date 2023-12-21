@@ -5,9 +5,9 @@ import org.albianj.aop.impl.AlbianServiceAopProxy;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.logger.LogLevel;
 import org.albianj.logger.LogTarget;
-import org.albianj.reflection.AlbianTypeConvert;
+import org.albianj.utils.ReflectUtil;
 import org.albianj.service.*;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.Map;
 
@@ -35,7 +35,7 @@ public class AlbianServiceLoader {
             }
 
             Class<?> itf = null;
-            if (!Validate.isNullOrEmptyOrAllSpace(sInterface)) {
+            if (!CheckUtil.isNullOrEmptyOrAllSpace(sInterface)) {
                 itf = AlbianClassLoader.getInstance().loadClass(sInterface);
                 if (!itf.isAssignableFrom(cla)) {
                     AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
@@ -57,7 +57,7 @@ public class AlbianServiceLoader {
             service.loading();
             setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterLoading, servAttrs);
             service.afterLoading();
-            if (Validate.isNullOrEmpty(serviceAttr.getAopAttributes())) {
+            if (CheckUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
                 rtnService = service;
             } else {
                 AlbianServiceAopProxy proxy = new AlbianServiceAopProxy();
@@ -76,7 +76,7 @@ public class AlbianServiceLoader {
     }
 
     public static void setServiceFields(IAlbianService serv, IAlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, IAlbianServiceAttribute> servAttrs)  {
-        if(Validate.isNullOrEmpty(servAttr.getServiceFields())) {
+        if(CheckUtil.isNullOrEmpty(servAttr.getServiceFields())) {
             return;
         }
         for (IAlbianServiceFieldAttribute fAttr : servAttr.getServiceFields().values()) {
@@ -85,7 +85,7 @@ public class AlbianServiceLoader {
             }
             if (!fAttr.getType().toLowerCase().equals("ref")) { // not set ref
                 try {
-                    Object o = AlbianTypeConvert.toRealObject(fAttr.getType(), fAttr.getValue());
+                    Object o = ReflectUtil.toRealObject(fAttr.getType(), fAttr.getValue());
                     fAttr.getField().set(serv, o);
                     fAttr.setReady(true);
                 } catch (Exception e) {

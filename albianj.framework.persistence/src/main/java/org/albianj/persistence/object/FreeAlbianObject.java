@@ -44,7 +44,7 @@ import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.object.rants.AlbianObjectDataFieldRant;
 import org.albianj.persistence.service.AlbianEntityMetadata;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -120,7 +120,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
         }
 
         Map<String, IAlbianEntityFieldAttribute> fields = entiryAttr.getFields();
-        if (Validate.isNullOrEmpty(fields)) {
+        if (CheckUtil.isNullOrEmpty(fields)) {
             throw new AlbianDataServiceException(
                 "PersistenceService is error. albian-object:" + className + " PropertyDescriptor is not found.");
         }

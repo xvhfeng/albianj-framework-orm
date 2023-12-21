@@ -11,7 +11,7 @@ import org.albianj.persistence.object.IAlbianObject;
 import org.albianj.persistence.object.IOrderByCondition;
 import org.albianj.persistence.object.filter.IChainExpression;
 import org.albianj.persistence.service.LoadType;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class QueryContext implements IQueryContext {
     @Override
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression wheres)  {
         List<T> entities = loadObjects(sessionId, itfClzz, loadType, wheres);
-        if (Validate.isNullOrEmpty(entities)) {
+        if (CheckUtil.isNullOrEmpty(entities)) {
             return null;
         }
         return entities.get(0);
@@ -81,10 +81,10 @@ public class QueryContext implements IQueryContext {
         this.loadType = loadType;
         this.wheres = wheres;
 
-        if (!Validate.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!Validate.isNullOrEmptyOrAllSpace(storageAlias) || !Validate.isNullOrEmptyOrAllSpace(tableAlias))) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) || !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
             throw new AlbianDataServiceException("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
-        if (Validate.isNullOrEmptyOrAllSpace(storageAlias) && !Validate.isNullOrEmptyOrAllSpace(tableAlias)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) && !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
             throw new AlbianDataServiceException("tableAlias exist but storageAlias is not exist.");
         }
 
@@ -102,10 +102,10 @@ public class QueryContext implements IQueryContext {
         this.loadType = loadType;
         this.wheres = wheres;
 
-        if (!Validate.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!Validate.isNullOrEmptyOrAllSpace(storageAlias) || !Validate.isNullOrEmptyOrAllSpace(tableAlias))) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) || !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
             throw new AlbianDataServiceException("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
-        if (Validate.isNullOrEmptyOrAllSpace(storageAlias) && !Validate.isNullOrEmptyOrAllSpace(tableAlias)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) && !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
             throw new AlbianDataServiceException("tableAlias exist but storageAlias is not exist.");
         }
 

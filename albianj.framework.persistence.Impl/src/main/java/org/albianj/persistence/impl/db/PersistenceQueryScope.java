@@ -51,7 +51,7 @@ import org.albianj.persistence.object.IRunningStorageAttribute;
 import org.albianj.persistence.service.AlbianEntityMetadata;
 import org.albianj.persistence.service.IAlbianStorageParserService;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.sql.*;
 import java.util.List;
@@ -86,7 +86,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     "get the statement is fail." );
         }
         Map<Integer, String> map = cmd.getParameterMapper();
-        if (!Validate.isNullOrEmpty(map)) {
+        if (!CheckUtil.isNullOrEmpty(map)) {
             for (int i = 1; i <= map.size(); i++) {
                 String paraName = map.get(i);
                 ISqlParameter para = cmd.getParameters().get(paraName);
@@ -122,7 +122,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             long begin1 = System.currentTimeMillis();
             result = ((PreparedStatement)job.getStatement()).executeQuery();
 
-            if (!Validate.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
+            if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
                 long end1 = System.currentTimeMillis();
                 AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                         "SpxLog job:{} execute query use times:{}.", job.getId(),end1 - begin1);
@@ -146,7 +146,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         long begin1 = System.currentTimeMillis();
         String sessionId = job.getId();
         List<T> list = executed(cls, job.getId(), job.getResult());
-        if (!Validate.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
+        if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
             long end1 = System.currentTimeMillis();
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                     "SpxLog executed query and make data result use times:{}.",
@@ -158,7 +158,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
-            Validate.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
+            CheckUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
         return list;
     }
 

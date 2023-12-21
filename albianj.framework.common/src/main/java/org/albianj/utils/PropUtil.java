@@ -43,7 +43,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-public class PropertiesParser {
+public class PropUtil {
     public static Properties load(String filePath) throws Exception {
         Properties props;
         File file = null;

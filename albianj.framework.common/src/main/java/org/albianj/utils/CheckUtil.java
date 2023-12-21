@@ -35,12 +35,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.verify;
+package org.albianj.utils;
 
 import java.util.Collection;
 import java.util.Map;
 
-public class Validate extends org.apache.commons.lang3.Validate {
+public class CheckUtil extends org.apache.commons.lang3.Validate {
 
     public static boolean isNullOrEmpty(Collection<?> collection) {
         return null == collection || collection.isEmpty();

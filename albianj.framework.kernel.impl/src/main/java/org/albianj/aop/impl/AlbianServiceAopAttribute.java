@@ -1,7 +1,7 @@
 package org.albianj.aop.impl;
 
 import org.albianj.aop.IAlbianServiceAopAttribute;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 /**
  * Created by xuhaifeng on 16/5/31.
@@ -101,14 +101,14 @@ public class AlbianServiceAopAttribute implements IAlbianServiceAopAttribute {
 
     public boolean matches(String name) {
         if (isAll) return true;
-        return Validate.isNullOrEmptyOrAllSpace(this.fullname)
+        return CheckUtil.isNullOrEmptyOrAllSpace(this.fullname)
                 ?
-                Validate.isNullOrEmptyOrAllSpace(this.beginWith) ? true : name.startsWith(this.beginWith)
-                        && Validate.isNullOrEmptyOrAllSpace(this.notBeginWith) ? true : !name.startsWith(this.notBeginWith)
-                        && Validate.isNullOrEmptyOrAllSpace(this.endWith) ? true : name.endsWith(this.endWith)
-                        && Validate.isNullOrEmptyOrAllSpace(this.notEndWith) ? true : !name.endsWith(this.notEndWith)
-                        && Validate.isNullOrEmptyOrAllSpace(this.contain) ? true : name.contains(this.contain)
-                        && Validate.isNullOrEmptyOrAllSpace(this.notContain) ? true : !name.contains(this.notContain)
+                CheckUtil.isNullOrEmptyOrAllSpace(this.beginWith) ? true : name.startsWith(this.beginWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notBeginWith) ? true : !name.startsWith(this.notBeginWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.endWith) ? true : name.endsWith(this.endWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notEndWith) ? true : !name.endsWith(this.notEndWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.contain) ? true : name.contains(this.contain)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notContain) ? true : !name.contains(this.notContain)
                 : name.equals(this.fullname);
 
     }

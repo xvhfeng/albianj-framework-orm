@@ -42,7 +42,7 @@ import org.albianj.persistence.db.IDataBasePool;
 import org.albianj.persistence.db.IPersistenceCommand;
 import org.albianj.persistence.object.IRunningStorageAttribute;
 import org.albianj.service.AlbianServiceRouter;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -58,7 +58,7 @@ public class ReaderJob implements IReaderJob {
     private IDataBasePool pool = null;
 
     public ReaderJob(String sessionId) {
-        if (Validate.isNullOrEmptyOrAllSpace(sessionId)) {
+        if (CheckUtil.isNullOrEmptyOrAllSpace(sessionId)) {
             this.id = AlbianServiceRouter.make32UUID();
         } else {
             this.id = sessionId;

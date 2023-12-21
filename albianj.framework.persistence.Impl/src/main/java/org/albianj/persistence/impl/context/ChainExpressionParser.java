@@ -46,7 +46,7 @@ import org.albianj.persistence.object.*;
 import org.albianj.persistence.object.filter.IChainExpression;
 import org.albianj.persistence.object.filter.IFilterExpression;
 import org.albianj.persistence.service.AlbianEntityMetadata;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -63,7 +63,7 @@ public class ChainExpressionParser {
                 toFilterConditionMap(ce, map);
             } else {
                 IFilterExpression fe = (IFilterExpression) ce;
-                map.put(Validate.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fe.getFieldName() : fe.getAliasName(),
+                map.put(CheckUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fe.getFieldName() : fe.getAliasName(),
                         new FilterCondition(fe));
             }
         }
@@ -99,7 +99,7 @@ public class ChainExpressionParser {
 
                 if (RelationalOperator.Normal != ce.getRelationalOperator()) {
                     String slo = EnumMapping.toRelationalOperators(ce.getRelationalOperator());
-                    if (!Validate.isNullOrEmptyOrAllSpace(slo)) {
+                    if (!CheckUtil.isNullOrEmptyOrAllSpace(slo)) {
                         sb.append(" ").append(slo);
                     }
                 }
@@ -127,7 +127,7 @@ public class ChainExpressionParser {
                 }
 
                 String slo = EnumMapping.toRelationalOperators(fe.getRelationalOperator());
-                if (!Validate.isNullOrEmptyOrAllSpace(slo)) {
+                if (!CheckUtil.isNullOrEmptyOrAllSpace(slo)) {
                     sb.append(" ").append(slo);
                 }
 
@@ -137,7 +137,7 @@ public class ChainExpressionParser {
                     sb.append(" [").append(fieldAttr.getSqlFieldName()).append("]");
                 }
                 sb.append(EnumMapping.toLogicalOperation(fe.getLogicalOperation())).append("#")
-                        .append(Validate.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fieldAttr.getSqlFieldName()
+                        .append(CheckUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fieldAttr.getSqlFieldName()
                                 : fe.getAliasName())
                         .append("# ");
 
@@ -150,7 +150,7 @@ public class ChainExpressionParser {
                     para.setSqlType(Convert.toSqlType(fe.getFieldClass()));
                 }
                 para.setValue(fe.getValue());
-                paras.put(String.format("#%1$s#", Validate.isNullOrEmptyOrAllSpace(fe.getAliasName())
+                paras.put(String.format("#%1$s#", CheckUtil.isNullOrEmptyOrAllSpace(fe.getAliasName())
                         ? fieldAttr.getSqlFieldName() : fe.getAliasName()), para);
             }
         }

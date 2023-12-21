@@ -7,7 +7,7 @@ import org.albianj.logger.LogLevel;
 import org.albianj.logger.LogTarget;
 import org.albianj.service.*;
 import org.albianj.service.impl.AlbianServiceRantParser;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -183,7 +183,7 @@ public class AlbianBuiltinServiceLoader {
                 }
             }
         }
-        if(Validate.isNullOrEmpty(bltSrvAttrs))  return null;
+        if(CheckUtil.isNullOrEmpty(bltSrvAttrs))  return null;
         return bltSrvAttrs;
     }
 

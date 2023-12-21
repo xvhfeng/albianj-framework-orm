@@ -1,7 +1,7 @@
 package org.albianj.persistence.service;
 
 import org.albianj.persistence.object.*;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
     public List<IDataRouterAttribute> mappingWriterRouting(
             Map<String, IDataRouterAttribute> routings, IAlbianObject obj) {
         // TODO Auto-generated method stub
-        if (Validate.isNullOrEmpty(routings)) return null;
+        if (CheckUtil.isNullOrEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;
@@ -34,7 +34,7 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
             Map<String, IFilterCondition> wheres,
             Map<String, IOrderByCondition> orderbys) {
         // TODO Auto-generated method stub
-        if (Validate.isNullOrEmpty(routings)) return null;
+        if (CheckUtil.isNullOrEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;

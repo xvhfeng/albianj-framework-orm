@@ -39,7 +39,7 @@ package org.albianj.persistence.impl.toolkit;
 
 import org.albianj.persistence.db.ISqlParameter;
 import org.albianj.persistence.object.ICondition;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -58,7 +58,7 @@ public class ListConvert {
         }
         Map<String, T> map = new LinkedHashMap<String, T>(len);
         for (T filter : filters) {
-            map.put(Validate.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
+            map.put(CheckUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
         }
         return map;
     }
@@ -74,7 +74,7 @@ public class ListConvert {
         }
         Map<String, T> map = new LinkedHashMap<String, T>(size);
         for (T filter : filters) {
-            map.put(Validate.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
+            map.put(CheckUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
         }
         return map;
     }

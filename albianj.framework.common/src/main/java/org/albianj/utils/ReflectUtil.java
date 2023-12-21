@@ -35,18 +35,21 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.reflection;
-
-import org.albianj.text.StringHelper;
+package org.albianj.utils;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
-public class AlbianReflect {
+public class ReflectUtil {
 
     public static BeanInfo getBeanInfo(ClassLoader cl, String className)
             throws ClassNotFoundException, IntrospectionException {
@@ -64,7 +67,7 @@ public class AlbianReflect {
 
     public static PropertyDescriptor getBeanPropertyDescriptor(Class<?> clzz, String propertyName)
             throws ClassNotFoundException, IntrospectionException {
-        String pName = StringHelper.lowercasingFirstLetter(propertyName);
+        String pName = StringsUtil.lowercasingFirstLetter(propertyName);
         PropertyDescriptor pd = new PropertyDescriptor(pName, clzz);
         return pd;
     }
@@ -267,6 +270,81 @@ public class AlbianReflect {
     }
 
 
+    public static Object toRealObject(String type, String o) throws ParseException {
+
+        if ("java.lang.string".equalsIgnoreCase(type)
+                || "string".equalsIgnoreCase(type)) {
+            return o;
+        } else if (
+                "java.math.bigdecimal".equalsIgnoreCase(type)
+                        || "bigdecimal".equalsIgnoreCase(type)) {
+            BigDecimal bd = new BigDecimal(o.toString());
+            return bd;
+        } else if ("java.lang.boolean".equalsIgnoreCase(type)
+                || "boolean".equalsIgnoreCase(type)) {
+            return Boolean.parseBoolean(o.toString());
+        } else if ("java.lang.integer".equalsIgnoreCase(type)
+                || "int".equalsIgnoreCase(type)) {
+            return Integer.parseInt(o.toString());
+        } else if ("java.lang.long".equalsIgnoreCase(type)
+                || "long".equalsIgnoreCase(type)) {
+            return Long.parseLong(o.toString());
+        } else if (
+                "java.math.biginteger".equalsIgnoreCase(type)
+                        || "biginteger".equalsIgnoreCase(type)) {
+            BigInteger bi = new BigInteger(o.toString());
+            return bi;
+        } else if ("java.lang.float".equalsIgnoreCase(type)
+                || "float".equalsIgnoreCase(type)) {
+            return Float.parseFloat(o.toString());
+        } else if ("java.lang.double".equalsIgnoreCase(type)
+                || "double".equalsIgnoreCase(type)) {
+            return Double.parseDouble(o.toString());
+        } else if ("java.sql.time".equalsIgnoreCase(type)) {
+            Date d = null;
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat(
+                        DateTimeUtil.CHINESE_SIMPLE_FORMAT);
+                d = dateFormat.parse(o.toString());
+            } catch (Exception e) {
+                d = null;
+            }
+            if (null == d) {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(
+                            DateTimeUtil.CHINESE_FORMAT);
+                    d = dateFormat.parse(o.toString());
+                } catch (Exception e) {
+                    throw e;
+                }
+            }
+            ;
+            return new java.sql.Date(d.getTime());
+        } else if ("java.util.date".equalsIgnoreCase(type)) {
+            Date d = null;
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat(
+                        DateTimeUtil.CHINESE_SIMPLE_FORMAT);
+                d = dateFormat.parse(o.toString());
+            } catch (Exception e) {
+                d = null;
+            }
+            if (null == d) {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(
+                            DateTimeUtil.CHINESE_FORMAT);
+                    d = dateFormat.parse(o.toString());
+                } catch (Exception e) {
+                    throw e;
+                }
+            }
+            return d;
+        } else if ("java.text.simpledateformat".equalsIgnoreCase(type)) {
+            return o;
+        } else {
+            return o;
+        }
+    }
 }
 
 

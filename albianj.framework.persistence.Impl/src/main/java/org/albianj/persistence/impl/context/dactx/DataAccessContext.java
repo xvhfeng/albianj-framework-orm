@@ -12,7 +12,7 @@ import org.albianj.persistence.impl.context.WriterJobAdapter;
 import org.albianj.persistence.impl.db.IPersistenceTransactionClusterScope;
 import org.albianj.persistence.impl.db.PersistenceTransactionClusterScope;
 import org.albianj.persistence.object.IAlbianObject;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,7 +146,7 @@ public class DataAccessContext implements IDataAccessContext {
         this.notifyCallbackObject = null;
         this.notifyCallback = null;
         this.notifyCallbackObject = null;
-        if (!Validate.isNullOrEmpty(entitis)) {
+        if (!CheckUtil.isNullOrEmpty(entitis)) {
             entitis.clear();
         }
     }

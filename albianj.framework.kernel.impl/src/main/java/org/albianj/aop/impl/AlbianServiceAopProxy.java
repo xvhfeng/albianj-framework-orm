@@ -9,7 +9,7 @@ import org.albianj.logger.LogLevel;
 import org.albianj.logger.LogTarget;
 import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.IAlbianService;
-import org.albianj.verify.Validate;
+import org.albianj.utils.CheckUtil;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -63,7 +63,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
             return rc;
         }
 
-        if (Validate.isNullOrEmpty(_aopAttributes)) {
+        if (CheckUtil.isNullOrEmpty(_aopAttributes)) {
             Object rc = methodProxy.invokeSuper(proxy, args);
             return rc;
         }

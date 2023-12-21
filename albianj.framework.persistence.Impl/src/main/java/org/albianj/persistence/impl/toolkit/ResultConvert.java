@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.impl.toolkit;
 
-import org.albianj.datetime.AlbianDateTime;
+import org.albianj.utils.DateTimeUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -93,7 +93,7 @@ public class ResultConvert {
             java.util.Date d = null;
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
-                        AlbianDateTime.CHINESE_FORMAT);
+                        DateTimeUtil.CHINESE_FORMAT);
                 d = dateFormat.parse(o.toString());
             } catch (Exception e) {
                 d = null;
@@ -101,7 +101,7 @@ public class ResultConvert {
             if (null == d) {
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat(
-                            AlbianDateTime.CHINESE_SIMPLE_FORMAT);
+                            DateTimeUtil.CHINESE_SIMPLE_FORMAT);
                     d = dateFormat.parse(o.toString());
                 } catch (Exception e) {
                     throw e;
@@ -122,7 +122,7 @@ public class ResultConvert {
         switch (sqlType) {
             case Types.DATE: {
                 Date d = (Date) v;
-                return AlbianDateTime.getDateTimeString(d);
+                return DateTimeUtil.getDateTimeString(d);
             }
             case Types.TIME: {
                 Time t = (Time) v;
