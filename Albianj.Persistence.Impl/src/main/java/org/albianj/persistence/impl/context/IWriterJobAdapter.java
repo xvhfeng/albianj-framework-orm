@@ -45,33 +45,33 @@ import java.util.List;
 
 public interface IWriterJobAdapter {
     public IWriterJob buildCreation(String sessionId, IAlbianObject object)
-            throws Throwable;
+           ;
 
     public IWriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects)
-            throws Throwable;
+           ;
 
     public IWriterJob buildModification(String sessionId, IAlbianObject object)
-            throws Throwable;
+           ;
 
 //    public IWriterJob buildModification(String sessionId, IAlbianObject object, String[] members)
 //            throws AlbianDataServiceException;
 
     public IWriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects)
-            throws Throwable;
+           ;
 
     public IWriterJob buildRemoved(String sessionId, IAlbianObject object)
-            throws Throwable;
+           ;
 
     public IWriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects)
-            throws Throwable;
+           ;
 
     public IWriterJob buildSaving(String sessionId, IAlbianObject object)
-            throws Throwable;
+           ;
 
     public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects)
-            throws Throwable;
+           ;
 
     IWriterJob buildWriterJob(String sessionId, List<IAlbianObjectWarp> entities, boolean rollbackOnError)
-            throws Throwable;
+           ;
 
 }

@@ -66,7 +66,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
         this.file = fileName;
     }
 
-    public void init() throws Throwable {
+    public void init()  {
         try {
             Properties props = PropertiesParser.load(Path
                     .getExtendResourcePath(KernelSetting

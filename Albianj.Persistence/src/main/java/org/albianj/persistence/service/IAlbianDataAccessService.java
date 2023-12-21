@@ -43,7 +43,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @return 是否完成删除
      * @throws AlbianDataServiceException
      */
-    boolean remove(String sessionId, IAlbianObject object) throws Throwable;
+    boolean remove(String sessionId, IAlbianObject object) ;
 
     /**
      * 从存储中删除指定的对象
@@ -63,7 +63,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws Throwable;
+                   Object compensateCallbackObject) ;
 
     /**
      * 从存储中删除指定的对象集合
@@ -77,7 +77,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @return 是否完成删除
      * @throws AlbianDataServiceException
      */
-    boolean remove(String sessionId, List<? extends IAlbianObject> objects) throws Throwable;
+    boolean remove(String sessionId, List<? extends IAlbianObject> objects) ;
 
     /**
      * 从存储中删除指定的对象集合
@@ -97,7 +97,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                   Object compensateCallbackObject) throws Throwable;
+                   Object compensateCallbackObject) ;
 
 
     /**
@@ -114,7 +114,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @return 是否保存成功
      * @throws AlbianDataServiceException
      */
-    boolean save(String sessionId, IAlbianObject object) throws Throwable;
+    boolean save(String sessionId, IAlbianObject object) ;
 
     /**
      * 保存对象到存储层
@@ -137,7 +137,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
     boolean save(String sessionId, IAlbianObject object,
                  IPersistenceNotify notifyCallback, Object notifyCallbackObject,
                  IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
-            throws Throwable;
+            ;
 
     /**
      * 保存对象集合到存储层
@@ -153,7 +153,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @return 是否保存成功
      * @throws AlbianDataServiceException
      */
-    boolean save(String sessionId, List<? extends IAlbianObject> objects) throws Throwable;
+    boolean save(String sessionId, List<? extends IAlbianObject> objects) ;
 
     /**
      * 保存对象集合到存储层
@@ -175,7 +175,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                  Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
-                 Object compensateCallbackObject) throws Throwable;
+                 Object compensateCallbackObject) ;
 
     /**
      * 从存储层加载数据
@@ -188,14 +188,14 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws Throwable;
+            ;
 
 
     <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, LoadType loadType, BigInteger id)
-            throws Throwable;
+            ;
 
     <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, LoadType loadType, String rountingName, BigInteger id)
-            throws Throwable;
+            ;
 
 
     /**
@@ -209,7 +209,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, LoadType loadType)
-            throws Throwable;
+            ;
 
     /**
      * 慎用
@@ -222,7 +222,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IOrderByCondition> orderbys)
-            throws Throwable;
+            ;
 
     /**
      * 慎用
@@ -235,7 +235,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName, LinkedList<IOrderByCondition> orderbys)
-            throws Throwable;
+            ;
 
 
     /**
@@ -250,7 +250,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, String rountingName, IChainExpression wheres)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层加载数据
@@ -268,7 +268,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
-                                           Statement statement) throws Throwable;
+                                           Statement statement) ;
 
     /**
      * 从存储层批量加载数据
@@ -281,7 +281,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层批量加载数据
@@ -297,7 +297,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   IChainExpression f, LinkedList<IOrderByCondition> orderbys)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层批量加载数据
@@ -312,7 +312,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   IChainExpression f, LinkedList<IOrderByCondition> orderbys)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层批量加载数据
@@ -330,7 +330,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
-                                                  Statement statement) throws Throwable;
+                                                  Statement statement) ;
 
     /**
      * 执行自定义sql语句来获取结果，暂时不支持存储过程
@@ -346,7 +346,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, IRunningStorageAttribute storageName, PersistenceCommandType cmdType,
-                                                  String text, Map<String, ISqlParameter> paras) throws Throwable;
+                                                  String text, Map<String, ISqlParameter> paras) ;
 
     /**
      * 执行自定义sql语句来获取结果，暂时不支持存储过程
@@ -362,7 +362,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, IRunningStorageAttribute storageName, PersistenceCommandType cmdType,
-                                                 String text, Map<String, ISqlParameter> paras) throws Throwable;
+                                                 String text, Map<String, ISqlParameter> paras) ;
 
 
     /**
@@ -378,7 +378,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, IChainExpression f)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层批量加载数据
@@ -395,7 +395,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层批量加载数据
@@ -413,7 +413,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层获取满足条件的对象数量
@@ -426,7 +426,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
-            throws Throwable;
+            ;
 
     /**
      * 从存储层获取满足条件的对象数量
@@ -441,40 +441,40 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType,
                                                     String rountingName, IChainExpression wheres)
-            throws Throwable;
+            ;
 
 
     //-------增加强制制定索引名字
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
                                                   LoadType loadType, String rountingName, IChainExpression wheres, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws Throwable;
+            ;
 
 
     /**
@@ -488,7 +488,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, LoadType loadType, String idxName)
-            throws Throwable;
+            ;
 
     /**
      * 慎用
@@ -501,7 +501,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @throws AlbianDataServiceException
      */
     public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, LoadType loadType, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws Throwable;
+            ;
 
     /**
      * 慎用
@@ -515,21 +515,21 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                             String rountingName, LinkedList<IOrderByCondition> orderbys, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, LoadType loadType, BigInteger id, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, LoadType loadType, String rountingName, BigInteger id, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, IChainExpression wheres, String idxName)
-            throws Throwable;
+            ;
 
     public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
                                                            LoadType loadType, String rountingName, IChainExpression wheres, String idxName)
-            throws Throwable;
+            ;
 
 
     IDataAccessContext newDataAccessContext();

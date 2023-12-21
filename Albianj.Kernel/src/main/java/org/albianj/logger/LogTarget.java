@@ -10,11 +10,11 @@ public enum LogTarget {
     @Comments("一般的程序运行时的日志")
     Running("RunningLogger", 1),
 
-    @Comments("数据库sql执行日志")
-    Sql("SqlLogger", 2),
+//    @Comments("数据库sql执行日志")
+//    Sql("SqlLogger", 2),
 
     @Comments("自定义日志")
-    Custom("CustomLogger", 3);
+    Custom("CustomLogger", 2);
 
     private String name = "D";
     private int type = 0;

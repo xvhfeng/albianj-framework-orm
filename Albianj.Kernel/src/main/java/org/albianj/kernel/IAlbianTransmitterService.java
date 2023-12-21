@@ -57,7 +57,7 @@ public interface IAlbianTransmitterService {
      * @param path
      * @throws Exception
      */
-    void start(String configUrl) throws Throwable;
+    void start(String configUrl) ;
 
     /**
      * ??????Albianj?????????kernel?????????????????????????????????????????????
@@ -67,9 +67,9 @@ public interface IAlbianTransmitterService {
      * @param configPath
      * @throws Exception
      */
-    void start(String kernelpath, String configPath) throws Throwable;
+    void start(String kernelpath, String configPath) ;
 
-    public void doStart() throws Throwable;
+    public void doStart() ;
 
     /**
      * ??????albianj
@@ -82,11 +82,11 @@ public interface IAlbianTransmitterService {
      *
      * @throws Exception
      */
-    void start() throws Throwable;
+    void start() ;
 
     String requestHandlerContext();
 
-    void unload() throws Throwable;
+    void unload() ;
 
     void makeEnvironment();
 }

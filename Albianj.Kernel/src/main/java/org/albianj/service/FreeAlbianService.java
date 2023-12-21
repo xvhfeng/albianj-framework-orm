@@ -71,7 +71,7 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void loading() throws Throwable {
+    public void loading()  {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Loading;
     }
@@ -102,7 +102,7 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void init() throws Throwable {
+    public void init()  {
         // TODO Auto-generated method stub
 
     }
@@ -167,7 +167,7 @@ public abstract class FreeAlbianService implements IAlbianService {
      * @return
      */
     @AlbianAopAttribute(avoid = true)
-    protected String findConfigFile(String filename) throws Throwable {
+    protected String findConfigFile(String filename)  {
         try {
             File f = new File(filename);
             if (f.exists()){
@@ -191,7 +191,7 @@ public abstract class FreeAlbianService implements IAlbianService {
 
     @AlbianAopAttribute(avoid = true)
     @Deprecated
-    protected String confirmConfigFile(String filename) throws Throwable {
+    protected String confirmConfigFile(String filename)  {
         return findConfigFile(filename);
     }
 

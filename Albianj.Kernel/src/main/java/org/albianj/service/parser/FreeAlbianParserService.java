@@ -42,7 +42,7 @@ import org.albianj.service.FreeAlbianService;
 public abstract class FreeAlbianParserService extends FreeAlbianService implements IAlbianParserService {
 
     @Override
-    public void loading() throws Throwable {
+    public void loading()  {
         // TODO Auto-generated method stub
         init();
         super.loading();

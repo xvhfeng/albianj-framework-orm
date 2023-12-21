@@ -42,5 +42,5 @@ import org.albianj.aop.AlbianAopAttribute;
 public interface IAlbianParser {
 
     @AlbianAopAttribute(avoid = true)
-    void init() throws Throwable;
+    void init() ;
 }

@@ -67,19 +67,19 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
     }
 
     @Override
-    public void init() throws Throwable {
+    public void init()  {
         _cached = new HashMap<>();
         try {
             parserFile(file);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the drouter.xml is error.");
         }
         return;
 
     }
 
-    private void parserFile(String filename) throws Throwable {
+    private void parserFile(String filename)  {
         Document doc = null;
         try {
             String fname = findConfigFile(filename);
@@ -91,7 +91,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
             }
             doc = XmlParser.load(fname);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the drouter.xml is error.");
         }
         if (null == doc) {
@@ -121,6 +121,6 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
     }
 
     protected abstract Map<String, IDataRouterAttribute> parserRoutings(
-            @SuppressWarnings("rawtypes") List nodes) throws Throwable;
+            @SuppressWarnings("rawtypes") List nodes) ;
 
 }

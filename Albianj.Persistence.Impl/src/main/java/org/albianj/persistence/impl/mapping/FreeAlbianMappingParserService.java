@@ -66,7 +66,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         this.file = fileName;
     }
 
-    public void init() throws Throwable {
+    public void init()  {
 //        _objAttrs = new HashMap<>();
 //        _class2Inter = new HashMap<>();
         _bpd = new HashMap<>();
@@ -74,8 +74,8 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
         try {
             parserFile(file);
-        } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+        } catch (Throwable e) {
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
            "loading the persisten.xml is error.");
         }
         return;
@@ -87,7 +87,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
             String fname = findConfigFile(filename);
             doc = XmlParser.load(fname);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the persisten.xml is error.");
 
         }
@@ -135,7 +135,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                             AlbianEntityMetadata.putAll(pkgMap);//merger the metedata
                         }
                     } catch (Exception e) {
-                        AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                        AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                                 "loading the persisten.xml is error.path:{} ",pkg);
                     }
                 }
@@ -160,7 +160,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
     protected abstract void parserAlbianObjects(
             @SuppressWarnings("rawtypes") List nodes)
-            throws Throwable;
+           ;
 
 //    protected abstract IAlbianObjectAttribute parserAlbianObject(Element node)
 //            throws AlbianParserException;

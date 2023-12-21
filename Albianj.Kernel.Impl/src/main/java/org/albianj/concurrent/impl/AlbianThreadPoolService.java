@@ -58,8 +58,7 @@ public class AlbianThreadPoolService extends FreeAlbianService implements IAlbia
         return Name;
     }
 
-    public void loading()
-            throws Throwable {
+    public void loading() {
         threadPool = new ThreadPoolExecutor(
                 KernelSetting.getThreadPoolCoreSize(),
                 KernelSetting.getThreadPoolMaxSize(), 300, TimeUnit.SECONDS,

@@ -25,12 +25,12 @@ public class SpxWapper extends FreeDataBasePool {
 
     public final static String DRIVER_CLASSNAME = "com.mysql.jdbc.Driver";
 
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa,boolean isAutoCommit) throws Throwable {
+    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa,boolean isAutoCommit)  {
         IStorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
         ISpxDBPool pool = (ISpxDBPool)ds;
-        AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+        AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Info,
                 "Get the connection from storage::{} and database::{} by connection pool.", sa.getName(),
             rsa.getDatabase());
         try {
@@ -43,7 +43,7 @@ public class SpxWapper extends FreeDataBasePool {
             conn.setAutoCommit(isAutoCommit);
             return conn;
         } catch (SQLException e) {
-            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+            AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Error,e,
                     "Get the connection with storage::{} and database::{} form connection pool is error.",
                 sa.getName(), rsa.getDatabase());
             return null;
@@ -51,12 +51,12 @@ public class SpxWapper extends FreeDataBasePool {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa) throws Throwable {
+    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa)  {
         ISpxDBPoolConfig cf = null;
         try {
             cf = new SpxDBPoolConfig();
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
                     "create dabasepool for storage:{} is fail.",key);
         }
         try {
@@ -92,7 +92,7 @@ public class SpxWapper extends FreeDataBasePool {
             cf.setPoolName(key);
             cf.setWaitTimeWhenGetMs(stgAttr.getWaitTimeWhenGetMs());
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
                     "startup database connection pools is fail.");
             //return null;
         }
@@ -130,7 +130,7 @@ public class SpxWapper extends FreeDataBasePool {
             String key = storageName + databaseName;
             DataSource ds = getDatasource(key);
             if (null == ds) {
-                AlbianServiceRouter.log(sessionId,LogTarget.Sql,LogLevel.Info,
+                AlbianServiceRouter.log(sessionId,LogTarget.Running,LogLevel.Info,
                         "return the connection from storage::{} and database::{} by connection pool.",
                         storageName, databaseName);
                 conn.close();
@@ -138,7 +138,7 @@ public class SpxWapper extends FreeDataBasePool {
             ISpxDBPool pool = (ISpxDBPool) ds;
             pool.rtnConnection(conn);
         } catch (SQLException e) {
-            AlbianServiceRouter.log(sessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.log(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "fail in return the connection from storage::{} and database::{} by connection pool.",
                     storageName, databaseName);
         }

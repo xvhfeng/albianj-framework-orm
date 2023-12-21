@@ -37,10 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl;
 
-import org.albianj.kernel.AlbianKernel;
-import org.albianj.kernel.AlbianState;
-import org.albianj.kernel.IAlbianTransmitterService;
-import org.albianj.kernel.KernelSetting;
+import org.albianj.kernel.*;
 import org.albianj.logger.LogLevel;
 import org.albianj.logger.LogTarget;
 import org.albianj.service.*;
@@ -90,7 +87,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String)
      */
     @Override
-    public void start(String configUrl) throws Throwable {
+    public void start(String configUrl)  {
         makeEnvironment();
         KernelSetting.setAlbianConfigFilePath(configUrl);
         start();
@@ -100,7 +97,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String, java.lang.String)
      */
     @Override
-    public void start(String kernelpath, String configPath) throws Throwable {
+    public void start(String kernelpath, String configPath)  {
         makeEnvironment();
         KernelSetting.setAlbianConfigFilePath(configPath);
         KernelSetting.setAlbianKernelConfigFilePath(kernelpath);
@@ -108,13 +105,13 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
     }
 
     @Override
-    public void start() throws Throwable {
+    public void start()  {
         makeEnvironment();
         startDateTime = new Date();
         doStart();
     }
 
-    public void doStart() throws Throwable {
+    public void doStart()  {
 
         // first load logger
         // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
@@ -189,7 +186,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                 }
                 ServiceContainer.clear();
                 state = AlbianState.Unloaded;
-                throw e;
+                throw new AlbianRuntimeException(e);
             } else {
                 mapAttr.clear();
                 mapAttr.putAll(failMap);
@@ -232,7 +229,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      * @see org.albianj.kernel.impl.IAlbianBootService#unload()
      */
     @Override
-    public void unload() throws Throwable {
+    public void unload()  {
         Set<String> keys = ServiceContainer.getAllServiceNames();
         for (String key : keys) {
             try {

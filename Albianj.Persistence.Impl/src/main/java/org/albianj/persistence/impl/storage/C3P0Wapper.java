@@ -26,11 +26,11 @@ public class C3P0Wapper extends FreeDataBasePool {
     }
 
     @Override
-    public Connection getConnection(String sessionid, IRunningStorageAttribute rsa,boolean isAutoCommit) throws Throwable {
+    public Connection getConnection(String sessionid, IRunningStorageAttribute rsa,boolean isAutoCommit)  {
         IStorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionid,key, rsa);
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,
+        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                 "Get the connection from storage::{} and database::{} by connection pool.", sa.getName(),
             rsa.getDatabase());
         try {
@@ -43,7 +43,7 @@ public class C3P0Wapper extends FreeDataBasePool {
             conn.setAutoCommit(isAutoCommit);
             return conn;
         } catch (SQLException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "Get the connection with storage::{} and database::{} form connection pool is error.",
                 sa.getName(), rsa.getDatabase(), e);
             return null;
@@ -51,12 +51,12 @@ public class C3P0Wapper extends FreeDataBasePool {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa) throws Throwable {
+    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa)  {
         ComboPooledDataSource ds = null;
         try {
             ds = new ComboPooledDataSource();
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
                     "create dabasepool for storage:{} is fail.", key);
         }
         try {
@@ -107,7 +107,7 @@ public class C3P0Wapper extends FreeDataBasePool {
             ds.setDebugUnreturnedConnectionStackTraces(true);//打开链接池的泄露调试
             ds.setUnreturnedConnectionTimeout(120); //增加没有返回的链接超时机制，防止链接泄露，单位是秒
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
                     "startup database connection pools is fail.");
             //return null;
         }

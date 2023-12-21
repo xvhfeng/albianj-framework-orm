@@ -50,7 +50,7 @@ public class AlbianEntityRantScaner {
 
                 new IAlbianClassExcavator() {
                     @Override
-                    public Object finder(Class<?> clzz) throws Throwable {
+                    public Object finder(Class<?> clzz)  {
                         IAlbianObjectAttribute objAttr = null;
                         AlbianObjectRant or = clzz.getAnnotation(AlbianObjectRant.class);
                         if (null == or.Interface()) {
@@ -116,7 +116,7 @@ public class AlbianEntityRantScaner {
                 });
     }
 
-    private static IDataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr) throws Throwable {
+    private static IDataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
         if (null == drr.DataRouter()) {
             return null;
         }

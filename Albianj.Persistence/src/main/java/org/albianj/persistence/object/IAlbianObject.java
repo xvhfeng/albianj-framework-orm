@@ -100,8 +100,8 @@ public interface IAlbianObject extends Serializable {
     public Object getOldAlbianObject(String key);
 
 
-    boolean needUpdate() throws AlbianDataServiceException;
+    boolean needUpdate(Object sessionId, Class<? extends IAlbianObject> itf) ;
 
-    boolean needUpdate(Object sessionId) throws Throwable;
+    boolean needUpdate(Object sessionId) ;
 
 }

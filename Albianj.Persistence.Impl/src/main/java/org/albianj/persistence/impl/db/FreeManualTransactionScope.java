@@ -12,7 +12,7 @@ import org.albianj.service.AlbianServiceRouter;
 public abstract class FreeManualTransactionScope implements IManualTransactionScope {
 
 
-    public boolean execute(IManualContext mctx) throws Throwable {
+    public boolean execute(IManualContext mctx)  {
         boolean isSuccess = true;
         try {
             mctx.setLifeTime(WriterJobLifeTime.NoStarted);
@@ -24,7 +24,7 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
             mctx.setLifeTime(WriterJobLifeTime.Commited);
         } catch (Exception e) {
             isSuccess = false;
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "Execute the manual command is fail.");
             try {
                 switch (mctx.getLifeTime()) {
@@ -42,7 +42,7 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
                         try {
                             this.exceptionHandler(mctx);
                         } catch (Exception exc) {
-                            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,exc,
+                            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
                                     "auto rollback  the manual command is fail.");
                         }
                         mctx.setLifeTime(WriterJobLifeTime.Rollbacked);
@@ -53,14 +53,14 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
                 }
 
             } catch (Exception exc) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                         "rollback the query the manual command is fail.");
             }
         } finally {
             try {
                 unLoadExecute(mctx);
             } catch (Exception exc) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,exc,
+                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
                         "unload the manual command is fail.");
             }
 
@@ -70,15 +70,15 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
     }
 
 
-    protected abstract void preExecute(IManualContext mctx) throws Throwable;
+    protected abstract void preExecute(IManualContext mctx) ;
 
-    protected abstract void executeHandler(IManualContext mctx) throws Throwable;
+    protected abstract void executeHandler(IManualContext mctx) ;
 
-    protected abstract void commit(IManualContext mctx) throws Throwable;
+    protected abstract void commit(IManualContext mctx) ;
 
-    protected abstract void exceptionHandler(IManualContext mctx) throws Throwable;
+    protected abstract void exceptionHandler(IManualContext mctx) ;
 
-    protected abstract void unLoadExecute(IManualContext mctx) throws Throwable;
+    protected abstract void unLoadExecute(IManualContext mctx) ;
 
 
 }

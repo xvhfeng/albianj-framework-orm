@@ -13,7 +13,7 @@ import org.albianj.verify.Validate;
  */
 public class AlbianObjectCreator {
 
-    public static IAlbianObject newInstance(Object sessionId, String itf) throws Throwable {
+    public static IAlbianObject newInstance(Object sessionId, String itf)  {
         IAlbianObjectAttribute attr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == attr) {
             AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
@@ -59,7 +59,7 @@ public class AlbianObjectCreator {
         return null;
     }
 
-    public static IAlbianObject newInstance(Object sessionId, Class<? extends IAlbianObject> clazz) throws Throwable {
+    public static IAlbianObject newInstance(Object sessionId, Class<? extends IAlbianObject> clazz)  {
         return newInstance(sessionId, clazz.getName());
     }
 }

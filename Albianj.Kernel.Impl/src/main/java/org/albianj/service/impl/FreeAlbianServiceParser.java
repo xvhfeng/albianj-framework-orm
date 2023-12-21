@@ -39,7 +39,7 @@ package org.albianj.service.impl;
 
 import org.albianj.aop.AlbianAopAttribute;
 import org.albianj.aop.IAlbianServiceAopAttribute;
-import org.albianj.except.AlbianRuntimeException;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.io.Path;
 import org.albianj.kernel.KernelSetting;
 import org.albianj.logger.LogLevel;
@@ -73,7 +73,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void init() throws Throwable {
+    public void init()  {
 
         Map<String, IAlbianServiceAttribute> map = new LinkedHashMap<>();
         try {
@@ -97,7 +97,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
         return;
     }
 
-    private void parserFile(Map<String, IAlbianServiceAttribute> map, String filename) throws Throwable {
+    private void parserFile(Map<String, IAlbianServiceAttribute> map, String filename)  {
         Document doc = null;
         try {
             String realFilename = findConfigFile(filename);
@@ -158,7 +158,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                         if (null != pkgMap) {
                             pkgMetedataMap.putAll(pkgMap);//merger the metedata
                         }
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                                 "loading the service.xml is error. Path :{}s in Package is fail.",pkg );
                     }
@@ -262,7 +262,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
     protected abstract void parserServices(Map<String, IAlbianServiceAttribute> map,
                                            String tagName,
-                                           @SuppressWarnings("rawtypes") List nodes) throws Throwable;
+                                           @SuppressWarnings("rawtypes") List nodes) ;
 
     protected abstract IAlbianServiceAttribute parserService(String name, Element node)
             throws Throwable;

@@ -12,11 +12,11 @@ public interface IAlbianOpenedStorageService extends IAlbianService {
 
     IRunningStorageAttribute getStorage(String sessionId,String storageName, String dbAliasName);
 
-    Connection getConnection(String sessionId, String storageName, boolean isAutoCommit) throws Throwable;
+    Connection getConnection(String sessionId, String storageName, boolean isAutoCommit) ;
 
-    Connection getConnection(String sessionId, String storageName, String dbAliasName, boolean isAutoCommit) throws Throwable;
+    Connection getConnection(String sessionId, String storageName, String dbAliasName, boolean isAutoCommit) ;
 
-    Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit) throws Throwable;
+    Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit) ;
 
     void returnConnection(String sessionId, IRunningStorageAttribute rsa, Connection conn);
 }

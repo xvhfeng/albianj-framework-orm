@@ -67,9 +67,9 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
         try {
             sb = writerJobCommandToString(job);
         } catch (AlbianDataServiceException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "jon {} send persistence notify is fail.",job.getId());
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "the job {} is not compensate then the all sql is:{}",job.getId(), sb.toString());
         }
     }

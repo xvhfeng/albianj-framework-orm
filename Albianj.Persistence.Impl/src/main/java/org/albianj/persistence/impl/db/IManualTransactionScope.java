@@ -7,6 +7,6 @@ import org.albianj.persistence.context.IManualContext;
  */
 public interface IManualTransactionScope {
 
-    public boolean execute(IManualContext mctx) throws Throwable;
+    public boolean execute(IManualContext mctx) ;
 
 }

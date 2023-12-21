@@ -67,7 +67,7 @@ public class QueryContext implements IQueryContext {
     }
 
     @Override
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression wheres) throws Throwable {
+    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression wheres)  {
         List<T> entities = loadObjects(sessionId, itfClzz, loadType, wheres);
         if (Validate.isNullOrEmpty(entities)) {
             return null;
@@ -76,7 +76,7 @@ public class QueryContext implements IQueryContext {
     }
 
     @Override
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression wheres) throws Throwable {
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> itfClzz, LoadType loadType, IChainExpression wheres)  {
         this.itfClzz = itfClzz;
         this.loadType = loadType;
         this.wheres = wheres;
@@ -97,7 +97,7 @@ public class QueryContext implements IQueryContext {
         return list;
     }
 
-    public long loadCounts(String sessionId, Class<? extends IAlbianObject> itfClzz, LoadType loadType, IChainExpression wheres) throws Throwable {
+    public long loadCounts(String sessionId, Class<? extends IAlbianObject> itfClzz, LoadType loadType, IChainExpression wheres)  {
         this.itfClzz = itfClzz;
         this.loadType = loadType;
         this.wheres = wheres;

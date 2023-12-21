@@ -62,7 +62,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
 
     public static final String DEFAULT_ROUTING_NAME = "!@#$%Albianj_Default_DataRouter%$#@!";
 
-    private static IDataRoutersAttribute getRoutingsAttribute(Element elt) throws Throwable {
+    private static IDataRoutersAttribute getRoutingsAttribute(Element elt)  {
         String inter = XmlParser.getAttributeValue(elt, "Interface");
         if (Validate.isNullOrEmptyOrAllSpace(inter)) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
@@ -109,7 +109,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
             }
 
         } catch (ClassNotFoundException e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "the type:{}  not found",type);
         }
 
@@ -243,7 +243,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
     }
 
     protected Map<String, IDataRouterAttribute> parserRoutings(
-            @SuppressWarnings("rawtypes") List nodes) throws Throwable {
+            @SuppressWarnings("rawtypes") List nodes)  {
         for (Object node : nodes) {
             IDataRoutersAttribute routingsAttribute = getRoutingsAttribute((Element) node);
             if (null == routingsAttribute)

@@ -49,14 +49,14 @@ import org.albianj.persistence.object.IAlbianObject;
 import java.util.List;
 
 public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
-    public IWriterJob buildCreation(String sessionId, IAlbianObject object) throws Throwable {
+    public IWriterJob buildCreation(String sessionId, IAlbianObject object)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, cca);
         return job;
     }
 
-    public IWriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
+    public IWriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         for (IAlbianObject object : objects) {
@@ -65,14 +65,14 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildModification(String sessionId, IAlbianObject object) throws Throwable {
+    public IWriterJob buildModification(String sessionId, IAlbianObject object)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, mca);
         return job;
     }
 
-    public IWriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
+    public IWriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
         for (IAlbianObject object : objects) {
@@ -82,7 +82,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildRemoved(String sessionId, IAlbianObject object) throws Throwable {
+    public IWriterJob buildRemoved(String sessionId, IAlbianObject object)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, rca);
@@ -90,7 +90,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
+    public IWriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
         for (IAlbianObject object : objects) {
@@ -99,7 +99,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildSaving(String sessionId, IAlbianObject object) throws Throwable {
+    public IWriterJob buildSaving(String sessionId, IAlbianObject object)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand iuc;
         if (object.getIsAlbianNew()) {
@@ -112,7 +112,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects) throws Throwable {
+    public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects)  {
         IWriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
@@ -127,7 +127,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
     }
 
     public IWriterJob buildWriterJob(String sessionId, List<IAlbianObjectWarp> entities, boolean rollbackOnError)
-            throws Throwable {
+            {
         IWriterJob job = new WriterJob(sessionId);
         job.setRollbackOnError(rollbackOnError);
         IPersistenceUpdateCommand crtCmd = new CreateCommandAdapter();
@@ -164,7 +164,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
 
     protected abstract void buildWriterJob(String sessionId,IWriterJob job, IAlbianObject entity,
                                            String storageAlias, String tableAlias,
-                                           IPersistenceUpdateCommand cmd) throws Throwable;
+                                           IPersistenceUpdateCommand cmd) ;
 
 
 }

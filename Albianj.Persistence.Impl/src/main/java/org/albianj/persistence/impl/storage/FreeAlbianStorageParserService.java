@@ -122,26 +122,26 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     }
 
     @Override
-    public void init() throws Throwable {
+    public void init()  {
         Document doc = null;
         cached = new HashMap<String, IStorageAttribute>();
         try {
             parserFile(file);
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the storage.xml is error." );
         }
         return;
     }
 
-    private void parserFile(String filename) throws Throwable {
+    private void parserFile(String filename)  {
         Document doc = null;
         cached = new HashMap<String, IStorageAttribute>();
         try {
             String fname = findConfigFile(filename);
             doc = XmlParser.load(fname);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the storage.xml is error.");
         }
         if (null == doc) {

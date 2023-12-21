@@ -1,10 +1,7 @@
 package org.albianj.logger.impl;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.albianj.except.AlbianDisplayableException;
+import org.albianj.kernel.AlbianRuntimeException;
+import org.albianj.kernel.StackFrame;
 import org.albianj.logger.IAlbianLoggerService;
 import org.albianj.logger.LogLevel;
 import org.albianj.logger.LogTarget;
@@ -26,90 +23,66 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
         return Name;
     }
 
-    @Data
-    @AllArgsConstructor
-    @ToString
-    @NoArgsConstructor
-    private static class StackFrame {
-        private String filename;
-
-        private String className;
-
-        private String methodName;
-
-        private int line;
-    }
-
     @Override
     public void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) {
-       String stackInfo =  pickStackInfoWapper();
+       String stackInfo =  new StackFrame().pickStackInfoWapper();
        String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(target,level,msg,null);
     }
 
     @Override
     public void log(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras) {
-        String stackInfo =  pickStackInfoWapper();
+        String stackInfo =  new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(target,level,msg,t);
 
     }
 
     @Override
-    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) throws Throwable {
-        String stackInfo =  pickStackInfoWapper();
+    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) {
+        String stackInfo =  new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(target,level,msg,null);
-        throw new AlbianDisplayableException(msg);
+        throw new AlbianRuntimeException(msg);
     }
 
 
     @Override
-    public void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras) throws Throwable {
-        String stackInfo =  pickStackInfoWapper();
+    public void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras)  {
+        String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(target,level,msg,t);
-        throw t;
+        throw  new AlbianRuntimeException(t);
     }
 
-
-
-
     @Override
-    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras) throws Throwable {
-        String stackInfo =  pickStackInfoWapper();
+    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras) {
+        String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(target,level,msg,null);
-        throw newThrow;
+        throw  new AlbianRuntimeException(newThrow);
     }
 
     @Override
-    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras) throws Throwable {
-        String stackInfo =  pickStackInfoWapper();
+    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras)  {
+        String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(target,level,msg,t);
+        throw  new AlbianRuntimeException(newThrow);
+    }
+
+    @Override
+    public void throwNew(Object sessionId, String format, Object... paras)  {
+        String stackInfo = new StackFrame().pickStackInfoWapper();
+        String msg = makeLogInfo(sessionId, stackInfo, format, paras);
+        AlbianRuntimeException newThrow = new AlbianRuntimeException(msg);
+        flushToFile(LogTarget.Running, LogLevel.Error, msg, null);
         throw newThrow;
     }
 
     private Logger getLogger(String name) {
         return LoggerFactory.getLogger(name);
     }
-
-    private String pickStackInfoWapper(){
-        /*
-            0 - it is function self
-            1 - AlbianLoggerService2.logger function
-            2 - function of called AlbianLoggerService2.logger
-         */
-        StackTraceElement s = Thread.currentThread().getStackTrace()[2];
-        // filter,then called from AlbianServiceHub.log,then stacktrace will +1
-        if(s.getClassName().contentEquals("AlbianServiceHub") || s.getClassName().contentEquals("AlbianServiceRouter") ) {
-            s = Thread.currentThread().getStackTrace()[3];
-        }
-        StackFrame si = new StackFrame(s.getFileName(), s.getClassName(), s.getMethodName(), s.getLineNumber());
-        return si.toString();
-    }
-
 
     private String makeLogInfo(Object sessionId,String stackInfo, String format, Object... values) {
         StringBuilder sb = new StringBuilder();

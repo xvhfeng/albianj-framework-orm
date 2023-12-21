@@ -16,7 +16,7 @@ public class AlbianServiceLoader {
     private static String sessionId = "AlbianServiceLoader";
 
     public static IAlbianService makeupService(IAlbianServiceAttribute serviceAttr,
-        Map<String, IAlbianServiceAttribute> servAttrs) throws Throwable {
+        Map<String, IAlbianServiceAttribute> servAttrs)  {
         String sImplClzz = serviceAttr.getType();
         String id = serviceAttr.getId();
         IAlbianService rtnService = null;
@@ -75,7 +75,7 @@ public class AlbianServiceLoader {
         return rtnService;
     }
 
-    public static void setServiceFields(IAlbianService serv, IAlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, IAlbianServiceAttribute> servAttrs) throws Throwable {
+    public static void setServiceFields(IAlbianService serv, IAlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, IAlbianServiceAttribute> servAttrs)  {
         if(Validate.isNullOrEmpty(servAttr.getServiceFields())) {
             return;
         }

@@ -20,7 +20,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
 
     private final ConcurrentMap<String, DataSource> _dataSource = new ConcurrentHashMap<>();
 
-    protected DataSource getDatasource(String sessionid,final String key, IRunningStorageAttribute rsa) throws Throwable {
+    protected DataSource getDatasource(String sessionid,final String key, IRunningStorageAttribute rsa)  {
         DataSource ds = _dataSource.get(key);
         if (ds != null) {
             return ds;
@@ -57,13 +57,13 @@ public abstract class FreeDataBasePool implements IDataBasePool {
         return ds;
     }
 
-    protected abstract DataSource setupDataSource(String sessionid,final String key, final IRunningStorageAttribute rsa) throws Throwable;
+    protected abstract DataSource setupDataSource(String sessionid,final String key, final IRunningStorageAttribute rsa) ;
 
     //释放连接回连接池
     public void returnConnection(String sessionId, String storageName, String databaseName, Connection conn,
         Statement pst, ResultSet rs) {
 
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Info,
+        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Info,
                 "return the connection from storage::{} and database::{} by connection pool.",
                 storageName, databaseName);
         try {
@@ -72,7 +72,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
             }
 
         } catch (SQLException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "close the result by connection to storage::{} database::{} is fail.", storageName, databaseName);
         } finally {
             try {
@@ -81,7 +81,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
                 }
 
             } catch (SQLException e) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                         "close the statement by connection to storage::{} database::{} is fail.",
                         storageName, databaseName);
             } finally {
@@ -91,7 +91,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
                     }
 
                 } catch (SQLException e) {
-                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                             "close the  connection to storage::{} database::{} is fail.", storageName, databaseName);
                 }
             }
@@ -102,7 +102,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
     //释放连接回连接池
     public void returnConnection(String sessionId, String storageName, String databaseName, Connection conn,
         List<Statement> statements) {
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Info,
+        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Info,
                 "return the connection from storage::{} and database::{} by connection pool.", storageName,
             databaseName);
         try {
@@ -111,14 +111,14 @@ public abstract class FreeDataBasePool implements IDataBasePool {
                     try {
                         ((PreparedStatement)statement).clearParameters();
                     } catch (SQLException e) {
-                        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                                 "close the statement to storage::{} database::{} is fail.",
                                 storageName, databaseName);
                     } finally {
                         try {
                             statement.close();
                         } catch (SQLException e) {
-                            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                                     "close the statconnectionement to storage::{} database::{} is fail.",
                                 storageName, databaseName);
                         }
@@ -132,14 +132,14 @@ public abstract class FreeDataBasePool implements IDataBasePool {
                 }
 
             } catch (SQLException e) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                         "close the  connection to storage::{} database::{} is fail.", storageName, databaseName);
             }
         }
     }
 
     public void returnConnection(String sessionId, String storageName, String databaseName, Connection conn) {
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Info,
+        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Info,
                 "return the connection from storage::{} and database::{} by connection pool.",
                 storageName, databaseName);
         try {
@@ -148,7 +148,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
             }
 
         } catch (SQLException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "close the  connection to storage::{} database::{} is fail.",
                     storageName, databaseName);
         }

@@ -53,14 +53,14 @@ import java.util.List;
 public abstract class FreePersistenceQueryScope implements IPersistenceQueryScope {
 
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     IReaderJob job) throws Throwable {
+                                                     IReaderJob job)  {
         try {
             perExecute(job);
             executing(job);
             List<T> list = executed(cls, job);
             return list;
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Sql, LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Running, LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
             unloadExecute(job);
@@ -69,14 +69,14 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
     }
 
     public Object execute(
-            IReaderJob job) throws Throwable {
+            IReaderJob job)  {
         try {
             perExecute(job);
             executing(job);
             Object o = executed(job.getId(), job);
             return o;
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Sql, LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Running, LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
             unloadExecute(job);
@@ -85,42 +85,42 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
     }
 
     public <T extends IAlbianObject> List<T> execute(String sessionId, Class<T> cls,
-                                                     PersistenceCommandType cmdType, Statement statement) throws Throwable {
+                                                     PersistenceCommandType cmdType, Statement statement)  {
         ResultSet result = null;
         List<T> list = null;
         try {
             result = executing(sessionId, cmdType, statement);
             list = executed(cls, AlbianServiceRouter.make32UUID(), result);
         } catch (AlbianDataServiceException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Sql, LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
             if (null != result)
                 try {
                     result.close();
                 } catch (SQLException e) {
-                    AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                    AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Error,e,
                             "close the ResultSet from database is error.");
                 }
         }
         return list;
     }
 
-    protected abstract void perExecute(IReaderJob job) throws Throwable;
+    protected abstract void perExecute(IReaderJob job) ;
 
-    protected abstract void executing(IReaderJob job) throws Throwable;
+    protected abstract void executing(IReaderJob job) ;
 
     protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls,
-                                                                  IReaderJob job) throws Throwable;
+                                                                  IReaderJob job) ;
 
     protected abstract Object executed(String jobId, IReaderJob job)
-            throws Throwable;
+           ;
 
     protected abstract void unloadExecute(IReaderJob job) throws AlbianDataServiceException;
 
     protected abstract ResultSet executing(String sessionId, PersistenceCommandType cmdType,
-                                           Statement statement) throws Throwable;
+                                           Statement statement) ;
 
     protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls, String jobId,
-                                                                  ResultSet result) throws Throwable;
+                                                                  ResultSet result) ;
 }

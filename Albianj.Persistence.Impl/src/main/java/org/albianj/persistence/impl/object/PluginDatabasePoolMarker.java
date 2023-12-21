@@ -26,7 +26,7 @@ public class PluginDatabasePoolMarker implements DatabasePoolMaker {
                 supportMarkers.add(its.next());
             }
         } catch (Throwable t) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,t,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,t,
                     "load databasePoolMarker error");
         }
     }

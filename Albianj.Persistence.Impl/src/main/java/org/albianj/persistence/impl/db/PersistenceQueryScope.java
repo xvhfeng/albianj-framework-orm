@@ -61,7 +61,7 @@ import java.util.Vector;
 public class PersistenceQueryScope extends FreePersistenceQueryScope implements IPersistenceQueryScope {
 
 
-    protected void perExecute(IReaderJob job) throws Throwable {
+    protected void perExecute(IReaderJob job)  {
         String sessionId = job.getId();
         PersistenceNamedParameter.parseSql(job.getCommand());
         IRunningStorageAttribute rsa = job.getStorage();
@@ -82,7 +82,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         try {
             statement = job.getConnection().prepareStatement(cmd.getCommandText());
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "get the statement is fail." );
         }
         Map<Integer, String> map = cmd.getParameterMapper();
@@ -98,7 +98,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                         statement.setObject(i, para.getValue(), para.getSqlType());
                     }
                 } catch (SQLException e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                         "set the sql paras is error.para name: {} ,para value: {}" ,
                             para.getName() ,ResultConvert.sqlValueToString(para.getSqlType(), para.getValue()));
                 }
@@ -107,7 +107,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         job.setStatement(statement);
     }
 
-    protected void executing(IReaderJob job) throws Throwable {
+    protected void executing(IReaderJob job)  {
         String text = job.getCommand().getCommandText();
         Map<String, ISqlParameter> map = job.getCommand().getParameters();
         IRunningStorageAttribute st = job.getStorage();
@@ -115,7 +115,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
         ResultSet result = null;
         try {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                     "job:{} Storage:{},database:{},SqlText:{},paras:{}.",
                    job.getId(), st.getStorageAttribute().getName(),
                 st.getDatabase(), text, ListConvert.toString(map));
@@ -124,17 +124,17 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
             if (!Validate.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
                 long end1 = System.currentTimeMillis();
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,
+                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                         "SpxLog job:{} execute query use times:{}.", job.getId(),end1 - begin1);
             }
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "execute the reader job:{} is fail." ,job.getId());
         } finally {
             try {
                 job.getConnection().commit();
             } catch (Exception e) {
-                AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+                AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                         "commit the reader job:{} is fail." ,job.getId());
             }
         }
@@ -142,20 +142,20 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     }
 
     protected <T extends IAlbianObject> List<T> executed(Class<T> cls, IReaderJob job)
-            throws Throwable {
+            {
         long begin1 = System.currentTimeMillis();
         String sessionId = job.getId();
         List<T> list = executed(cls, job.getId(), job.getResult());
         if (!Validate.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
             long end1 = System.currentTimeMillis();
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                     "SpxLog executed query and make data result use times:{}.",
                     end1 - begin1);
         }
         String text = job.getCommand().getCommandText();
         Map<String, ISqlParameter> map = job.getCommand().getParameters();
         IRunningStorageAttribute st = job.getStorage();
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,
+        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
             Validate.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
@@ -171,14 +171,14 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     }
 
     protected ResultSet executing(String sessionId, PersistenceCommandType cmdType, Statement statement)
-            throws Throwable {
+            {
         try {
             if (PersistenceCommandType.Text == cmdType) {
                 return ((PreparedStatement)statement).executeQuery();
             }
             return ((CallableStatement)statement).executeQuery();
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "execute the reader job fail");
         }
 
@@ -186,7 +186,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     }
 
     protected <T extends IAlbianObject> List<T> executed(Class<T> cli, String sessionId, ResultSet result)
-            throws Throwable {
+            {
         String inter = cli.getName();
 
         IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
@@ -197,7 +197,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         try {
             cls = AlbianClassLoader.getInstance().loadClass(className);
         } catch (ClassNotFoundException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "class:{} is not found.",className);
         }
         List<T> list = new Vector<T>();
@@ -220,12 +220,12 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     obj.setIsAlbianNew(false);
                     list.add(obj);
                 } catch (Exception e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                             "create object from class::{} is fail.",className);
                 }
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "loop the result from database for class:{} is error.",
                      className);
         }
@@ -234,7 +234,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     }
 
     @Override
-    protected Object executed(String sessionId, IReaderJob job) throws Throwable {
+    protected Object executed(String sessionId, IReaderJob job)  {
         Object v = null;
         ResultSet result = job.getResult();
         try {
@@ -243,13 +243,13 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                 String text = job.getCommand().getCommandText();
                 Map<String, ISqlParameter> map = job.getCommand().getParameters();
                 IRunningStorageAttribute st = job.getStorage();
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,
+                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                         "Storage:{},database:{},SqlText:{},paras:{}.return COUNT(1) :{}",
                     st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
                     String.valueOf(v));
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "get pagesize is null."
             );
         }

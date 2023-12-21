@@ -65,7 +65,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     @Override
     protected void parserServices(Map<String, IAlbianServiceAttribute> map,
-                                  String tagName, @SuppressWarnings("rawtypes") List nodes) throws Throwable {
+                                  String tagName, @SuppressWarnings("rawtypes") List nodes)  {
         if (Validate.isNullOrEmpty(nodes)) {
             AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "parser the nodes named {} for service is null or empty.",tagName);
@@ -86,7 +86,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     }
 
     @Override
-    protected IAlbianServiceAttribute parserService(String name, Element elt) throws Throwable {
+    protected IAlbianServiceAttribute parserService(String name, Element elt)  {
         if (null == elt) {
             AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "Parser service {} fail.",name);
@@ -149,7 +149,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         return serviceAttr;
     }
 
-    protected Map<String, IAlbianServiceFieldAttribute> parserAlbianServiceFieldsAttribute(Class<?> clzz, String id, List nodes) throws Throwable {
+    protected Map<String, IAlbianServiceFieldAttribute> parserAlbianServiceFieldsAttribute(Class<?> clzz, String id, List nodes)  {
         Map<String, IAlbianServiceFieldAttribute> pas = new HashMap<>();
         for (Object node : nodes) {
             IAlbianServiceFieldAttribute pa = parserAlbianServiceFieldAttribute(clzz, id, (Element) node);
@@ -158,7 +158,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         return pas;
     }
 
-    protected IAlbianServiceFieldAttribute parserAlbianServiceFieldAttribute(Class<?> clzz, String id, Element e) throws Throwable {
+    protected IAlbianServiceFieldAttribute parserAlbianServiceFieldAttribute(Class<?> clzz, String id, Element e)  {
         String name = XmlParser.getAttributeValue(e, "Name");
         IAlbianServiceFieldAttribute pa = new AlbianServiceFieldAttribute();
         if (Validate.isNullOrEmptyOrAllSpace(name)) {
@@ -196,7 +196,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     }
 
-    protected Map<String, IAlbianServiceAopAttribute> parserAlbianServiceAopAttribute(String id, List nodes) throws Throwable {
+    protected Map<String, IAlbianServiceAopAttribute> parserAlbianServiceAopAttribute(String id, List nodes)  {
         Map<String, IAlbianServiceAopAttribute> aas = new HashMap<>();
         for (Object node : nodes) {
             IAlbianServiceAopAttribute pa = parserAlbianServiceAopAttribute(id, (Element) node);
@@ -205,7 +205,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         return aas;
     }
 
-    protected IAlbianServiceAopAttribute parserAlbianServiceAopAttribute(String id, Element e) throws Throwable {
+    protected IAlbianServiceAopAttribute parserAlbianServiceAopAttribute(String id, Element e)  {
 
 
         IAlbianServiceAopAttribute aa = new AlbianServiceAopAttribute();

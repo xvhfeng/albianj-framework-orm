@@ -29,21 +29,21 @@ public class AlbianOpenedStorageService extends FreeAlbianService implements IAl
     }
 
     @Override
-    public Connection getConnection(String sessionId, String storageName, boolean isAutoCommit) throws Throwable {
+    public Connection getConnection(String sessionId, String storageName, boolean isAutoCommit)  {
         IAlbianStorageParserService asps = AlbianServiceHub.getService(sessionId,IAlbianStorageParserService.class,IAlbianStorageParserService.Name);
         IRunningStorageAttribute rsa = getStorage(sessionId,storageName);
         return asps.getConnection(sessionId,rsa,isAutoCommit);
     }
 
     @Override
-    public Connection getConnection(String sessionId, String storageName, String dbAliasName, boolean isAutoCommit) throws Throwable {
+    public Connection getConnection(String sessionId, String storageName, String dbAliasName, boolean isAutoCommit)  {
         IAlbianStorageParserService asps = AlbianServiceHub.getService(sessionId,IAlbianStorageParserService.class,IAlbianStorageParserService.Name);
         IRunningStorageAttribute rsa = getStorage(storageName,dbAliasName);
         return asps.getConnection(sessionId,rsa,isAutoCommit);
     }
 
     @Override
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit) throws Throwable {
+    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
         IAlbianStorageParserService asps = AlbianServiceHub.getService(sessionId,IAlbianStorageParserService.class,IAlbianStorageParserService.Name);
         return asps.getConnection(sessionId,rsa,isAutoCommit);
     }

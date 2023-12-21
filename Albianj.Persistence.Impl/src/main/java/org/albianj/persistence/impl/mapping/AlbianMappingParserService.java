@@ -254,7 +254,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     }
 
     @Override
-    protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes) throws Throwable {
+    protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes)  {
         if (Validate.isNullOrEmpty(nodes)) {
             throw new IllegalArgumentException("nodes");
         }
@@ -265,7 +265,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             try {
                 parserAlbianObject(ele);
             } catch (Exception e) {
-                AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Sql,LogLevel.Error,e,
+                AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                 "parser persisten node is fail,xml:{}" ,ele.asXML());
             }
 //            if (null == albianObjectAttribute) {
@@ -281,7 +281,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     }
 
-    protected void parserAlbianObject(Element node) throws Throwable {
+    protected void parserAlbianObject(Element node)  {
         String type = XmlParser.getAttributeValue(node, "Type");
         if (Validate.isNullOrEmptyOrAllSpace(type)) {
             throw new AlbianDataServiceException("The AlbianObject's type is empty in persistence.xml");
@@ -389,7 +389,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         return;
     }
 
-    private Map<String, IMemberAttribute> reflexAlbianObjectMembers(String type) throws Throwable {
+    private Map<String, IMemberAttribute> reflexAlbianObjectMembers(String type)  {
         Map<String, IMemberAttribute> map = new LinkedHashMap<String, IMemberAttribute>();
         PropertyDescriptor[] propertyDesc = null;
         try {

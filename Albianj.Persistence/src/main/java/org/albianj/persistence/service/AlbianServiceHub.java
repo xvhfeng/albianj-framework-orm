@@ -13,11 +13,11 @@ import org.albianj.service.AlbianServiceRouter;
 
 public final class AlbianServiceHub extends AlbianServiceRouter {
 
-    public static IAlbianObject newInstance(Object sessionId, String itf) throws Throwable {
+    public static IAlbianObject newInstance(Object sessionId, String itf)  {
         return AlbianObjectCreator.newInstance(sessionId, itf);
     }
 
-    public static <T extends IAlbianObject> T newInstance(Object sessionId, Class<T> clazz) throws Throwable {
+    public static <T extends IAlbianObject> T newInstance(Object sessionId, Class<T> clazz)  {
         return (T) newInstance(sessionId, clazz.getName());
     }
 

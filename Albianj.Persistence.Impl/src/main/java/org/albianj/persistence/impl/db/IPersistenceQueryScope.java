@@ -46,11 +46,11 @@ import java.util.List;
 
 public interface IPersistenceQueryScope {
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     IReaderJob job) throws Throwable;
+                                                     IReaderJob job) ;
 
     public <T extends IAlbianObject> List<T> execute(String sessionId, Class<T> cls,
-                                                     PersistenceCommandType cmdType, Statement statement) throws Throwable;
+                                                     PersistenceCommandType cmdType, Statement statement) ;
 
     public Object execute(
-            IReaderJob job) throws Throwable;
+            IReaderJob job) ;
 }

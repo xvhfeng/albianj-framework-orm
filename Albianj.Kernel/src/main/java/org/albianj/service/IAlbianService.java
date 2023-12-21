@@ -59,7 +59,7 @@ public interface IAlbianService {
     public void beforeLoad() throws RuntimeException;
 
     @AlbianAopAttribute(avoid = true)
-    public void loading() throws Throwable;
+    public void loading() ;
 
     @AlbianAopAttribute(avoid = true)
     public void afterLoading() throws RuntimeException;

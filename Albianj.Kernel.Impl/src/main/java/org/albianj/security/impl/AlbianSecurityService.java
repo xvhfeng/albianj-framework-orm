@@ -69,7 +69,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
     @Override
-    public void init() throws Throwable {
+    public void init()  {
         super.init();
         String mkey = KernelSetting.getMachineKey();
         if (Validate.isNullOrEmptyOrAllSpace(mkey)) {
@@ -87,11 +87,11 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
 
-    public String decryptDES(Object sessionId,String message) throws Throwable {
+    public String decryptDES(Object sessionId,String message)  {
         return decryptDES(DEFAULT_DES_KEY, message);
     }
 
-    public String decryptDES(Object sessionId,String key, String message) throws Throwable {
+    public String decryptDES(Object sessionId,String key, String message)  {
         String k = StringHelper.padLeft(key, 8);
         byte[] bytesrc = decryptBASE64(sessionId,message);
         try {
@@ -112,11 +112,11 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
         return null;
     }
 
-    public String encryptDES(Object sessionId,String message) throws Throwable {
+    public String encryptDES(Object sessionId,String message)  {
         return encryptDES(DEFAULT_DES_KEY, message);
     }
 
-    public String encryptDES(Object sessionId,String key, String message) throws Throwable {
+    public String encryptDES(Object sessionId,String key, String message)  {
         String k = StringHelper.padLeft(key, 8);
         try {
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
@@ -135,31 +135,31 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
 
-    public byte[] decryptBASE64(Object sessionId,String key) throws Throwable {
+    public byte[] decryptBASE64(Object sessionId,String key)  {
         return Base64.decodeBase64(key);
     }
 
-    public String encryptBASE64(Object sessionId,byte[] key) throws Throwable {
+    public String encryptBASE64(Object sessionId,byte[] key)  {
         return Base64.encodeBase64String(key);
     }
 
-    public String encryptMD5(Object sessionId,String data) throws Throwable {
+    public String encryptMD5(Object sessionId,String data)  {
         return encryptHMAC(sessionId,DEFAULT_MD5_KEY, MACStyle.MD5, data);
     }
 
-    public String encryptSHA(Object sessionId,String data) throws Throwable {
+    public String encryptSHA(Object sessionId,String data)  {
         return encryptHMAC(sessionId,DEFAULT_SHA_KEY, MACStyle.SHA1, data);
     }
 
-    public String initMacKey(Object sessionId) throws Throwable {
+    public String initMacKey(Object sessionId)  {
         return initMacKey(MACStyle.MD5);
     }
 
-    public String initMacKey(Object sessionId,MACStyle style) throws Throwable {
+    public String initMacKey(Object sessionId,MACStyle style)  {
         return initMacKey(sessionId,StyleMapping.toMACStyleString(style));
     }
 
-    protected String initMacKey(Object sessionId,String key) throws Throwable {
+    protected String initMacKey(Object sessionId,String key)  {
         KeyGenerator keyGenerator = null;
         try {
             keyGenerator = KeyGenerator.getInstance(key);
@@ -171,8 +171,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
         return encryptBASE64(sessionId,secretKey.getEncoded());
     }
 
-    public String encryptHMAC(Object sessionId,String key, MACStyle style, byte[] data)
-            throws Throwable {
+    public String encryptHMAC(Object sessionId,String key, MACStyle style, byte[] data) {
         try {
             SecretKey secretKey = new SecretKeySpec(decryptBASE64(sessionId,key),
                     StyleMapping.toMACStyleString(style));
@@ -186,8 +185,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
         return null;
     }
 
-    public String encryptHMAC(Object sessionId,String key, MACStyle style, String data)
-            throws Throwable {
+    public String encryptHMAC(Object sessionId,String key, MACStyle style, String data) {
         try {
             SecretKey secretKey = new SecretKeySpec(decryptBASE64(sessionId,key),
                     StyleMapping.toMACStyleString(style));
@@ -201,11 +199,11 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
         return null;
     }
 
-    public String encryptHMAC(Object sessionId,String key, byte[] data) throws Throwable {
+    public String encryptHMAC(Object sessionId,String key, byte[] data)  {
         return encryptHMAC(sessionId,key, MACStyle.MD5, data);
     }
 
-    public String encryptHMAC(Object sessionId,String key, String data) throws Throwable {
+    public String encryptHMAC(Object sessionId,String key, String data)  {
         return encryptHMAC(sessionId,key, MACStyle.MD5, data);
     }
 

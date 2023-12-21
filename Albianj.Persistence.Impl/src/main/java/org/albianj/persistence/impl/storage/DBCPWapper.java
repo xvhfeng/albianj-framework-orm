@@ -29,7 +29,7 @@ public class DBCPWapper extends FreeDataBasePool {
     }
 
     @Override
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa,boolean isAutoCommit) throws Throwable {
+    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa,boolean isAutoCommit)  {
         IStorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
@@ -54,12 +54,12 @@ public class DBCPWapper extends FreeDataBasePool {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa) throws Throwable {
+    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa)  {
         BasicDataSource ds = null;
         try {
             ds = new BasicDataSource();
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
                     "create dabasepool for storage:{} is fail.", key);
         }
         try {
@@ -127,7 +127,7 @@ public class DBCPWapper extends FreeDataBasePool {
 
 
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
                     "startup database connection pools is fail.");
             //return null;
         }

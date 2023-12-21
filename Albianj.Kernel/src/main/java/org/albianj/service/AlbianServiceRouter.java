@@ -116,28 +116,28 @@ public class AlbianServiceRouter extends ServiceContainer {
         }
     }
 
-    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) throws Throwable {
+    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras)  {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowNew(sessionId,target,level,format,paras);
         }
     }
 
-    public static void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras) throws Throwable{
+    public static void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras) {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowAgain(sessionId,target,level,t,format,paras);
         }
     }
 
-    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras) throws Throwable{
+    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras) {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowNew(sessionId,target,level,newThrow,format,paras);
         }
     }
 
-    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable t, Throwable newThrow, String format, Object... paras) throws Throwable{
+    public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable t, Throwable newThrow, String format, Object... paras) {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowNew(sessionId,target,level, newThrow, t, format,paras);

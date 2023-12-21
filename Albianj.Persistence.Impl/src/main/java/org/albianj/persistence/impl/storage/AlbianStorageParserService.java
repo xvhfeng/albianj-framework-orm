@@ -91,7 +91,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     }
 
     @Override
-    public void init() throws Throwable {
+    public void init()  {
         pools = new ConcurrentHashMap<>(64);
         super.init();
         databasePoolMaker = new PluginDatabasePoolMarker();
@@ -304,7 +304,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 //        return getConnection(sessionId, rsa, isAutoCommit);
 //    }
 
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit) throws Throwable {
+    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
         IStorageAttribute sa = rsa.getStorageAttribute();
         //            String key = sa.getName() + rsa.getDatabase();
         try {
@@ -328,7 +328,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     }
 
     public Connection getConnection(String sessionId, IDataBasePool pool, IRunningStorageAttribute rsa,
-        boolean isAutoCommit) throws Throwable {
+        boolean isAutoCommit)  {
         IStorageAttribute sa = rsa.getStorageAttribute();
         try {
             if (null == pool) {

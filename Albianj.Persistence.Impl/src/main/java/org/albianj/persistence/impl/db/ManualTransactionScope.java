@@ -29,7 +29,7 @@ import java.util.Vector;
 public class ManualTransactionScope extends FreeManualTransactionScope {
 
 
-    protected void preExecute(IManualContext mctx) throws Throwable {
+    protected void preExecute(IManualContext mctx)  {
         List<IManualCommand> mcs = mctx.getCommands();
         List<IInternalManualCommand> imcs = mctx.getInternalCommands();
         IAlbianStorageParserService asps = AlbianServiceRouter.getService(mctx.getSessionId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
@@ -65,14 +65,14 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 statements.add(prepareStatement);
             }
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Running,LogLevel.Error,e,
                     "make manual sql command with mctx and the command is empty or null" );
         }
         mctx.setStatements(statements);
     }
 
 
-    protected void executeHandler(IManualContext mctx) throws Throwable {
+    protected void executeHandler(IManualContext mctx)  {
 
             List<Integer> rcs = new Vector<>();
             List<Statement> statements = mctx.getStatements();
@@ -80,13 +80,13 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
             for (int i = 0; i < statements.size(); i++) {
                 try {
                     IManualCommand cmd = cmds.get(i);
-                    AlbianServiceRouter.log(mctx.getSessionId(), LogTarget.Sql, LogLevel.Info,
+                    AlbianServiceRouter.log(mctx.getSessionId(), LogTarget.Running, LogLevel.Info,
                             "storage:{},sqltext:{},parars:{}", mctx.getStorageName(), cmd.getCommandText(),
                         ListConvert.toString(cmd.getCommandParameters()));
                     int rc = ((PreparedStatement)statements.get(i)).executeUpdate();
                     rcs.add(rc);
                 } catch (SQLException e) {
-                    AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Sql,LogLevel.Error,e,
+                    AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Running,LogLevel.Error,e,
                         "execute manual command to storage: {} dstabase:{} is fail.",
                                     mctx.getStorageName(), mctx.getDatabaseName() );
                 }
@@ -97,29 +97,29 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
         return;
     }
 
-    protected void commit(IManualContext mctx) throws Throwable {
+    protected void commit(IManualContext mctx)  {
         try {
             mctx.getConnection().commit();
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Running,LogLevel.Error,e,
                     "commit manual command to storage: {} dstabase:{} is fail.",
                     mctx.getStorageName(), mctx.getDatabaseName() );
         }
     }
 
 
-    protected void exceptionHandler(IManualContext mctx) throws Throwable {
+    protected void exceptionHandler(IManualContext mctx)  {
         try {
             mctx.getConnection().rollback();
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Sql,LogLevel.Error,e,
+            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(),LogTarget.Running,LogLevel.Error,e,
                     "rollback manual command to storage: {} dstabase:{} is fail.",
                     mctx.getStorageName(), mctx.getDatabaseName() );
         }
     }
 
 
-    protected void unLoadExecute(IManualContext mctx) throws Throwable {
+    protected void unLoadExecute(IManualContext mctx)  {
         boolean isThrow = false;
         try {
             List<Statement> statements = mctx.getStatements();
@@ -129,7 +129,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                     statement.close();
                 } catch (Exception e) {
                     isThrow = true;
-                    AlbianServiceRouter.log(mctx.getSessionId(), LogTarget.Sql, LogLevel.Error,e,
+                    AlbianServiceRouter.log(mctx.getSessionId(), LogTarget.Running, LogLevel.Error,e,
                             "clear the statement to storage:{} database:{} is fail.",
                             mctx.getStorageName(), mctx.getDatabaseName());
                 }
@@ -137,7 +137,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
             mctx.getConnection().close();
         } catch (Exception exc) {
             isThrow = true;
-            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(), LogTarget.Sql, LogLevel.Error,exc,
+            AlbianServiceRouter.logAndThrowAgain(mctx.getSessionId(), LogTarget.Running, LogLevel.Error,exc,
                     "close the connect to storage:{} database:{} is fail.", mctx.getStorageName(),
                 mctx.getDatabaseName());
         }

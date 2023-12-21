@@ -101,17 +101,17 @@ public abstract class FreeAlbianObject implements IAlbianObject {
 //    }
 
     @org.albianj.comment.SpecialWarning("不推荐使用，推荐使用带sessionid,itf的同名函数")
-    public boolean needUpdate(Object sessionId) throws Throwable {
+    public boolean needUpdate(Object sessionId)  {
         String className = this.getClass().getName();
         String itf = AlbianEntityMetadata.type2Interface(className);
         return needUpdate(sessionId, itf);
     }
 
-    public boolean needUpdate(Object sessionId, Class<? extends IAlbianObject> itf) throws Throwable {
+    public boolean needUpdate(Object sessionId, Class<? extends IAlbianObject> itf)  {
         return needUpdate(sessionId, itf.getName());
     }
 
-    private boolean needUpdate(Object sessionId, String itf) throws Throwable {
+    private boolean needUpdate(Object sessionId, String itf)  {
         String className = this.getClass().getName();
         IAlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == entiryAttr) {

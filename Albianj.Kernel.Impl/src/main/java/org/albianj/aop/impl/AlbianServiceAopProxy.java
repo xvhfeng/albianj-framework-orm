@@ -24,7 +24,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
     String sessionId = null;
 
 
-    public Object newInstance(String sessionId,IAlbianService service, Map<String, IAlbianServiceAopAttribute> aopAttributes) throws Throwable {
+    public Object newInstance(String sessionId,IAlbianService service, Map<String, IAlbianServiceAopAttribute> aopAttributes)  {
         this._service = service;
         this._aopAttributes = aopAttributes;
         try {

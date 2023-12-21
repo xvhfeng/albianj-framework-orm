@@ -14,6 +14,7 @@
         <module>Albianj.Loader</module>
         <module>Albianj.Persistence</module>
         <module>Albianj.Persistence.Impl</module>
+        <module>Albianj.Test</module>
     </modules>
     <packaging>pom</packaging>
 

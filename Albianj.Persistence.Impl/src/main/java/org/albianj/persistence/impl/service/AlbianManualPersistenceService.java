@@ -26,21 +26,21 @@ public class AlbianManualPersistenceService extends FreeAlbianService implements
     }
 
 
-    public int execute(String sessionId, String storageName, String dbName, IManualCommand cmd) throws Throwable {
+    public int execute(String sessionId, String storageName, String dbName, IManualCommand cmd)  {
         List<IManualCommand> mcs = new Vector<>();
         mcs.add(cmd);
         List<Integer> rcs = execute(sessionId, storageName, dbName, mcs);
         return rcs.get(0);
     }
 
-    public int execute(String sessionId, String storageName, IManualCommand cmd) throws Throwable {
+    public int execute(String sessionId, String storageName, IManualCommand cmd)  {
         List<IManualCommand> mcs = new Vector<>();
         mcs.add(cmd);
         List<Integer> rcs = execute(sessionId, storageName, null, mcs);
         return rcs.get(0);
     }
 
-    public List<Integer> execute(String sessionId, String storageName, String dbName, List<IManualCommand> cmds) throws Throwable {
+    public List<Integer> execute(String sessionId, String storageName, String dbName, List<IManualCommand> cmds)  {
 
         IManualContext mctx = new ManualContext();
 
@@ -57,7 +57,7 @@ public class AlbianManualPersistenceService extends FreeAlbianService implements
 
     }
 
-    public List<Integer> execute(String sessionId, String storageName, List<IManualCommand> cmds) throws Throwable {
+    public List<Integer> execute(String sessionId, String storageName, List<IManualCommand> cmds)  {
 
         return execute(sessionId, storageName, null, cmds);
 

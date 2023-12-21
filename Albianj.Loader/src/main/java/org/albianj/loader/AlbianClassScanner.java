@@ -2,6 +2,7 @@ package org.albianj.loader;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -28,8 +29,7 @@ public class AlbianClassScanner {
     public static HashMap<String, Object> filter(ClassLoader classLoader,
                                                  String pkgName,
                                                  IAlbianClassFilter filter,
-                                                 IAlbianClassExcavator excavator)
-            throws Throwable {
+                                                 IAlbianClassExcavator excavator) throws Throwable {
 
         // 第一个class类的集合
         HashMap<String, Object> classes = new HashMap<String, Object>();
