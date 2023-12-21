@@ -1,10 +1,11 @@
 package org.albianj.persistence.impl.dbpool.impl;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.impl.dbpool.IPoolingConnection;
 import org.albianj.persistence.impl.dbpool.ISpxDBPool;
 import org.albianj.persistence.impl.dbpool.ISpxDBPoolConfig;
-import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.LoggerFactory;
+import org.albianj.service.AlbianServiceRouter;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -16,7 +17,6 @@ import java.util.logging.Logger;
 
 public class SpxDBPool implements ISpxDBPool {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SpxDBPool.class);
     private ISpxDBPoolConfig cf = null;
     private Boolean isActive = true;
     private String name;
@@ -29,9 +29,10 @@ public class SpxDBPool implements ISpxDBPool {
         super();
     }
 
-    public static synchronized SpxDBPool createConnectionPool(ISpxDBPoolConfig cf) {
+    public static synchronized SpxDBPool createConnectionPool(String sessionId,ISpxDBPoolConfig cf) {
 
-        logger.info("create dbpool:{} with argument: minConnections :{},maxConnections :{}"
+        AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                "create dbpool:{} with argument: minConnections :{},maxConnections :{}"
                 + " waitTimeWhenGetMs :{}, lifeTimeMs :{}, freeTimeMs :{},maxRemedyConnectionCount :{},"
                 + "max request timeout :{},cleanup timestamp :{}", cf.getPoolName(), cf.getMinConnections(),
             cf.getMaxConnections(), cf.getWaitTimeWhenGetMs(), cf.getLifeCycleTime(), cf.getWaitInFreePoolMs(),
@@ -46,13 +47,14 @@ public class SpxDBPool implements ISpxDBPool {
                 IPoolingConnection conn = pool.newConnection(true);
                 pool.freeConnections.add(conn);
             } catch (SQLException e) {
-                logger.error("create dbpool：{} is fail.", cf.getPoolName(), e);
+                AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                        "create dbpool：{} is fail.", cf.getPoolName());
                 return null;
             }
         }
 
         pool.isActive = true;
-        pool.regeditCleanupTask();
+        pool.regeditCleanupTask(sessionId);
         return pool;
     }
 
@@ -69,7 +71,6 @@ public class SpxDBPool implements ISpxDBPool {
         return this.isActive;
     }
 
-    @Override
     public ISpxDBPoolConfig getConfig() {
         return cf;
     }
@@ -168,12 +169,14 @@ public class SpxDBPool implements ISpxDBPool {
         pconn.setSessionId(sessionId);
     }
 
-    @Override
-    public Connection getConnection() throws SQLException {
-        logger.error("please use the same function with argument sessionid.:{}", cf.getPoolName());
-        throw new SQLException("getConnection not implament");
-
-    }
+//    @Override
+//    public Connection getConnection(String sessionId) throws SQLException {
+//        AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,
+//                "please use the same function with argument sessionid.:{}",
+//                cf.getPoolName());
+//        throw new SQLException("getConnection not implament");
+//
+//    }
 
     @Override
     public Connection getConnection(String sessionId) throws SQLException {
@@ -182,7 +185,8 @@ public class SpxDBPool implements ISpxDBPool {
         pconn = pollFreeConnection();
         if (null != pconn) { // have free connection
             if (pconn.getLastUsedTimeMs() + this.cf.getWaitInFreePoolMs() <= now || !pconn.isValid()) {
-                logger.warn("DBPOOL :{}.free time expired connection which lastUsedTime:{}, "
+                AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Warn,
+                        "DBPOOL :{}.free time expired connection which lastUsedTime:{}, "
                         + "startup :{}, reuse:{},timout:{},valid :{}.close it and new pooling one.", cf.getPoolName(),
                     pconn.getLastUsedTimeMs(), pconn.getStartupTimeMs(), pconn.getReuseTimes(),
                     (now - pconn.getLastUsedTimeMs() - cf.getWaitInFreePoolMs()), pconn.isValid() ? "true" : "false");
@@ -196,7 +200,8 @@ public class SpxDBPool implements ISpxDBPool {
         // not have free connection
         // new one and add to dbpool
         if (this.getBusyCount() < this.cf.getMaxConnections()) { // maybe not threadsafe but soso
-            logger.info("DBPOOL :{}.not have free connection and new pooling one.", cf.getPoolName());
+            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                    "DBPOOL :{}.not have free connection and new pooling one.", cf.getPoolName());
             pconn = newConnection(true);
             usePoolingConnection(sessionId, pconn);
             return pconn;
@@ -205,20 +210,23 @@ public class SpxDBPool implements ISpxDBPool {
         //all connection is busy
         if (cf.getWaitTimeWhenGetMs() <= 0) { // not wait and do remedy
             if (this.getRemedyCount() < cf.getMaxRemedyConnectionCount()) {
-                logger.warn("DBPOOL :{}.all connection is busy,the config is not waitting and new remedy one.",
+                AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Warn,
+                        "DBPOOL :{}.all connection is busy,the config is not waitting and new remedy one.",
                     cf.getPoolName());
                 pconn = newConnection(false);
                 useRemedyConnection(sessionId, pconn);
                 if (this.getRemedyCount() >= cf.getMaxRemedyConnectionCount() / 2) {
-                    logger.info("DBPOOL :{}.the remedy connections count:{} over the half by max  remedy connections :{}."
+                    AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                            "DBPOOL :{}.the remedy connections count:{} over the half by max  remedy connections :{}."
                             + "Critical,maybe dbpool is overflow.", cf.getPoolName(), this.getRemedyCount(),
                         cf.getMaxRemedyConnectionCount());
                 }
                 return pconn;
             }
-            logger.info("DBPOOL :{}.current remedy connections :{} over the maxsize :{},not connection can use."
-                    + "Critical,maybe dbpool is overflow.", cf.getPoolName(), this.getRemedyCount(),
-                cf.getMaxRemedyConnectionCount());
+            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                    "DBPOOL :{}.current remedy connections :{} over the maxsize :{},not connection can use."
+                    + "Critical,maybe dbpool is overflow.",
+                    cf.getPoolName(), this.getRemedyCount(), cf.getMaxRemedyConnectionCount());
             return null;
         }
 
@@ -228,7 +236,9 @@ public class SpxDBPool implements ISpxDBPool {
             try {
                 this.wait(cf.getWaitTimeWhenGetMs());
             } catch (InterruptedException e) {
-                logger.error("DBPOOL:{}.get connection when wait was be Interrupted.", cf.getPoolName(), e);
+                AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                        "DBPOOL:{}.get connection when wait was be Interrupted.",
+                        cf.getPoolName());
             }
         }
 
@@ -240,27 +250,35 @@ public class SpxDBPool implements ISpxDBPool {
 
         // wait timeout and do remedy
         if (this.getRemedyCount() < cf.getMaxRemedyConnectionCount()) {
-            logger.error("DBPOOL :{}.all connection is busy and wait timeout.try new remedy connection.",
+            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,
+                    "DBPOOL :{}.all connection is busy and wait timeout.try new remedy connection.",
                 cf.getPoolName());
             pconn = newConnection(false);
             useRemedyConnection(sessionId, pconn);
             if (this.getRemedyCount() >= cf.getMaxRemedyConnectionCount() / 2) {
-                logger.info("DBPOOL:{}.the remedy connections count:{} over the half by max  remedy connections :{}."
-                        + "Critical,maybe dbpool is overflow.", cf.getPoolName(), this.getRemedyCount(),
-                    cf.getMaxRemedyConnectionCount());
+                AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                        "DBPOOL:{}.the remedy connections count:{} over the half by max  remedy connections :{}."
+                        + "Critical,maybe dbpool is overflow.",
+                        cf.getPoolName(), this.getRemedyCount(), cf.getMaxRemedyConnectionCount());
             }
             return pconn;
         }
 
-        logger.info("DBPOOL :{}.current remedy connections :{} over the maxsize:{},not connection can use."
-                + "Critical,maybe dbpool is overflow.", cf.getPoolName(), this.getRemedyCount(),
-            cf.getMaxRemedyConnectionCount());
+        AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                "DBPOOL :{}.current remedy connections :{} over the maxsize:{},not connection can use."
+                + "Critical,maybe dbpool is overflow.",
+                cf.getPoolName(), this.getRemedyCount(), cf.getMaxRemedyConnectionCount());
         return null;
     }
 
     @Override
+    public Connection getConnection() throws SQLException {
+        return null;
+    }
+
     public Connection getConnection(String username, String password) throws SQLException {
-        logger.error("DBPOOL please use the same function with argument sessionid:{}.", cf.getPoolName());
+        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,
+                "DBPOOL please use the same function with argument sessionid:{}.", cf.getPoolName());
         throw new SQLException("getConnection not implament");
     }
 
@@ -269,7 +287,8 @@ public class SpxDBPool implements ISpxDBPool {
         IPoolingConnection pconn = (IPoolingConnection) conn;
         String sessionId = pconn.getSessionId();
         if (!pconn.isPooling()) {
-            logger.info("DBPOOL :{}.back remedy connecton.close it.", cf.getPoolName());
+            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                    "DBPOOL :{}.back remedy connecton.close it.", cf.getPoolName());
             removeRemedyConnection(pconn);
             pconn.close();
             return;
@@ -279,18 +298,21 @@ public class SpxDBPool implements ISpxDBPool {
         removeBusyConnection(pconn);
         long now = System.currentTimeMillis();
         if (pconn.getStartupTimeMs() + cf.getLifeCycleTime() < now) {//over the max lifecycle,kill it
-            logger.info("DBPOOL:{}.close pooling connection which over the maxlife.startup:{},now :{},max life :{}.reuse :{}.",
+            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                    "DBPOOL:{}.close pooling connection which over the maxlife.startup:{},now :{},max life :{}.reuse :{}.",
                 cf.getPoolName(), pconn.getStartupTimeMs(), now, cf.getLifeCycleTime(), pconn.getReuseTimes());
             pconn.close();
             return;
         }
         if (pconn.isValid()) {
-            logger.info("DBPOOL -> :{}.back pooling connection.startup -> :{},now -> :{},max life -> :{}.reuse -> :{}.",
+            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                    "DBPOOL -> :{}.back pooling connection.startup -> :{},now -> :{},max life -> :{}.reuse -> :{}.",
                 cf.getPoolName(), pconn.getStartupTimeMs(), now, cf.getLifeCycleTime(), pconn.getReuseTimes());
             pconn.setSessionId(null); // cleanup last sessionid
             pushFreeConnection(pconn);
         } else {
-            logger.info("DBPOOL -> :{}.close pooling connection which valid is false.startup -> :{},now -> :{},max life -> :{}.reuse -> :{}.",
+            AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                    "DBPOOL -> :{}.close pooling connection which valid is false.startup -> :{},now -> :{},max life -> :{}.reuse -> :{}.",
                 cf.getPoolName(), pconn.getStartupTimeMs(), now, cf.getLifeCycleTime(), pconn.getReuseTimes());
             pconn.close();
         }
@@ -298,8 +320,9 @@ public class SpxDBPool implements ISpxDBPool {
     }
 
     @Override
-    public synchronized void destroy() {
-        logger.info("DBPOOL destory the dbpool -> :{}.", this.getPoolName());
+    public synchronized void destroy(String sessionId) {
+        AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                "DBPOOL destory the dbpool -> :{}.", this.getPoolName());
         synchronized (freeConnections) {
             for (IPoolingConnection pconn : this.freeConnections) {
                 try {
@@ -307,7 +330,8 @@ public class SpxDBPool implements ISpxDBPool {
                         pconn.close();
                     }
                 } catch (SQLException e) {
-                    logger.error("SpxDBPool destroy SQLException  ",e);
+                    AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                            "SpxDBPool destroy SQLException  ");
                 }
             }
             this.freeConnections.clear();
@@ -319,7 +343,8 @@ public class SpxDBPool implements ISpxDBPool {
                         pconn.close();
                     }
                 } catch (SQLException e) {
-                    logger.error("SpxDBPool destroy SQLException  ",e);
+                    AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                            "SpxDBPool destroy SQLException  ");
                 }
             }
             this.busyConnections.clear();
@@ -331,7 +356,8 @@ public class SpxDBPool implements ISpxDBPool {
                         pconn.close();
                     }
                 } catch (SQLException e) {
-                    logger.error("SpxDBPool destroy SQLException  ",e);
+                    AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Error,e,
+                            "SpxDBPool destroy SQLException  ");
                 }
             }
             this.remebyConnections.clear();
@@ -339,8 +365,9 @@ public class SpxDBPool implements ISpxDBPool {
         this.isActive = false;
     }
 
-    private void regeditCleanupTask() {
-        logger.info("DBPOOL regedit cleanup task for dbpool -> :{}.which startup every millisecond -> :{}.",
+    private void regeditCleanupTask(String sessionId) {
+        AlbianServiceRouter.log(sessionId, LogTarget.Sql, LogLevel.Info,
+                "DBPOOL regedit cleanup task for dbpool -> :{}.which startup every millisecond -> :{}.",
             this.getPoolName(), cf.getCleanupTimestampMs());
         new cleanupTask(this).start();
     }
@@ -371,13 +398,13 @@ public class SpxDBPool implements ISpxDBPool {
     }
 
     @Override
-    public void setLoginTimeout(int seconds) throws SQLException {
-
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return null;
     }
 
     @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return null;
+    public void setLoginTimeout(int seconds) throws SQLException {
+
     }
 
     class cleanupTask extends Thread {
@@ -393,24 +420,28 @@ public class SpxDBPool implements ISpxDBPool {
                 try {
                     Thread.sleep(cf.getCleanupTimestampMs());
                 } catch (InterruptedException e) {
-                    logger.error("SpxDBPool run InterruptedException  ",e);
+                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+                            "SpxDBPool run InterruptedException  ");
                 }
 
                 try {
-                    logger.info("DBPOOL cleanup task is wakeup. pool -> :{},current state : busy -> :{},free -> :{},remedy -> :{}.. ",
+                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,
+                            "DBPOOL cleanup task is wakeup. pool -> :{},current state : busy -> :{},free -> :{},remedy -> :{}.. ",
                         pool.getPoolName(), pool.getBusyCount(), pool.getFreeCount(), pool.getRemedyCount());
                     long now = System.currentTimeMillis();
                     synchronized (busyConnections) {
                         for (IPoolingConnection pconn : busyConnections) {
                             try {
                                 if (pconn.getLastUsedTimeMs() + cf.getMaxRequestTimeMs() < now) { // exec timeout
-                                    logger.info("DBPOOL -> :{} Cleanup Task. busy connection is request timeout,close it force.request time -> :{},now -> :{},timeout ->:{}.",
+                                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,
+                                            "DBPOOL -> :{} Cleanup Task. busy connection is request timeout,close it force.request time -> :{},now -> :{},timeout ->:{}.",
                                         pool.getPoolName(), pconn.getLastUsedTimeMs(), now, cf.getMaxRequestTimeMs());
                                     removeBusyConnection(pconn);
                                     pconn.close();
                                 }
                             } catch (SQLException e) {
-                                logger.error("SpxDBPool run SQLException  ",e);
+                                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+                                        "SpxDBPool run SQLException  ");
                             }
                         }
                     }
@@ -419,13 +450,15 @@ public class SpxDBPool implements ISpxDBPool {
                         for (IPoolingConnection pconn : freeConnections) {
                             try {
                                 if (pconn.getLastUsedTimeMs() + cf.getWaitInFreePoolMs() < now) { // free timeout
-                                    logger.info("DBPOOL -> :{} Cleanup Task.free connection is timeout,close it force.last used time -> :{},now -> :{},timeout -> :{}.",
+                                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,
+                                            "DBPOOL -> :{} Cleanup Task.free connection is timeout,close it force.last used time -> :{},now -> :{},timeout -> :{}.",
                                         pool.getPoolName(), pconn.getLastUsedTimeMs(), now, cf.getWaitInFreePoolMs());
                                     removeFreeConnection(pconn);
                                     pconn.close();
                                 }
                             } catch (SQLException e) {
-                                logger.error("SpxDBPool run SQLException  ",e);
+                                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+                                        "SpxDBPool run SQLException  ");
                             }
                         }
                     }
@@ -434,13 +467,15 @@ public class SpxDBPool implements ISpxDBPool {
                         for (IPoolingConnection pconn : remebyConnections) {
                             try {
                                 if (pconn.getLastUsedTimeMs() + cf.getMaxRequestTimeMs() < now) { // exec timeout
-                                    logger.info("DBPOOL -> :{} Cleanup Task. remedy connection is request timeout,close it force.begin time -> :{},now -> :{},timeout ->:{}.",
+                                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,
+                                            "DBPOOL -> :{} Cleanup Task. remedy connection is request timeout,close it force.begin time -> :{},now -> :{},timeout ->:{}.",
                                         pool.getPoolName(), pconn.getLastUsedTimeMs(), now, cf.getMaxRequestTimeMs());
                                     removeRemedyConnection(pconn);
                                     pconn.close();
                                 }
                             } catch (SQLException e) {
-                                logger.error("SpxDBPool run SQLException  ",e);
+                                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,e,
+                                        "SpxDBPool run SQLException  ");
                             }
                         }
                     }
@@ -454,7 +489,8 @@ public class SpxDBPool implements ISpxDBPool {
                                 IPoolingConnection pconn = pool.newConnection(true);
                                 pushFreeConnection(pconn);
                             } catch (SQLException e) {
-                                logger.error("SpxDBPool run SQLException  ",e);
+                                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Info,e,
+                                        "SpxDBPool run SQLException  ");
                             }
                         }
                     }

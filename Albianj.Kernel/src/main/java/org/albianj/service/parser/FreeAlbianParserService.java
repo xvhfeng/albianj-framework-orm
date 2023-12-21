@@ -37,13 +37,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.service.parser;
 
-import org.albianj.service.AlbianServiceException;
 import org.albianj.service.FreeAlbianService;
 
 public abstract class FreeAlbianParserService extends FreeAlbianService implements IAlbianParserService {
 
     @Override
-    public void loading() throws AlbianServiceException, AlbianParserException {
+    public void loading() throws Throwable {
         // TODO Auto-generated method stub
         init();
         super.loading();

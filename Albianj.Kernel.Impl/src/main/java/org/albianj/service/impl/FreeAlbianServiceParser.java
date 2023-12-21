@@ -42,19 +42,18 @@ import org.albianj.aop.IAlbianServiceAopAttribute;
 import org.albianj.except.AlbianRuntimeException;
 import org.albianj.io.Path;
 import org.albianj.kernel.KernelSetting;
-import org.albianj.service.AlbianServiceException;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.IAlbianServiceAttribute;
 import org.albianj.service.IAlbianServiceFieldAttribute;
 import org.albianj.service.ServiceAttributeMap;
-import org.albianj.service.parser.AlbianParserException;
 import org.albianj.service.parser.FreeAlbianParserService;
 import org.albianj.verify.Validate;
 import org.albianj.xml.XmlParser;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -63,7 +62,6 @@ import java.util.Map;
 
 public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreeAlbianServiceParser.class);
     public final static String ALBIANJSERVICEKEY = "@$#&ALBIANJ_ALL_SERVICE&#$@";
     private final static String tagName = "Services/Service";
     private final static String pkgTagName = "Services/Packages/Package";
@@ -75,7 +73,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void init() throws AlbianParserException {
+    public void init() throws Throwable {
 
         Map<String, IAlbianServiceAttribute> map = new LinkedHashMap<>();
         try {
@@ -85,29 +83,33 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
 
         } catch (Exception e) {
-            throw new AlbianParserException("loading the service.xml is error.", e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                    "loading the service.xml is error." );
         }
 
         if (0 == map.size()) {
-            logger.error("The albian services is empty.");
+//            logger.error("The albian services is empty.");
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                    "The albian services is empty." );
             return;
         }
         ServiceAttributeMap.insert(ALBIANJSERVICEKEY, map);
         return;
     }
 
-    private void parserFile(Map<String, IAlbianServiceAttribute> map, String filename) throws AlbianParserException {
+    private void parserFile(Map<String, IAlbianServiceAttribute> map, String filename) throws Throwable {
         Document doc = null;
         try {
             String realFilename = findConfigFile(filename);
             //判断fname如果是空，则直接返回不需要进行加载操作。
             if(StringUtils.isBlank(realFilename)){
-                logger.error("loading the service.xml is error. service.xml is not exist");
+//                logger.error("loading the service.xml is error. service.xml is not exist");
                 return;
             }
             doc = XmlParser.load(realFilename);
         } catch (Exception e) {
-            throw new AlbianRuntimeException("loading the service.xml is error.", e);
+            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                    "loading the service.xml is error." );
         }
         if (null == doc) {
             throw new AlbianRuntimeException("loading the service.xml is error. the file is null.");
@@ -135,8 +137,12 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                 if (!Validate.isNullOrEmptyOrAllSpace(enable)) {
                     boolean b = Boolean.parseBoolean(enable);
                     if (!b) {
-                        logger.warn("Path:{} in the Package enable is false,so not load it.",
-                            Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+//                        logger.warn("Path:{} in the Package enable is false,so not load it.",
+//                            Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+                        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                                "Path:{} in the Package enable is false,so not load it.",
+                                Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+
                         continue;// not load pkg
                     }
                 }
@@ -153,8 +159,8 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                             pkgMetedataMap.putAll(pkgMap);//merger the metedata
                         }
                     } catch (Exception e) {
-                        throw new AlbianRuntimeException(
-                            "loading the service.xml is error. Path :" + pkg + "s in Package is fail.", e);
+                        AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                                "loading the service.xml is error. Path :{}s in Package is fail.",pkg );
                     }
                 }
             }
@@ -256,8 +262,8 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
     protected abstract void parserServices(Map<String, IAlbianServiceAttribute> map,
                                            String tagName,
-                                           @SuppressWarnings("rawtypes") List nodes) throws NullPointerException;
+                                           @SuppressWarnings("rawtypes") List nodes) throws Throwable;
 
     protected abstract IAlbianServiceAttribute parserService(String name, Element node)
-            throws NullPointerException, AlbianServiceException;
+            throws Throwable;
 }

@@ -25,7 +25,7 @@ public class MonitorWrapper implements IDataBasePool {
     }
 
     @Override
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa,boolean isAutoCommit) {
+    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa,boolean isAutoCommit) throws Throwable {
         long start = System.currentTimeMillis();
         Connection connection = null;
         try {

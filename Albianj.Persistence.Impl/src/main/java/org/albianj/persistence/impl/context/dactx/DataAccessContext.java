@@ -127,7 +127,7 @@ public class DataAccessContext implements IDataAccessContext {
     }
 
     @Override
-    public boolean commit(String sessionId) {
+    public boolean commit(String sessionId) throws Throwable {
         IWriterJobAdapter jobAdp = new WriterJobAdapter();
         IWriterJob job = jobAdp.buildWriterJob(sessionId, this.entitis, this.rbkOnErr);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();

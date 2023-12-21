@@ -62,7 +62,7 @@ public class PersistenceNamedParameter {
 
         int idx = 1;
         while (m.find()) {
-            paramsMap.put(new Integer(idx++), m.group());
+            paramsMap.put(idx++, m.group());
         }
         cmdText = cmdText.replaceAll(regex, "?");
         cmd.setCommandText(cmdText);
@@ -75,7 +75,7 @@ public class PersistenceNamedParameter {
 
             idx = 1;
             while (rm.find()) {
-                rollbackParamsMap.put(new Integer(idx++), rm.group());
+                rollbackParamsMap.put(idx++, rm.group());
             }
             rollbackText = rollbackText.replaceAll(regex, "?");
             cmd.setRollbackCommandText(rollbackText);
@@ -94,7 +94,7 @@ public class PersistenceNamedParameter {
 
         int idx = 1;
         while (m.find()) {
-            paramsMap.put(new Integer(idx++), m.group());
+            paramsMap.put(idx++, m.group());
         }
         cmdText = cmdText.replaceAll(regex, "?");
         IInternalManualCommand imc = new InternalManualCommand();

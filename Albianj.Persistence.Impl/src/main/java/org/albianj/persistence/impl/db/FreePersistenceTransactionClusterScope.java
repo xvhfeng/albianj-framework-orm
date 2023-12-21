@@ -37,18 +37,18 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.impl.db;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.context.IPersistenceCompensateNotify;
 import org.albianj.persistence.context.IWriterJob;
 import org.albianj.persistence.context.WriterJobLifeTime;
 import org.albianj.persistence.db.AlbianDataServiceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.albianj.service.AlbianServiceRouter;
 
 public abstract class FreePersistenceTransactionClusterScope implements IPersistenceTransactionClusterScope {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreePersistenceTransactionClusterScope.class);
 
-    public boolean execute(IWriterJob writerJob) {
+    public boolean execute(IWriterJob writerJob) throws Throwable {
         boolean isSuccess = true;
         boolean isAutoRollbackSuccess = true;
         boolean isManualRollbackSuccess = true;
@@ -66,7 +66,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
             sbMsg.append("Execute job is error.Job lifetime is:").append(writerJob.getWriterJobLifeTime())
                 .append(",exception msg:").append(e.getMessage()).append(",Current task:")
                 .append(writerJob.getCurrentStorage()).append(",job id:").append(writerJob.getId());
-            logger.error("Execute the job is fail.sbMsg:{}", sbMsg, e);
+            AlbianServiceRouter.log(writerJob.getId(), LogTarget.Sql, LogLevel.Error,e,sbMsg.toString());
             try {
                 switch (writerJob.getWriterJobLifeTime()) {
                     case Opened:
@@ -84,7 +84,8 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                             this.exceptionHandler(writerJob);
                         } catch (Exception exc) {
                             isAutoRollbackSuccess = false;
-                            logger.error("auto rollback  the job is fail.", exc);
+                            AlbianServiceRouter.log(writerJob.getId(),LogTarget.Sql,LogLevel.Error,exc,
+                                    "auto rollback  the job {} is fail.",writerJob.getId());
                         }
                         if (writerJob.getNeedManualRollbackIfException()) {
                             writerJob.setWriterJobLifeTime(WriterJobLifeTime.ManualRollbacking);
@@ -92,7 +93,8 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                                 isManualRollbackSuccess = this.exceptionManualRollback(writerJob);
                             } catch (Exception exc) {
                                 isManualRollbackSuccess = false;
-                                logger.error("manual rollback the job is fail.", exc);
+                                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Sql,LogLevel.Error,exc,
+                                        "manual rollback  the job {} is fail.",writerJob.getId());
                             }
                         }
 
@@ -104,7 +106,8 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                 }
 
             } catch (Exception exc) {
-                logger.error("rollback the query the job is fail.", exc);
+                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Sql,LogLevel.Error,exc,
+                        " rollback  the job {} is fail.",writerJob.getId());
             }
 
             try {
@@ -120,14 +123,17 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                     }
                 }
             } catch (Exception exc) {
-                logger.error("Execute the compensate callback of job job is fail.", exc);
+                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Sql,LogLevel.Error,exc,
+                        " Execute the compensate callback of job {} is fail.",writerJob.getId());
+
             }
 
         } finally {
             try {
                 unLoadExecute(writerJob);
             } catch (Exception exc) {
-                logger.error("unload the job is fail.", exc);
+                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Sql,LogLevel.Error,exc,
+                        " unload job {} is fail.",writerJob.getId());
             }
             if (null != writerJob.getNotifyCallback()) {
                 try {
@@ -135,7 +141,8 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                     writerJob.getNotifyCallback().notice(isSuccess, sbMsg.toString(),
                             writerJob.getNotifyCallbackObject());
                 } catch (Exception exc) {
-                    logger.error("Execute the notice of job is fail.", exc);
+                    AlbianServiceRouter.log(writerJob.getId(),LogTarget.Sql,LogLevel.Error,exc,
+                            " Execute the notice of job {} is fail.",writerJob.getId());
                 }
             }
             writerJob.setCurrentStorage(null);
@@ -144,15 +151,15 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
         return isSuccess;
     }
 
-    protected abstract void preExecute(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract void preExecute(IWriterJob writerJob) throws Throwable;
 
-    protected abstract void executeHandler(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract void executeHandler(IWriterJob writerJob) throws Throwable;
 
-    protected abstract void commit(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract void commit(IWriterJob writerJob) throws Throwable;
 
     protected abstract void exceptionHandler(IWriterJob writerJob) throws AlbianDataServiceException;
 
     protected abstract void unLoadExecute(IWriterJob writerJob) throws AlbianDataServiceException;
 
-    protected abstract boolean exceptionManualRollback(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract boolean exceptionManualRollback(IWriterJob writerJob) throws Throwable;
 }

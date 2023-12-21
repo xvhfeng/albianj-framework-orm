@@ -40,7 +40,10 @@ package org.albianj.text;
 import org.albianj.verify.Validate;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringHelper extends StringUtils {
     /*
@@ -161,14 +164,44 @@ public class StringHelper extends StringUtils {
         return String.valueOf(cs);
     }
 
-//    public static String join(Object... args){
-//        if(null == args || 0 == args.length) {
-//            return "";
-//        }
-//        StringBuilder sb = new StringBuilder();
-//        for(Object arg : args){
-//            sb.append(arg);
-//        }
-//        return sb.toString();
-//    }
+    /**
+     *  String result = MessageFormat.format("At {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",planet, new Date(), event);
+     * @param format
+     * @param paras
+     * @return
+     */
+    public static String format(String format,Object ...paras){
+        if(null== paras || 0 == paras.length){
+            return format;
+        }
+        return MessageFormat.format(format,paras);
+    }
+
+    public static  String formatWithoutIndex(String formatTemplate,Object...objects){
+
+        String regex = "\\{\\}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(formatTemplate);
+        int i = 0;
+        StringBuilder sb = new StringBuilder();
+        while (matcher.find()){
+            Object obj = objects[i];
+            String replacement = java.util.regex.Matcher.quoteReplacement(String.valueOf(obj));
+            matcher.appendReplacement(sb,replacement);
+            i++;
+        }
+        return sb.toString();
+    }
+
+
+    public static String join(Object... args){
+        if(null == args || 0 == args.length) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for(Object arg : args){
+            sb.append(arg);
+        }
+        return sb.toString();
+    }
 }

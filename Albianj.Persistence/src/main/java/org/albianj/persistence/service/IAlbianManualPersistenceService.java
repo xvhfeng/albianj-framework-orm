@@ -19,11 +19,11 @@ public interface IAlbianManualPersistenceService extends IAlbianService {
     String Name = "AlbianManualPersistenceService";
 
 
-    int execute(String sessionId, String storageName, String dbName, IManualCommand cmd);
+    int execute(String sessionId, String storageName, String dbName, IManualCommand cmd) throws Throwable;
 
-    int execute(String sessionId, String storageName, IManualCommand cmd);
+    int execute(String sessionId, String storageName, IManualCommand cmd) throws Throwable;
 
-    List<Integer> execute(String sessionId, String storageName, String dbName, List<IManualCommand> cmds);
+    List<Integer> execute(String sessionId, String storageName, String dbName, List<IManualCommand> cmds) throws Throwable;
 
-    List<Integer> execute(String sessionId, String storageName, List<IManualCommand> cmds);
+    List<Integer> execute(String sessionId, String storageName, List<IManualCommand> cmds) throws Throwable;
 }

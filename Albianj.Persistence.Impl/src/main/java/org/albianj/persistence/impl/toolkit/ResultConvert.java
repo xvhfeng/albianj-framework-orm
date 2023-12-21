@@ -60,7 +60,7 @@ public class ResultConvert {
         } else if (boolean.class.isAssignableFrom(cls) ||
                 Boolean.class.isAssignableFrom(cls)) {
             try {
-                int i = new Integer(o.toString());
+                int i = Integer.parseInt(o.toString());
                 return 0 == i ? false : true;
             }catch(Exception e){
 

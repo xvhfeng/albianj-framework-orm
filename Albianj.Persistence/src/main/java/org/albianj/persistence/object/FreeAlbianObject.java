@@ -37,11 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.object;
 
-import org.albianj.logger.IAlbianLoggerService2;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.context.dactx.IAlbianObjectWarp;
 import org.albianj.persistence.db.AlbianDataServiceException;
 import org.albianj.persistence.object.rants.AlbianObjectDataFieldRant;
 import org.albianj.persistence.service.AlbianEntityMetadata;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.verify.Validate;
 
 import java.util.HashMap;
@@ -92,25 +94,24 @@ public abstract class FreeAlbianObject implements IAlbianObject {
         return dic.get(key);
     }
 
-    @Deprecated
-    @org.albianj.comment.SpecialWarning("不推荐使用，推荐使用带sessionid参数的同名函数")
-    public boolean needUpdate() throws AlbianDataServiceException {
-        return needUpdate(IAlbianLoggerService2.InnerThreadName);
-    }
+//    @Deprecated
+//    @org.albianj.comment.SpecialWarning("不推荐使用，推荐使用带sessionid参数的同名函数")
+//    public boolean needUpdate(Object sessionId) throws AlbianDataServiceException {
+//        return needUpdate(sessionId);
+//    }
 
-    @Deprecated
     @org.albianj.comment.SpecialWarning("不推荐使用，推荐使用带sessionid,itf的同名函数")
-    public boolean needUpdate(String sessionId) throws AlbianDataServiceException {
+    public boolean needUpdate(Object sessionId) throws Throwable {
         String className = this.getClass().getName();
         String itf = AlbianEntityMetadata.type2Interface(className);
         return needUpdate(sessionId, itf);
     }
 
-    public boolean needUpdate(String sessionId, Class<? extends IAlbianObject> itf) throws AlbianDataServiceException {
+    public boolean needUpdate(Object sessionId, Class<? extends IAlbianObject> itf) throws Throwable {
         return needUpdate(sessionId, itf.getName());
     }
 
-    private boolean needUpdate(String sessionId, String itf) throws AlbianDataServiceException {
+    private boolean needUpdate(Object sessionId, String itf) throws Throwable {
         String className = this.getClass().getName();
         IAlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == entiryAttr) {
@@ -143,9 +144,9 @@ public abstract class FreeAlbianObject implements IAlbianObject {
                 return true;
             }
         } catch (Exception e) {
-            throw new AlbianDataServiceException(
-                "PersistenceService is error. invoke bean read method is error.the property is:" + entiryAttr.getType()
-                    + ".job id:%s.");
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "PersistenceService is error. invoke bean read method is error.the property is:{} ",
+                    entiryAttr.getType());
         }
         return false;
     }

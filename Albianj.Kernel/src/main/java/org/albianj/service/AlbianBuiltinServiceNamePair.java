@@ -3,7 +3,7 @@ package org.albianj.service;
 public class AlbianBuiltinServiceNamePair {
 
     public final static String AlbianLoggerServiceName = "AlbianLoggerService";
-    public final static String AlbianLoggerService2Name = "AlbianLoggerService2";
+//    public final static String AlbianLoggerService2Name = "AlbianLoggerService2";
     public final static String AlbianKernelServiceName = "AlbianKernelService";
     public final static String AlbianLogicIdServiceName = "AlbianLogicIdService";
     public final static String AlbianThreadPoolServiceName = "AlbianThreadPoolService";
@@ -30,7 +30,7 @@ public class AlbianBuiltinServiceNamePair {
 
 
     public final static String[] AlbianLoggerServicePair = {AlbianLoggerServiceName, "org.albianj.logger.impl.AlbianLoggerService"};
-    public final static String[] AlbianLoggerService2Pair = {AlbianLoggerService2Name, "org.albianj.logger.impl.AlbianLoggerService2"};
+//    public final static String[] AlbianLoggerService2Pair = {AlbianLoggerService2Name, "org.albianj.logger.impl.AlbianLoggerService2"};
     public final static String[] AlbianKernelServicePair = {AlbianKernelServiceName, "org.albianj.kernel.impl.AlbianKernelParserService"};
     public final static String[] AlbianLogicIdServicePair = {AlbianLogicIdServiceName, "org.albianj.kernel.impl.AlbianLogicIdService"};
     public final static String[] AlbianThreadPoolServicePair = {AlbianThreadPoolServiceName, "org.albianj.concurrent.impl.AlbianThreadPoolService"};

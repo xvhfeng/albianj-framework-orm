@@ -15,7 +15,7 @@ public interface IDataBasePool {
     /**
      * 从链接池中得到一个连接
      */
-    public Connection getConnection(String sessionid, IRunningStorageAttribute rsa,boolean isAutoCommit) ;
+    public Connection getConnection(String sessionid, IRunningStorageAttribute rsa,boolean isAutoCommit) throws Throwable;
 
 
         /**

@@ -37,23 +37,19 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.persistence.impl.db;
 
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.context.IPersistenceCompensateNotify;
 import org.albianj.persistence.context.IWriterJob;
 import org.albianj.persistence.context.IWriterTask;
 import org.albianj.persistence.db.AlbianDataServiceException;
-import org.albianj.persistence.db.IPersistenceCommand;
-import org.albianj.persistence.impl.toolkit.ListConvert;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.verify.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.sql.Statement;
-import java.util.List;
 import java.util.Map;
 
 public class PersistenceCompensateNotify implements IPersistenceCompensateNotify {
 
-    private static final Logger logger = LoggerFactory.getLogger(PersistenceCompensateNotify.class);
     private static IPersistenceCompensateNotify notify = null;
 
     public static synchronized IPersistenceCompensateNotify getInstance() {
@@ -71,8 +67,10 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
         try {
             sb = writerJobCommandToString(job);
         } catch (AlbianDataServiceException e) {
-            logger.error("send persistence notify is fail.", e);
-            logger.error("the job is not compensate then the all sql is:{}", sb.toString());
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+                    "jon {} send persistence notify is fail.",job.getId());
+            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Sql, LogLevel.Error,e,
+                    "the job {} is not compensate then the all sql is:{}",job.getId(), sb.toString());
         }
     }
 

@@ -38,10 +38,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.security.impl;
 
 import org.albianj.kernel.KernelSetting;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.security.IAlbianSecurityService;
 import org.albianj.security.MACStyle;
 import org.albianj.security.StyleMapping;
 import org.albianj.service.AlbianServiceRant;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.service.FreeAlbianService;
 import org.albianj.text.StringHelper;
 import org.albianj.verify.Validate;
@@ -66,7 +69,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
     @Override
-    public void init() throws org.albianj.service.parser.AlbianParserException {
+    public void init() throws Throwable {
         super.init();
         String mkey = KernelSetting.getMachineKey();
         if (Validate.isNullOrEmptyOrAllSpace(mkey)) {
@@ -84,13 +87,13 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
 
-    public String decryptDES(String message) throws RuntimeException {
+    public String decryptDES(Object sessionId,String message) throws Throwable {
         return decryptDES(DEFAULT_DES_KEY, message);
     }
 
-    public String decryptDES(String key, String message) throws RuntimeException {
+    public String decryptDES(Object sessionId,String key, String message) throws Throwable {
         String k = StringHelper.padLeft(key, 8);
-        byte[] bytesrc = decryptBASE64(message);
+        byte[] bytesrc = decryptBASE64(sessionId,message);
         try {
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
             DESKeySpec desKeySpec = new DESKeySpec(k.getBytes("UTF-8"));
@@ -103,15 +106,17 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
             byte[] retByte = cipher.doFinal(bytesrc);
             return new String(retByte);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "DES decrypt is fail.");
         }
+        return null;
     }
 
-    public String encryptDES(String message) throws RuntimeException {
+    public String encryptDES(Object sessionId,String message) throws Throwable {
         return encryptDES(DEFAULT_DES_KEY, message);
     }
 
-    public String encryptDES(String key, String message) throws RuntimeException {
+    public String encryptDES(Object sessionId,String key, String message) throws Throwable {
         String k = StringHelper.padLeft(key, 8);
         try {
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
@@ -121,80 +126,87 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
             IvParameterSpec iv = new IvParameterSpec(k.getBytes("UTF-8"));
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
 
-            return encryptBASE64(cipher.doFinal(message.getBytes("UTF-8")));
+            return encryptBASE64(sessionId,cipher.doFinal(message.getBytes("UTF-8")));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "DES encrypt is fail.");
         }
+        return null;
     }
 
 
-    public byte[] decryptBASE64(String key) throws RuntimeException {
+    public byte[] decryptBASE64(Object sessionId,String key) throws Throwable {
         return Base64.decodeBase64(key);
     }
 
-    public String encryptBASE64(byte[] key) throws RuntimeException {
+    public String encryptBASE64(Object sessionId,byte[] key) throws Throwable {
         return Base64.encodeBase64String(key);
     }
 
-    public String encryptMD5(String data) throws RuntimeException {
-        return encryptHMAC(DEFAULT_MD5_KEY, MACStyle.MD5, data);
+    public String encryptMD5(Object sessionId,String data) throws Throwable {
+        return encryptHMAC(sessionId,DEFAULT_MD5_KEY, MACStyle.MD5, data);
     }
 
-    public String encryptSHA(String data) throws RuntimeException {
-        return encryptHMAC(DEFAULT_SHA_KEY, MACStyle.SHA1, data);
+    public String encryptSHA(Object sessionId,String data) throws Throwable {
+        return encryptHMAC(sessionId,DEFAULT_SHA_KEY, MACStyle.SHA1, data);
     }
 
-    public String initMacKey() throws RuntimeException {
+    public String initMacKey(Object sessionId) throws Throwable {
         return initMacKey(MACStyle.MD5);
     }
 
-    public String initMacKey(MACStyle style) throws RuntimeException {
-        return initMacKey(StyleMapping.toMACStyleString(style));
+    public String initMacKey(Object sessionId,MACStyle style) throws Throwable {
+        return initMacKey(sessionId,StyleMapping.toMACStyleString(style));
     }
 
-    protected String initMacKey(String key) throws RuntimeException {
+    protected String initMacKey(Object sessionId,String key) throws Throwable {
         KeyGenerator keyGenerator = null;
         try {
             keyGenerator = KeyGenerator.getInstance(key);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "init mackey is fail.");
         }
         SecretKey secretKey = keyGenerator.generateKey();
-        return encryptBASE64(secretKey.getEncoded());
+        return encryptBASE64(sessionId,secretKey.getEncoded());
     }
 
-    public String encryptHMAC(String key, MACStyle style, byte[] data)
-            throws RuntimeException {
+    public String encryptHMAC(Object sessionId,String key, MACStyle style, byte[] data)
+            throws Throwable {
         try {
-            SecretKey secretKey = new SecretKeySpec(decryptBASE64(key),
+            SecretKey secretKey = new SecretKeySpec(decryptBASE64(sessionId,key),
                     StyleMapping.toMACStyleString(style));
             Mac mac = Mac.getInstance(secretKey.getAlgorithm());
             mac.init(secretKey);
-            return encryptBASE64(mac.doFinal(data));
+            return encryptBASE64(sessionId,mac.doFinal(data));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "encrypt HMAC is fail.");
         }
+        return null;
     }
 
-    public String encryptHMAC(String key, MACStyle style, String data)
-            throws RuntimeException {
+    public String encryptHMAC(Object sessionId,String key, MACStyle style, String data)
+            throws Throwable {
         try {
-            SecretKey secretKey = new SecretKeySpec(decryptBASE64(key),
+            SecretKey secretKey = new SecretKeySpec(decryptBASE64(sessionId,key),
                     StyleMapping.toMACStyleString(style));
             Mac mac = Mac.getInstance(secretKey.getAlgorithm());
             mac.init(secretKey);
-            return encryptBASE64(mac.doFinal(decryptBASE64(data)));
+            return encryptBASE64(sessionId,mac.doFinal(decryptBASE64(sessionId,data)));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    "encrypt HMAC is fail.");
         }
+        return null;
     }
 
-    public String encryptHMAC(String key, byte[] data) throws RuntimeException {
-        return encryptHMAC(key, MACStyle.MD5, data);
+    public String encryptHMAC(Object sessionId,String key, byte[] data) throws Throwable {
+        return encryptHMAC(sessionId,key, MACStyle.MD5, data);
     }
 
-    public String encryptHMAC(String key, String data) throws RuntimeException {
-        return encryptHMAC(key, MACStyle.MD5, data);
+    public String encryptHMAC(Object sessionId,String key, String data) throws Throwable {
+        return encryptHMAC(sessionId,key, MACStyle.MD5, data);
     }
 
 

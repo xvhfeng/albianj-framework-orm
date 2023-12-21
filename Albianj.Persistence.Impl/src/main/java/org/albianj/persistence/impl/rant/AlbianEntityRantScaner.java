@@ -4,6 +4,8 @@ import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;
 import org.albianj.loader.IAlbianClassFilter;
+import org.albianj.logger.LogLevel;
+import org.albianj.logger.LogTarget;
 import org.albianj.persistence.impl.object.AlbianEntityFieldAttribute;
 import org.albianj.persistence.impl.object.AlbianObjectAttribute;
 import org.albianj.persistence.impl.object.DataRouterAttribute;
@@ -17,14 +19,12 @@ import org.albianj.persistence.object.rants.AlbianObjectDataRoutersRant;
 import org.albianj.persistence.object.rants.AlbianObjectRant;
 import org.albianj.persistence.service.AlbianEntityMetadata;
 import org.albianj.reflection.AlbianReflect;
+import org.albianj.service.AlbianServiceRouter;
 import org.albianj.text.StringHelper;
 import org.albianj.verify.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.Types;
@@ -32,8 +32,7 @@ import java.util.*;
 
 public class AlbianEntityRantScaner {
 
-    private static final Logger logger = LoggerFactory.getLogger(AlbianEntityRantScaner.class);
-    public static HashMap<String, Object> scanPackage(final String pkgName) throws IOException, ClassNotFoundException {
+    public static HashMap<String, Object> scanPackage(final String pkgName) throws Throwable {
         return AlbianClassScanner.filter(AlbianClassLoader.getInstance(),
                 pkgName,
 
@@ -51,7 +50,7 @@ public class AlbianEntityRantScaner {
 
                 new IAlbianClassExcavator() {
                     @Override
-                    public Object finder(Class<?> clzz) {
+                    public Object finder(Class<?> clzz) throws Throwable {
                         IAlbianObjectAttribute objAttr = null;
                         AlbianObjectRant or = clzz.getAnnotation(AlbianObjectRant.class);
                         if (null == or.Interface()) {
@@ -117,7 +116,7 @@ public class AlbianEntityRantScaner {
                 });
     }
 
-    private static IDataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr) {
+    private static IDataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr) throws Throwable {
         if (null == drr.DataRouter()) {
             return null;
         }
@@ -134,7 +133,8 @@ public class AlbianEntityRantScaner {
         try {
             dr = (IAlbianObjectDataRouter) clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("scanRouters is IllegalAccessException error ",e);
+           AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                   "scanRouters is IllegalAccessException error ");
         }
         drsAttr.setDataRouter(dr);
         drsAttr.setReaderRouterEnable(drr.ReaderRoutersEnable());

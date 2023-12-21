@@ -45,7 +45,7 @@ mappingReaderTable 读table路由规则，返回数据为读操作表
 
 service：
 对数据库表增删改查操作。需要注入IAlbianDataAccessService 注入方式有两种：
-1.private final IAlbianDataAccessService dao = AlbianServiceRouter.getSingletonService(
+1.private final IAlbianDataAccessService dao = AlbianServiceRouter.getService(
         IAlbianDataAccessService.class, IAlbianDataAccessService.Name, true);
 2.@Autowired
     private IAlbianDataAccessService dao;

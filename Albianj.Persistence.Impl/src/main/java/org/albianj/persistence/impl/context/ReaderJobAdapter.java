@@ -53,12 +53,12 @@ import java.util.Map;
 
 public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJobAdapter {
 
-    protected IStorageAttribute makeReaderToStorageCtx(IAlbianObjectAttribute objAttr, boolean isExact,
+    protected IStorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr, boolean isExact,
         String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
         Map<String, IOrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
         IStorageAttribute stgAttr = null;
         IAlbianStorageParserService asps = AlbianServiceRouter
-            .getSingletonService(IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
+            .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         if (Validate.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
             if (Validate.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback
                 IDataRoutersAttribute drsAttr = objAttr.getDataRouters();
@@ -161,7 +161,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         return sbOrderby;
     }
 
-    protected StringBuilder makeSltCmdTxt(int sbStyle, StringBuilder sbCols, String tableName, StringBuilder sbWhere,
+    protected StringBuilder makeSltCmdTxt(String sessionId,int sbStyle, StringBuilder sbCols, String tableName, StringBuilder sbWhere,
         StringBuilder sbOrderby, int start, int step, String idxName) {
         StringBuilder sbCmdTxt = new StringBuilder();
         sbCmdTxt.append("SELECT ").append(sbCols).append(" FROM ");
