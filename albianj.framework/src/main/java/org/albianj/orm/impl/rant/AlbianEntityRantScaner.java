@@ -82,24 +82,24 @@ public class AlbianEntityRantScaner {
 
 
                         AlbianObjectDataRoutersRant drr = or.DataRouters();
-                        IDataRoutersAttribute pkgDataRouterAttr = scanRouters(clzz, drr);
+                        DataRoutersAttribute pkgDataRouterAttr = scanRouters(clzz, drr);
                         //set data router
                         if (null != pkgDataRouterAttr) {
-                            IDataRoutersAttribute cfgDataRouterAttr = objAttr.getDataRouters();
+                            DataRoutersAttribute cfgDataRouterAttr = objAttr.getDataRouters();
                             if (null == cfgDataRouterAttr) { // not exist data router from drouter.xml
                                 objAttr.setDataRouters(pkgDataRouterAttr);
                             } else {
-                                Map<String, IDataRouterAttribute> cfgWRouter = cfgDataRouterAttr.getWriterRouters();
-                                Map<String, IDataRouterAttribute> cfgRRouter = cfgDataRouterAttr.getReaderRouters();
-                                Map<String, IDataRouterAttribute> pkgWRouter = pkgDataRouterAttr.getWriterRouters();
-                                Map<String, IDataRouterAttribute> pkgRRouter = pkgDataRouterAttr.getReaderRouters();
+                                Map<String, IDataRouterAttribute> cfgWRouter = cfgDataRouterAttr.getWriterRoutings();
+                                Map<String, IDataRouterAttribute> cfgRRouter = cfgDataRouterAttr.getReaderRoutings();
+                                Map<String, IDataRouterAttribute> pkgWRouter = pkgDataRouterAttr.getWriterRoutings();
+                                Map<String, IDataRouterAttribute> pkgRRouter = pkgDataRouterAttr.getReaderRoutings();
                                 if (null != pkgRRouter) {
                                     if (null != cfgRRouter) {
                                         //exist pkg datarouter and cfg datarouter,merger them base cfg datarouter
                                         pkgRRouter.putAll(cfgRRouter);
                                     }
                                     //if not exist cfg drouter or memgered drouter,set to total drouter
-                                    cfgDataRouterAttr.setReaderRouters(pkgRRouter);
+                                    cfgDataRouterAttr.setReaderRoutings(pkgRRouter);
 
                                 }
 
@@ -107,7 +107,7 @@ public class AlbianEntityRantScaner {
                                     if (null != cfgWRouter) {
                                         pkgWRouter.putAll(cfgWRouter);
                                     }
-                                    cfgDataRouterAttr.setWriterRouters(pkgRRouter);
+                                    cfgDataRouterAttr.setWriterRoutings(pkgRRouter);
                                 }
                             }
                         }
@@ -116,7 +116,7 @@ public class AlbianEntityRantScaner {
                 });
     }
 
-    private static IDataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
+    private static DataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
         if (null == drr.DataRouter()) {
             return null;
         }
@@ -128,7 +128,7 @@ public class AlbianEntityRantScaner {
             return null;
         }
 
-        IDataRoutersAttribute drsAttr = new DataRoutersAttribute();
+        DataRoutersAttribute drsAttr = new DataRoutersAttribute();
         IAlbianObjectDataRouter dr = null;
         try {
             dr = (IAlbianObjectDataRouter) clazz.newInstance();
@@ -141,10 +141,10 @@ public class AlbianEntityRantScaner {
         drsAttr.setWriterRouterEnable(drr.WriterRoutersEnable());
 
         Map<String, IDataRouterAttribute> rMap = scanRouter(clzz, drr.ReaderRouters());
-        drsAttr.setReaderRouters(rMap);
+        drsAttr.setReaderRoutings(rMap);
 
         Map<String, IDataRouterAttribute> wMap = scanRouter(clzz, drr.WriterRouters());
-        drsAttr.setWriterRouters(wMap);
+        drsAttr.setWriterRoutings(wMap);
         return drsAttr;
 
     }

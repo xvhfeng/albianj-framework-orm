@@ -38,8 +38,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.orm.db.IPersistenceCommand;
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianEntityFieldAttribute;
 import org.albianj.orm.object.IAlbianObject;
@@ -51,7 +49,7 @@ import java.util.Map;
 
 public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
 
-    public static Map<String, ISqlParameter> makeRemoveCommand(String sessionId, int dbStyle, String tableName,
+    public static Map<String, SqlParameter> makeRemoveCommand(String sessionId, int dbStyle, String tableName,
                                                                IAlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
                                                                StringBuilder sqlText)  {
         StringBuilder where = new StringBuilder();
@@ -63,14 +61,14 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
         }
 
         Map<String, IAlbianEntityFieldAttribute> mapMemberAttributes = objAttr.getFields();
-        Map<String, ISqlParameter> sqlParas = new HashMap<String, ISqlParameter>();
+        Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
         for (Map.Entry<String, IAlbianEntityFieldAttribute> entry : mapMemberAttributes
                 .entrySet()) {
             IAlbianEntityFieldAttribute member = entry.getValue();
             if (!member.getIsSave() || !member.getPrimaryKey())
                 continue;
             String name = member.getPropertyName();
-            ISqlParameter para = new SqlParameter();
+            SqlParameter para = new SqlParameter();
             para.setName(name);
             para.setSqlFieldName(member.getSqlFieldName());
             para.setSqlType(member.getDatabaseType());
@@ -97,12 +95,12 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
         return sqlParas;
     }
 
-    public IPersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
+    public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
                                            IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  {
-        IPersistenceCommand cmd = new PersistenceCommand();
+        PersistenceCommand cmd = new PersistenceCommand();
         StringBuilder sqlText = new StringBuilder();
 
-        Map<String, ISqlParameter> sqlParas = makeRemoveCommand(sessionId, dbStyle, tableName,
+        Map<String, SqlParameter> sqlParas = makeRemoveCommand(sessionId, dbStyle, tableName,
                 objAttr, mapValue, sqlText);
 
         cmd.setCommandText(sqlText.toString());
@@ -111,7 +109,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
 
         if (rbkOnError) {
             StringBuilder rollbackText = new StringBuilder();
-            Map<String, ISqlParameter> rollbackParas = CreateCommandAdapter.makeCreateCommand(sessionId, dbStyle, tableName,
+            Map<String, SqlParameter> rollbackParas = CreateCommandAdapter.makeCreateCommand(sessionId, dbStyle, tableName,
                     objAttr, mapValue, rollbackText);
             cmd.setRollbackCommandText(rollbackText.toString());
             cmd.setRollbackCommandType(PersistenceCommandType.Text);

@@ -44,8 +44,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.albianj.orm.context.PersistenceStatement;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.db.localize.IDBClientSection;
+import org.albianj.orm.impl.db.PersistenceCommand;
 import org.albianj.orm.object.IRunningStorageAttribute;
 
 import java.sql.Connection;
@@ -58,10 +58,10 @@ import java.util.Map;
 @NoArgsConstructor
 @ToString
 public class WriterTask {
-    List<IPersistenceCommand> rbkCmds = null;
+    List<PersistenceCommand> rbkCmds = null;
     boolean compensating = true;
     private IRunningStorageAttribute storageSAttr = null;
-    private List<IPersistenceCommand> commands = null;
+    private List<PersistenceCommand> commands = null;
     private Connection connection = null;
     private Map<String, PersistenceStatement> statements = null;
     private List<Statement> rollbackStatements = null;

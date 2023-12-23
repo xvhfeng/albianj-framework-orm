@@ -7,7 +7,6 @@ import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.impl.context.ReaderJob;
 import org.albianj.orm.impl.context.ReaderJobAdapter;
@@ -15,10 +14,7 @@ import org.albianj.orm.impl.context.WriterJob;
 import org.albianj.orm.impl.context.WriterJobAdapter;
 import org.albianj.orm.impl.context.dactx.DataAccessContext;
 import org.albianj.orm.impl.context.dactx.QueryContext;
-import org.albianj.orm.impl.db.IPersistenceQueryScope;
-import org.albianj.orm.impl.db.IPersistenceTransactionClusterScope;
-import org.albianj.orm.impl.db.PersistenceQueryScope;
-import org.albianj.orm.impl.db.PersistenceTransactionClusterScope;
+import org.albianj.orm.impl.db.*;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IOrderByCondition;
 import org.albianj.orm.object.IRunningStorageAttribute;
@@ -399,7 +395,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
 
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, IRunningStorageAttribute storage, PersistenceCommandType cmdType,
-                                                         String text, Map<String, ISqlParameter> paras)  {
+                                                         String text, Map<String, SqlParameter> paras)  {
         ReaderJobAdapter ad = new ReaderJobAdapter();
         ReaderJob job = ad.buildReaderJob(sessionId, cls, storage, cmdType,
                 text, paras);
@@ -409,7 +405,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, IRunningStorageAttribute storage, PersistenceCommandType cmdType,
-                                                        String text, Map<String, ISqlParameter> paras)  {
+                                                        String text, Map<String, SqlParameter> paras)  {
         return loadObjects(sessionId, cls, storage, cmdType, text, paras);
     }
 

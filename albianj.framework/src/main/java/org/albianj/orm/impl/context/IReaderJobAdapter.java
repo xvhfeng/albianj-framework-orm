@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
+import org.albianj.orm.impl.db.SqlParameter;
 import org.albianj.orm.object.IFilterCondition;
 import org.albianj.orm.object.IOrderByCondition;
 import org.albianj.orm.object.IRunningStorageAttribute;
@@ -68,7 +68,7 @@ public interface IReaderJobAdapter {
         String idxName) ;
 
     public ReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
-                                     PersistenceCommandType cmdType, String text, Map<String, ISqlParameter> paras)
+                                     PersistenceCommandType cmdType, String text, Map<String, SqlParameter> paras)
         ;
 
 }

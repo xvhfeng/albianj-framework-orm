@@ -40,7 +40,6 @@ package org.albianj.orm.impl.db;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.orm.context.InternalManualCommand;
 import org.albianj.orm.context.ManualCommand;
-import org.albianj.orm.db.IPersistenceCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class PersistenceNamedParameter {
     /**
 
      */
-    public static void parseSql(IPersistenceCommand cmd) {
+    public static void parseSql(PersistenceCommand cmd) {
         String regex = "#\\w+#";// insert into tablename(col1,col2) values(
         // #col1#,#col2#)
         String cmdText = cmd.getCommandText();

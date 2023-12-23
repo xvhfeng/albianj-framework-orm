@@ -44,7 +44,7 @@ import lombok.ToString;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.db.IPersistenceCommand;
+import org.albianj.orm.impl.db.PersistenceCommand;
 import org.albianj.orm.object.IRunningStorageAttribute;
 
 import java.sql.Connection;
@@ -57,7 +57,7 @@ import java.sql.Statement;
 @ToString
 public class ReaderJob {
     private IRunningStorageAttribute storageAttr = null;
-    private IPersistenceCommand command = null;
+    private PersistenceCommand command = null;
     private Connection connection = null;
     private Statement statement = null;
     private ResultSet result = null;

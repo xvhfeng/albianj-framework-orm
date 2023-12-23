@@ -7,7 +7,6 @@ import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.context.InternalManualCommand;
 import org.albianj.orm.context.ManualCommand;
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.context.ManualContext;
 import org.albianj.orm.impl.toolkit.ListConvert;
 import org.albianj.orm.object.IRunningStorageAttribute;
@@ -53,7 +52,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 } else {
                     for (int i = 1; i <= map.size(); i++) {
                         String paraName = map.get(i);
-                        ISqlParameter para = imc.getCommandParameters().get(paraName);
+                        SqlParameter para = imc.getCommandParameters().get(paraName);
                         if (null == para.getValue()) {
                             prepareStatement.setNull(i, para.getSqlType());
                         } else {

@@ -38,49 +38,21 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 
-import org.albianj.orm.db.ISqlParameter;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.sql.Types;
 
-public class SqlParameter implements ISqlParameter {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class SqlParameter {
     private int sqlType = Types.NVARCHAR;
     private String name = null;
     private Object value = null;
     private String sqlFieldName = null;
-
-    // private Class valueClass;
-    // private int length = 200;
-
-    public int getSqlType() {
-        return sqlType;
-    }
-
-    public void setSqlType(int sqlType) {
-        this.sqlType = sqlType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
-    public String getSqlFieldName() {
-        return this.sqlFieldName;
-    }
-
-    public void setSqlFieldName(String sqlFieldName) {
-        this.sqlFieldName = sqlFieldName;
-    }
-
 }

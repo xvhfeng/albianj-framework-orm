@@ -38,8 +38,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.orm.db.IPersistenceCommand;
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianEntityFieldAttribute;
 import org.albianj.orm.object.IAlbianObject;
@@ -52,7 +50,7 @@ import java.util.Map;
 public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
 
 
-    public IPersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
+    public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
                                            IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)
              {
         if (object.getIsAlbianNew()) {
@@ -60,7 +58,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
                 "the new albianj object can not be update.please load the object from database first.");
         }
 
-        IPersistenceCommand cmd = new PersistenceCommand();
+                 PersistenceCommand cmd = new PersistenceCommand();
         StringBuilder text = new StringBuilder();
         StringBuilder cols = new StringBuilder();
         StringBuilder where = new StringBuilder();
@@ -92,8 +90,8 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
         }
 
         Map<String, IAlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
-        Map<String, ISqlParameter> sqlParas = new HashMap<String, ISqlParameter>();
-        Map<String, ISqlParameter> rollbackParas = new HashMap<String, ISqlParameter>();
+        Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
+        Map<String, SqlParameter> rollbackParas = new HashMap<String, SqlParameter>();
         for (Map.Entry<String, IAlbianEntityFieldAttribute> entry : fieldsAttr.entrySet()) {
             IAlbianEntityFieldAttribute member = entry.getValue();
             if (!member.getIsSave())
@@ -150,7 +148,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
                     rollbackCols.append(" = ").append("#").append(member.getSqlFieldName()).append("# ,");
                 }
             }
-            ISqlParameter para = new SqlParameter();
+            SqlParameter para = new SqlParameter();
             para.setName(name);
             para.setSqlFieldName(member.getSqlFieldName());
             para.setSqlType(member.getDatabaseType());
@@ -158,7 +156,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
             sqlParas.put(String.format("#%1$s#", member.getSqlFieldName()), para);
 
             if (rbkOnError) {
-                ISqlParameter rollbackPara = new SqlParameter();
+                SqlParameter rollbackPara = new SqlParameter();
                 rollbackPara.setName(name);
                 rollbackPara.setSqlFieldName(member.getSqlFieldName());
                 rollbackPara.setSqlType(member.getDatabaseType());

@@ -41,7 +41,6 @@ import org.albianj.common.argument.RefArg;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.db.SqlParameter;
 import org.albianj.orm.impl.toolkit.Convert;
 import org.albianj.orm.impl.toolkit.EnumMapping;
@@ -61,18 +60,18 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         if (CheckUtil.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
             if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback
-                IDataRoutersAttribute drsAttr = objAttr.getDataRouters();
+                DataRoutersAttribute drsAttr = objAttr.getDataRouters();
                 IAlbianObjectDataRouter drouter = drsAttr.getDataRouter();
                 if (isExact) {
                     IDataRouterAttribute drAttr =
-                        drouter.mappingExactReaderRouting(drsAttr.getWriterRouters(), hashWheres, hashOrderbys);
+                        drouter.mappingExactReaderRouting(drsAttr.getWriterRoutings(), hashWheres, hashOrderbys);
                     String storageName = drouter.mappingExactReaderRoutingStorage(drAttr, hashWheres, hashOrderbys);
                     stgAttr = asps.getStorageAttribute(storageName);
                     dbName.setValue(drouter.mappingExactReaderRoutingDatabase(stgAttr, hashWheres, hashOrderbys));
                     tableName.setValue(drouter.mappingExactReaderTable(drAttr, hashWheres, hashOrderbys));
                 } else {
                     IDataRouterAttribute drAttr =
-                        drouter.mappingReaderRouting(drsAttr.getReaderRouters(), hashWheres, hashOrderbys);
+                        drouter.mappingReaderRouting(drsAttr.getReaderRoutings(), hashWheres, hashOrderbys);
                     String storageName = drouter.mappingReaderRoutingStorage(drAttr, hashWheres, hashOrderbys);
                     stgAttr = asps.getStorageAttribute(storageName);
                     dbName.setValue(drouter.mappingReaderRoutingDatabase(stgAttr, hashWheres, hashOrderbys));
@@ -85,9 +84,9 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                     CheckUtil.isNullOrEmptyOrAllSpace(tableAlias) ? objAttr.getImplClzz().getSimpleName() : tableAlias);
             }
         } else { // do fix drouter
-            IDataRoutersAttribute drsAttr = objAttr.getDataRouters();
+            DataRoutersAttribute drsAttr = objAttr.getDataRouters();
             IAlbianObjectDataRouter drouter = drsAttr.getDataRouter();
-            IDataRouterAttribute drAttr = drsAttr.getReaderRouters().get(drouterAlias);
+            IDataRouterAttribute drAttr = drsAttr.getReaderRoutings().get(drouterAlias);
             String storageName = drAttr.getStorageName();
             stgAttr = asps.getStorageAttribute(storageName);
             dbName.setValue(drouter.mappingReaderRoutingDatabase(stgAttr, hashWheres, hashOrderbys));
@@ -190,7 +189,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
     }
 
     protected StringBuilder makeSltCmdWhrs(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle,
-        String implType, LinkedList<IFilterCondition> wheres, Map<String, ISqlParameter> paras) {
+        String implType, LinkedList<IFilterCondition> wheres, Map<String, SqlParameter> paras) {
         StringBuilder sbWhrs = new StringBuilder();
         if (null != wheres) {
             for (IFilterCondition where : wheres) {
@@ -215,7 +214,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                         where.getAliasName())
                     //	.append(member.getSqlFieldName())
                     .append("#").append(where.isCloseSub() ? ")" : "");
-                ISqlParameter para = new SqlParameter();
+                SqlParameter para = new SqlParameter();
                 para.setName(member.getSqlFieldName());
                 para.setSqlFieldName(member.getSqlFieldName());
                 if (null == where.getFieldClass()) {

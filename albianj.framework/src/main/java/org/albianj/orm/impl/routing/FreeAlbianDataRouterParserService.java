@@ -45,7 +45,7 @@ import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.orm.object.IDataRouterAttribute;
-import org.albianj.orm.object.IDataRoutersAttribute;
+import org.albianj.orm.object.DataRoutersAttribute;
 import org.albianj.orm.service.IAlbianDataRouterParserService;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -59,7 +59,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
 
     private final static String tagName = "AlbianObjects/AlbianObject";
     private String file = "drouter.xml";
-    private HashMap<String, IDataRoutersAttribute> _cached = null;
+    private HashMap<String, DataRoutersAttribute> _cached = null;
 
     public void setConfigFileName(String fileName) {
         this.file = fileName;
