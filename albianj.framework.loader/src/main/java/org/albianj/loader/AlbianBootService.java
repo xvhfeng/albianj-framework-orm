@@ -134,9 +134,10 @@ public class AlbianBootService {
         }
 
         try {
+            GlobalSettings settings = new GlobalSettings();
             Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
             IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
-            abs.start(cfPath);
+            abs.start(settings);
 
 //            if (!Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
 //                abs.start(kernelPath, configPath);

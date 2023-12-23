@@ -1,12 +1,8 @@
 package org.albianj.orm.impl.storage;
 
-import org.albianj.kernel.core.AlbianLevel;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -68,21 +64,21 @@ public class DBCPWapper extends FreeDataBasePool {
                     .generateConnectionUrl(rsa);
             ds.setDriverClassName(DRIVER_CLASSNAME);
             ds.setUrl(url);
-
-            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
-                ds.setUsername(storageAttribute.getUser());
-                ds.setPassword(storageAttribute.getPassword());
-            } else {
-                IAlbianSecurityService ass = AlbianServiceRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
-                if (null != ass) {
-                    ds.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
-                    ds.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
-                } else {
-                    ds.setUsername(storageAttribute.getUser());
-                    ds.setPassword(storageAttribute.getPassword());
-                    throw new AlbianDataServiceException("the run level is release in the kernel config but security is null,so not use security service.");
-                }
-            }
+            ds.setUsername(storageAttribute.getUser());
+            ds.setPassword(storageAttribute.getPassword());
+//            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
+//
+//            } else {
+//                IAlbianSecurityService ass = AlbianServiceRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
+//                if (null != ass) {
+//                    ds.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
+//                    ds.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
+//                } else {
+//                    ds.setUsername(storageAttribute.getUser());
+//                    ds.setPassword(storageAttribute.getPassword());
+//                    throw new AlbianRuntimeException("the run level is release in the kernel config but security is null,so not use security service.");
+//                }
+//            }
 
             if (storageAttribute.getTransactional()) {
                 ds.setDefaultAutoCommit(false);

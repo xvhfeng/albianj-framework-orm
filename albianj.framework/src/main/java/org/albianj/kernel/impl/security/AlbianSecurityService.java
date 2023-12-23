@@ -39,7 +39,6 @@ package org.albianj.kernel.impl.security;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.security.IAlbianSecurityService;
@@ -71,7 +70,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     @Override
     public void init()  {
         super.init();
-        String mkey = KernelSetting.getMachineKey();
+        String mkey = getSettings().getMachineKey();
         if (CheckUtil.isNullOrEmptyOrAllSpace(mkey)) {
             return;
         }

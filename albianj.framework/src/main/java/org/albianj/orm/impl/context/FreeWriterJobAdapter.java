@@ -37,9 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
-import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.context.dactx.IAlbianObjectWarp;
+import org.albianj.orm.context.dactx.AlbianObjectWarp;
 import org.albianj.orm.impl.db.CreateCommandAdapter;
 import org.albianj.orm.impl.db.IPersistenceUpdateCommand;
 import org.albianj.orm.impl.db.ModifyCommandAdapter;
@@ -49,15 +48,15 @@ import org.albianj.orm.object.IAlbianObject;
 import java.util.List;
 
 public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
-    public IWriterJob buildCreation(String sessionId, IAlbianObject object)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildCreation(String sessionId, IAlbianObject object)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, cca);
         return job;
     }
 
-    public IWriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildCreation(String sessionId, List<? extends IAlbianObject> objects)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         for (IAlbianObject object : objects) {
             buildWriterJob(sessionId, job, object, null, null, cca);
@@ -65,15 +64,15 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildModification(String sessionId, IAlbianObject object)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildModification(String sessionId, IAlbianObject object)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, mca);
         return job;
     }
 
-    public IWriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildModification(String sessionId, List<? extends IAlbianObject> objects)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
         for (IAlbianObject object : objects) {
             buildWriterJob(sessionId, job, object, null, null, mca);
@@ -82,16 +81,16 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildRemoved(String sessionId, IAlbianObject object)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildRemoved(String sessionId, IAlbianObject object)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, rca);
 
         return job;
     }
 
-    public IWriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildRemoved(String sessionId, List<? extends IAlbianObject> objects)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
         for (IAlbianObject object : objects) {
             buildWriterJob(sessionId, job, object, null, null, rca);
@@ -99,8 +98,8 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildSaving(String sessionId, IAlbianObject object)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildSaving(String sessionId, IAlbianObject object)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand iuc;
         if (object.getIsAlbianNew()) {
             iuc = new CreateCommandAdapter();
@@ -112,8 +111,8 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects)  {
-        IWriterJob job = new WriterJob(sessionId);
+    public WriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects)  {
+        WriterJob job = new WriterJob(sessionId);
         IPersistenceUpdateCommand cca = new CreateCommandAdapter();
         IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
         for (IAlbianObject object : objects) {
@@ -126,14 +125,14 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildWriterJob(String sessionId, List<IAlbianObjectWarp> entities, boolean rollbackOnError)
+    public WriterJob buildWriterJob(String sessionId, List<AlbianObjectWarp> entities, boolean rollbackOnError)
             {
-        IWriterJob job = new WriterJob(sessionId);
+        WriterJob job = new WriterJob(sessionId);
         job.setRollbackOnError(rollbackOnError);
         IPersistenceUpdateCommand crtCmd = new CreateCommandAdapter();
         IPersistenceUpdateCommand mdfCmd = new ModifyCommandAdapter();
         IPersistenceUpdateCommand dltCmd = new RemoveCommandAdapter();
-        for (IAlbianObjectWarp entity : entities) {
+        for (AlbianObjectWarp entity : entities) {
             switch (entity.getPersistenceOpt()) {
                 case (AlbianDataAccessOpt.Create): {
                     buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), crtCmd);
@@ -162,7 +161,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    protected abstract void buildWriterJob(String sessionId,IWriterJob job, IAlbianObject entity,
+    protected abstract void buildWriterJob(String sessionId,WriterJob job, IAlbianObject entity,
                                            String storageAlias, String tableAlias,
                                            IPersistenceUpdateCommand cmd) ;
 

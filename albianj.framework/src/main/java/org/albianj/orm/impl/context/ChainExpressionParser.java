@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.context;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.db.SqlParameter;
 import org.albianj.orm.impl.toolkit.Convert;
@@ -86,7 +86,7 @@ public class ChainExpressionParser {
 
     public static void toConditionText(String sessionId, Class<?> cls, IAlbianObjectAttribute albianObject,
                                        IStorageAttribute storage, IChainExpression f, StringBuilder sb, Map<String, ISqlParameter> paras)
-            throws AlbianDataServiceException {
+             {
         if (null == f) return;
         List<IChainExpression> ces = f.getChainExpression();
         if (null == ces || 0 == ces.size())
@@ -121,7 +121,7 @@ public class ChainExpressionParser {
                 IAlbianEntityFieldAttribute fieldAttr = albianObject.getFields().get(AlbianEntityMetadata.makeFieldsKey(fe.getFieldName().toLowerCase()));
 
                 if (null == fieldAttr) {
-                    throw new AlbianDataServiceException(
+                    throw new AlbianRuntimeException(
                         "PersistenceService is error. albian-object:" + className + " member:" + fe.getFieldName()
                             + " is not found.");
                 }

@@ -1,13 +1,9 @@
 package org.albianj.orm.impl.storage;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.albianj.kernel.core.AlbianLevel;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
 
@@ -64,21 +60,22 @@ public class C3P0Wapper extends FreeDataBasePool {
             String url = FreeAlbianStorageParserService.generateConnectionUrl(rsa);
             ds.setDriverClass(DRIVER_CLASSNAME);
             ds.setJdbcUrl(url);
-            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
-                ds.setUser(storageAttribute.getUser());
-                ds.setPassword(storageAttribute.getPassword());
-            } else {
-                IAlbianSecurityService ass = AlbianServiceRouter
-                        .getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
-                if (null != ass) {
-                    ds.setUser(ass.decryptDES(sessionid,storageAttribute.getUser()));
-                    ds.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
-                } else {
-                    ds.setUser(storageAttribute.getUser());
-                    ds.setPassword(storageAttribute.getPassword());
-                    throw new AlbianDataServiceException("the run level is release in the kernel config but security is null,so not use security service.");
-                }
-            }
+            ds.setUser(storageAttribute.getUser());
+            ds.setPassword(storageAttribute.getPassword());
+//            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
+//
+//            } else {
+//                IAlbianSecurityService ass = AlbianServiceRouter
+//                        .getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
+//                if (null != ass) {
+//                    ds.setUser(ass.decryptDES(sessionid,storageAttribute.getUser()));
+//                    ds.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
+//                } else {
+//                    ds.setUser(storageAttribute.getUser());
+//                    ds.setPassword(storageAttribute.getPassword());
+//                    throw new AlbianRuntimeException("the run level is release in the kernel config but security is null,so not use security service.");
+//                }
+//            }
             ds.setAutoCommitOnClose(false); //连接关闭时默认将所有未提交的操作回滚
 
             if (storageAttribute.getPooling()) {

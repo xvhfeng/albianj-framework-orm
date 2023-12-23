@@ -39,11 +39,11 @@ package org.albianj.orm.object;
 
 import org.albianj.common.comment.SpecialWarning;
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.dactx.IAlbianObjectWarp;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.orm.context.dactx.AlbianObjectWarp;
 import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
 import org.albianj.orm.service.AlbianEntityMetadata;
 
@@ -59,7 +59,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
     protected transient HashMap<String, Object> dic = null;
 
     @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
-    protected transient Map<String, IAlbianObjectWarp> chainEntity = null;
+    protected transient Map<String, AlbianObjectWarp> chainEntity = null;
 
     @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
     private transient boolean isAlbianNew = true;
@@ -97,7 +97,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
 
 //    @Deprecated
 //    @org.albianj.common.comment.SpecialWarning("不推荐使用，推荐使用带sessionid参数的同名函数")
-//    public boolean needUpdate(Object sessionId) throws AlbianDataServiceException {
+//    public boolean needUpdate(Object sessionId)  {
 //        return needUpdate(sessionId);
 //    }
 
@@ -116,13 +116,13 @@ public abstract class FreeAlbianObject implements IAlbianObject {
         String className = this.getClass().getName();
         IAlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == entiryAttr) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "PersistenceService is error. albian-object:" + className + " attribute is not found.");
         }
 
         Map<String, IAlbianEntityFieldAttribute> fields = entiryAttr.getFields();
         if (CheckUtil.isNullOrEmpty(fields)) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "PersistenceService is error. albian-object:" + className + " PropertyDescriptor is not found.");
         }
         try {

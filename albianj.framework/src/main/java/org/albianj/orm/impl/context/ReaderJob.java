@@ -37,9 +37,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.object.IRunningStorageAttribute;
@@ -48,14 +51,18 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class ReaderJob implements IReaderJob {
-    private IRunningStorageAttribute storage = null;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class ReaderJob {
+    private IRunningStorageAttribute storageAttr = null;
     private IPersistenceCommand command = null;
     private Connection connection = null;
     private Statement statement = null;
     private ResultSet result = null;
     private String id = null;
-    private IDataBasePool pool = null;
+    private IDataBasePool dataBasePool = null;
 
     public ReaderJob(String sessionId) {
         if (CheckUtil.isNullOrEmptyOrAllSpace(sessionId)) {
@@ -65,57 +72,4 @@ public class ReaderJob implements IReaderJob {
         }
     }
 
-    public IRunningStorageAttribute getStorage() {
-        return storage;
-    }
-
-    public void setStorage(IRunningStorageAttribute storage) {
-        this.storage = storage;
-    }
-
-    public IPersistenceCommand getCommand() {
-        return command;
-    }
-
-    public void setCommand(IPersistenceCommand command) {
-        this.command = command;
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
-    public Statement getStatement() {
-        return statement;
-    }
-
-    public void setStatement(Statement statement) {
-        this.statement = statement;
-    }
-
-    public ResultSet getResult() {
-        return this.result;
-    }
-
-    public void setResult(ResultSet result) {
-        this.result = result;
-    }
-
-    @Override
-    public String getId() {
-        // TODO Auto-generated method stub
-        return this.id;
-    }
-
-    public IDataBasePool getDatabasePool() {
-        return this.pool;
-    }
-
-    public void setDatabasePool(IDataBasePool pool) {
-        this.pool = pool;
-    }
 }

@@ -42,12 +42,10 @@ import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
-import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.orm.impl.context.IReaderJobAdapter;
-import org.albianj.orm.impl.context.IWriterJobAdapter;
+import org.albianj.orm.impl.context.ReaderJob;
 import org.albianj.orm.impl.context.ReaderJobAdapter;
+import org.albianj.orm.impl.context.WriterJob;
 import org.albianj.orm.impl.context.WriterJobAdapter;
 import org.albianj.orm.impl.db.IPersistenceQueryScope;
 import org.albianj.orm.impl.db.IPersistenceTransactionClusterScope;
@@ -84,9 +82,9 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                                      LinkedList<IFilterCondition> wheres,
                                                                      LinkedList<IOrderByCondition> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
+        ReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
-        IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName, start, step,
+        ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName, start, step,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         list = scope.execute(cls, job);
@@ -99,8 +97,8 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                                        LinkedList<IFilterCondition> wheres,
                                                                        LinkedList<IOrderByCondition> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
-        IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName,
+        ReaderJobAdapter ad = new ReaderJobAdapter();
+        ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         Object o = scope.execute(job);
@@ -124,14 +122,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public boolean create(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildCreation(sessionId, object);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildCreation(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -147,14 +145,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public boolean create(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildCreation(sessionId, objects);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildCreation(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -170,14 +168,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public boolean modify(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildModification(sessionId, object);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildModification(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -194,14 +192,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                           IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildModification(sessionId, objects);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildModification(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -215,14 +213,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildRemoved(sessionId, object);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildRemoved(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -236,14 +234,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                           Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildRemoved(sessionId, objects);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildRemoved(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -258,14 +256,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                         IPersistenceNotify notifyCallback, Object notifyCallbackObject,
                         IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
             {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildSaving(sessionId, object);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildSaving(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -279,14 +277,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                         Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                         Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        IWriterJob job = ja.buildSaving(sessionId, objects);
+        WriterJobAdapter ja = new WriterJobAdapter();
+        WriterJob job = ja.buildSaving(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
-            job.setNotifyCallbackObject(notifyCallbackObject);
+            job.setNotifyCallbackobject(notifyCallbackObject);
         if (null != compensateCallback)
-            job.setCompensateNotify(compensateCallback);
+            job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
@@ -598,9 +596,9 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                               IChainExpression wheres,
                                                               LinkedList<IOrderByCondition> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
+        ReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
-        IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName, start, step,
+        ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName, start, step,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         list = scope.execute(cls, job);
@@ -612,8 +610,8 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                                 IChainExpression wheres,
                                                                 LinkedList<IOrderByCondition> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
-        IReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
+        ReaderJobAdapter ad = new ReaderJobAdapter();
+        ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         Object o = scope.execute(job);

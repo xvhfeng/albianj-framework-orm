@@ -38,12 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.context;
 
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.context.IWriterTask;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.impl.db.IPersistenceUpdateCommand;
 import org.albianj.orm.impl.db.localize.MysqlClientSection;
@@ -158,9 +156,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     protected String parserRoutingStorage(String jobId, IAlbianObject obj,
                                           IDataRouterAttribute routing, IAlbianObjectDataRouter hashMapping,
-                                          IAlbianObjectAttribute albianObject) throws AlbianDataServiceException {
+                                          IAlbianObjectAttribute albianObject)  {
         if (null == routing) {
-            throw new AlbianDataServiceException("the writer data router of object:"+albianObject.getType()+" is null.");
+            throw new AlbianRuntimeException("the writer data router of object:"+albianObject.getType()+" is null.");
         }
         if (null == hashMapping) {
             String name = routing.getStorageName();
@@ -184,9 +182,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     protected String parserRoutingDatabase(String jobId, IAlbianObject obj,
                                            IStorageAttribute storage, IAlbianObjectDataRouter hashMapping,
-                                           IAlbianObjectAttribute albianObject) throws AlbianDataServiceException {
+                                           IAlbianObjectAttribute albianObject)  {
         if (null == storage) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "the writer data router of object:" + albianObject.getType() + " is null.");
         }
         if (null == hashMapping) {
@@ -210,7 +208,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
     }
 
 
-    protected void buildWriterJob(String sessionId, IWriterJob job, IAlbianObject entity,
+    protected void buildWriterJob(String sessionId, WriterJob job, IAlbianObject entity,
                                   String storageAlias, String tableAlias,
                                   IPersistenceUpdateCommand cmd)  {
         Class<?> cls = entity.getClass();
@@ -219,7 +217,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
         Map<String, IAlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
         if (CheckUtil.isNullOrEmpty(fieldsAttr)) {
-            throw new AlbianDataServiceException("albian-object:" + className + " PropertyDescriptor is not found.");
+            throw new AlbianRuntimeException("albian-object:" + className + " PropertyDescriptor is not found.");
         }
         Map<String, Object> sqlParaVals = buildSqlParameter(job.getId(), entity,
                 objAttr, fieldsAttr);
@@ -257,35 +255,35 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
         }
     }
 
-    private void addWrtTsk(IWriterJob job, IStorageAttribute storage, String database, IPersistenceCommand pstCmd) {
+    private void addWrtTsk(WriterJob job, IStorageAttribute storage, String database, IPersistenceCommand pstCmd) {
         String key = storage.getName() + database;
         if (CheckUtil.isNull(job.getWriterTasks())) {
-            Map<String, IWriterTask> tasks = new LinkedHashMap<>();
-            IWriterTask task = new WriterTask();
+            Map<String, WriterTask> tasks = new LinkedHashMap<>();
+            WriterTask task = new WriterTask();
             List<IPersistenceCommand> cmds = new Vector<>();
             cmds.add(pstCmd);
             task.setCommands(cmds);
-            task.setStorage(new RunningStorageAttribute(storage, database));
+            task.setStorageSAttr(new RunningStorageAttribute(storage, database));
             tasks.put(key, task);
             if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
-                task.setClientSection(new MysqlClientSection());
+                task.setDbClientSection(new MysqlClientSection());
             } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
-                task.setClientSection(new SqlServerClientSection());
+                task.setDbClientSection(new SqlServerClientSection());
             }
             job.setWriterTasks(tasks);
         } else {
             if (job.getWriterTasks().containsKey(key)) {
                 job.getWriterTasks().get(key).getCommands().add(pstCmd);
             } else {
-                IWriterTask task = new WriterTask();
+                WriterTask task = new WriterTask();
                 List<IPersistenceCommand> cmds = new Vector<>();
                 cmds.add(pstCmd);
                 task.setCommands(cmds);
-                task.setStorage(new RunningStorageAttribute(storage, database));
+                task.setStorageSAttr(new RunningStorageAttribute(storage, database));
                 if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
-                    task.setClientSection(new MysqlClientSection());
+                    task.setDbClientSection(new MysqlClientSection());
                 } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
-                    task.setClientSection(new SqlServerClientSection());
+                    task.setDbClientSection(new SqlServerClientSection());
                 }
                 job.getWriterTasks().put(key, task);
             }

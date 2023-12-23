@@ -39,15 +39,14 @@ package org.albianj.orm.impl.routing;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IDataRouterAttribute;
 import org.albianj.orm.object.IDataRoutersAttribute;
 import org.albianj.orm.service.IAlbianDataRouterParserService;
-import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -84,7 +83,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         try {
             String fname = findConfigFile(filename);
             //配置文件不存在则不用加载，不报错
-            if(StringUtils.isBlank(fname)){
+            if(fname.isBlank()){
                 AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                         "loading the drouter.xml is error. drouter.xml is not exist");
                 return;
@@ -95,7 +94,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
                     "loading the drouter.xml is error.");
         }
         if (null == doc) {
-            throw new AlbianDataServiceException("loading the drouter.xml is error.");
+            throw new AlbianRuntimeException("loading the drouter.xml is error.");
         }
 
         @SuppressWarnings("rawtypes")

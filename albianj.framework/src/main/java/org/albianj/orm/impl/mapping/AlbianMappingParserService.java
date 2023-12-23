@@ -41,13 +41,12 @@ import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.kernel.service.parser.AlbianParserException;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.impl.object.DataRouterAttribute;
 import org.albianj.orm.impl.object.MemberAttribute;
@@ -74,7 +73,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     private static final String memberTagName = "Members/Member";
 
     private static void parserEntityFields(String type, @SuppressWarnings("rawtypes") List nodes,
-                                           Map<String, IAlbianEntityFieldAttribute> map) throws AlbianParserException {
+                                           Map<String, IAlbianEntityFieldAttribute> map)   {
         for (Object node : nodes) {
             parserEntityField(type, (Element) node, map);
         }
@@ -92,16 +91,16 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 //    }
 
     private static void parserEntityField(String type, Element elt, Map<String, IAlbianEntityFieldAttribute> map)
-            throws AlbianParserException {
+             {
         String name = XmlUtil.getAttributeValue(elt, "Name");
         if (CheckUtil.isNullOrEmpty(name)) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML());
         }
         IAlbianEntityFieldAttribute fieldAttr = map.get(name.toLowerCase());
 //        IMemberAttribute member = (IMemberAttribute) map.get(name.toLowerCase());
         if (null == fieldAttr) {
-            throw new AlbianDataServiceException("the field: " + name + "is not found in the :" + type);
+            throw new AlbianRuntimeException("the field: " + name + "is not found in the :" + type);
         }
 
         String fieldName = XmlUtil.getAttributeValue(elt, "FieldName");
@@ -137,22 +136,22 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     }
 
     private static void parserAlbianObjectMembers(String type, @SuppressWarnings("rawtypes") List nodes,
-                                                  Map<String, IMemberAttribute> map) throws AlbianParserException {
+                                                  Map<String, IMemberAttribute> map)   {
         for (Object node : nodes) {
             parserAlbianObjectMember(type, (Element) node, map);
         }
     }
 
     private static void parserAlbianObjectMember(String type, Element elt, Map<String, IMemberAttribute> map)
-            throws AlbianParserException {
+              {
         String name = XmlUtil.getAttributeValue(elt, "Name");
         if (CheckUtil.isNullOrEmpty(name)) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML() + ".");
         }
         IMemberAttribute member = (IMemberAttribute) map.get(name.toLowerCase());
         if (null == member) {
-            throw new AlbianDataServiceException("the field:" + name + " is not found in the " + type + ".");
+            throw new AlbianRuntimeException("the field:" + name + " is not found in the " + type + ".");
         }
 
         String fieldName = XmlUtil.getAttributeValue(elt, "FieldName");
@@ -284,13 +283,13 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     protected void parserAlbianObject(Element node)  {
         String type = XmlUtil.getAttributeValue(node, "Type");
         if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
-            throw new AlbianDataServiceException("The AlbianObject's type is empty in persistence.xml");
+            throw new AlbianRuntimeException("The AlbianObject's type is empty in persistence.xml");
             //return;
         }
 
         String inter = XmlUtil.getAttributeValue(node, "Interface");
         if (CheckUtil.isNullOrEmptyOrAllSpace(inter)) {
-            throw new AlbianDataServiceException("The AlbianObject's type->:" + type + " is empty in persistence.xml");
+            throw new AlbianRuntimeException("The AlbianObject's type->:" + type + " is empty in persistence.xml");
             //return;
         }
 
@@ -310,17 +309,17 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             implClzz = AlbianClassLoader.getInstance().loadClass(type);
             Class<?> itf = AlbianClassLoader.getInstance().loadClass(inter);
             if (!itf.isAssignableFrom(implClzz)) {
-                throw new AlbianDataServiceException(
+                throw new AlbianRuntimeException(
                     "the albian-object class:" + type + " is not implements from interface:" + inter + ".");
             }
 
             if (!IAlbianObject.class.isAssignableFrom(implClzz)) {
-                throw new AlbianDataServiceException(
+                throw new AlbianRuntimeException(
                     "the albian-object class:" + type + " is not implements from interface: IAlbianObject.");
             }
 
             if (!IAlbianObject.class.isAssignableFrom(itf)) {
-                throw new AlbianDataServiceException(
+                throw new AlbianRuntimeException(
                     "the albian-object interface:" + inter + " is not implements from interface: IAlbianObject.");
             }
 
@@ -400,7 +399,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
                     "the type:{} is not found",type);
         }
         if (null == propertyDesc) {
-            throw new AlbianDataServiceException("the type:" + type + " is not found");
+            throw new AlbianRuntimeException("the type:" + type + " is not found");
         }
 //        addAlbianObjectPropertyDescriptor(type, propertyDesc);
         for (PropertyDescriptor p : propertyDesc) {

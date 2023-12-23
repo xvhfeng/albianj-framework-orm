@@ -5,12 +5,12 @@
     <parent>
         <artifactId>albianj</artifactId>
          <groupId>albianj-framework</groupId>
-        <version>10009-dev</version>
+        <version>03-delete-dataclass-interface</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework.loader</artifactId>
-    <version>10009-dev</version>
+    <version>03-delete-dataclass-interface</version>
 
     <dependencies>
         <dependency>
@@ -32,6 +32,13 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.22.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

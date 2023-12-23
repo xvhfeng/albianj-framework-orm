@@ -39,7 +39,7 @@ package org.albianj.kernel.service;
 
 import org.albianj.common.comment.Comments;
 import org.albianj.kernel.aop.AlbianAopAttribute;
-import org.albianj.kernel.core.AlbianKernel;
+import org.albianj.loader.GlobalSettings;
 
 /**
  * ??????albianj???service??????????????????????????????FreeAlbianService???????
@@ -47,10 +47,13 @@ import org.albianj.kernel.core.AlbianKernel;
  *
  * @author Seapeak
  */
-@AlbianKernel
 public interface IAlbianService {
 
     String FullName = "org.albianj.service.IAlbianService";
+
+    GlobalSettings getSettings();
+
+    void setSettings(GlobalSettings settings);
 
     @AlbianAopAttribute(avoid = true)
     public AlbianServiceLifetime getAlbianServiceState();

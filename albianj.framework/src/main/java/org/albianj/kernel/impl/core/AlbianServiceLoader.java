@@ -8,6 +8,7 @@ import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.*;
 import org.albianj.loader.AlbianClassLoader;
+import org.albianj.loader.GlobalSettings;
 
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class AlbianServiceLoader {
 
     private static String sessionId = "AlbianServiceLoader";
 
-    public static IAlbianService makeupService(IAlbianServiceAttribute serviceAttr,
+    public static IAlbianService makeupService(GlobalSettings settings,IAlbianServiceAttribute serviceAttr,
                                                Map<String, IAlbianServiceAttribute> servAttrs)  {
         String sImplClzz = serviceAttr.getType();
         String id = serviceAttr.getId();
@@ -50,7 +51,8 @@ public class AlbianServiceLoader {
                 }
             }
 
-            IAlbianService service = (IAlbianService) cla.newInstance();
+            IAlbianService service = (IAlbianService) cla.getDeclaredConstructor().newInstance();
+            service.setSettings(settings);
             setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterNew, servAttrs);
             service.beforeLoad();
             setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.BeforeLoading, servAttrs);

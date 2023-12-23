@@ -1,4 +1,4 @@
-package org.albianj.kernel.core;
+package org.albianj.kernel.logger;
 
 
 import lombok.AllArgsConstructor;

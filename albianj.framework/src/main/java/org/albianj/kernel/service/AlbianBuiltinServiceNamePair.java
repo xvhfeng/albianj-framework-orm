@@ -3,7 +3,6 @@ package org.albianj.kernel.service;
 public class AlbianBuiltinServiceNamePair {
 
     public final static String AlbianLoggerServiceName = "AlbianLoggerService";
-//    public final static String AlbianLoggerService2Name = "AlbianLoggerService2";
     public final static String AlbianKernelServiceName = "AlbianKernelService";
     public final static String AlbianLogicIdServiceName = "AlbianLogicIdService";
     public final static String AlbianThreadPoolServiceName = "AlbianThreadPoolService";

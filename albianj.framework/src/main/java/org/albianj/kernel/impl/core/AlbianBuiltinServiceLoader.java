@@ -2,12 +2,13 @@ package org.albianj.kernel.impl.core;
 
 import org.albianj.common.argument.KeyValuePair;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.core.AlbianRuntimeException;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.impl.service.AlbianServiceRantParser;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.*;
 import org.albianj.loader.AlbianClassLoader;
+import org.albianj.loader.GlobalSettings;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -85,7 +86,7 @@ public class AlbianBuiltinServiceLoader {
                         AlbianBuiltinServiceNamePair.AlbianServiceParserPair[1], true));
     }
 
-    public void loadServices(String sessionId)  {
+    public void loadServices(String sessionId, GlobalSettings settings)  {
 
         Map<String,IAlbianServiceAttribute> bltServMap = sacnService(sessionId);
         String id = null;
@@ -112,7 +113,7 @@ public class AlbianBuiltinServiceLoader {
                 id = bltSerAttr.getId();
                 try {
                     IAlbianServiceAttribute attr = bltServMap.get(id);
-                    IAlbianService service = AlbianServiceLoader.makeupService(attr,bltServMap);
+                    IAlbianService service = AlbianServiceLoader.makeupService(settings,attr,bltServMap);
                     ServiceContainer.addService(id, service);
                     bltSerAttr.setLoadOK(true);
                 } catch (Exception e) {
@@ -212,10 +213,10 @@ public class AlbianBuiltinServiceLoader {
      * 单独建立日志service，必须在startup方法的第一条就调用，以便后续启动的时候日志可以记录
      * @throws ClassNotFoundException
      */
-    public void loadLoggerService()  {
+    public void loadLoggerService(GlobalSettings settings)  {
         KeyValuePair<String,IAlbianServiceAttribute>  logServAttr =  sacnService(new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
                                                                     AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[1],true));
-        IAlbianService service = AlbianServiceLoader.makeupService(logServAttr.getValue(),null);
+        IAlbianService service = AlbianServiceLoader.makeupService(settings,logServAttr.getValue(),null);
         ServiceContainer.addService(logServAttr.getKey(), service);
     }
 

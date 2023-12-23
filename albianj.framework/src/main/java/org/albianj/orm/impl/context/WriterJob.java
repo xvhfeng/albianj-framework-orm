@@ -37,14 +37,24 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.*;
+import org.albianj.orm.context.IPersistenceCompensateNotify;
+import org.albianj.orm.context.IPersistenceNotify;
+import org.albianj.orm.context.WriterJobLifeTime;
 
 import java.util.Map;
 
-public class WriterJob implements IWriterJob {
-    private Map<String, IWriterTask> writerTasks = null;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class WriterJob {
+    private Map<String, WriterTask> writerTasks = null;
     private WriterJobLifeTime writerJobLifeTime = WriterJobLifeTime.Normal;
     private IPersistenceCompensateNotify compensateCallback = null;
     private Object compensateCallbackObject = null;
@@ -62,99 +72,5 @@ public class WriterJob implements IWriterJob {
         } else {
             this.id = sessionId;
         }
-    }
-
-    @Override
-    public Object getNotifyCallbackObject() {
-        // TODO Auto-generated method stub
-        return this.notifyCallbackobject;
-    }
-
-    @Override
-    public void setNotifyCallbackObject(Object notifyCallbackObject) {
-        // TODO Auto-generated method stub
-        this.notifyCallbackobject = notifyCallbackObject;
-    }
-
-    public Map<String, IWriterTask> getWriterTasks() {
-        // TODO Auto-generated method stub
-        return this.writerTasks;
-    }
-
-    public void setWriterTasks(Map<String, IWriterTask> writerTasks) {
-        // TODO Auto-generated method stub
-        this.writerTasks = writerTasks;
-    }
-
-    public WriterJobLifeTime getWriterJobLifeTime() {
-        // TODO Auto-generated method stub
-        return this.writerJobLifeTime;
-    }
-
-    public void setWriterJobLifeTime(WriterJobLifeTime writerJobLifeTime) {
-        // TODO Auto-generated method stub
-        this.writerJobLifeTime = writerJobLifeTime;
-    }
-
-    public IPersistenceCompensateNotify getCompensateNotify() {
-        // TODO Auto-generated method stub
-        return this.compensateCallback;
-    }
-
-    public void setCompensateNotify(IPersistenceCompensateNotify compensateCallback) {
-        // TODO Auto-generated method stub
-        this.compensateCallback = compensateCallback;
-    }
-
-    public Object getCompensateCallbackObject() {
-        return this.compensateCallbackObject;
-    }
-
-    public void setCompensateCallbackObject(Object compensateCallbackObject) {
-        this.compensateCallbackObject = compensateCallbackObject;
-    }
-
-    public IPersistenceNotify getNotifyCallback() {
-        return this.notifyCallback;
-    }
-
-    public void setNotifyCallback(IPersistenceNotify notifyCallback) {
-        this.notifyCallback = notifyCallback;
-    }
-
-    public String getCurrentStorage() {
-        return this.currentStorage;
-    }
-
-    public void setCurrentStorage(String currentStorage) {
-        this.currentStorage = currentStorage;
-    }
-
-    @Override
-    public String getId() {
-        // TODO Auto-generated method stub
-        return this.id;
-    }
-
-    @Override
-    public boolean getNeedManualRollbackIfException() {
-        // TODO Auto-generated method stub
-        return needManualRollback;
-    }
-
-    @Override
-    public void setNeedManualRollbackIfException(boolean needManualRollback) {
-        // TODO Auto-generated method stub
-        this.needManualRollback = needManualRollback;
-    }
-
-    @Override
-    public boolean isRollbackOnError() {
-        return this.rollbackOnError;
-    }
-
-    @Override
-    public void setRollbackOnError(boolean rollbackOnError) {
-        this.rollbackOnError = rollbackOnError;
     }
 }

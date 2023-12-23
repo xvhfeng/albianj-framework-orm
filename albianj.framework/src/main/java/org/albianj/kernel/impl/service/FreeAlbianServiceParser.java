@@ -40,10 +40,9 @@ package org.albianj.kernel.impl.service;
 import org.albianj.common.io.Path;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.aop.AlbianAopAttribute;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
-import org.albianj.kernel.core.AlbianRuntimeException;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
@@ -51,7 +50,6 @@ import org.albianj.kernel.service.IAlbianServiceAttribute;
 import org.albianj.kernel.service.IAlbianServiceFieldAttribute;
 import org.albianj.kernel.service.ServiceAttributeMap;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -78,7 +76,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
         Map<String, IAlbianServiceAttribute> map = new LinkedHashMap<>();
         try {
             parserFile(map,
-                    Path.getExtendResourcePath(KernelSetting.getAlbianConfigFilePath()
+                    Path.getExtendResourcePath(getSettings().getConfigPath()
                             + getConfigFileName()));
 
 
@@ -102,7 +100,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
         try {
             String realFilename = findConfigFile(filename);
             //判断fname如果是空，则直接返回不需要进行加载操作。
-            if(StringUtils.isBlank(realFilename)){
+            if(realFilename.isBlank()){
 //                logger.error("loading the service.xml is error. service.xml is not exist");
                 return;
             }

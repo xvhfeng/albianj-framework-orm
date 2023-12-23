@@ -1,4 +1,4 @@
-package org.albianj.kernel.core;
+package org.albianj.kernel;
 
 /**
  * 运行时异常,可处理也可以不处理

@@ -42,14 +42,13 @@ import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
-import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.WriterJobLifeTime;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.orm.impl.context.WriterJob;
 
 public abstract class FreePersistenceTransactionClusterScope implements IPersistenceTransactionClusterScope {
 
 
-    public boolean execute(IWriterJob writerJob)  {
+    public boolean execute(WriterJob writerJob)  {
         boolean isSuccess = true;
         boolean isAutoRollbackSuccess = true;
         boolean isManualRollbackSuccess = true;
@@ -88,7 +87,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                             AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                                     "auto rollback  the job {} is fail.",writerJob.getId());
                         }
-                        if (writerJob.getNeedManualRollbackIfException()) {
+                        if (writerJob.isNeedManualRollback()) {
                             writerJob.setWriterJobLifeTime(WriterJobLifeTime.ManualRollbacking);
                             try {
                                 isManualRollbackSuccess = this.exceptionManualRollback(writerJob);
@@ -113,9 +112,9 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
 
             try {
                 if (!isManualRollbackSuccess) {
-                    if (writerJob.getNeedManualRollbackIfException()) {
+                    if (writerJob.isNeedManualRollback()) {
                         IPersistenceCompensateNotify callback = null;
-                        callback = writerJob.getCompensateNotify();
+                        callback = writerJob.getCompensateCallback();
 
                         if (null == callback) {
                             callback = PersistenceCompensateNotify.getInstance();
@@ -140,7 +139,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                 try {
 
                     writerJob.getNotifyCallback().notice(isSuccess, sbMsg.toString(),
-                            writerJob.getNotifyCallbackObject());
+                            writerJob.getNotifyCallback());
                 } catch (Exception exc) {
                     AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                             " Execute the notice of job {} is fail.",writerJob.getId());
@@ -152,15 +151,15 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
         return isSuccess;
     }
 
-    protected abstract void preExecute(IWriterJob writerJob) ;
+    protected abstract void preExecute(WriterJob writerJob) ;
 
-    protected abstract void executeHandler(IWriterJob writerJob) ;
+    protected abstract void executeHandler(WriterJob writerJob) ;
 
-    protected abstract void commit(IWriterJob writerJob) ;
+    protected abstract void commit(WriterJob writerJob) ;
 
-    protected abstract void exceptionHandler(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract void exceptionHandler(WriterJob writerJob) ;
 
-    protected abstract void unLoadExecute(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract void unLoadExecute(WriterJob writerJob) ;
 
-    protected abstract boolean exceptionManualRollback(IWriterJob writerJob) ;
+    protected abstract boolean exceptionManualRollback(WriterJob writerJob) ;
 }

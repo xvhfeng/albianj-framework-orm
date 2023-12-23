@@ -38,12 +38,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.PersistenceCommandType;
+import org.albianj.orm.impl.context.ReaderJob;
 import org.albianj.orm.object.IAlbianObject;
 
 import java.sql.ResultSet;
@@ -54,7 +54,7 @@ import java.util.List;
 public abstract class FreePersistenceQueryScope implements IPersistenceQueryScope {
 
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     IReaderJob job)  {
+                                                     ReaderJob job)  {
         try {
             perExecute(job);
             executing(job);
@@ -70,7 +70,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
     }
 
     public Object execute(
-            IReaderJob job)  {
+            ReaderJob job)  {
         try {
             perExecute(job);
             executing(job);
@@ -92,7 +92,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
         try {
             result = executing(sessionId, cmdType, statement);
             list = executed(cls, AlbianServiceRouter.make32UUID(), result);
-        } catch (AlbianDataServiceException e) {
+        } catch (AlbianRuntimeException e) {
             AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
@@ -107,17 +107,17 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
         return list;
     }
 
-    protected abstract void perExecute(IReaderJob job) ;
+    protected abstract void perExecute(ReaderJob job) ;
 
-    protected abstract void executing(IReaderJob job) ;
+    protected abstract void executing(ReaderJob job) ;
 
     protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls,
-                                                                  IReaderJob job) ;
+                                                                  ReaderJob job) ;
 
-    protected abstract Object executed(String jobId, IReaderJob job)
+    protected abstract Object executed(String jobId, ReaderJob job)
            ;
 
-    protected abstract void unloadExecute(IReaderJob job) throws AlbianDataServiceException;
+    protected abstract void unloadExecute(ReaderJob job);
 
     protected abstract ResultSet executing(String sessionId, PersistenceCommandType cmdType,
                                            Statement statement) ;

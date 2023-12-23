@@ -35,41 +35,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.orm.db;
+package org.albianj.kernel.service;
 
-import org.albianj.kernel.core.AlbianRuntimeException;
-
-/**
- * albianj存储层异常
- *
- * @author seapeak
- */
-public class AlbianDataServiceException extends AlbianRuntimeException {
-    private static final long serialVersionUID = 671904625520462583L;
-
-    public AlbianDataServiceException() {
-        super();
-    }
-
-    /**
-     * @param msg
-     */
-    public AlbianDataServiceException(String msg) {
-        super(msg);
-    }
-
-    /**
-     * @param msg
-     * @param cause
-     */
-    public AlbianDataServiceException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
-
-    /**
-     * @param cause
-     */
-    public AlbianDataServiceException(Throwable cause) {
-        super(cause);
-    }
+public enum AlbianState {
+    Normal, Initing, Running, Unloading, Unloaded
 }

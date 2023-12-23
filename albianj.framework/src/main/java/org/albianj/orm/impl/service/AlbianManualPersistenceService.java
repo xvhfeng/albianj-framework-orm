@@ -2,8 +2,7 @@ package org.albianj.orm.impl.service;
 
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.IManualCommand;
-import org.albianj.orm.context.IManualContext;
+import org.albianj.orm.context.ManualCommand;
 import org.albianj.orm.impl.context.ManualContext;
 import org.albianj.orm.impl.db.IManualCommandAdapter;
 import org.albianj.orm.impl.db.IManualTransactionScope;
@@ -26,38 +25,38 @@ public class AlbianManualPersistenceService extends FreeAlbianService implements
     }
 
 
-    public int execute(String sessionId, String storageName, String dbName, IManualCommand cmd)  {
-        List<IManualCommand> mcs = new Vector<>();
+    public int execute(String sessionId, String storageName, String dbName, ManualCommand cmd)  {
+        List<ManualCommand> mcs = new Vector<>();
         mcs.add(cmd);
         List<Integer> rcs = execute(sessionId, storageName, dbName, mcs);
         return rcs.get(0);
     }
 
-    public int execute(String sessionId, String storageName, IManualCommand cmd)  {
-        List<IManualCommand> mcs = new Vector<>();
+    public int execute(String sessionId, String storageName, ManualCommand cmd)  {
+        List<ManualCommand> mcs = new Vector<>();
         mcs.add(cmd);
         List<Integer> rcs = execute(sessionId, storageName, null, mcs);
         return rcs.get(0);
     }
 
-    public List<Integer> execute(String sessionId, String storageName, String dbName, List<IManualCommand> cmds)  {
+    public List<Integer> execute(String sessionId, String storageName, String dbName, List<ManualCommand> cmds)  {
 
-        IManualContext mctx = new ManualContext();
+        ManualContext mctx = new ManualContext();
 
 
         mctx.setSessionId(sessionId);
-        mctx.setCommands(cmds);
+        mctx.setCmds(cmds);
 
         IManualCommandAdapter mcd = new ManualCommandAdapter();
         mctx = mcd.createManualCommands(mctx);
 
         IManualTransactionScope mts = new ManualTransactionScope();
         mts.execute(mctx);
-        return mctx.getResults();
+        return mctx.getRcs();
 
     }
 
-    public List<Integer> execute(String sessionId, String storageName, List<IManualCommand> cmds)  {
+    public List<Integer> execute(String sessionId, String storageName, List<ManualCommand> cmds)  {
 
         return execute(sessionId, storageName, null, cmds);
 

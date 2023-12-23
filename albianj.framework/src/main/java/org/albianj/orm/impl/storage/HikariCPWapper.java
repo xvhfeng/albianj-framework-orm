@@ -2,16 +2,11 @@ package org.albianj.orm.impl.storage;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.albianj.kernel.core.AlbianLevel;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
-
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -62,21 +57,23 @@ public class HikariCPWapper extends FreeDataBasePool {
                     .generateConnectionUrl(rsa);
             config.setDriverClassName(DRIVER_CLASSNAME);
             config.setJdbcUrl(url);
-            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
-                config.setUsername(storageAttribute.getUser());
-                config.setPassword(storageAttribute.getPassword());
-            } else {
-                IAlbianSecurityService ass = AlbianServiceRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
-                if (null != ass) {
-                    config.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
-                    config.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
-                } else {
-                    config.setUsername(storageAttribute.getUser());
-                    config.setPassword(storageAttribute.getPassword());
-                    throw new AlbianDataServiceException(
-                        "the run level is release in the kernel config but security is null,so not use security service.");
-                }
-            }
+            config.setUsername(storageAttribute.getUser());
+            config.setPassword(storageAttribute.getPassword());
+
+//            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
+//
+//            } else {
+//                IAlbianSecurityService ass = AlbianServiceRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
+//                if (null != ass) {
+//                    config.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
+//                    config.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
+//                } else {
+//                    config.setUsername(storageAttribute.getUser());
+//                    config.setPassword(storageAttribute.getPassword());
+//                    throw new AlbianRuntimeException(
+//                        "the run level is release in the kernel config but security is null,so not use security service.");
+//                }
+//            }
             config.setAutoCommit(false);
             config.setReadOnly(false);
             //            config.setTransactionIsolation(storageAttribute.getTransactionLevel());

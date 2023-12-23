@@ -38,9 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.orm.context.IInternalManualCommand;
-import org.albianj.orm.context.IManualCommand;
 import org.albianj.orm.context.InternalManualCommand;
+import org.albianj.orm.context.ManualCommand;
 import org.albianj.orm.db.IPersistenceCommand;
 
 import java.util.HashMap;
@@ -84,10 +83,10 @@ public class PersistenceNamedParameter {
         return;
     }
 
-    public static IInternalManualCommand parseSql(IManualCommand cmd) {
+    public static InternalManualCommand parseSql(ManualCommand cmd) {
         String regex = "#\\w+#";// insert into tablename(col1,col2) values(
         // #col1#,#col2#)
-        String cmdText = cmd.getCommandText();
+        String cmdText = cmd.getCmdText();
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(cmdText);
         Map<Integer, String> paramsMap = new HashMap<Integer, String>();
@@ -97,7 +96,7 @@ public class PersistenceNamedParameter {
             paramsMap.put(idx++, m.group());
         }
         cmdText = cmdText.replaceAll(regex, "?");
-        IInternalManualCommand imc = new InternalManualCommand();
+        InternalManualCommand imc = new InternalManualCommand();
         imc.setParameterMapper(paramsMap);
         imc.setSqlText(cmdText);
 

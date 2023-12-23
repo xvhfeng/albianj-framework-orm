@@ -37,11 +37,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
-import org.albianj.kernel.core.*;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.*;
+import org.albianj.loader.GlobalSettings;
 import org.albianj.loader.IAlbianTransmitterService;
 
 import java.util.*;
@@ -49,7 +50,6 @@ import java.util.*;
 /**
  * @author Seapeak
  */
-@AlbianKernel
 public class AlbianTransmitterService implements IAlbianTransmitterService {
 
     private static AlbianState state = AlbianState.Normal;
@@ -87,41 +87,29 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String)
      */
     @Override
-    public void start(String configUrl)  {
-        makeEnvironment();
-        KernelSetting.setAlbianConfigFilePath(configUrl);
-        start();
+    public void start(GlobalSettings settings)  {
+        this.settings =  settings;
+        lunch(this.settings);
     }
 
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void start(String kernelpath, String configPath)  {
-        makeEnvironment();
-        KernelSetting.setAlbianConfigFilePath(configPath);
-        KernelSetting.setAlbianKernelConfigFilePath(kernelpath);
-        start();
-    }
+    private GlobalSettings settings;
 
-    @Override
-    public void start()  {
-        makeEnvironment();
-        startDateTime = new Date();
-        doStart();
-    }
+//    @Override
+//    public GlobalSettings getGlobalSettings() {
+//        return this.settings;
+//    }
 
-    public void doStart()  {
+    public void lunch(GlobalSettings settings)  {
 
         // first load logger
         // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
         AlbianBuiltinServiceLoader bltSevLoader = new AlbianBuiltinServiceLoader();
-        bltSevLoader.loadLoggerService();
+        bltSevLoader.loadLoggerService(settings);
 
         // 从这里以后，就可以正常使用log了，前面的logger自行处理，但是一般不需要任何的处理
 
         // do load builtin service
-        bltSevLoader.loadServices(AlbianServiceRouter.__StartupSessionId);
+        bltSevLoader.loadServices(AlbianServiceRouter.__StartupSessionId,settings);
         Map<String, IAlbianServiceAttribute> bltSrvAttrs = bltSevLoader.getBltSrvAttrs();
 
         //do load bussiness service
@@ -151,7 +139,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             for (Map.Entry<String, IAlbianServiceAttribute> entry : mapAttr.entrySet())
                 try {
                     IAlbianServiceAttribute serviceAttr = entry.getValue();
-                    IAlbianService service = AlbianServiceLoader.makeupService(serviceAttr, mapAttr);
+                    IAlbianService service = AlbianServiceLoader.makeupService(settings,serviceAttr, mapAttr);
                     ServiceContainer.addService(serviceAttr.getId(), service);
                 } catch (Exception exc) {
                     e = exc;
@@ -247,15 +235,15 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
     /* (non-Javadoc)
      * @see org.albianj.kernel.impl.IAlbianBootService#makeEnvironment()
      */
-    @Override
-    public void makeEnvironment() {
-        String system = System.getProperty("os.name");
-        if (system.toLowerCase().contains("windows"))// start with '/'
-        {
-            KernelSetting.setSystem(KernelSetting.Windows);
-        } else {
-            KernelSetting.setSystem(KernelSetting.Linux);
-        }
-    }
+//    @Override
+//    public void makeEnvironment() {
+//        String system = System.getProperty("os.name");
+//        if (system.toLowerCase().contains("windows"))// start with '/'
+//        {
+//            KernelSetting.setSystem(KernelSetting.Windows);
+//        } else {
+//            KernelSetting.setSystem(KernelSetting.Linux);
+//        }
+//    }
 
 }

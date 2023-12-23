@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 
-import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.PersistenceCommandType;
+import org.albianj.orm.impl.context.ReaderJob;
 import org.albianj.orm.object.IAlbianObject;
 
 import java.sql.Statement;
@@ -47,11 +47,11 @@ import java.util.List;
 
 public interface IPersistenceQueryScope {
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     IReaderJob job) ;
+                                                     ReaderJob job) ;
 
     public <T extends IAlbianObject> List<T> execute(String sessionId, Class<T> cls,
                                                      PersistenceCommandType cmdType, Statement statement) ;
 
     public Object execute(
-            IReaderJob job) ;
+            ReaderJob job) ;
 }

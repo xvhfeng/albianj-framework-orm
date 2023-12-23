@@ -1,10 +1,9 @@
 package org.albianj.orm.impl.context.dactx;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.orm.context.IReaderJob;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.context.dactx.IQueryContext;
-import org.albianj.orm.db.AlbianDataServiceException;
-import org.albianj.orm.impl.context.IReaderJobAdapter;
+import org.albianj.orm.impl.context.ReaderJob;
 import org.albianj.orm.impl.context.ReaderJobAdapter;
 import org.albianj.orm.impl.db.IPersistenceQueryScope;
 import org.albianj.orm.impl.db.PersistenceQueryScope;
@@ -82,15 +81,15 @@ public class QueryContext implements IQueryContext {
         this.wheres = wheres;
 
         if (!CheckUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) || !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
-            throw new AlbianDataServiceException("drouterAlias is not coexist with storageAlias or tableAlias.");
+            throw new AlbianRuntimeException("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
         if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) && !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
-            throw new AlbianDataServiceException("tableAlias exist but storageAlias is not exist.");
+            throw new AlbianRuntimeException("tableAlias exist but storageAlias is not exist.");
         }
 
-        IReaderJobAdapter ad = new ReaderJobAdapter();
+        ReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
-        IReaderJob job = ad.buildReaderJob(sessionId, itfClzz, loadType == LoadType.exact, this.storageAlias, this.tableAlias, this.drouterAlias, start, pagesize,
+        ReaderJob job = ad.buildReaderJob(sessionId, itfClzz, loadType == LoadType.exact, this.storageAlias, this.tableAlias, this.drouterAlias, start, pagesize,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         list = scope.execute(itfClzz, job);
@@ -103,14 +102,14 @@ public class QueryContext implements IQueryContext {
         this.wheres = wheres;
 
         if (!CheckUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) || !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
-            throw new AlbianDataServiceException("drouterAlias is not coexist with storageAlias or tableAlias.");
+            throw new AlbianRuntimeException("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
         if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias) && !CheckUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
-            throw new AlbianDataServiceException("tableAlias exist but storageAlias is not exist.");
+            throw new AlbianRuntimeException("tableAlias exist but storageAlias is not exist.");
         }
 
-        IReaderJobAdapter ad = new ReaderJobAdapter();
-        IReaderJob job = ad.buildReaderJob(sessionId, itfClzz, loadType == LoadType.exact, this.storageAlias, this.tableAlias, this.drouterAlias,
+        ReaderJobAdapter ad = new ReaderJobAdapter();
+        ReaderJob job = ad.buildReaderJob(sessionId, itfClzz, loadType == LoadType.exact, this.storageAlias, this.tableAlias, this.drouterAlias,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         Object count = scope.execute(job);

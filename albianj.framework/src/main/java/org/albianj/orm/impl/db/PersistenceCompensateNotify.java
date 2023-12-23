@@ -38,13 +38,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
-import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.context.IWriterTask;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.orm.impl.context.WriterJob;
+import org.albianj.orm.impl.context.WriterTask;
 
 import java.util.Map;
 
@@ -61,12 +61,12 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
     }
 
     @Override
-    public void send(boolean isAutoRollbackSuccess, boolean isManualRollbackSuccess, IWriterJob job) {
+    public void send(boolean isAutoRollbackSuccess, boolean isManualRollbackSuccess, WriterJob job) {
         StringBuilder sb = null;
 
         try {
             sb = writerJobCommandToString(job);
-        } catch (AlbianDataServiceException e) {
+        } catch (AlbianRuntimeException e) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "jon {} send persistence notify is fail.",job.getId());
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
@@ -74,16 +74,16 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
         }
     }
 
-    public StringBuilder writerJobCommandToString(IWriterJob writerJob) throws AlbianDataServiceException {
+    public StringBuilder writerJobCommandToString(WriterJob writerJob)  {
         StringBuilder sb = new StringBuilder();
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
 
         //  z这段没啥用处
-//        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-//            IWriterTask t = task.getValue();
+//        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+//            WriterTask t = task.getValue();
 //            writerJob.setCurrentStorage(task.getKey());
 //            List<Statement> statements = t.getStatements();
 //            List<IPersistenceCommand> cmds = t.getCommands();

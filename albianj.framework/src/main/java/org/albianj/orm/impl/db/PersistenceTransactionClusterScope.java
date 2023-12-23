@@ -38,18 +38,18 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.context.IWriterTask;
 import org.albianj.orm.context.PersistenceStatement;
 import org.albianj.orm.context.WriterJobLifeTime;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.localize.IDBClientSection;
+import org.albianj.orm.impl.context.WriterJob;
+import org.albianj.orm.impl.context.WriterTask;
 import org.albianj.orm.impl.toolkit.ListConvert;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
@@ -63,26 +63,26 @@ import java.util.*;
 public class PersistenceTransactionClusterScope extends FreePersistenceTransactionClusterScope
     implements IPersistenceTransactionClusterScope {
 
-    protected void preExecute(IWriterJob writerJob)  {
+    protected void preExecute(WriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Opening);
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
-            throw new AlbianDataServiceException("the task for the job is null or empty.");
+            throw new AlbianRuntimeException("the task for the job is null or empty.");
         }
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
             writerJob.setCurrentStorage(task.getKey());
-            IWriterTask t = task.getValue();
-            IRunningStorageAttribute rsa = t.getStorage();
+            WriterTask t = task.getValue();
+            IRunningStorageAttribute rsa = t.getStorageSAttr();
             IStorageAttribute storage = rsa.getStorageAttribute();
-            IDBClientSection dbClientSection = t.getClientSection();
+            IDBClientSection dbClientSection = t.getDbClientSection();
             if (null == storage) {
-                throw new AlbianDataServiceException("The storage for task is null.");
+                throw new AlbianRuntimeException("The storage for task is null.");
             }
             try {
                 IAlbianStorageParserService asps = AlbianServiceRouter.getService(writerJob.getId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
                 IDataBasePool dbp = asps.getDatabasePool(writerJob.getId(), rsa);
-                t.setDatabasePool(dbp);
+                t.setPool(dbp);
                 t.setConnection(asps.getConnection(writerJob.getId(), dbp, rsa,false));
             } catch (Exception e) {
                 AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,
@@ -91,7 +91,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             }
             List<IPersistenceCommand> cmds = t.getCommands();
             if (CheckUtil.isNullOrEmpty(cmds)) {
-                throw new AlbianDataServiceException("The commands for task is empty or null");
+                throw new AlbianRuntimeException("The commands for task is empty or null");
             }
 
             Map<String, PersistenceStatement> psMap = new LinkedHashMap<>();
@@ -205,7 +205,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 //                    t.setBatchStmt(batchStmt);
 //                    t.setBatchSqlText(sqlTexts);
 //                } catch (SQLException e) {
-//                    throw new AlbianDataServiceException("make sql command for task is empty or null", e);
+//                    throw new AlbianRuntimeException("make sql command for task is empty or null", e);
 //                }
 //            } else {
 //                List<Statement> statements = new Vector<Statement>();
@@ -231,23 +231,23 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 //                        statements.add(prepareStatement);
 //                    }
 //                } catch (SQLException e) {
-//                    throw new AlbianDataServiceException("make sql command for task is empty or null", e);
+//                    throw new AlbianRuntimeException("make sql command for task is empty or null", e);
 //                }
 //                t.setStatements(statements);
 //            }
         }
     }
 
-    protected void executeHandler(IWriterJob writerJob)  {
+    protected void executeHandler(WriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Running);
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
-            throw new AlbianDataServiceException("The task is null or empty.");
+            throw new AlbianRuntimeException("The task is null or empty.");
         }
 
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             writerJob.setCurrentStorage(task.getKey());
 
             List<IPersistenceCommand> cmds = t.getCommands();
@@ -270,7 +270,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         ((PreparedStatement) ps.getStatement()).executeUpdate();
                     }
                 }  catch (SQLException e) {
-                IRunningStorageAttribute rsa = t.getStorage();
+                IRunningStorageAttribute rsa = t.getStorageSAttr();
                     AlbianServiceRouter.logAndThrowAgain(writerJob.getId(),LogTarget.Running,LogLevel.Error,e,
                             "commit to storage:{}  database: {} is fail.",
                             rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
@@ -292,7 +292,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 //                    batchStmt.clearBatch();
 //                } catch (SQLException e) {
 //                    IRunningStorageAttribute rsa = t.getStorage();
-//                    throw new AlbianDataServiceException(
+//                    throw new AlbianRuntimeException(
 //                            "execute to storage:" + rsa.getStorageAttribute().getName() + " dtabase:" + rsa.getDatabase()
 //                                    + " is fail.", e);
 //                }
@@ -307,7 +307,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 //                        ((PreparedStatement)statements.get(i)).executeUpdate();
 //                    } catch (SQLException e) {
 //                        IRunningStorageAttribute rsa = t.getStorage();
-//                        throw new AlbianDataServiceException(
+//                        throw new AlbianRuntimeException(
 //                                "execute to storage:" + rsa.getStorageAttribute().getName() + " dtabase:" + rsa.getDatabase()
 //                                        + " is fail.", e);
 //                    }
@@ -316,21 +316,21 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
         }
     }
 
-    protected void commit(IWriterJob writerJob)  {
+    protected void commit(WriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Commiting);
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
-            throw new AlbianDataServiceException("The task is null or empty.");
+            throw new AlbianRuntimeException("The task is null or empty.");
         }
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             try {
                 writerJob.setCurrentStorage(task.getKey());
                 t.getConnection().commit();
-                t.setIsCommited(true);
-                writerJob.setNeedManualRollbackIfException(true);
+                t.setBatchSubmit(true);
+                writerJob.setNeedManualRollback(true);
             } catch (SQLException e) {
-                IRunningStorageAttribute rsa = t.getStorage();
+                IRunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.logAndThrowAgain(writerJob.getId(),LogTarget.Running,LogLevel.Error,e,
                     "commit to storage:{}  database: {} is fail.",
                         rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
@@ -338,20 +338,20 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
         }
     }
 
-    protected void exceptionHandler(IWriterJob writerJob) throws AlbianDataServiceException {
+    protected void exceptionHandler(WriterJob writerJob)  {
         boolean isThrow = false;
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
-            throw new AlbianDataServiceException("The task is null or empty.");
+            throw new AlbianRuntimeException("The task is null or empty.");
         }
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             try {
-                if (!t.getIsCommited()) {
+                if (!t.isCommited()) {
                     t.getConnection().rollback();
                 }
             } catch (Exception e) {
-                IRunningStorageAttribute rsa = t.getStorage();
+                IRunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,
                         "rollback to storage:{} database:{} is error.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());
@@ -359,10 +359,10 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             }
         }
         if (isThrow)
-            throw new AlbianDataServiceException("DataService is error.");
+            throw new AlbianRuntimeException("DataService is error.");
     }
 
-    protected boolean exceptionManualRollback(IWriterJob writerJob)  {
+    protected boolean exceptionManualRollback(WriterJob writerJob)  {
         try {
             manualRollbackPreExecute(writerJob);
             manualRollbackExecuteHandler(writerJob);
@@ -376,14 +376,14 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     }
 
 
-    protected void unLoadExecute(IWriterJob writerJob) throws AlbianDataServiceException {
+    protected void unLoadExecute(WriterJob writerJob)  {
         boolean isThrow = false;
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
-            throw new AlbianDataServiceException("The task is null or empty.");
+            throw new AlbianRuntimeException("The task is null or empty.");
         }
-        IWriterTask t = null;
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
+        WriterTask t = null;
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
             try {
                 t = task.getValue();
                 Map<String,PersistenceStatement> psMap =  t.getStatements();
@@ -391,13 +391,13 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 for (PersistenceStatement ps: psMap.values()) {
                     sts.add(ps.getStatement());
                 }
-                IRunningStorageAttribute rsa = t.getStorage();
-                IDataBasePool dbp = t.getDatabasePool();
+                IRunningStorageAttribute rsa = t.getStorageSAttr();
+                IDataBasePool dbp = t.getPool();
                 dbp.returnConnection(writerJob.getId(), rsa.getStorageAttribute().getName(), rsa.getDatabase(),
                         t.getConnection(), sts);
             }catch (Exception e){
                 isThrow = true;
-                IRunningStorageAttribute rsa = t.getStorage();
+                IRunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                         "close the connect to storage:{} database:{} is fail.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());
@@ -408,19 +408,19 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     }
 
 
-    private void manualRollbackPreExecute(IWriterJob writerJob)  {
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+    private void manualRollbackPreExecute(WriterJob writerJob)  {
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
-            throw new AlbianDataServiceException("the task for the job is null or empty when manual rollbacking.");
+            throw new AlbianRuntimeException("the task for the job is null or empty when manual rollbacking.");
         }
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
-            if (!t.getIsCommited()) continue;// not commit then use auto rollback
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
+            if (!t.isCommited()) continue;// not commit then use auto rollback
 
             List<IPersistenceCommand> cmds = t.getCommands();
             if (CheckUtil.isNullOrEmpty(cmds)) {
-                throw new AlbianDataServiceException("The commands for task is empty or null when manual rollbacking.");
+                throw new AlbianRuntimeException("The commands for task is empty or null when manual rollbacking.");
             }
             List<Statement> statements = new Vector<Statement>();
             List<IPersistenceCommand> rbkCmds = new Vector<>();
@@ -453,25 +453,25 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             }
             if (!CheckUtil.isNullOrEmpty(statements)) {
                 t.setRollbackStatements(statements);
-                t.setRollbackCommands(rbkCmds);
+                t.setRbkCmds(rbkCmds);
                 t.setCompensating(true);
             }
         }
     }
 
-    private void manualRollbackExecuteHandler(IWriterJob writerJob)  {
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+    private void manualRollbackExecuteHandler(WriterJob writerJob)  {
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
-            throw new AlbianDataServiceException("The task is null or empty.");
+            throw new AlbianRuntimeException("The task is null or empty.");
         }
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
-            if (!t.getIsCommited()) continue;
-            if (!t.getCompensating()) continue;
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
+            if (!t.isCommited()) continue;
+            if (!t.isCompensating()) continue;
 
             List<Statement> statements = t.getRollbackStatements();
-            List<IPersistenceCommand> cmds = t.getRollbackCommands();
+            List<IPersistenceCommand> cmds = t.getRbkCmds();
             if (CheckUtil.isNullOrEmpty(statements)) continue;
             ;
             for (int i = 0; i < statements.size(); i++) {
@@ -482,7 +482,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         cmd.getRollbackCommandText(), ListConvert.toString(cmd.getRollbackParameters()));
                     ((PreparedStatement)statements.get(i)).executeUpdate();
                 } catch (SQLException e) {
-                    IRunningStorageAttribute rsa = t.getStorage();
+                    IRunningStorageAttribute rsa = t.getStorageSAttr();
                     AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
                         "execute to storage:{} database:{} is error when manual rollbacking.",
                             rsa.getStorageAttribute().getName(), rsa.getDatabase());
@@ -491,20 +491,20 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
         }
     }
 
-    private void manualRollbackCommit(IWriterJob writerJob)  {
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+    private void manualRollbackCommit(WriterJob writerJob)  {
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (CheckUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
-            if (!t.getIsCommited()) continue;
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
+            if (!t.isCommited()) continue;
             try {
-                if (t.getCompensating()) {
+                if (t.isCompensating()) {
                     t.getConnection().commit();
                 }
             } catch (SQLException e) {
-                IRunningStorageAttribute rsa = t.getStorage();
+                IRunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
                         "commit to storage:{} database:{} is error when manual rollbacking.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());

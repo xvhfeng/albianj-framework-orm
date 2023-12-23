@@ -1,14 +1,12 @@
 package org.albianj.orm.impl.context.dactx;
 
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
-import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.dactx.AlbianObjectWarp;
-import org.albianj.orm.context.dactx.IAlbianObjectWarp;
 import org.albianj.orm.context.dactx.IDataAccessContext;
-import org.albianj.orm.db.AlbianDataServiceException;
-import org.albianj.orm.impl.context.IWriterJobAdapter;
+import org.albianj.orm.impl.context.WriterJob;
 import org.albianj.orm.impl.context.WriterJobAdapter;
 import org.albianj.orm.impl.db.IPersistenceTransactionClusterScope;
 import org.albianj.orm.impl.db.PersistenceTransactionClusterScope;
@@ -18,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataAccessContext implements IDataAccessContext {
-    List<IAlbianObjectWarp> entitis = null;
+    List<AlbianObjectWarp> entitis = null;
     private boolean isSetQueryIdentity = false;
     private IPersistenceNotify notifyCallback;
     private Object notifyCallbackObject;
@@ -33,7 +31,7 @@ public class DataAccessContext implements IDataAccessContext {
      @Override
      public IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity) {
         entity.forEach(e -> {
-            IAlbianObjectWarp warp = new AlbianObjectWarp();
+            AlbianObjectWarp warp = new AlbianObjectWarp();
             warp.setEntry(e);
             warp.setPersistenceOpt(opt);
             entitis.add(warp);
@@ -45,7 +43,7 @@ public class DataAccessContext implements IDataAccessContext {
     @Override
     public IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias) {
          entity.forEach(e -> {
-            IAlbianObjectWarp warp = new AlbianObjectWarp();
+             AlbianObjectWarp warp = new AlbianObjectWarp();
             warp.setEntry(e);
             warp.setPersistenceOpt(opt);
              warp.setStorageAliasName(storageAlias);
@@ -57,7 +55,7 @@ public class DataAccessContext implements IDataAccessContext {
     @Override
     public IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias, String tableAlias) {
         entity.forEach(e -> {
-            IAlbianObjectWarp warp = new AlbianObjectWarp();
+            AlbianObjectWarp warp = new AlbianObjectWarp();
             warp.setEntry(e);
             warp.setPersistenceOpt(opt);
              warp.setStorageAliasName(storageAlias);
@@ -69,7 +67,7 @@ public class DataAccessContext implements IDataAccessContext {
 
     @Override
     public IDataAccessContext add(int opt, IAlbianObject entity) {
-        IAlbianObjectWarp warp = new AlbianObjectWarp();
+        AlbianObjectWarp warp = new AlbianObjectWarp();
         warp.setEntry(entity);
         warp.setPersistenceOpt(opt);
         entitis.add(warp);
@@ -78,7 +76,7 @@ public class DataAccessContext implements IDataAccessContext {
 
     @Override
     public IDataAccessContext add(int opt, IAlbianObject entity, String storageAlias) {
-        IAlbianObjectWarp warp = new AlbianObjectWarp();
+        AlbianObjectWarp warp = new AlbianObjectWarp();
         warp.setEntry(entity);
         warp.setPersistenceOpt(opt);
         warp.setStorageAliasName(storageAlias);
@@ -89,7 +87,7 @@ public class DataAccessContext implements IDataAccessContext {
 
     @Override
     public IDataAccessContext add(int opt, IAlbianObject entity, String storageAlias, String tableAlias) {
-        IAlbianObjectWarp warp = new AlbianObjectWarp();
+        AlbianObjectWarp warp = new AlbianObjectWarp();
         warp.setEntry(entity);
         warp.setPersistenceOpt(opt);
         warp.setStorageAliasName(storageAlias);
@@ -101,7 +99,7 @@ public class DataAccessContext implements IDataAccessContext {
 
     public IDataAccessContext withQueryGenKey() {
         if (this.isSetQueryIdentity) {
-            throw new AlbianDataServiceException("da-ctx exist query auto genkey");
+            throw new AlbianRuntimeException("da-ctx exist query auto genkey");
         }
         entitis.get(entitis.size() - 1).setQueryIdentitry(true);
         this.isSetQueryIdentity = true;
@@ -128,8 +126,8 @@ public class DataAccessContext implements IDataAccessContext {
 
     @Override
     public boolean commit(String sessionId)  {
-        IWriterJobAdapter jobAdp = new WriterJobAdapter();
-        IWriterJob job = jobAdp.buildWriterJob(sessionId, this.entitis, this.rbkOnErr);
+        WriterJobAdapter jobAdp = new WriterJobAdapter();
+        WriterJob job = jobAdp.buildWriterJob(sessionId, this.entitis, this.rbkOnErr);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
         return tcs.execute(job);
     }

@@ -5,12 +5,12 @@
     <parent>
         <artifactId>albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>10009-dev</version>
+        <version>03-delete-dataclass-interface</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework.test</artifactId>
-    <version>10009-dev</version>
+    <version>03-delete-dataclass-interface</version>
     <dependencies>
 
         <dependency>
@@ -24,6 +24,4 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
-
-
 </project>

@@ -4,8 +4,8 @@ package org.albianj.orm.impl.db;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IManualContext;
 import org.albianj.orm.context.WriterJobLifeTime;
+import org.albianj.orm.impl.context.ManualContext;
 
 /**
  * Created by xuhaifeng on 17/9/1.
@@ -13,7 +13,7 @@ import org.albianj.orm.context.WriterJobLifeTime;
 public abstract class FreeManualTransactionScope implements IManualTransactionScope {
 
 
-    public boolean execute(IManualContext mctx)  {
+    public boolean execute(ManualContext mctx)  {
         boolean isSuccess = true;
         try {
             mctx.setLifeTime(WriterJobLifeTime.NoStarted);
@@ -71,15 +71,15 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
     }
 
 
-    protected abstract void preExecute(IManualContext mctx) ;
+    protected abstract void preExecute(ManualContext mctx) ;
 
-    protected abstract void executeHandler(IManualContext mctx) ;
+    protected abstract void executeHandler(ManualContext mctx) ;
 
-    protected abstract void commit(IManualContext mctx) ;
+    protected abstract void commit(ManualContext mctx) ;
 
-    protected abstract void exceptionHandler(IManualContext mctx) ;
+    protected abstract void exceptionHandler(ManualContext mctx) ;
 
-    protected abstract void unLoadExecute(IManualContext mctx) ;
+    protected abstract void unLoadExecute(ManualContext mctx) ;
 
 
 }

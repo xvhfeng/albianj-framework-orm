@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
@@ -53,7 +53,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
 
     public static Map<String, ISqlParameter> makeRemoveCommand(String sessionId, int dbStyle, String tableName,
                                                                IAlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
-                                                               StringBuilder sqlText) throws AlbianDataServiceException {
+                                                               StringBuilder sqlText)  {
         StringBuilder where = new StringBuilder();
         sqlText.append("DELETE FROM ");// .append(routing.getTableName());
         if (PersistenceDatabaseStyle.MySql == dbStyle) {
@@ -89,7 +89,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
         }
 
         if (0 == where.length()) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "the albianj object can not be delete .there is not PrimaryKey in the object.");
         }
 
@@ -98,7 +98,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
     }
 
     public IPersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError) throws AlbianDataServiceException {
+                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  {
         IPersistenceCommand cmd = new PersistenceCommand();
         StringBuilder sqlText = new StringBuilder();
 

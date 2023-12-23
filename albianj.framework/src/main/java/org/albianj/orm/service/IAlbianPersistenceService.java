@@ -41,7 +41,6 @@ import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IFilterCondition;
@@ -105,7 +104,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param object    需要删除的对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean remove(String sessionId, IAlbianObject object) ;
 
@@ -123,7 +122,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
@@ -139,7 +138,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param objects   需要删除的对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects) ;
 
@@ -157,7 +156,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
@@ -176,7 +175,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId essionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param object    需要保存的对象
      * @return 是否保存成功
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean save(String sessionId, IAlbianObject object) ;
 
@@ -196,7 +195,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean save(String sessionId, IAlbianObject object,
                  IPersistenceNotify notifyCallback, Object notifyCallbackObject,
@@ -215,7 +214,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId essionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param objects   需要保存的对象
      * @return 是否保存成功
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects) ;
 
@@ -235,7 +234,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
+     * @
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                  Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
@@ -249,7 +248,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param loadType  加载的方式
      * @param wheres    过滤条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
             ;
@@ -263,7 +262,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param rountingName 指定加载的数据路由
      * @param wheres       过滤条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, LoadType loadType, String rountingName, IChainExpression wheres)
             ;
@@ -281,7 +280,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param cmdType   执行命令的类型
      * @param statement 执行命令的语句
      * @return 加载的数据
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
                                            Statement statement) ;
@@ -294,7 +293,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param loadType  加载的方式
      * @param wheres    过滤条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
             ;
@@ -309,7 +308,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param f            过滤条件
      * @param orderbys     排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   IChainExpression f, LinkedList<IOrderByCondition> orderbys)
@@ -324,7 +323,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param f         过滤条件
      * @param orderbys  排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   IChainExpression f, LinkedList<IOrderByCondition> orderbys)
@@ -343,7 +342,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param cmdType   执行命令的类型
      * @param statement 执行命令的语句
      * @return 加载的数据
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
                                                   Statement statement) ;
@@ -358,7 +357,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param step      加载的数量
      * @param wheres    过滤条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, IChainExpression f)
@@ -375,7 +374,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param wheres    过滤条件
      * @param orderbys  排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType,
                                                   int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
@@ -393,7 +392,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param wheres       过滤条件
      * @param orderbys     排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, LoadType loadType, String rountingName,
                                                   int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
@@ -407,7 +406,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param loadType  加载的方式
      * @param wheres    过滤条件
      * @return 满足条件的对象数量
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType, IChainExpression wheres)
             ;
@@ -421,7 +420,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param rountingName 指定的加载路由
      * @param wheres       过滤条件
      * @return 满足条件的对象数量
-     * @throws AlbianDataServiceException
+     * @
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, LoadType loadType,
                                                     String rountingName, IChainExpression wheres)
@@ -478,7 +477,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId
      * @param object
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean create(String sessionId, IAlbianObject object) ;
@@ -491,7 +490,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback
      * @param compensateCallbackObject
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean create(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
@@ -502,7 +501,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId
      * @param objects
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean create(String sessionId, List<? extends IAlbianObject> objects) ;
@@ -515,7 +514,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback
      * @param compensateCallbackObject
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean create(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
@@ -526,7 +525,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId
      * @param object
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean modify(String sessionId, IAlbianObject object) ;
@@ -539,7 +538,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback
      * @param compensateCallbackObject
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean modify(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
@@ -550,7 +549,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param sessionId
      * @param objects
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean modify(String sessionId, List<? extends IAlbianObject> objects) ;
@@ -563,7 +562,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallback
      * @param compensateCallbackObject
      * @return
-     * @throws AlbianDataServiceException
+     * @
      */
     @Deprecated
     boolean modify(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,

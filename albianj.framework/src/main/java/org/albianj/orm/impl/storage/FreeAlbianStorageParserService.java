@@ -39,12 +39,11 @@ package org.albianj.orm.impl.storage;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.kernel.service.parser.AlbianParserException;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
 import org.albianj.orm.object.PersistenceDatabaseStyle;
@@ -145,7 +144,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     "loading the storage.xml is error.");
         }
         if (null == doc) {
-            throw new AlbianDataServiceException("loading the storage.xml is error.");
+            throw new AlbianRuntimeException("loading the storage.xml is error.");
         }
 
         @SuppressWarnings("rawtypes")
@@ -162,7 +161,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         @SuppressWarnings("rawtypes")
         List objNodes = XmlUtil.selectNodes(doc, tagName);
         if (CheckUtil.isNullOrEmpty(objNodes)) {
-            throw new AlbianDataServiceException("parser the node tags:" + tagName
+            throw new AlbianRuntimeException("parser the node tags:" + tagName
                 + " in the storage.xml is error. the node of the tags is null or empty.");
         }
         parserStorages(objNodes);
@@ -170,8 +169,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     }
 
     protected abstract void parserStorages(
-            @SuppressWarnings("rawtypes") List nodes)
-            throws AlbianParserException;
+            @SuppressWarnings("rawtypes") List nodes);
 
     protected abstract IStorageAttribute parserStorage(Element node);
 

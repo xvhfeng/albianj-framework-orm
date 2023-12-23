@@ -39,10 +39,9 @@ package org.albianj.kernel.service;
 
 import org.albianj.common.io.Path;
 import org.albianj.kernel.aop.AlbianAopAttribute;
-import org.albianj.kernel.core.AlbianKernel;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
+import org.albianj.loader.GlobalSettings;
 
 import java.io.File;
 
@@ -51,11 +50,23 @@ import java.io.File;
  *
  * @author Seapeak
  */
-@AlbianKernel
 public abstract class FreeAlbianService implements IAlbianService {
 
     boolean enableProxy = false;
     IAlbianService service = null;
+
+    @Override
+    public GlobalSettings getSettings() {
+        return settings;
+    }
+
+    @Override
+    public void setSettings(GlobalSettings settings) {
+        this.settings = settings;
+    }
+
+    GlobalSettings settings;
+
     private AlbianServiceLifetime state = AlbianServiceLifetime.Normal;
 
     @AlbianAopAttribute(avoid = true)
@@ -65,7 +76,7 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void beforeLoad() throws AlbianServiceException {
+    public void beforeLoad() {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.BeforeLoading;
     }
@@ -77,26 +88,26 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void afterLoading() throws AlbianServiceException {
+    public void afterLoading()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Running;
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void beforeUnload() throws AlbianServiceException {
+    public void beforeUnload()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.BeforeUnloading;
 
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void unload() throws AlbianServiceException {
+    public void unload()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Unloading;
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void afterUnload() throws AlbianServiceException {
+    public void afterUnload()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Unloaded;
     }
@@ -152,11 +163,11 @@ public abstract class FreeAlbianService implements IAlbianService {
         return super.toString();
     }
 
-    @Override
-    @AlbianAopAttribute(avoid = true)
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
+//    @Override
+//    @AlbianAopAttribute(avoid = true)
+//    protected void finalize() throws Throwable {
+//        super.finalize();
+//    }
 
 
     /**
@@ -173,7 +184,7 @@ public abstract class FreeAlbianService implements IAlbianService {
             if (f.exists()){
                 return filename;
             }
-            String fname = Path.getExtendResourcePath(KernelSetting.getAlbianConfigFilePath() + filename);
+            String fname = Path.getExtendResourcePath(settings.getConfigPath() + filename);
             f = new File(fname);
             if (f.exists()){
                 return f.getAbsolutePath();

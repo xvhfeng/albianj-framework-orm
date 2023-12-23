@@ -142,7 +142,7 @@ public final class Path {
     public static void traversalAllFolder(List<String> files, boolean isDepth, String path, String currSubFolder,
                                           IFileMark fileMark, String mark) {
         File file = new File(path);
-        if (StringUtils.isBlank(currSubFolder)) {
+        if (currSubFolder.isBlank()) {
             currSubFolder = "/";
         }
         if (file.exists()) {
@@ -163,7 +163,7 @@ public final class Path {
                         }
                     } else {
                         if (fileMark.isMark(f, mark)) {
-                            String filename = StringUtils.isBlank(currSubFolder)
+                            String filename = currSubFolder.isBlank()
                                     ? f.getName() : currSubFolder + f.getName();
                             files.add(filename);
                         }
@@ -181,7 +181,7 @@ public final class Path {
     public static void traversalAllFolder2(List<String> files, boolean isDepth, String path, String rootpath, String currSubFolder,
                                            IFileMark fileMark, String mark) {
         File file = new File(path);
-        if (StringUtils.isBlank(rootpath)) {
+        if (rootpath.isBlank()) {
             rootpath = "/";
         }
         if (file.exists()) {
@@ -198,7 +198,7 @@ public final class Path {
                         }
                     } else {
                         if (fileMark.isMark(f, mark)) {
-                            String filename = StringUtils.isBlank(currSubFolder)
+                            String filename = currSubFolder.isBlank()
                                     ? f.getName() : Path.joinWithFilename(f.getName(), rootpath, currSubFolder);
                             files.add(filename);
                         }

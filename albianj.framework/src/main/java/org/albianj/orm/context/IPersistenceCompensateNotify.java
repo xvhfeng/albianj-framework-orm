@@ -37,6 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.context;
 
+import org.albianj.orm.impl.context.WriterJob;
+
 /**
  * 存储操作发生异常时的通知类
  *
@@ -51,5 +53,5 @@ public interface IPersistenceCompensateNotify {
      * @param isManualRollbackSuccess albianj回滚事务是否成功
      * @param job                     被存储层执行的job信息
      */
-    public void send(boolean isAutoRollbackSuccess, boolean isManualRollbackSuccess, IWriterJob job);
+    public void send(boolean isAutoRollbackSuccess, boolean isManualRollbackSuccess, WriterJob job);
 }

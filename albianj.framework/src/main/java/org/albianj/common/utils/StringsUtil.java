@@ -218,7 +218,7 @@ public class StringsUtil extends StringUtils {
         return sb.toString();
     }
     public static String underlineToCamel(String param) {
-        if (StringUtils.isBlank(param)) {
+        if (param.isBlank()) {
             return "";
         }
         int len = param.length();

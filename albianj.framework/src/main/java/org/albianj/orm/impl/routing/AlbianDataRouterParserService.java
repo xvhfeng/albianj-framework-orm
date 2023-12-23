@@ -39,12 +39,12 @@ package org.albianj.orm.impl.routing;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.impl.object.DataRouterAttribute;
 import org.albianj.orm.object.*;
@@ -94,17 +94,17 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
             Class<?> cls = AlbianClassLoader.getInstance().loadClass(type);
             Class<?> itf = AlbianClassLoader.getInstance().loadClass(inter);
             if (!itf.isAssignableFrom(cls)) {
-                throw new AlbianDataServiceException(
+                throw new AlbianRuntimeException(
                     "the albian-object class:" + type + " is not implements from interface:" + inter + ".");
             }
 
             if (!IAlbianObject.class.isAssignableFrom(cls)) {
-                throw new AlbianDataServiceException(
+                throw new AlbianRuntimeException(
                     "the albian-object class:" + type + " is not implements from interface: IAlbianObject.");
             }
 
             if (!IAlbianObject.class.isAssignableFrom(itf)) {
-                throw new AlbianDataServiceException(
+                throw new AlbianRuntimeException(
                     "the albian-object interface:" + inter + " is not implements from interface: IAlbianObject.");
             }
 
@@ -123,7 +123,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         try {
             Class<?> cls = AlbianClassLoader.getInstance().loadClass(hashMapping);
             if (!IAlbianObjectDataRouter.class.isAssignableFrom(cls)) {
-                throw new AlbianDataServiceException(
+                throw new AlbianRuntimeException(
                     "the datarouter class:" + type + " is not implements from IAlbianObjectDataRouter.");
             }
 

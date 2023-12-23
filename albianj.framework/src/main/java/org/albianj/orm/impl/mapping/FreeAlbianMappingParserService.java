@@ -39,11 +39,11 @@ package org.albianj.orm.impl.mapping;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.rant.AlbianEntityRantScaner;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianMappingParserService;
@@ -92,7 +92,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
         }
         if (null == doc) {
-            throw new AlbianDataServiceException("loading the persisten.xml is error.");
+            throw new AlbianRuntimeException("loading the persisten.xml is error.");
         }
 
         @SuppressWarnings("rawtypes")
@@ -126,7 +126,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                 }
 
                 if (CheckUtil.isNullOrEmptyOrAllSpace(pkg)) {
-                    throw new AlbianDataServiceException(
+                    throw new AlbianRuntimeException(
                         "loading the persistence.xml is error. 'Path' attribute in  Package config-item is null or empty.");
                 } else {
                     try {

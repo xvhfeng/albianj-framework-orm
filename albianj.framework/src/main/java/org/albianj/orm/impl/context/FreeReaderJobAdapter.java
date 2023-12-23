@@ -38,8 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.context;
 
 import org.albianj.common.argument.RefArg;
-import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
@@ -83,13 +82,13 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
     protected abstract StringBuilder makeSltCmdCount(int dbStyle);
 
     @Deprecated
-    public IReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
+    public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
                                      int start, int step, LinkedList<IFilterCondition> wheres,
-                                     LinkedList<IOrderByCondition> orderbys, String idxName) throws AlbianDataServiceException {
-        IReaderJob job = new ReaderJob(sessionId);
+                                     LinkedList<IOrderByCondition> orderbys, String idxName)  {
+        ReaderJob job = new ReaderJob(sessionId);
         IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
         }
 
@@ -122,19 +121,19 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
         job.setCommand(cmd);
-        job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
+        job.setStorageAttr(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
     }
 
     @Deprecated
-    public IReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
+    public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
                                      LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys,
-                                     String idxName) throws AlbianDataServiceException {
+                                     String idxName)   {
 
-        IReaderJob job = new ReaderJob(sessionId);
+        ReaderJob job = new ReaderJob(sessionId);
         IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
         }
 
@@ -167,19 +166,19 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
         job.setCommand(cmd);
-        job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
+        job.setStorageAttr(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
     }
 
-    public IReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact,
+    public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact,
                                      String storageAlias, String tableAlias, String drouterAlias,
                                      int start, int step, IChainExpression f,
-                                     LinkedList<IOrderByCondition> orderbys, String idxName) throws AlbianDataServiceException {
+                                     LinkedList<IOrderByCondition> orderbys, String idxName)   {
 
-        IReaderJob job = new ReaderJob(sessionId);
+        ReaderJob job = new ReaderJob(sessionId);
         IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
         }
 
@@ -212,18 +211,18 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
         job.setCommand(cmd);
-        job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
+        job.setStorageAttr(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
     }
 
 
-    public IReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String storageAlias, String tableAlias, String drouterAlias,
+    public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String storageAlias, String tableAlias, String drouterAlias,
                                      IChainExpression f,
-                                     LinkedList<IOrderByCondition> orderbys, String idxName) throws AlbianDataServiceException {
-        IReaderJob job = new ReaderJob(sessionId);
+                                     LinkedList<IOrderByCondition> orderbys, String idxName)   {
+        ReaderJob job = new ReaderJob(sessionId);
         IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
-            throw new AlbianDataServiceException(
+            throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
         }
 
@@ -256,19 +255,19 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
         job.setCommand(cmd);
-        job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
+        job.setStorageAttr(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
     }
 
-    public IReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
-                                     PersistenceCommandType cmdType, String text, Map<String, ISqlParameter> paras) throws AlbianDataServiceException {
-        IReaderJob job = new ReaderJob(sessionId);
+    public ReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
+                                     PersistenceCommandType cmdType, String text, Map<String, ISqlParameter> paras)   {
+        ReaderJob job = new ReaderJob(sessionId);
         IPersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(text);
         cmd.setParameters(paras);
         cmd.setCommandType(cmdType);
         job.setCommand(cmd);
-        job.setStorage(storage);
+        job.setStorageAttr(storage);
         return job;
     }
 }

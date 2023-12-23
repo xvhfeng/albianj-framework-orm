@@ -8,7 +8,7 @@ public class InnerCommandAdapter {
 //    public static Map<String, ISqlParameter> makeCreateCommand(String sessionId,
 //                                                               IAlbianObjectAttribute albianObject,
 //                                                               Map<String, Object> mapValue
-//                                                               ) throws AlbianDataServiceException {
+//                                                               )  {
 //
 //        Map<String, IMemberAttribute> mapMemberAttributes = albianObject
 //                .getMembers();
