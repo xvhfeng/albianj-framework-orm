@@ -3,7 +3,6 @@ package org.albianj.kernel.impl.service;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.aop.AlbianServiceProxyRant;
 import org.albianj.kernel.aop.AlbianServiceProxyRants;
-import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
 import org.albianj.kernel.impl.aop.AlbianServiceAopAttribute;
 import org.albianj.kernel.service.*;
 import org.albianj.loader.AlbianClassLoader;
@@ -41,14 +40,14 @@ public class AlbianServiceRantParser {
                 });
     }
 
-    public static IAlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
-        IAlbianServiceAttribute asa = new AlbianServiceAttribute();
+    public static AlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
+        AlbianServiceAttribute asa = new AlbianServiceAttribute();
         AlbianServiceRant rant = implClzz.getAnnotation(AlbianServiceRant.class);
         asa.setId(rant.Id());
         if (CheckUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
-            asa.setInterface(IAlbianService.class.getName());
+            asa.setItfClzzName(IAlbianService.class.getName());
         } else {
-            asa.setInterface(null != rant.Interface() ? rant.Interface().getName() : rant.sInterface());
+            asa.setItfClzzName(null != rant.Interface() ? rant.Interface().getName() : rant.sInterface());
         }
         asa.setEnable(rant.Enable());
         asa.setType(implClzz.getName());
@@ -56,9 +55,9 @@ public class AlbianServiceRantParser {
 
         if (implClzz.isAnnotationPresent(AlbianServiceProxyRants.class)) {
             AlbianServiceProxyRants prants = implClzz.getAnnotation(AlbianServiceProxyRants.class);
-            Map<String, IAlbianServiceAopAttribute> asaas = new HashMap<>();
+            Map<String, AlbianServiceAopAttribute> asaas = new HashMap<>();
             for (AlbianServiceProxyRant prant : prants.Rants()) {
-                IAlbianServiceAopAttribute aspa = new AlbianServiceAopAttribute();
+                AlbianServiceAopAttribute aspa = new AlbianServiceAopAttribute();
                 aspa.setServiceName(prant.ServiceName());
                 aspa.setProxyName(prant.ProxyName());
 
@@ -85,14 +84,14 @@ public class AlbianServiceRantParser {
                 if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.FullName())) {
                     aspa.setFullName(prant.FullName());
                 }
-                aspa.setIsAll(prant.IsAll());
+                aspa.setAll(prant.IsAll());
                 asaas.put(aspa.getProxyName(), aspa);
             }
 
             asa.setAopAttributes(asaas);
         }
 
-        Map<String, IAlbianServiceFieldAttribute> fields = scanFields(implClzz);
+        Map<String, AlbianServiceFieldAttribute> fields = scanFields(implClzz);
         if (!CheckUtil.isNullOrEmpty(fields)) {
             asa.setServiceFields(fields);
         }
@@ -100,18 +99,18 @@ public class AlbianServiceRantParser {
         return asa;
     }
 
-    private static Map<String, IAlbianServiceFieldAttribute> scanFields(Class<?> clzz) {
+    private static Map<String, AlbianServiceFieldAttribute> scanFields(Class<?> clzz) {
         Class tempClass = clzz;
         List<Field> fields = new ArrayList<>() ;
         while (tempClass !=null && !tempClass.getName().toLowerCase().equals("java.lang.object") ) {//当父类为null的时候说明到达了最上层的父类(Object类).
             fields.addAll(Arrays.asList(tempClass .getDeclaredFields()));
             tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
         }
-        Map<String, IAlbianServiceFieldAttribute> fieldsAttr = new HashMap<>();
+        Map<String, AlbianServiceFieldAttribute> fieldsAttr = new HashMap<>();
         for (Field f : fields) {
             if (f.isAnnotationPresent(AlbianServiceFieldRant.class)) {
                 f.setAccessible(true);
-                IAlbianServiceFieldAttribute aspa = new AlbianServiceFieldAttribute();
+                AlbianServiceFieldAttribute aspa = new AlbianServiceFieldAttribute();
                 AlbianServiceFieldRant frant = f.getAnnotation(AlbianServiceFieldRant.class);
                 aspa.setName(f.getName());
                 aspa.setType(frant.Type().name());

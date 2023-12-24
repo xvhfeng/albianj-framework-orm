@@ -41,7 +41,7 @@ import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.impl.db.SqlParameter;
 import org.albianj.orm.object.IFilterCondition;
 import org.albianj.orm.object.IOrderByCondition;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.object.filter.IChainExpression;
 
 import java.util.LinkedList;
@@ -67,7 +67,7 @@ public interface IReaderJobAdapter {
         String tableAlias, String drouterAlias, IChainExpression f, LinkedList<IOrderByCondition> orderbys,
         String idxName) ;
 
-    public ReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
+    public ReaderJob buildReaderJob(String sessionId, Class<?> cls, RunningStorageAttribute storage,
                                      PersistenceCommandType cmdType, String text, Map<String, SqlParameter> paras)
         ;
 

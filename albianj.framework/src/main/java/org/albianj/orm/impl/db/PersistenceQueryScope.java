@@ -46,12 +46,12 @@ import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.impl.context.ReaderJob;
+import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.impl.toolkit.ListConvert;
 import org.albianj.orm.impl.toolkit.ResultConvert;
-import org.albianj.orm.object.IAlbianEntityFieldAttribute;
 import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.IAlbianObjectAttribute;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianStorageParserService;
 
@@ -66,7 +66,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     protected void perExecute(ReaderJob job)  {
         String sessionId = job.getId();
         PersistenceNamedParameter.parseSql(job.getCommand());
-        IRunningStorageAttribute rsa = job.getStorageAttr();
+        RunningStorageAttribute rsa = job.getStorageAttr();
         IAlbianStorageParserService asps = AlbianServiceRouter
             .getService(job.getId(), IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         IDataBasePool dbp = asps.getDatabasePool(sessionId, rsa);
@@ -112,7 +112,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     protected void executing(ReaderJob job)  {
         String text = job.getCommand().getCommandText();
         Map<String, SqlParameter> map = job.getCommand().getParameters();
-        IRunningStorageAttribute st = job.getStorageAttr();
+        RunningStorageAttribute st = job.getStorageAttr();
         String sessionId = job.getId();
 
         ResultSet result = null;
@@ -156,7 +156,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         }
         String text = job.getCommand().getCommandText();
         Map<String, SqlParameter> map = job.getCommand().getParameters();
-        IRunningStorageAttribute st = job.getStorageAttr();
+        RunningStorageAttribute st = job.getStorageAttr();
         AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
@@ -166,7 +166,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
     protected void unloadExecute(ReaderJob job)  {
         String sessionId = job.getId();
-        IRunningStorageAttribute rsa = job.getStorageAttr();
+        RunningStorageAttribute rsa = job.getStorageAttr();
         IDataBasePool dbp = job.getDataBasePool();
         dbp.returnConnection(sessionId, rsa.getStorageAttribute().getName(), rsa.getDatabase(), job.getConnection(),
             job.getStatement(), job.getResult());
@@ -191,9 +191,9 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             {
         String inter = cli.getName();
 
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
+                AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
         String className = objAttr.getType();
-        Map<String, IAlbianEntityFieldAttribute> member = objAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> member = objAttr.getFields();
 
         Class<?> cls = null;
         try {
@@ -207,8 +207,8 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             while (result.next()) {
                 try {
                     @SuppressWarnings("unchecked") T obj = (T)cls.newInstance();
-                    for (IAlbianEntityFieldAttribute fAttr : member.values()) {
-                        if (!fAttr.getIsSave()) {
+                    for (AlbianEntityFieldAttribute fAttr : member.values()) {
+                        if (!fAttr.isSave()) {
                             continue;
                         }
 
@@ -244,7 +244,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                 v = result.getObject("COUNT");
                 String text = job.getCommand().getCommandText();
                 Map<String, SqlParameter> map = job.getCommand().getParameters();
-                IRunningStorageAttribute st = job.getStorageAttr();
+                RunningStorageAttribute st = job.getStorageAttr();
                 AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                         "Storage:{},database:{},SqlText:{},paras:{}.return COUNT(1) :{}",
                     st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),

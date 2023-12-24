@@ -37,6 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.object;
 
+import org.albianj.orm.impl.object.DataRouterAttribute;
+import org.albianj.orm.impl.object.StorageAttribute;
+
 import java.util.List;
 import java.util.Map;
 
@@ -45,51 +48,51 @@ import java.util.Map;
  */
 public interface IAlbianObjectDataRouter {
     //reader routing
-    List<IDataRouterAttribute> mappingWriterRouting(
-            Map<String, IDataRouterAttribute> routings, IAlbianObject obj);
+    List<DataRouterAttribute> mappingWriterRouting(
+            Map<String, DataRouterAttribute> routings, IAlbianObject obj);
 
-    String mappingWriterRoutingStorage(IDataRouterAttribute routing,
+    String mappingWriterRoutingStorage(DataRouterAttribute routing,
                                        IAlbianObject obj);
 
-    String mappingWriterRoutingDatabase(IStorageAttribute storage,
+    String mappingWriterRoutingDatabase(StorageAttribute storage,
                                         IAlbianObject obj);
 
-    String mappingWriterTable(IDataRouterAttribute routing,
+    String mappingWriterTable(DataRouterAttribute routing,
                               IAlbianObject obj);
 
     //writer routing
-    IDataRouterAttribute mappingReaderRouting(
-            Map<String, IDataRouterAttribute> routings,
+    DataRouterAttribute mappingReaderRouting(
+            Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
             Map<String, IOrderByCondition> orderbys);
 
-    String mappingReaderRoutingStorage(IDataRouterAttribute routing,
+    String mappingReaderRoutingStorage(DataRouterAttribute routing,
                                        Map<String, IFilterCondition> wheres,
                                        Map<String, IOrderByCondition> orderbys);
 
-    String mappingReaderRoutingDatabase(IStorageAttribute storage,
+    String mappingReaderRoutingDatabase(StorageAttribute storage,
                                         Map<String, IFilterCondition> wheres,
                                         Map<String, IOrderByCondition> orderbys);
 
-    String mappingReaderTable(IDataRouterAttribute routing,
+    String mappingReaderTable(DataRouterAttribute routing,
                               Map<String, IFilterCondition> wheres,
                               Map<String, IOrderByCondition> orderbys);
 
     //exact reader routing
-    IDataRouterAttribute mappingExactReaderRouting(
-            Map<String, IDataRouterAttribute> routings,
+    DataRouterAttribute mappingExactReaderRouting(
+            Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
             Map<String, IOrderByCondition> orderbys);
 
-    String mappingExactReaderRoutingStorage(IDataRouterAttribute routing,
+    String mappingExactReaderRoutingStorage(DataRouterAttribute routing,
                                             Map<String, IFilterCondition> wheres,
                                             Map<String, IOrderByCondition> orderbys);
 
-    String mappingExactReaderRoutingDatabase(IStorageAttribute storage,
+    String mappingExactReaderRoutingDatabase(StorageAttribute storage,
                                              Map<String, IFilterCondition> wheres,
                                              Map<String, IOrderByCondition> orderbys);
 
-    String mappingExactReaderTable(IDataRouterAttribute routing,
+    String mappingExactReaderTable(DataRouterAttribute routing,
                                    Map<String, IFilterCondition> wheres,
                                    Map<String, IOrderByCondition> orderbys);
 }

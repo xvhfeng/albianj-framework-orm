@@ -42,6 +42,10 @@ import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.impl.db.SqlParameter;
+import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianObjectAttribute;
+import org.albianj.orm.impl.object.DataRouterAttribute;
+import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.Convert;
 import org.albianj.orm.impl.toolkit.EnumMapping;
 import org.albianj.orm.object.*;
@@ -52,10 +56,10 @@ import java.util.Map;
 
 public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJobAdapter {
 
-    protected IStorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr, boolean isExact,
-                                                       String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
-                                                       Map<String, IOrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
-        IStorageAttribute stgAttr = null;
+    protected StorageAttribute makeReaderToStorageCtx(String sessionId, AlbianObjectAttribute objAttr, boolean isExact,
+                                                      String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
+                                                      Map<String, IOrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
+        StorageAttribute stgAttr = null;
         IAlbianStorageParserService asps = AlbianServiceRouter
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         if (CheckUtil.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
@@ -63,14 +67,14 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                 DataRoutersAttribute drsAttr = objAttr.getDataRouters();
                 IAlbianObjectDataRouter drouter = drsAttr.getDataRouter();
                 if (isExact) {
-                    IDataRouterAttribute drAttr =
+                    DataRouterAttribute drAttr =
                         drouter.mappingExactReaderRouting(drsAttr.getWriterRoutings(), hashWheres, hashOrderbys);
                     String storageName = drouter.mappingExactReaderRoutingStorage(drAttr, hashWheres, hashOrderbys);
                     stgAttr = asps.getStorageAttribute(storageName);
                     dbName.setValue(drouter.mappingExactReaderRoutingDatabase(stgAttr, hashWheres, hashOrderbys));
                     tableName.setValue(drouter.mappingExactReaderTable(drAttr, hashWheres, hashOrderbys));
                 } else {
-                    IDataRouterAttribute drAttr =
+                    DataRouterAttribute drAttr =
                         drouter.mappingReaderRouting(drsAttr.getReaderRoutings(), hashWheres, hashOrderbys);
                     String storageName = drouter.mappingReaderRoutingStorage(drAttr, hashWheres, hashOrderbys);
                     stgAttr = asps.getStorageAttribute(storageName);
@@ -86,7 +90,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         } else { // do fix drouter
             DataRoutersAttribute drsAttr = objAttr.getDataRouters();
             IAlbianObjectDataRouter drouter = drsAttr.getDataRouter();
-            IDataRouterAttribute drAttr = drsAttr.getReaderRoutings().get(drouterAlias);
+            DataRouterAttribute drAttr = drsAttr.getReaderRoutings().get(drouterAlias);
             String storageName = drAttr.getStorageName();
             stgAttr = asps.getStorageAttribute(storageName);
             dbName.setValue(drouter.mappingReaderRoutingDatabase(stgAttr, hashWheres, hashOrderbys));
@@ -95,15 +99,15 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         return stgAttr;
     }
 
-    protected StringBuilder makeSltCmdCols(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle) {
+    protected StringBuilder makeSltCmdCols(String sessionId, AlbianObjectAttribute objAttr, int dbStyle) {
         StringBuilder sbCols = new StringBuilder();
         for (String key : objAttr.getFields().keySet()) {
-            IAlbianEntityFieldAttribute member = objAttr.getFields().get(key);
+            AlbianEntityFieldAttribute member = objAttr.getFields().get(key);
             if (null == member) {
                 throw new AlbianRuntimeException(
                     "albian-object:" + objAttr.getType() + " member:" + key + " is not found.");
             }
-            if (!member.getIsSave())
+            if (!member.isSave())
                 continue;
             if (member.getSqlFieldName().equals(member.getPropertyName())) {
                 if (PersistenceDatabaseStyle.MySql == dbStyle) {
@@ -136,12 +140,12 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         return sbCols;
     }
 
-    protected StringBuilder makeSltCmdOdrs(String sessionId, IAlbianObjectAttribute objAttr,
+    protected StringBuilder makeSltCmdOdrs(String sessionId, AlbianObjectAttribute objAttr,
         LinkedList<IOrderByCondition> orderbys, int dbStyle) {
         StringBuilder sbOrderby = new StringBuilder();
         if (null != orderbys) {
             for (IOrderByCondition orderby : orderbys) {
-                IMemberAttribute member = objAttr.getFields().get(orderby.getFieldName().toLowerCase());
+                AlbianEntityFieldAttribute member = objAttr.getFields().get(orderby.getFieldName().toLowerCase());
                 if (null == member) {
                     throw new AlbianRuntimeException(
                         "albian-object:" + objAttr.getType() + " member:" + orderby.getFieldName() + " is not found.");
@@ -188,14 +192,14 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         return sbCmdTxt;
     }
 
-    protected StringBuilder makeSltCmdWhrs(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle,
+    protected StringBuilder makeSltCmdWhrs(String sessionId, AlbianObjectAttribute objAttr, int dbStyle,
         String implType, LinkedList<IFilterCondition> wheres, Map<String, SqlParameter> paras) {
         StringBuilder sbWhrs = new StringBuilder();
         if (null != wheres) {
             for (IFilterCondition where : wheres) {
                 if (where.isAddition())
                     continue;
-                IMemberAttribute member = objAttr.getFields().get(where.getFieldName().toLowerCase());
+                AlbianEntityFieldAttribute member = objAttr.getFields().get(where.getFieldName().toLowerCase());
 
                 if (null == member) {
                     throw new AlbianRuntimeException(

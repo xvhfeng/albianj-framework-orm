@@ -37,38 +37,20 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.object;
 
-public class RunningStorageAttribute implements IRunningStorageAttribute {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.albianj.orm.impl.object.StorageAttribute;
 
-    IStorageAttribute sa = null;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class RunningStorageAttribute {
+
+    StorageAttribute storageAttribute = null;
     String database = null;
 
-    public RunningStorageAttribute(IStorageAttribute sa, String database) {
-        this.sa = sa;
-        this.database = database;
-    }
-
-    @Override
-    public IStorageAttribute getStorageAttribute() {
-        // TODO Auto-generated method stub
-        return sa;
-    }
-
-    @Override
-    public void setStorageAttribute(IStorageAttribute sa) {
-        // TODO Auto-generated method stub
-        this.sa = sa;
-    }
-
-    @Override
-    public String getDatabase() {
-        // TODO Auto-generated method stub
-        return this.database;
-    }
-
-    @Override
-    public void setDatabase(String database) {
-        // TODO Auto-generated method stub
-        this.database = database;
-    }
 
 }

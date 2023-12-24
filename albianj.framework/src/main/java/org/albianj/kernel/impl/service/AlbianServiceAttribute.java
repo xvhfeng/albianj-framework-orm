@@ -37,91 +37,97 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.service;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.albianj.kernel.impl.aop.AlbianServiceAopAttribute;
+import org.albianj.kernel.service.AlbianServiceFieldAttribute;
 import org.albianj.kernel.service.IAlbianService;
-import org.albianj.kernel.service.IAlbianServiceAttribute;
-import org.albianj.kernel.service.IAlbianServiceFieldAttribute;
 
 import java.util.Map;
 
-public class AlbianServiceAttribute implements IAlbianServiceAttribute {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class AlbianServiceAttribute { // } implements IAlbianServiceAttribute {
 
-    Map<String, IAlbianServiceFieldAttribute> ps;
-    Map<String, IAlbianServiceAopAttribute> aopAttributes = null;
+    Map<String, AlbianServiceFieldAttribute> serviceFields;
+    Map<String, AlbianServiceAopAttribute> aopAttributes = null;
     private String id = "";
     private String type = "";
-    private String itf;
-    private Class<? extends IAlbianService> clzz = null;
+    private String itfClzzName;
+    private Class<? extends IAlbianService> serviceClass = null;
     private boolean enable = true;
 
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) throws IllegalArgumentException {
-        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
-            throw new IllegalArgumentException("id");
-        }
-        this.id = id;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) throws IllegalArgumentException {
-        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
-            throw new IllegalArgumentException("type");
-        }
-        this.type = type;
-
-    }
-
-    public String getInterface() {
-        return this.itf;
-    }
-
-    public void setInterface(String itf) {
-        this.itf = itf;
-    }
-
-    @Override
-    public Map<String, IAlbianServiceFieldAttribute> getServiceFields() {
-        return this.ps;
-    }
-
-    @Override
-    public void setServiceFields(Map<String, IAlbianServiceFieldAttribute> ps) {
-        this.ps = ps;
-    }
-
-    public Map<String, IAlbianServiceAopAttribute> getAopAttributes() {
-        return this.aopAttributes;
-    }
-
-    public void setAopAttributes(Map<String, IAlbianServiceAopAttribute> aopAttributes) {
-        this.aopAttributes = aopAttributes;
-    }
-
-    @Override
-    public Class<? extends IAlbianService> getServiceClass() {
-        return clzz;
-    }
-
-    @Override
-    public void setServiceClass(Class<? extends IAlbianService> clazz) {
-        clzz = clazz;
-    }
-
-    @Override
-    public boolean getEnable() {
-        return enable;
-    }
-
-    @Override
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
+//    public String getId() {
+//        return this.id;
+//    }
+//
+//    public void setId(String id) throws IllegalArgumentException {
+//        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
+//            throw new IllegalArgumentException("id");
+//        }
+//        this.id = id;
+//    }
+//
+//    public String getType() {
+//        return this.type;
+//    }
+//
+//    public void setType(String type) throws IllegalArgumentException {
+//        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
+//            throw new IllegalArgumentException("type");
+//        }
+//        this.type = type;
+//
+//    }
+//
+//    public String getItfClzzName() {
+//        return this.itf;
+//    }
+//
+//    public void setItfClzzName(String itf) {
+//        this.itf = itf;
+//    }
+//
+//    @Override
+//    public Map<String, AlbianServiceFieldAttribute> getServiceFields() {
+//        return this.ps;
+//    }
+//
+//    @Override
+//    public void setServiceFields(Map<String, AlbianServiceFieldAttribute> ps) {
+//        this.ps = ps;
+//    }
+//
+//    public Map<String, IAlbianServiceAopAttribute> getAopAttributes() {
+//        return this.aopAttributes;
+//    }
+//
+//    public void setAopAttributes(Map<String, IAlbianServiceAopAttribute> aopAttributes) {
+//        this.aopAttributes = aopAttributes;
+//    }
+//
+//    @Override
+//    public Class<? extends IAlbianService> getServiceClass() {
+//        return clzz;
+//    }
+//
+//    @Override
+//    public void setServiceClass(Class<? extends IAlbianService> clazz) {
+//        clzz = clazz;
+//    }
+//
+//    @Override
+//    public boolean getEnable() {
+//        return enable;
+//    }
+//
+//    @Override
+//    public void setEnable(boolean enable) {
+//        this.enable = enable;
+//    }
 
 }

@@ -3,6 +3,7 @@ package org.albianj.kernel.impl.core;
 import org.albianj.common.argument.KeyValuePair;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
+import org.albianj.kernel.impl.service.AlbianServiceAttribute;
 import org.albianj.kernel.impl.service.AlbianServiceRantParser;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class AlbianBuiltinServiceLoader {
 
     private LinkedHashMap<String, AlbianBuiltinServiceAttribute> bltServ = null;
-    private Map<String, IAlbianServiceAttribute> bltSrvAttrs = null;
+    private Map<String, AlbianServiceAttribute> bltSrvAttrs = null;
 
     public AlbianBuiltinServiceLoader() {
 
@@ -88,7 +89,7 @@ public class AlbianBuiltinServiceLoader {
 
     public void loadServices(String sessionId, GlobalSettings settings)  {
 
-        Map<String,IAlbianServiceAttribute> bltServMap = sacnService(sessionId);
+        Map<String,AlbianServiceAttribute> bltServMap = sacnService(sessionId);
         String id = null;
         String sImplClzz = null;
         int failCount = 0;
@@ -112,7 +113,7 @@ public class AlbianBuiltinServiceLoader {
                 if (bltSerAttr.isLoadOK()) continue;
                 id = bltSerAttr.getId();
                 try {
-                    IAlbianServiceAttribute attr = bltServMap.get(id);
+                    AlbianServiceAttribute attr = bltServMap.get(id);
                     IAlbianService service = AlbianServiceLoader.makeupService(settings,attr,bltServMap);
                     ServiceContainer.addService(id, service);
                     bltSerAttr.setLoadOK(true);
@@ -157,11 +158,11 @@ public class AlbianBuiltinServiceLoader {
         }
     }
 
-    public Map<String, IAlbianServiceAttribute> getBltSrvAttrs() {
+    public Map<String, AlbianServiceAttribute> getBltSrvAttrs() {
         return this.bltSrvAttrs;
     }
 
-    public Map<String,IAlbianServiceAttribute> sacnService(String sessionId)  {
+    public Map<String,AlbianServiceAttribute> sacnService(String sessionId)  {
         bltSrvAttrs = new LinkedHashMap<>();
         for (AlbianBuiltinServiceAttribute bltSerAttr : this.bltServ.values()) {
 //            String id = bltSerAttr.getId();
@@ -170,7 +171,7 @@ public class AlbianBuiltinServiceLoader {
 //                Class<?> implClzz = AlbianClassLoader.getInstance().loadClass(sImplClzz);
 //                IAlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
 //                bltSrvAttrs.put(id,attr);
-                KeyValuePair<String,IAlbianServiceAttribute> kvp = sacnService(bltSerAttr);
+                KeyValuePair<String,AlbianServiceAttribute> kvp = sacnService(bltSerAttr);
                 bltSrvAttrs.put(kvp.getKey(),kvp.getValue());
             }catch (Exception e){
                 if(bltSerAttr.isRequired()) {
@@ -194,13 +195,13 @@ public class AlbianBuiltinServiceLoader {
      * @return
      * @throws ClassNotFoundException
      */
-    public KeyValuePair<String,IAlbianServiceAttribute> sacnService(AlbianBuiltinServiceAttribute servAttr) {
+    public KeyValuePair<String,AlbianServiceAttribute> sacnService(AlbianBuiltinServiceAttribute servAttr) {
             String id = servAttr.getId();
             String sImplClzz = servAttr.getImplClzz();
             KeyValuePair kvp = null;
             try {
                 Class<?> implClzz = AlbianClassLoader.getInstance().loadClass(sImplClzz);
-                IAlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
+                AlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
                 kvp = new KeyValuePair(id,attr);
             }catch (Throwable e){
                 throw new AlbianRuntimeException(e);
@@ -214,7 +215,7 @@ public class AlbianBuiltinServiceLoader {
      * @throws ClassNotFoundException
      */
     public void loadLoggerService(GlobalSettings settings)  {
-        KeyValuePair<String,IAlbianServiceAttribute>  logServAttr =  sacnService(new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
+        KeyValuePair<String,AlbianServiceAttribute>  logServAttr =  sacnService(new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[0],
                                                                     AlbianBuiltinServiceNamePair.AlbianLoggerServicePair[1],true));
         IAlbianService service = AlbianServiceLoader.makeupService(settings,logServAttr.getValue(),null);
         ServiceContainer.addService(logServAttr.getKey(), service);

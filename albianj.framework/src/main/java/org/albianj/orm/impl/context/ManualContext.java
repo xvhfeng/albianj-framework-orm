@@ -8,7 +8,7 @@ import lombok.ToString;
 import org.albianj.orm.context.InternalManualCommand;
 import org.albianj.orm.context.ManualCommand;
 import org.albianj.orm.context.WriterJobLifeTime;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -30,7 +30,7 @@ public class ManualContext  {
     private Connection conn;
     private List<Statement> statements;
     private String storageName;
-    private IRunningStorageAttribute runStgAttr;
+    private RunningStorageAttribute runStgAttr;
     private String dbName;
     private List<Integer> rcs;
     private WriterJobLifeTime lifeTime = WriterJobLifeTime.Normal;

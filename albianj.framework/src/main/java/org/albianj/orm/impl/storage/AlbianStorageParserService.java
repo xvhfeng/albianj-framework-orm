@@ -45,9 +45,10 @@ import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.impl.object.PluginDatabasePoolMarker;
 import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.object.*;
+import org.albianj.orm.object.DatabasePoolStyle;
+import org.albianj.orm.object.PersistenceDatabaseStyle;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianConnectionMonitorService;
 import org.albianj.orm.service.IAlbianStorageParserService;
 import org.dom4j.Element;
@@ -64,7 +65,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     public final static String DEFAULT_STORAGE_NAME = "!@#$%Albianj_Default_Storage%$#@!";
     private ConcurrentMap<String, IDataBasePool> pools = null;
-    private DatabasePoolMaker databasePoolMaker = null;
+//    private DatabasePoolMaker databasePoolMaker = null;
 
     // <Storage>
     // <Name>1thStorage</Name>
@@ -90,7 +91,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     public void init()  {
         pools = new ConcurrentHashMap<>(64);
         super.init();
-        databasePoolMaker = new PluginDatabasePoolMarker();
+//        databasePoolMaker = new PluginDatabasePoolMarker();
     }
 
     @Override
@@ -101,7 +102,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
             return;
         }
         for (int i = 0; i < nodes.size(); i++) {
-            IStorageAttribute storage = parserStorage((Element)nodes.get(i));
+            StorageAttribute storage = parserStorage((Element)nodes.get(i));
             if (null == storage) {
                 throw new AlbianRuntimeException(
                     "parser storage in the storage.xml is fail.xml:" + ((Element)nodes.get(i)).asXML() + ".");
@@ -114,7 +115,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     }
 
     @Override
-    protected IStorageAttribute parserStorage(Element node) {
+    protected StorageAttribute parserStorage(Element node) {
         String name = XmlUtil.getSingleChildNodeValue(node, "Name");
         if (null == name) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
@@ -157,7 +158,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         String sDatabasePoolStyle = XmlUtil.getSingleChildNodeValue(node, "PoolStyle");
         String sUrlParaments = XmlUtil.getSingleChildNodeValue(node, "UrlParaments");
 
-        IStorageAttribute storage = new StorageAttribute();
+        StorageAttribute storage = new StorageAttribute();
         storage.setName(name);
         if (null == databaseStyle) {
             storage.setDatabaseStyle(PersistenceDatabaseStyle.MySql);
@@ -210,7 +211,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         }
         storage.setOptions(options);
 
-        if (storage.getTransactional()) {
+        if (storage.isTransactional()) {
             if (CheckUtil.isNullOrEmpty(transactionLevel)) {
                 // default level and do not means no suppert tran
                 storage.setTransactionLevel(Connection.TRANSACTION_NONE);
@@ -237,8 +238,8 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         return storage;
     }
 
-    public IDataBasePool getDatabasePool(String sessionId, IRunningStorageAttribute rsa) {
-        final IStorageAttribute sa = rsa.getStorageAttribute();
+    public IDataBasePool getDatabasePool(String sessionId, RunningStorageAttribute rsa) {
+        final StorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName();
         IDataBasePool dbp = pools.get(key);
         if (dbp != null) {
@@ -285,12 +286,12 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         }
     }
 
-//    public Connection getConnection(String sessionId,IRunningStorageAttribute rsa, boolean isAutoCommit) {
+//    public Connection getConnection(String sessionId,RunningStorageAttribute rsa, boolean isAutoCommit) {
 //        return getConnection(sessionId, rsa, isAutoCommit);
 //    }
 
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
-        IStorageAttribute sa = rsa.getStorageAttribute();
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa, boolean isAutoCommit)  {
+        StorageAttribute sa = rsa.getStorageAttribute();
         //            String key = sa.getName() + rsa.getDatabase();
         try {
 
@@ -312,9 +313,9 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     }
 
-    public Connection getConnection(String sessionId, IDataBasePool pool, IRunningStorageAttribute rsa,
+    public Connection getConnection(String sessionId, IDataBasePool pool, RunningStorageAttribute rsa,
         boolean isAutoCommit)  {
-        IStorageAttribute sa = rsa.getStorageAttribute();
+        StorageAttribute sa = rsa.getStorageAttribute();
         try {
             if (null == pool) {
                 AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
@@ -337,7 +338,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
      * @param rsa
      * @param conn
      */
-    public void returnConnection(String sessionId, IRunningStorageAttribute rsa, Connection conn) {
+    public void returnConnection(String sessionId, RunningStorageAttribute rsa, Connection conn) {
         IDataBasePool dbp = getDatabasePool(sessionId, rsa);
         dbp.returnConnection(sessionId, rsa.getStorageAttribute().getName(), rsa.getDatabase(), conn);
     }

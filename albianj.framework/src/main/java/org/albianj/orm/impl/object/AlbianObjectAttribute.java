@@ -38,104 +38,26 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.object;
 
 
-import org.albianj.orm.object.IAlbianEntityFieldAttribute;
-import org.albianj.orm.object.IAlbianObjectAttribute;
-import org.albianj.orm.object.IDataRouterAttribute;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.albianj.orm.object.DataRoutersAttribute;
 
 import java.util.Map;
 
-public class AlbianObjectAttribute implements IAlbianObjectAttribute {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class AlbianObjectAttribute {
 
-    //    private ICacheAttribute cache = null;
-    private IDataRouterAttribute defaultRouting = null;
-    //    private Map<String, IMemberAttribute> members = null;
+    private DataRouterAttribute defaultRouting = null;
     private String type = null;
-    private String inter = null;
-    //    private boolean compensating = true;
-    private DataRoutersAttribute dra = null;
-    private Map<String, IAlbianEntityFieldAttribute> fields = null;
+    private String interfaceName = null;
+    private DataRoutersAttribute dataRouters = null;
+    private Map<String, AlbianEntityFieldAttribute> fields = null;
     private Class<?> implClzz = null;
 
-    public String getInterface() {
-        return inter;
-    }
-
-    public void setInterface(String inter) {
-        this.inter = inter;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public Class<?> getImplClzz() {
-        return this.implClzz;
-    }
-
-    @Override
-    public void setImplClzz(Class<?> implClzz) {
-        this.implClzz = implClzz;
-    }
-
-//    public ICacheAttribute getCache() {
-//        // TODO Auto-generated method stub
-//        return this.cache;
-//    }
-//
-//    public void setCache(ICacheAttribute cache) {
-//        // TODO Auto-generated method stub
-//        this.cache = cache;
-//    }
-
-    public IDataRouterAttribute getDefaultRouting() {
-        return this.defaultRouting;
-    }
-
-    public void setDefaultRouting(IDataRouterAttribute defaultRouting) {
-        this.defaultRouting = defaultRouting;
-    }
-
-//    public Map<String, IMemberAttribute> getMembers() {
-//        // TODO Auto-generated method stub
-//        return this.members;
-//    }
-//
-//    public void setMembers(Map<String, IMemberAttribute> members) {
-//        // TODO Auto-generated method stub
-//        this.members = members;
-//    }
-
-//    public boolean getCompensating() {
-//        return this.compensating;
-//    }
-//
-//    public void setCompensating(boolean compensating) {
-//        this.compensating = compensating;
-//    }
-
-
-    public DataRoutersAttribute getDataRouters() {
-        return this.dra;
-    }
-
-    public void setDataRouters(DataRoutersAttribute dra) {
-        this.dra = dra;
-    }
-
-    @Override
-    public Map<String, IAlbianEntityFieldAttribute> getFields() {
-        return fields;
-    }
-
-    @Override
-    public void setFields(Map<String, IAlbianEntityFieldAttribute> fields) {
-        this.fields = fields;
-    }
 
 }

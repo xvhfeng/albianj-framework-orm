@@ -1,18 +1,19 @@
 package org.albianj.kernel.aop;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 /**
  * Created by xuhaifeng on 16/7/25.
  */
-public class AlbianAopContext implements IAlbianAopContext {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class AlbianAopContext { //} implements IAlbianAopContext {
     private Object data = null;
 
-    @Override
-    public Object getData() {
-        return data;
-    }
 
-    @Override
-    public void setData(Object data) {
-        this.data = data;
-    }
 }

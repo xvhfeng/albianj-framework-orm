@@ -8,9 +8,8 @@ import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.context.InternalManualCommand;
 import org.albianj.orm.context.ManualCommand;
 import org.albianj.orm.impl.context.ManualContext;
+import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.ListConvert;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
 import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianStorageParserService;
 
@@ -32,11 +31,11 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
         List<ManualCommand> mcs = mctx.getCmds();
         List<InternalManualCommand> imcs = mctx.getInternalCmds();
         IAlbianStorageParserService asps = AlbianServiceRouter.getService(mctx.getSessionId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        IStorageAttribute storage = asps.getStorageAttribute(mctx.getStorageName());
+        StorageAttribute storage = asps.getStorageAttribute(mctx.getStorageName());
         if (CheckUtil.isNullOrEmptyOrAllSpace(mctx.getDbName())) {
             mctx.setDbName(storage.getDatabase());
         }
-        IRunningStorageAttribute rsa = new RunningStorageAttribute(storage, mctx.getDbName());
+        RunningStorageAttribute rsa = new RunningStorageAttribute(storage, mctx.getDbName());
         mctx.setRunStgAttr(rsa);
         Connection conn = asps.getConnection(mctx.getSessionId(), rsa,false);
         mctx.setConn(conn);

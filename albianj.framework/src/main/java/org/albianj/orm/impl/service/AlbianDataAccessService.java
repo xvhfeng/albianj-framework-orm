@@ -17,7 +17,7 @@ import org.albianj.orm.impl.context.dactx.QueryContext;
 import org.albianj.orm.impl.db.*;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IOrderByCondition;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.object.LogicalOperation;
 import org.albianj.orm.object.filter.FilterExpression;
 import org.albianj.orm.object.filter.IChainExpression;
@@ -394,7 +394,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, IRunningStorageAttribute storage, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, RunningStorageAttribute storage, PersistenceCommandType cmdType,
                                                          String text, Map<String, SqlParameter> paras)  {
         ReaderJobAdapter ad = new ReaderJobAdapter();
         ReaderJob job = ad.buildReaderJob(sessionId, cls, storage, cmdType,
@@ -404,7 +404,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
         return list;
     }
 
-    public <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, IRunningStorageAttribute storage, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, RunningStorageAttribute storage, PersistenceCommandType cmdType,
                                                         String text, Map<String, SqlParameter> paras)  {
         return loadObjects(sessionId, cls, storage, cmdType, text, paras);
     }

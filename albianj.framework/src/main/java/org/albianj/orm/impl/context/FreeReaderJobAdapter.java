@@ -42,8 +42,12 @@ import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.impl.db.PersistenceCommand;
 import org.albianj.orm.impl.db.SqlParameter;
+import org.albianj.orm.impl.object.AlbianObjectAttribute;
+import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.ListConvert;
-import org.albianj.orm.object.*;
+import org.albianj.orm.object.IFilterCondition;
+import org.albianj.orm.object.IOrderByCondition;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.object.filter.IChainExpression;
 import org.albianj.orm.service.AlbianEntityMetadata;
 
@@ -57,23 +61,23 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                                    StringBuilder sbWhere, StringBuilder sbOrderby,
                                                    int start, int step, String idxName);
 
-    protected abstract StringBuilder makeSltCmdOdrs(String sessionId, IAlbianObjectAttribute objAttr,
+    protected abstract StringBuilder makeSltCmdOdrs(String sessionId, AlbianObjectAttribute objAttr,
                                                     LinkedList<IOrderByCondition> orderbys, int dbStyle);
 
-    protected abstract StringBuilder makeSltCmdCols(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle);
+    protected abstract StringBuilder makeSltCmdCols(String sessionId, AlbianObjectAttribute objAttr, int dbStyle);
 
-    protected abstract IStorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr,
-                                                                boolean isExact,
-                                                                String storageAlias,
-                                                                String tableAlias,
-                                                                String drouterAlias,
-                                                                Map<String, IFilterCondition> hashWheres,
-                                                                Map<String, IOrderByCondition> hashOrderbys,
-                                                                RefArg<String> dbName,
-                                                                RefArg<String> tableName
+    protected abstract StorageAttribute makeReaderToStorageCtx(String sessionId, AlbianObjectAttribute objAttr,
+                                                               boolean isExact,
+                                                               String storageAlias,
+                                                               String tableAlias,
+                                                               String drouterAlias,
+                                                               Map<String, IFilterCondition> hashWheres,
+                                                               Map<String, IOrderByCondition> hashOrderbys,
+                                                               RefArg<String> dbName,
+                                                               RefArg<String> tableName
     );
 
-    protected abstract StringBuilder makeSltCmdWhrs(String sessionId, IAlbianObjectAttribute objAttr,
+    protected abstract StringBuilder makeSltCmdWhrs(String sessionId, AlbianObjectAttribute objAttr,
                                                     int dbStyle, String implType,
                                                     LinkedList<IFilterCondition> wheres,
                                                     Map<String, SqlParameter> paras);
@@ -85,7 +89,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      int start, int step, LinkedList<IFilterCondition> wheres,
                                      LinkedList<IOrderByCondition> orderbys, String idxName)  {
         ReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
@@ -101,7 +105,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         StringBuilder sbCols = makeSltCmdCols(sessionId, objAttr, stgAttr.getDatabaseStyle());
@@ -130,7 +134,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      String idxName)   {
 
         ReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
@@ -146,7 +150,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         StringBuilder sbCols = makeSltCmdCount(stgAttr.getDatabaseStyle());
@@ -175,7 +179,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      LinkedList<IOrderByCondition> orderbys, String idxName)   {
 
         ReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
@@ -191,7 +195,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         Map<String, SqlParameter> paras = new HashMap<>();
@@ -219,7 +223,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      IChainExpression f,
                                      LinkedList<IOrderByCondition> orderbys, String idxName)   {
         ReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AlbianRuntimeException(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
@@ -235,7 +239,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         Map<String, SqlParameter> paras = new HashMap<>();
@@ -258,7 +262,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         return job;
     }
 
-    public ReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
+    public ReaderJob buildReaderJob(String sessionId, Class<?> cls, RunningStorageAttribute storage,
                                      PersistenceCommandType cmdType, String text, Map<String, SqlParameter> paras)   {
         ReaderJob job = new ReaderJob(sessionId);
         PersistenceCommand cmd = new PersistenceCommand();

@@ -38,60 +38,23 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.object;
 
 
-import org.albianj.orm.object.IDataRouterAttribute;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-public class DataRouterAttribute implements IDataRouterAttribute {
+// <Routing Name="IdRouting" StorageName="2thStorage"
+// TableName="BizOfferById" Owner="dbo" Permission="WR"></Routing>
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class DataRouterAttribute {
     public boolean enable = true;
     private String name = null;
     private String storageName = null;
     private String tableName = null;
     private String owner = "dbo";
 
-    public String getName() {
-        // TODO Auto-generated method stub
-        return this.name;
-    }
-
-    public void setName(String name) {
-        // TODO Auto-generated method stub
-        this.name = name;
-    }
-
-    public String getStorageName() {
-        // TODO Auto-generated method stub
-        return this.storageName;
-    }
-
-    public void setStorageName(String storageName) {
-        // TODO Auto-generated method stub
-        this.storageName = storageName;
-    }
-
-    public String getTableName() {
-        // TODO Auto-generated method stub
-        return this.tableName;
-    }
-
-    public void setTableName(String tableName) {
-        // TODO Auto-generated method stub
-        this.tableName = tableName;
-    }
-
-    public String getOwner() {
-        // TODO Auto-generated method stub
-        return this.owner;
-    }
-
-    public void setOwner(String owner) {
-        // TODO Auto-generated method stub
-        this.owner = owner;
-    }
-
-    public boolean getEnable() {
-        return this.enable;
-    }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
 }

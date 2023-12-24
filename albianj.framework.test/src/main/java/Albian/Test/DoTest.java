@@ -55,8 +55,8 @@ public class DoTest {
 //                new Thread(new Runnable(){
 //                    @Override
 //                    public void run() {
-//                        IStorageAttribute stgAttr = stgService.getStorageAttribute("SpxDBCP");
-//                        IRunningStorageAttribute runStgAttr = new RunningStorageAttribute(stgAttr,stgAttr.getDatabase());
+//                        StorageAttribute stgAttr = stgService.getStorageAttribute("SpxDBCP");
+//                        RunningStorageAttribute runStgAttr = new RunningStorageAttribute(stgAttr,stgAttr.getDatabase());
 //                        Connection conn = stgService.getConnection("sessionId:" + Thread.currentThread().getId(), runStgAttr);
 //
 //                        int sec = 1 * 1000;

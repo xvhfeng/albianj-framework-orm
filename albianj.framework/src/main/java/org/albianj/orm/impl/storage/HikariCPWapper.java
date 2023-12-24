@@ -5,8 +5,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
+import org.albianj.orm.impl.object.StorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -25,8 +25,8 @@ public class HikariCPWapper extends FreeDataBasePool {
     }
 
     @Override
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
-        IStorageAttribute sa = rsa.getStorageAttribute();
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa, boolean isAutoCommit)  {
+        StorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
         AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
@@ -49,10 +49,10 @@ public class HikariCPWapper extends FreeDataBasePool {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa)  {
+    public DataSource setupDataSource(String sessionid,String key, RunningStorageAttribute rsa)  {
         HikariConfig config = new HikariConfig();
         try {
-            IStorageAttribute storageAttribute = rsa.getStorageAttribute();
+            StorageAttribute storageAttribute = rsa.getStorageAttribute();
             String url = FreeAlbianStorageParserService
                     .generateConnectionUrl(rsa);
             config.setDriverClassName(DRIVER_CLASSNAME);
@@ -82,7 +82,7 @@ public class HikariCPWapper extends FreeDataBasePool {
             config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
             config.setConnectionTestQuery("SELECT 1");
 
-            if (storageAttribute.getPooling()) {
+            if (storageAttribute.isPooling()) {
                 //池中最小空闲链接数量
                 config.setMinimumIdle(storageAttribute.getMinSize());
                 //池中最大链接数量

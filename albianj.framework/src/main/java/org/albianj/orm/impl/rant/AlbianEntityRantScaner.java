@@ -51,7 +51,7 @@ public class AlbianEntityRantScaner {
                 new IAlbianClassExcavator() {
                     @Override
                     public Object finder(Class<?> clzz)  {
-                        IAlbianObjectAttribute objAttr = null;
+                        AlbianObjectAttribute objAttr = null;
                         AlbianObjectRant or = clzz.getAnnotation(AlbianObjectRant.class);
                         if (null == or.Interface()) {
                             return null;
@@ -65,19 +65,19 @@ public class AlbianEntityRantScaner {
                         } else {
                             objAttr = new AlbianObjectAttribute();
                             objAttr.setType(clzz.getName());
-                            objAttr.setInterface(sItf);
+                            objAttr.setInterfaceName(sItf);
                             AlbianEntityMetadata.put(sItf, objAttr);
 
                         }
 
                         objAttr.setImplClzz(clzz);
 
-                        Map<String, IAlbianEntityFieldAttribute> fields = scanFields(clzz);
+                        Map<String, AlbianEntityFieldAttribute> fields = scanFields(clzz);
                         if (!CheckUtil.isNullOrEmpty(fields)) {
                             objAttr.setFields(fields);
                         }
 
-                        IDataRouterAttribute defaultRouting = makeDefaultDataRouter(clzz);
+                        DataRouterAttribute defaultRouting = makeDefaultDataRouter(clzz);
                         objAttr.setDefaultRouting(defaultRouting);
 
 
@@ -89,10 +89,10 @@ public class AlbianEntityRantScaner {
                             if (null == cfgDataRouterAttr) { // not exist data router from drouter.xml
                                 objAttr.setDataRouters(pkgDataRouterAttr);
                             } else {
-                                Map<String, IDataRouterAttribute> cfgWRouter = cfgDataRouterAttr.getWriterRoutings();
-                                Map<String, IDataRouterAttribute> cfgRRouter = cfgDataRouterAttr.getReaderRoutings();
-                                Map<String, IDataRouterAttribute> pkgWRouter = pkgDataRouterAttr.getWriterRoutings();
-                                Map<String, IDataRouterAttribute> pkgRRouter = pkgDataRouterAttr.getReaderRoutings();
+                                Map<String, DataRouterAttribute> cfgWRouter = cfgDataRouterAttr.getWriterRoutings();
+                                Map<String, DataRouterAttribute> cfgRRouter = cfgDataRouterAttr.getReaderRoutings();
+                                Map<String, DataRouterAttribute> pkgWRouter = pkgDataRouterAttr.getWriterRoutings();
+                                Map<String, DataRouterAttribute> pkgRRouter = pkgDataRouterAttr.getReaderRoutings();
                                 if (null != pkgRRouter) {
                                     if (null != cfgRRouter) {
                                         //exist pkg datarouter and cfg datarouter,merger them base cfg datarouter
@@ -140,20 +140,20 @@ public class AlbianEntityRantScaner {
         drsAttr.setReaderRouterEnable(drr.ReaderRoutersEnable());
         drsAttr.setWriterRouterEnable(drr.WriterRoutersEnable());
 
-        Map<String, IDataRouterAttribute> rMap = scanRouter(clzz, drr.ReaderRouters());
+        Map<String, DataRouterAttribute> rMap = scanRouter(clzz, drr.ReaderRouters());
         drsAttr.setReaderRoutings(rMap);
 
-        Map<String, IDataRouterAttribute> wMap = scanRouter(clzz, drr.WriterRouters());
+        Map<String, DataRouterAttribute> wMap = scanRouter(clzz, drr.WriterRouters());
         drsAttr.setWriterRoutings(wMap);
         return drsAttr;
 
     }
 
-    private static Map<String, IDataRouterAttribute> scanRouter(Class<?> clzz, AlbianObjectDataRouterRant[] rrs) {
-        Map<String, IDataRouterAttribute> map = new HashMap<>();
+    private static Map<String, DataRouterAttribute> scanRouter(Class<?> clzz, AlbianObjectDataRouterRant[] rrs) {
+        Map<String, DataRouterAttribute> map = new HashMap<>();
         for (AlbianObjectDataRouterRant odrr : rrs) {
             if (odrr.Enable()) {
-                IDataRouterAttribute dra = new DataRouterAttribute();
+                DataRouterAttribute dra = new DataRouterAttribute();
                 dra.setEnable(true);
                 dra.setName(odrr.Name());
                 dra.setStorageName(odrr.StorageName());
@@ -174,7 +174,7 @@ public class AlbianEntityRantScaner {
     }
 
 
-    public static Map<String, IAlbianEntityFieldAttribute> scanFields(Class<?> clzz) {
+    public static Map<String, AlbianEntityFieldAttribute> scanFields(Class<?> clzz) {
 
         Class tempClass = clzz;
         List<Field> fields = new ArrayList<>() ;
@@ -183,9 +183,9 @@ public class AlbianEntityRantScaner {
             tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
         }
 
-        Map<String, IAlbianEntityFieldAttribute> fieldsAttrs = new HashMap<>();
+        Map<String, AlbianEntityFieldAttribute> fieldsAttrs = new HashMap<>();
         for (Field f : fields) {
-            IAlbianEntityFieldAttribute fAttr = null;
+            AlbianEntityFieldAttribute fAttr = null;
             if (f.isAnnotationPresent(AlbianObjectDataFieldRant.class)) {
                 fAttr = new AlbianEntityFieldAttribute();
                 AlbianObjectDataFieldRant fr = f.getAnnotation(AlbianObjectDataFieldRant.class);
@@ -218,7 +218,7 @@ public class AlbianEntityRantScaner {
                 } else {
                     fAttr.setDatabaseType(fr.DbType());
                 }
-                fAttr.setIsSave(fr.IsSave());
+                fAttr.setSave(fr.IsSave());
                 fAttr.setLength(fr.Length());
                 fAttr.setPrimaryKey(fr.IsPrimaryKey());
                 fAttr.setAutoGenKey(fr.IsAutoGenKey());
@@ -263,8 +263,8 @@ public class AlbianEntityRantScaner {
     }
 
 
-    private static IDataRouterAttribute makeDefaultDataRouter(Class<?> implClzz) {
-        IDataRouterAttribute defaultRouting = new DataRouterAttribute();
+    private static DataRouterAttribute makeDefaultDataRouter(Class<?> implClzz) {
+        DataRouterAttribute defaultRouting = new DataRouterAttribute();
         defaultRouting.setName(AlbianDataRouterParserService.DEFAULT_ROUTING_NAME);
         defaultRouting.setOwner("dbo");
         defaultRouting.setStorageName(AlbianStorageParserService.DEFAULT_STORAGE_NAME);

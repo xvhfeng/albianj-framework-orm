@@ -40,9 +40,9 @@ package org.albianj.orm.impl.db;
 
 import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.orm.object.IAlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.IAlbianObjectAttribute;
 import org.albianj.orm.object.PersistenceDatabaseStyle;
 
 import java.util.HashMap;
@@ -51,8 +51,8 @@ import java.util.Map;
 public class CreateCommandAdapter implements IPersistenceUpdateCommand {
 
     public static Map<String, SqlParameter> makeCreateCommand(String sessionId, int dbStyle, String tableName,
-                                                               IAlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
-                                                               StringBuilder sqlText)  {
+                                                              AlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
+                                                              StringBuilder sqlText)  {
         StringBuilder cols = new StringBuilder();
         StringBuilder paras = new StringBuilder();
 
@@ -64,18 +64,18 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
             sqlText.append("[").append(tableName).append("]");
         }
 
-        Map<String, IAlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
 
         Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
-        for (Map.Entry<String, IAlbianEntityFieldAttribute> entry : fieldsAttr
+        for (Map.Entry<String, AlbianEntityFieldAttribute> entry : fieldsAttr
                 .entrySet()) {
-            IAlbianEntityFieldAttribute member = entry.getValue();
+            AlbianEntityFieldAttribute member = entry.getValue();
 
             if (member.isAutoGenKey()) {
                 continue;
             }
             Object v = sqlParaVals.get(member.getPropertyName());
-            if (!member.getIsSave() || null == v)
+            if (!member.isSave() || null == v)
                 continue;
 
             SqlParameter para = new SqlParameter();
@@ -106,7 +106,7 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
     }
 
     public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  {
+                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  {
         if (!object.getIsAlbianNew()) {
             throw new AlbianRuntimeException(
                 "the loaded albianj object can not be insert.please new the object from database first.");

@@ -39,9 +39,9 @@ package org.albianj.orm.impl.db;
 
 import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.orm.object.IAlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.IAlbianObjectAttribute;
 import org.albianj.orm.object.PersistenceDatabaseStyle;
 
 import java.util.HashMap;
@@ -50,8 +50,8 @@ import java.util.Map;
 public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
 
     public static Map<String, SqlParameter> makeRemoveCommand(String sessionId, int dbStyle, String tableName,
-                                                               IAlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
-                                                               StringBuilder sqlText)  {
+                                                              AlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
+                                                              StringBuilder sqlText)  {
         StringBuilder where = new StringBuilder();
         sqlText.append("DELETE FROM ");// .append(routing.getTableName());
         if (PersistenceDatabaseStyle.MySql == dbStyle) {
@@ -60,12 +60,12 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
             sqlText.append("[").append(tableName).append("]");
         }
 
-        Map<String, IAlbianEntityFieldAttribute> mapMemberAttributes = objAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> mapMemberAttributes = objAttr.getFields();
         Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
-        for (Map.Entry<String, IAlbianEntityFieldAttribute> entry : mapMemberAttributes
+        for (Map.Entry<String, AlbianEntityFieldAttribute> entry : mapMemberAttributes
                 .entrySet()) {
-            IAlbianEntityFieldAttribute member = entry.getValue();
-            if (!member.getIsSave() || !member.getPrimaryKey())
+            AlbianEntityFieldAttribute member = entry.getValue();
+            if (!member.isSave() || !member.isPrimaryKey())
                 continue;
             String name = member.getPropertyName();
             SqlParameter para = new SqlParameter();
@@ -96,7 +96,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
     }
 
     public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  {
+                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  {
         PersistenceCommand cmd = new PersistenceCommand();
         StringBuilder sqlText = new StringBuilder();
 

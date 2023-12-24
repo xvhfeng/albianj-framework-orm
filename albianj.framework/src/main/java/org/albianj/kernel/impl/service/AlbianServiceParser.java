@@ -39,7 +39,6 @@ package org.albianj.kernel.impl.service;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
 import org.albianj.kernel.impl.aop.AlbianServiceAopAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
@@ -64,7 +63,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     }
 
     @Override
-    protected void parserServices(Map<String, IAlbianServiceAttribute> map,
+    protected void parserServices(Map<String, AlbianServiceAttribute> map,
                                   String tagName, @SuppressWarnings("rawtypes") List nodes)  {
         if (CheckUtil.isNullOrEmpty(nodes)) {
             AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
@@ -74,7 +73,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         for (Object node : nodes) {
             Element elt = XmlUtil.toElement(node);
             name = null == name ? "tagName" : name;
-            IAlbianServiceAttribute serviceAttr = parserService(name, elt);
+            AlbianServiceAttribute serviceAttr = parserService(name, elt);
             if (null == serviceAttr) {
                 AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                         "Tags {} as xml {} not lookup service.",tagName,elt.asXML());
@@ -86,12 +85,12 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     }
 
     @Override
-    protected IAlbianServiceAttribute parserService(String name, Element elt)  {
+    protected AlbianServiceAttribute parserService(String name, Element elt)  {
         if (null == elt) {
             AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "Parser service {} fail.",name);
         }
-        IAlbianServiceAttribute serviceAttr = new AlbianServiceAttribute();
+        AlbianServiceAttribute serviceAttr = new AlbianServiceAttribute();
         String id = XmlUtil.getAttributeValue(elt, ID_ATTRBUITE_NAME);
         if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
@@ -120,7 +119,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         String sitf = XmlUtil.getAttributeValue(elt, "Interface");
         if (!CheckUtil.isNullOrEmptyOrAllSpace(sitf)) {
-            serviceAttr.setInterface(sitf);
+            serviceAttr.setItfClzzName(sitf);
         }
 
         String enable = XmlUtil.getAttributeValue(elt, "Enable");
@@ -130,7 +129,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         List nodes = elt.selectNodes("Properties/Property");
         if (!CheckUtil.isNullOrEmpty(nodes)) {
-            Map<String, IAlbianServiceFieldAttribute> ps = parserAlbianServiceFieldsAttribute(clzz, id, nodes);
+            Map<String, AlbianServiceFieldAttribute> ps = parserAlbianServiceFieldsAttribute(clzz, id, nodes);
             if (!CheckUtil.isNullOrEmpty(ps)) {
                 serviceAttr.setServiceFields(ps);
             }
@@ -139,7 +138,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         List aopNodes = elt.selectNodes("Aop/Aspect");
         if (!CheckUtil.isNullOrEmpty(aopNodes)) {
-            Map<String, IAlbianServiceAopAttribute> aas = parserAlbianServiceAopAttribute(id, aopNodes);
+            Map<String, AlbianServiceAopAttribute> aas = parserAlbianServiceAopAttribute(id, aopNodes);
             if (!CheckUtil.isNullOrEmpty(aas)) {
                 serviceAttr.setAopAttributes(aas);
             }
@@ -149,18 +148,18 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         return serviceAttr;
     }
 
-    protected Map<String, IAlbianServiceFieldAttribute> parserAlbianServiceFieldsAttribute(Class<?> clzz, String id, List nodes)  {
-        Map<String, IAlbianServiceFieldAttribute> pas = new HashMap<>();
+    protected Map<String, AlbianServiceFieldAttribute> parserAlbianServiceFieldsAttribute(Class<?> clzz, String id, List nodes)  {
+        Map<String, AlbianServiceFieldAttribute> pas = new HashMap<>();
         for (Object node : nodes) {
-            IAlbianServiceFieldAttribute pa = parserAlbianServiceFieldAttribute(clzz, id, (Element) node);
+            AlbianServiceFieldAttribute pa = parserAlbianServiceFieldAttribute(clzz, id, (Element) node);
             pas.put(pa.getName(), pa);
         }
         return pas;
     }
 
-    protected IAlbianServiceFieldAttribute parserAlbianServiceFieldAttribute(Class<?> clzz, String id, Element e)  {
+    protected AlbianServiceFieldAttribute parserAlbianServiceFieldAttribute(Class<?> clzz, String id, Element e)  {
         String name = XmlUtil.getAttributeValue(e, "Name");
-        IAlbianServiceFieldAttribute pa = new AlbianServiceFieldAttribute();
+        AlbianServiceFieldAttribute pa = new AlbianServiceFieldAttribute();
         if (CheckUtil.isNullOrEmptyOrAllSpace(name)) {
             AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     " name of service {} is null or empty.",id);
@@ -196,19 +195,19 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     }
 
-    protected Map<String, IAlbianServiceAopAttribute> parserAlbianServiceAopAttribute(String id, List nodes)  {
-        Map<String, IAlbianServiceAopAttribute> aas = new HashMap<>();
+    protected Map<String, AlbianServiceAopAttribute> parserAlbianServiceAopAttribute(String id, List nodes)  {
+        Map<String, AlbianServiceAopAttribute> aas = new HashMap<>();
         for (Object node : nodes) {
-            IAlbianServiceAopAttribute pa = parserAlbianServiceAopAttribute(id, (Element) node);
+            AlbianServiceAopAttribute pa = parserAlbianServiceAopAttribute(id, (Element) node);
             aas.put(pa.getProxyName(), pa);
         }
         return aas;
     }
 
-    protected IAlbianServiceAopAttribute parserAlbianServiceAopAttribute(String id, Element e)  {
+    protected AlbianServiceAopAttribute parserAlbianServiceAopAttribute(String id, Element e)  {
 
 
-        IAlbianServiceAopAttribute aa = new AlbianServiceAopAttribute();
+        AlbianServiceAopAttribute aa = new AlbianServiceAopAttribute();
         String beginWith = XmlUtil.getAttributeValue(e, "BeginWith");
         if (!CheckUtil.isNullOrEmptyOrAllSpace(beginWith)) {
             aa.setBeginWith(beginWith);
@@ -246,7 +245,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         String sIsAll = XmlUtil.getAttributeValue(e, "IsAll");
         if (!CheckUtil.isNullOrEmptyOrAllSpace(sIsAll)) {
-            aa.setIsAll(Boolean.parseBoolean(sIsAll));
+            aa.setAll(Boolean.parseBoolean(sIsAll));
         }
 
         String proxy = XmlUtil.getAttributeValue(e, "Proxy");

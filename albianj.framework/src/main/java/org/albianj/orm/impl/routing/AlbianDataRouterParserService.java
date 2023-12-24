@@ -77,11 +77,11 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
             return null;
         }
 
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
         if (null == objAttr) {
             objAttr = new AlbianObjectAttribute();
             objAttr.setType(type);
-            objAttr.setInterface(inter);
+            objAttr.setInterfaceName(inter);
             AlbianEntityMetadata.put(inter, objAttr);
         }
         DataRoutersAttribute routing = objAttr.getDataRouters();
@@ -163,12 +163,12 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
 
         List<?> writers = elt.selectNodes("WriterRouters/WriterRouter");
         if (!CheckUtil.isNullOrEmpty(writers)) {
-            Map<String, IDataRouterAttribute> cfgWRouters = parserRouting(writers);
+            Map<String, DataRouterAttribute> cfgWRouters = parserRouting(writers);
             if (null != cfgWRouters) {
                 if (null == routing.getWriterRoutings()) {
                     routing.setWriterRoutings(cfgWRouters);
                 } else {
-                    Map<String, IDataRouterAttribute> pkgWRouters = routing.getWriterRoutings();
+                    Map<String, DataRouterAttribute> pkgWRouters = routing.getWriterRoutings();
                     pkgWRouters.putAll(cfgWRouters);
                     routing.setWriterRoutings(pkgWRouters);
                 }
@@ -178,12 +178,12 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
 
         List<?> readers = elt.selectNodes("ReaderRouters/ReaderRouter");
         if (!CheckUtil.isNullOrEmpty(readers)) {
-            Map<String, IDataRouterAttribute> cfgRRouters = parserRouting(readers);
+            Map<String, DataRouterAttribute> cfgRRouters = parserRouting(readers);
             if (null != cfgRRouters) {
                 if (null == routing.getReaderRoutings()) {
                     routing.setReaderRoutings(cfgRRouters);
                 } else {
-                    Map<String, IDataRouterAttribute> pkgRRouters = routing.getReaderRoutings();
+                    Map<String, DataRouterAttribute> pkgRRouters = routing.getReaderRoutings();
                     pkgRRouters.putAll(cfgRRouters);
                     routing.setReaderRoutings(pkgRRouters);
                 }
@@ -192,11 +192,11 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         return routing;
     }
 
-    private static Map<String, IDataRouterAttribute> parserRouting(
+    private static Map<String, DataRouterAttribute> parserRouting(
             @SuppressWarnings("rawtypes") List nodes) {
-        Map<String, IDataRouterAttribute> map = new HashMap<String, IDataRouterAttribute>();
+        Map<String, DataRouterAttribute> map = new HashMap<String, DataRouterAttribute>();
         for (Object node : nodes) {
-            IDataRouterAttribute routingAttribute = getroutingAttribute((Element) node);
+            DataRouterAttribute routingAttribute = getroutingAttribute((Element) node);
             if (null == routingAttribute)
                 return null;
             map.put(routingAttribute.getName(), routingAttribute);
@@ -204,7 +204,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         return map;
     }
 
-    private static IDataRouterAttribute getroutingAttribute(Element elt) {
+    private static DataRouterAttribute getroutingAttribute(Element elt) {
         String name = XmlUtil.getAttributeValue(elt, "Name");
         if (CheckUtil.isNullOrEmptyOrAllSpace(name)) {
             AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
@@ -218,7 +218,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
                     "this storage name for the :{} routing attribute is null or empty.", name);
             return null;
         }
-        IDataRouterAttribute routing = new DataRouterAttribute();
+        DataRouterAttribute routing = new DataRouterAttribute();
         routing.setName(name);
         routing.setStorageName(storageName);
         String tableName = XmlUtil.getAttributeValue(elt, "TableName");
@@ -242,7 +242,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         return Name;
     }
 
-    protected Map<String, IDataRouterAttribute> parserRoutings(
+    protected Map<String, DataRouterAttribute> parserRoutings(
             @SuppressWarnings("rawtypes") List nodes)  {
         for (Object node : nodes) {
             DataRoutersAttribute routingsAttribute = getRoutingsAttribute((Element) node);

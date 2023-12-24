@@ -44,6 +44,8 @@ import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.context.dactx.AlbianObjectWarp;
+import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
 import org.albianj.orm.service.AlbianEntityMetadata;
 
@@ -114,21 +116,21 @@ public abstract class FreeAlbianObject implements IAlbianObject {
 
     private boolean needUpdate(Object sessionId, String itf)  {
         String className = this.getClass().getName();
-        IAlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == entiryAttr) {
             throw new AlbianRuntimeException(
                 "PersistenceService is error. albian-object:" + className + " attribute is not found.");
         }
 
-        Map<String, IAlbianEntityFieldAttribute> fields = entiryAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> fields = entiryAttr.getFields();
         if (CheckUtil.isNullOrEmpty(fields)) {
             throw new AlbianRuntimeException(
                 "PersistenceService is error. albian-object:" + className + " PropertyDescriptor is not found.");
         }
         try {
 
-            for (IAlbianEntityFieldAttribute fieldAttr : fields.values()) {
-                if (!fieldAttr.getIsSave())
+            for (AlbianEntityFieldAttribute fieldAttr : fields.values()) {
+                if (!fieldAttr.isSave())
                     continue;
                 Object newVal = fieldAttr.getEntityField().get(this);
                 Object oldValue = getOldAlbianObject(fieldAttr.getPropertyName());

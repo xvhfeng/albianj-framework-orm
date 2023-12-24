@@ -44,7 +44,7 @@ import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.object.IDataRouterAttribute;
+import org.albianj.orm.impl.object.DataRouterAttribute;
 import org.albianj.orm.object.DataRoutersAttribute;
 import org.albianj.orm.service.IAlbianDataRouterParserService;
 import org.dom4j.Document;
@@ -119,7 +119,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         parserRoutings(objNodes);
     }
 
-    protected abstract Map<String, IDataRouterAttribute> parserRoutings(
+    protected abstract Map<String, DataRouterAttribute> parserRoutings(
             @SuppressWarnings("rawtypes") List nodes) ;
 
 }

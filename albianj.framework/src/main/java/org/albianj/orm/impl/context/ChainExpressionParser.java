@@ -40,9 +40,15 @@ package org.albianj.orm.impl.context;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.orm.impl.db.SqlParameter;
+import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.impl.object.AlbianObjectAttribute;
+import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.Convert;
 import org.albianj.orm.impl.toolkit.EnumMapping;
-import org.albianj.orm.object.*;
+import org.albianj.orm.object.FilterCondition;
+import org.albianj.orm.object.IFilterCondition;
+import org.albianj.orm.object.PersistenceDatabaseStyle;
+import org.albianj.orm.object.RelationalOperator;
 import org.albianj.orm.object.filter.IChainExpression;
 import org.albianj.orm.object.filter.IFilterExpression;
 import org.albianj.orm.service.AlbianEntityMetadata;
@@ -83,8 +89,8 @@ public class ChainExpressionParser {
         }
     }
 
-    public static void toConditionText(String sessionId, Class<?> cls, IAlbianObjectAttribute albianObject,
-                                       IStorageAttribute storage, IChainExpression f, StringBuilder sb, Map<String, SqlParameter> paras)
+    public static void toConditionText(String sessionId, Class<?> cls, AlbianObjectAttribute albianObject,
+                                       StorageAttribute storage, IChainExpression f, StringBuilder sb, Map<String, SqlParameter> paras)
              {
         if (null == f) return;
         List<IChainExpression> ces = f.getChainExpression();
@@ -117,7 +123,7 @@ public class ChainExpressionParser {
                 }
 
                 String className = cls.getName();
-                IAlbianEntityFieldAttribute fieldAttr = albianObject.getFields().get(AlbianEntityMetadata.makeFieldsKey(fe.getFieldName().toLowerCase()));
+                AlbianEntityFieldAttribute fieldAttr = albianObject.getFields().get(AlbianEntityMetadata.makeFieldsKey(fe.getFieldName().toLowerCase()));
 
                 if (null == fieldAttr) {
                     throw new AlbianRuntimeException(

@@ -6,7 +6,7 @@ import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -21,7 +21,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
 
     private final ConcurrentMap<String, DataSource> _dataSource = new ConcurrentHashMap<>();
 
-    protected DataSource getDatasource(String sessionid,final String key, IRunningStorageAttribute rsa)  {
+    protected DataSource getDatasource(String sessionid,final String key, RunningStorageAttribute rsa)  {
         DataSource ds = _dataSource.get(key);
         if (ds != null) {
             return ds;
@@ -58,7 +58,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
         return ds;
     }
 
-    protected abstract DataSource setupDataSource(String sessionid,final String key, final IRunningStorageAttribute rsa) ;
+    protected abstract DataSource setupDataSource(String sessionid,final String key, final RunningStorageAttribute rsa) ;
 
     //释放连接回连接池
     public void returnConnection(String sessionId, String storageName, String databaseName, Connection conn,

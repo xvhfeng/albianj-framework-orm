@@ -38,11 +38,18 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.object;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.albianj.orm.object.DatabasePoolStyle;
-import org.albianj.orm.object.IStorageAttribute;
 import org.albianj.orm.object.PersistenceDatabaseStyle;
 
-public class StorageAttribute implements IStorageAttribute {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class StorageAttribute  { //implements StorageAttribute {
 
     private String name = null;
     private int databaseStyle = PersistenceDatabaseStyle.MySql;
@@ -59,8 +66,8 @@ public class StorageAttribute implements IStorageAttribute {
     private int port = 0;
     private int transactionLevel = 0;
     private String options = null;
-    private int idelTime = 180;
-    private String dbps = DatabasePoolStyle.SpxDBCP.name();
+    private int aliveTime = 180;
+    private String databasePoolStyle = DatabasePoolStyle.SpxDBCP.name();
     private int waitTimeWhenGetMs = 2;
     private int lifeCycleTime = 3600000;
     private int waitInFreePoolMs = 120000;
@@ -69,224 +76,224 @@ public class StorageAttribute implements IStorageAttribute {
     private int maxRequestTimeMs = 60000;
 
     private String urlParaments;
-
-    public int getWaitTimeWhenGetMs() {
-        return waitTimeWhenGetMs;
-    }
-
-    public void setWaitTimeWhenGetMs(int waitTimeWhenGetMs) {
-        this.waitTimeWhenGetMs = waitTimeWhenGetMs;
-    }
-
-    public int getLifeCycleTime() {
-        return lifeCycleTime;
-    }
-
-    public void setLifeCycleTime(int lifeCycleTime) {
-        this.lifeCycleTime = lifeCycleTime;
-    }
-
-    public int getWaitInFreePoolMs() {
-        return waitInFreePoolMs;
-    }
-
-    public void setWaitInFreePoolMs(int waitInFreePoolMs) {
-        this.waitInFreePoolMs = waitInFreePoolMs;
-    }
-
-    public int getMaxRemedyConnectionCount() {
-        return maxRemedyConnectionCount;
-    }
-
-    public void setMaxRemedyConnectionCount(int maxRemedyConnectionCount) {
-        this.maxRemedyConnectionCount = maxRemedyConnectionCount;
-    }
-
-    public int getCleanupTimestampMs() {
-        return cleanupTimestampMs;
-    }
-
-    public void setCleanupTimestampMs(int cleanupTimestampMs) {
-        this.cleanupTimestampMs = cleanupTimestampMs;
-    }
-
-    public int getMaxRequestTimeMs() {
-        return maxRequestTimeMs;
-    }
-
-    public void setMaxRequestTimeMs(int maxRequestTimeMs) {
-        this.maxRequestTimeMs = maxRequestTimeMs;
-    }
-
-    @Override
-    public String getUrlParaments() {
-        return urlParaments;
-    }
-
-    @Override
-    public void setUrlParaments(String urlParaments) {
-        this.urlParaments = urlParaments;
-    }
-
-    public String getName() {
-
-        return this.name;
-    }
-
-    public void setName(String name) {
-
-        this.name = name;
-    }
-
-    public int getDatabaseStyle() {
-
-        return this.databaseStyle;
-    }
-
-    public void setDatabaseStyle(int databaseStyle) {
-
-        this.databaseStyle = databaseStyle;
-    }
-
-    public String getDatabase() {
-
-        return this.database;
-    }
-
-    public void setDatabase(String database) {
-
-        this.database = database;
-    }
-
-    public String getUser() {
-
-        return this.user;
-    }
-
-    public void setUser(String user) {
-
-        this.user = user;
-    }
-
-    public String getPassword() {
-
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-
-        this.password = password;
-    }
-
-    public boolean getPooling() {
-
-        return this.pooling;
-    }
-
-    public void setPooling(boolean pooling) {
-
-        this.pooling = pooling;
-    }
-
-    public int getMinSize() {
-
-        return this.minSize;
-    }
-
-    public void setMinSize(int minSize) {
-
-        this.minSize = minSize;
-    }
-
-    public int getMaxSize() {
-
-        return this.maxSize;
-    }
-
-    public void setMaxSize(int maxSize) {
-
-        this.maxSize = maxSize;
-    }
-
-    public int getTimeout() {
-
-        return this.timeout;
-    }
-
-    public void setTimeout(int timeout) {
-
-        this.timeout = timeout;
-    }
-
-    public String getCharset() {
-        return this.charset;
-    }
-
-    public void setCharset(String charset) {
-
-        this.charset = charset;
-    }
-
-    public boolean getTransactional() {
-
-        return this.transactional;
-    }
-
-    public void setTransactional(boolean transactional) {
-
-        this.transactional = transactional;
-    }
-
-    public String getServer() {
-        return server;
-    }
-
-    public void setServer(String server) {
-        this.server = server;
-    }
-
-    public int getTransactionLevel() {
-        return this.transactionLevel;
-    }
-
-    public void setTransactionLevel(int level) {
-        this.transactionLevel = level;
-    }
-
-    @Override
-    public int getPort() {
-
-        return this.port;
-    }
-
-    @Override
-    public void setPort(int port) {
-
-        this.port = port;
-    }
-
-    public String getOptions() {
-        return this.options;
-    }
-
-    public void setOptions(String options) {
-        this.options = options;
-    }
-
-    public int getAliveTime() {
-        return this.idelTime;
-    }
-
-    public void setAliveTime(int time) {
-        this.idelTime = time;
-    }
-
-    public String getDatabasePoolStyle() {
-        return this.dbps;
-    }
-
-    public void setDatabasePoolStyle(String dps) {
-        this.dbps = dps;
-    }
+//
+//    public int getWaitTimeWhenGetMs() {
+//        return waitTimeWhenGetMs;
+//    }
+//
+//    public void setWaitTimeWhenGetMs(int waitTimeWhenGetMs) {
+//        this.waitTimeWhenGetMs = waitTimeWhenGetMs;
+//    }
+//
+//    public int getLifeCycleTime() {
+//        return lifeCycleTime;
+//    }
+//
+//    public void setLifeCycleTime(int lifeCycleTime) {
+//        this.lifeCycleTime = lifeCycleTime;
+//    }
+//
+//    public int getWaitInFreePoolMs() {
+//        return waitInFreePoolMs;
+//    }
+//
+//    public void setWaitInFreePoolMs(int waitInFreePoolMs) {
+//        this.waitInFreePoolMs = waitInFreePoolMs;
+//    }
+//
+//    public int getMaxRemedyConnectionCount() {
+//        return maxRemedyConnectionCount;
+//    }
+//
+//    public void setMaxRemedyConnectionCount(int maxRemedyConnectionCount) {
+//        this.maxRemedyConnectionCount = maxRemedyConnectionCount;
+//    }
+//
+//    public int getCleanupTimestampMs() {
+//        return cleanupTimestampMs;
+//    }
+//
+//    public void setCleanupTimestampMs(int cleanupTimestampMs) {
+//        this.cleanupTimestampMs = cleanupTimestampMs;
+//    }
+//
+//    public int getMaxRequestTimeMs() {
+//        return maxRequestTimeMs;
+//    }
+//
+//    public void setMaxRequestTimeMs(int maxRequestTimeMs) {
+//        this.maxRequestTimeMs = maxRequestTimeMs;
+//    }
+//
+//    @Override
+//    public String getUrlParaments() {
+//        return urlParaments;
+//    }
+//
+//    @Override
+//    public void setUrlParaments(String urlParaments) {
+//        this.urlParaments = urlParaments;
+//    }
+//
+//    public String getName() {
+//
+//        return this.name;
+//    }
+//
+//    public void setName(String name) {
+//
+//        this.name = name;
+//    }
+//
+//    public int getDatabaseStyle() {
+//
+//        return this.databaseStyle;
+//    }
+//
+//    public void setDatabaseStyle(int databaseStyle) {
+//
+//        this.databaseStyle = databaseStyle;
+//    }
+//
+//    public String getDatabase() {
+//
+//        return this.database;
+//    }
+//
+//    public void setDatabase(String database) {
+//
+//        this.database = database;
+//    }
+//
+//    public String getUser() {
+//
+//        return this.user;
+//    }
+//
+//    public void setUser(String user) {
+//
+//        this.user = user;
+//    }
+//
+//    public String getPassword() {
+//
+//        return this.password;
+//    }
+//
+//    public void setPassword(String password) {
+//
+//        this.password = password;
+//    }
+//
+//    public boolean getPooling() {
+//
+//        return this.pooling;
+//    }
+//
+//    public void setPooling(boolean pooling) {
+//
+//        this.pooling = pooling;
+//    }
+//
+//    public int getMinSize() {
+//
+//        return this.minSize;
+//    }
+//
+//    public void setMinSize(int minSize) {
+//
+//        this.minSize = minSize;
+//    }
+//
+//    public int getMaxSize() {
+//
+//        return this.maxSize;
+//    }
+//
+//    public void setMaxSize(int maxSize) {
+//
+//        this.maxSize = maxSize;
+//    }
+//
+//    public int getTimeout() {
+//
+//        return this.timeout;
+//    }
+//
+//    public void setTimeout(int timeout) {
+//
+//        this.timeout = timeout;
+//    }
+//
+//    public String getCharset() {
+//        return this.charset;
+//    }
+//
+//    public void setCharset(String charset) {
+//
+//        this.charset = charset;
+//    }
+//
+//    public boolean getTransactional() {
+//
+//        return this.transactional;
+//    }
+//
+//    public void setTransactional(boolean transactional) {
+//
+//        this.transactional = transactional;
+//    }
+//
+//    public String getServer() {
+//        return server;
+//    }
+//
+//    public void setServer(String server) {
+//        this.server = server;
+//    }
+//
+//    public int getTransactionLevel() {
+//        return this.transactionLevel;
+//    }
+//
+//    public void setTransactionLevel(int level) {
+//        this.transactionLevel = level;
+//    }
+//
+//    @Override
+//    public int getPort() {
+//
+//        return this.port;
+//    }
+//
+//    @Override
+//    public void setPort(int port) {
+//
+//        this.port = port;
+//    }
+//
+//    public String getOptions() {
+//        return this.options;
+//    }
+//
+//    public void setOptions(String options) {
+//        this.options = options;
+//    }
+//
+//    public int getAliveTime() {
+//        return this.idelTime;
+//    }
+//
+//    public void setAliveTime(int time) {
+//        this.idelTime = time;
+//    }
+//
+//    public String getDatabasePoolStyle() {
+//        return this.dbps;
+//    }
+//
+//    public void setDatabasePoolStyle(String dps) {
+//        this.dbps = dps;
+//    }
 
 }

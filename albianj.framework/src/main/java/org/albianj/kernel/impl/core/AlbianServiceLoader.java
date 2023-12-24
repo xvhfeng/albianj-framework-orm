@@ -4,9 +4,13 @@ import ognl.Ognl;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.kernel.impl.aop.AlbianServiceAopProxy;
+import org.albianj.kernel.impl.service.AlbianServiceAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.*;
+import org.albianj.kernel.service.AlbianServiceFieldAttribute;
+import org.albianj.kernel.service.AlbianServiceFieldSetterLifetime;
+import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.service.IAlbianService;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.GlobalSettings;
 
@@ -16,13 +20,13 @@ public class AlbianServiceLoader {
 
     private static String sessionId = "AlbianServiceLoader";
 
-    public static IAlbianService makeupService(GlobalSettings settings,IAlbianServiceAttribute serviceAttr,
-                                               Map<String, IAlbianServiceAttribute> servAttrs)  {
+    public static IAlbianService makeupService(GlobalSettings settings, AlbianServiceAttribute serviceAttr,
+                                               Map<String, AlbianServiceAttribute> servAttrs)  {
         String sImplClzz = serviceAttr.getType();
         String id = serviceAttr.getId();
         IAlbianService rtnService = null;
 
-        String sInterface = serviceAttr.getInterface();
+        String sInterface = serviceAttr.getItfClzzName();
         try {
             Class<?> cla = AlbianClassLoader.getInstance().loadClass(sImplClzz);
             if (null == cla) {
@@ -77,11 +81,11 @@ public class AlbianServiceLoader {
         return rtnService;
     }
 
-    public static void setServiceFields(IAlbianService serv, IAlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, IAlbianServiceAttribute> servAttrs)  {
+    public static void setServiceFields(IAlbianService serv, AlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, AlbianServiceAttribute> servAttrs)  {
         if(CheckUtil.isNullOrEmpty(servAttr.getServiceFields())) {
             return;
         }
-        for (IAlbianServiceFieldAttribute fAttr : servAttr.getServiceFields().values()) {
+        for (AlbianServiceFieldAttribute fAttr : servAttr.getServiceFields().values()) {
             if (lifetime != fAttr.getSetterLifetime() || fAttr.isReady()) { //when in the lifecycle
                 continue;
             }
@@ -102,7 +106,7 @@ public class AlbianServiceLoader {
             int indexof = value.indexOf(".");
             if (-1 == indexof) { // real ref service
                 realObject = AlbianServiceRouter.getService(sessionId,IAlbianService.class, value, false);
-                if (!fAttr.getAllowNull() && null == realObject) {
+                if (!fAttr.isAllowNull() && null == realObject) {
                     AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
                     "not found ref service:{} to set field:{} in service:{}",
                     value,fAttr.getName(),servAttr.getId());
@@ -127,14 +131,14 @@ public class AlbianServiceLoader {
             IAlbianService refService =
                 AlbianServiceRouter.getService(sessionId,IAlbianService.class, refServiceId, false);
 
-            if (!fAttr.getAllowNull() && null == refService) {
+            if (!fAttr.isAllowNull() && null == refService) {
                 AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
                 "{}.{} = {}.{} is fail.not found ref srvice:{}",
                 servAttr.getId(),fAttr.getName(),refServiceId,exp,exp);
             }
 
             if (null != refService) {
-                IAlbianServiceAttribute sAttr = servAttrs.get(refServiceId);
+                AlbianServiceAttribute sAttr = servAttrs.get(refServiceId);
                 Object refRealObj = sAttr.getServiceClass().cast(refService);//must get service full type sign
                 try {
                     realObject = Ognl.getValue(exp, refRealObj);// get read value from full-sgin ref service
@@ -143,7 +147,7 @@ public class AlbianServiceLoader {
                             "{}.{} = {}.{} is fail.not found exp {} in ref srvice:{}",
                             servAttr.getId(),fAttr.getName(),refServiceId,exp,exp,refServiceId);
                 }
-                if (null == realObject && !fAttr.getAllowNull()) {
+                if (null == realObject && !fAttr.isAllowNull()) {
                     AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
                             "{}.{} = {}.{} is fail.not found  ref srvice:{}",
                             servAttr.getId(),fAttr.getName(),refServiceId,exp,exp);

@@ -41,6 +41,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.albianj.orm.impl.object.DataRouterAttribute;
 
 import java.util.Map;
 
@@ -52,8 +53,8 @@ public class DataRoutersAttribute {
 
     private boolean writerRouterEnable = false;
     private boolean readerRouterEnable = false;
-    private Map<String, IDataRouterAttribute> writerRoutings = null;
-    private Map<String, IDataRouterAttribute> readerRoutings = null;
+    private Map<String, DataRouterAttribute> writerRoutings = null;
+    private Map<String, DataRouterAttribute> readerRoutings = null;
     private IAlbianObjectDataRouter dataRouter = null;
 
 }

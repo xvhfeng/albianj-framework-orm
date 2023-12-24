@@ -2,7 +2,7 @@ package org.albianj.orm.impl.storage;
 
 
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianConnectionMonitorService;
 
 import java.sql.Connection;
@@ -26,7 +26,7 @@ public class MonitorWrapper implements IDataBasePool {
     }
 
     @Override
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa, boolean isAutoCommit)  {
         long start = System.currentTimeMillis();
         Connection connection = null;
         try {

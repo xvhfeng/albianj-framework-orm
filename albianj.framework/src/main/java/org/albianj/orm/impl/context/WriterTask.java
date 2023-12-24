@@ -46,7 +46,7 @@ import org.albianj.orm.context.PersistenceStatement;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.db.localize.IDBClientSection;
 import org.albianj.orm.impl.db.PersistenceCommand;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -60,7 +60,7 @@ import java.util.Map;
 public class WriterTask {
     List<PersistenceCommand> rbkCmds = null;
     boolean compensating = true;
-    private IRunningStorageAttribute storageSAttr = null;
+    private RunningStorageAttribute storageSAttr = null;
     private List<PersistenceCommand> commands = null;
     private Connection connection = null;
     private Map<String, PersistenceStatement> statements = null;

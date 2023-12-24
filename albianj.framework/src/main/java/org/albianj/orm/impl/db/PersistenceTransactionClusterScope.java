@@ -48,9 +48,9 @@ import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.db.localize.IDBClientSection;
 import org.albianj.orm.impl.context.WriterJob;
 import org.albianj.orm.impl.context.WriterTask;
+import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.ListConvert;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianStorageParserService;
 
 import java.sql.PreparedStatement;
@@ -71,8 +71,8 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
         for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
             writerJob.setCurrentStorage(task.getKey());
             WriterTask t = task.getValue();
-            IRunningStorageAttribute rsa = t.getStorageSAttr();
-            IStorageAttribute storage = rsa.getStorageAttribute();
+            RunningStorageAttribute rsa = t.getStorageSAttr();
+            StorageAttribute storage = rsa.getStorageAttribute();
             IDBClientSection dbClientSection = t.getDbClientSection();
             if (null == storage) {
                 throw new AlbianRuntimeException("The storage for task is null.");
@@ -268,7 +268,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         ((PreparedStatement) ps.getStatement()).executeUpdate();
                     }
                 }  catch (SQLException e) {
-                IRunningStorageAttribute rsa = t.getStorageSAttr();
+                RunningStorageAttribute rsa = t.getStorageSAttr();
                     AlbianServiceRouter.logAndThrowAgain(writerJob.getId(),LogTarget.Running,LogLevel.Error,e,
                             "commit to storage:{}  database: {} is fail.",
                             rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
@@ -289,7 +289,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 //                    int[] rtn = batchStmt.executeBatch();
 //                    batchStmt.clearBatch();
 //                } catch (SQLException e) {
-//                    IRunningStorageAttribute rsa = t.getStorage();
+//                    RunningStorageAttribute rsa = t.getStorage();
 //                    throw new AlbianRuntimeException(
 //                            "execute to storage:" + rsa.getStorageAttribute().getName() + " dtabase:" + rsa.getDatabase()
 //                                    + " is fail.", e);
@@ -304,7 +304,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 //                                ListConvert.toString(cmd.getParameters()));
 //                        ((PreparedStatement)statements.get(i)).executeUpdate();
 //                    } catch (SQLException e) {
-//                        IRunningStorageAttribute rsa = t.getStorage();
+//                        RunningStorageAttribute rsa = t.getStorage();
 //                        throw new AlbianRuntimeException(
 //                                "execute to storage:" + rsa.getStorageAttribute().getName() + " dtabase:" + rsa.getDatabase()
 //                                        + " is fail.", e);
@@ -328,7 +328,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 t.setBatchSubmit(true);
                 writerJob.setNeedManualRollback(true);
             } catch (SQLException e) {
-                IRunningStorageAttribute rsa = t.getStorageSAttr();
+                RunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.logAndThrowAgain(writerJob.getId(),LogTarget.Running,LogLevel.Error,e,
                     "commit to storage:{}  database: {} is fail.",
                         rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
@@ -349,7 +349,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     t.getConnection().rollback();
                 }
             } catch (Exception e) {
-                IRunningStorageAttribute rsa = t.getStorageSAttr();
+                RunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,
                         "rollback to storage:{} database:{} is error.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());
@@ -389,13 +389,13 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 for (PersistenceStatement ps: psMap.values()) {
                     sts.add(ps.getStatement());
                 }
-                IRunningStorageAttribute rsa = t.getStorageSAttr();
+                RunningStorageAttribute rsa = t.getStorageSAttr();
                 IDataBasePool dbp = t.getPool();
                 dbp.returnConnection(writerJob.getId(), rsa.getStorageAttribute().getName(), rsa.getDatabase(),
                         t.getConnection(), sts);
             }catch (Exception e){
                 isThrow = true;
-                IRunningStorageAttribute rsa = t.getStorageSAttr();
+                RunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                         "close the connect to storage:{} database:{} is fail.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());
@@ -480,7 +480,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         cmd.getRollbackCommandText(), ListConvert.toString(cmd.getRollbackParameters()));
                     ((PreparedStatement)statements.get(i)).executeUpdate();
                 } catch (SQLException e) {
-                    IRunningStorageAttribute rsa = t.getStorageSAttr();
+                    RunningStorageAttribute rsa = t.getStorageSAttr();
                     AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
                         "execute to storage:{} database:{} is error when manual rollbacking.",
                             rsa.getStorageAttribute().getName(), rsa.getDatabase());
@@ -502,7 +502,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     t.getConnection().commit();
                 }
             } catch (SQLException e) {
-                IRunningStorageAttribute rsa = t.getStorageSAttr();
+                RunningStorageAttribute rsa = t.getStorageSAttr();
                 AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
                         "commit to storage:{} database:{} is error when manual rollbacking.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());

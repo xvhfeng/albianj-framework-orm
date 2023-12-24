@@ -47,6 +47,7 @@ import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
+import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.impl.object.DataRouterAttribute;
 import org.albianj.orm.impl.object.MemberAttribute;
@@ -54,10 +55,10 @@ import org.albianj.orm.impl.rant.AlbianEntityRantScaner;
 import org.albianj.orm.impl.routing.AlbianDataRouterParserService;
 import org.albianj.orm.impl.storage.AlbianStorageParserService;
 import org.albianj.orm.impl.toolkit.Convert;
-import org.albianj.orm.object.*;
+import org.albianj.orm.object.AlbianObjectMemberAttribute;
+import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianMappingParserService;
-import org.albianj.orm.service.MappingAttributeException;
 import org.dom4j.Element;
 
 import java.beans.PropertyDescriptor;
@@ -73,7 +74,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     private static final String memberTagName = "Members/Member";
 
     private static void parserEntityFields(String type, @SuppressWarnings("rawtypes") List nodes,
-                                           Map<String, IAlbianEntityFieldAttribute> map)   {
+                                           Map<String, AlbianEntityFieldAttribute> map)   {
         for (Object node : nodes) {
             parserEntityField(type, (Element) node, map);
         }
@@ -90,14 +91,14 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 //        return cache;
 //    }
 
-    private static void parserEntityField(String type, Element elt, Map<String, IAlbianEntityFieldAttribute> map)
+    private static void parserEntityField(String type, Element elt, Map<String, AlbianEntityFieldAttribute> map)
              {
         String name = XmlUtil.getAttributeValue(elt, "Name");
         if (CheckUtil.isNullOrEmpty(name)) {
             throw new AlbianRuntimeException(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML());
         }
-        IAlbianEntityFieldAttribute fieldAttr = map.get(name.toLowerCase());
+                 AlbianEntityFieldAttribute fieldAttr = map.get(name.toLowerCase());
 //        IMemberAttribute member = (IMemberAttribute) map.get(name.toLowerCase());
         if (null == fieldAttr) {
             throw new AlbianRuntimeException("the field: " + name + "is not found in the :" + type);
@@ -126,7 +127,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             fieldAttr.setDatabaseType(Convert.toSqlType(dbType));
         }
         if (!CheckUtil.isNullOrEmpty(isSave)) {
-            fieldAttr.setIsSave( Boolean.parseBoolean(isSave));
+            fieldAttr.setSave( Boolean.parseBoolean(isSave));
         }
 //        if(Validate.isNullOrEmptyOrAllSpace(varField)){
 //            member.setVarField(StringHelper.lowercasingFirstLetter(name));
@@ -136,20 +137,20 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     }
 
     private static void parserAlbianObjectMembers(String type, @SuppressWarnings("rawtypes") List nodes,
-                                                  Map<String, IMemberAttribute> map)   {
+                                                  Map<String, MemberAttribute> map)   {
         for (Object node : nodes) {
             parserAlbianObjectMember(type, (Element) node, map);
         }
     }
 
-    private static void parserAlbianObjectMember(String type, Element elt, Map<String, IMemberAttribute> map)
+    private static void parserAlbianObjectMember(String type, Element elt, Map<String, MemberAttribute> map)
               {
         String name = XmlUtil.getAttributeValue(elt, "Name");
         if (CheckUtil.isNullOrEmpty(name)) {
             throw new AlbianRuntimeException(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML() + ".");
         }
-        IMemberAttribute member = (IMemberAttribute) map.get(name.toLowerCase());
+                  MemberAttribute member = (MemberAttribute) map.get(name.toLowerCase());
         if (null == member) {
             throw new AlbianRuntimeException("the field:" + name + " is not found in the " + type + ".");
         }
@@ -178,7 +179,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             member.setDatabaseType(Convert.toSqlType(dbType));
         }
         if (!CheckUtil.isNullOrEmpty(isSave)) {
-            member.setIsSave( Boolean.parseBoolean(isSave));
+            member.setSave( Boolean.parseBoolean(isSave));
         }
         if (CheckUtil.isNullOrEmptyOrAllSpace(varField)) {
             member.setVarField(StringsUtil.lowercasingFirstLetter(name));
@@ -190,7 +191,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
     }
 
-    private static IMemberAttribute reflexAlbianObjectMember(String type, PropertyDescriptor propertyDescriptor) {
+    private static AlbianEntityFieldAttribute reflexAlbianObjectMember(String type, PropertyDescriptor propertyDescriptor) {
         Method mr = propertyDescriptor.getReadMethod();
         Method mw = propertyDescriptor.getWriteMethod();
         if (null == mr || null == mw) {
@@ -209,7 +210,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
         if (attr.Ignore()) return null;
 
-        IMemberAttribute member = new MemberAttribute();
+        AlbianEntityFieldAttribute member = new AlbianEntityFieldAttribute();
         if (null != attr) {
             member.setName(propertyDescriptor.getName());
 
@@ -224,21 +225,21 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             } else {
                 member.setDatabaseType(attr.DbType());
             }
-            member.setIsSave(attr.IsSave());
+            member.setSave(attr.IsSave());
             member.setLength(attr.Length());
             member.setPrimaryKey(attr.IsPrimaryKey());
             return member;
         }
 
         if ("isAlbianNew".equals(propertyDescriptor.getName())) {
-            member.setIsSave(false);
+            member.setSave(false);
             member.setName(propertyDescriptor.getName());
             return member;
         }
         member.setAllowNull(true);
         member.setDatabaseType(Convert.toSqlType(propertyDescriptor.getPropertyType()));
         member.setSqlFieldName(propertyDescriptor.getName());
-        member.setIsSave(true);
+        member.setSave(true);
         member.setLength(-1);
         member.setPrimaryKey(false);
         member.setName(propertyDescriptor.getName());
@@ -293,13 +294,13 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             //return;
         }
 
-        IAlbianObjectAttribute pkgEntityAttr = null;
+        AlbianObjectAttribute pkgEntityAttr = null;
         if (AlbianEntityMetadata.exist(inter)) {
             pkgEntityAttr = AlbianEntityMetadata.getEntityMetadata(inter);
             pkgEntityAttr.setType(type);
         } else {
             pkgEntityAttr = new AlbianObjectAttribute();
-            pkgEntityAttr.setInterface(inter);
+            pkgEntityAttr.setInterfaceName(inter);
             pkgEntityAttr.setType(type);
             AlbianEntityMetadata.put(inter, pkgEntityAttr);
         }
@@ -343,7 +344,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         //            cached = parserAlbianObjectCache(cachedNode);
         //        }
 
-        IDataRouterAttribute defaultRouting = new DataRouterAttribute();
+        DataRouterAttribute defaultRouting = new DataRouterAttribute();
         defaultRouting.setName(AlbianDataRouterParserService.DEFAULT_ROUTING_NAME);
         defaultRouting.setOwner("dbo");
         defaultRouting.setStorageName(AlbianStorageParserService.DEFAULT_STORAGE_NAME);
@@ -368,7 +369,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 //            }
 //        }
 
-        Map<String, IAlbianEntityFieldAttribute> entityFieldAttr = null;
+        Map<String, AlbianEntityFieldAttribute> entityFieldAttr = null;
         if (CheckUtil.isNullOrEmpty(pkgEntityAttr.getFields())) {
             entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz);
             pkgEntityAttr.setFields(entityFieldAttr);
@@ -388,8 +389,8 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         return;
     }
 
-    private Map<String, IMemberAttribute> reflexAlbianObjectMembers(String type)  {
-        Map<String, IMemberAttribute> map = new LinkedHashMap<String, IMemberAttribute>();
+    private Map<String, AlbianEntityFieldAttribute> reflexAlbianObjectMembers(String type)  {
+        Map<String, AlbianEntityFieldAttribute> map = new LinkedHashMap<String, AlbianEntityFieldAttribute>();
         PropertyDescriptor[] propertyDesc = null;
         try {
             propertyDesc = ReflectUtil.getBeanPropertyDescriptor(AlbianClassLoader.getInstance(), type);
@@ -403,9 +404,9 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
 //        addAlbianObjectPropertyDescriptor(type, propertyDesc);
         for (PropertyDescriptor p : propertyDesc) {
-            IMemberAttribute member = reflexAlbianObjectMember(type, p);
+            AlbianEntityFieldAttribute member = reflexAlbianObjectMember(type, p);
             if (null == member) {
-                throw new MappingAttributeException(String.format("reflx albianobject:%s is fail.", type));
+                throw new AlbianRuntimeException(String.format("reflx albianobject:%s is fail.", type));
             }
             map.put(member.getVarField(), member);
         }
