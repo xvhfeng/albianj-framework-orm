@@ -5,7 +5,7 @@
     <parent>
         <artifactId>albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>03-delete-dataclass-interface</version>
+        <version>04-refactoring-code-struct</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,13 +19,13 @@
     </properties>
 
     <artifactId>albianj.framework</artifactId>
-    <version>03-delete-dataclass-interface</version>
+    <version>04-refactoring-code-struct</version>
 
     <dependencies>
         <dependency>
             <groupId>albianj-framework</groupId>
             <artifactId>albianj.framework.loader</artifactId>
-            <version>03-delete-dataclass-interface</version>
+            <version>04-refactoring-code-struct</version>
         </dependency>
 
         <dependency>
