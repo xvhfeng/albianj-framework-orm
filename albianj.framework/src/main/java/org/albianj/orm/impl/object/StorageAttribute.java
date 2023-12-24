@@ -60,7 +60,7 @@ public class StorageAttribute implements IStorageAttribute {
     private int transactionLevel = 0;
     private String options = null;
     private int idelTime = 180;
-    private String dbps = DatabasePoolStyle.DBCP.name();
+    private String dbps = DatabasePoolStyle.SpxDBCP.name();
     private int waitTimeWhenGetMs = 2;
     private int lifeCycleTime = 3600000;
     private int waitInFreePoolMs = 120000;

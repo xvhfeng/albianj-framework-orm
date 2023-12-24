@@ -47,10 +47,7 @@ import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.impl.object.PluginDatabasePoolMarker;
 import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.object.DatabasePoolMaker;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
-import org.albianj.orm.object.PersistenceDatabaseStyle;
+import org.albianj.orm.object.*;
 import org.albianj.orm.service.IAlbianConnectionMonitorService;
 import org.albianj.orm.service.IAlbianStorageParserService;
 import org.dom4j.Element;
@@ -60,7 +57,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static org.albianj.orm.object.DatabasePoolStyle.DBCP;
 
 
 @AlbianServiceRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
@@ -184,7 +180,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         storage.setTransactional(CheckUtil.isNullOrEmptyOrAllSpace(transactional) ? true :  Boolean.parseBoolean(transactional));
         storage.setAliveTime(CheckUtil.isNullOrEmptyOrAllSpace(sidleTime) ? 120 : Integer.parseInt(sidleTime));
         storage.setDatabasePoolStyle(
-            CheckUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? DBCP.name() : sDatabasePoolStyle);
+            CheckUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? DatabasePoolStyle.SpxDBCP.name() : sDatabasePoolStyle);
         storage.setUrlParaments(sUrlParaments);
 
         String sWaitTimeWhenGetMs = XmlUtil.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");
@@ -256,29 +252,18 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
                     return dbp;
                 }
                 switch (sa.getDatabasePoolStyle()) {
-                    case "C3P0": {
-                        dbp = new C3P0Wapper();
-                        break;
-                    }
+
                     case "HIKARICP": {
                         dbp = new HikariCPWapper();
                         break;
                     }
-                    case "DBCP": {
-                        dbp = new DBCPWapper();
-                        break;
-                    }
-                    case "SpxDBCP": {
-                        dbp = new SpxWapper();
-                        break;
-                    }
+
+//                    case "SpxDBCP": {
+//                        dbp = new SpxWapper();
+//                        break;
+//                    }
                     default: {
-                        if (databasePoolMaker != null) {
-                            dbp = databasePoolMaker.support(sa.getDatabasePoolStyle());
-                        }
-                        if (dbp == null) {
-                            dbp = new C3P0Wapper();
-                        }
+                        dbp = new SpxWapper();
                         break;
                     }
                 }
