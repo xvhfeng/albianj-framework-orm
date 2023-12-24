@@ -4,7 +4,10 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.anno.AlbianAopRant;
 import org.albianj.kernel.aop.*;
+import org.albianj.kernel.aop.AlbianAopContext;
+import org.albianj.kernel.attr.AlbianServiceAopAttr;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRouter;
@@ -18,13 +21,11 @@ import java.util.Map;
  * Created by xuhaifeng on 16/5/30.
  */
 public class AlbianServiceAopProxy implements MethodInterceptor {
-
     IAlbianService _service = null;
-    Map<String, AlbianServiceAopAttribute> _aopAttributes = null;
+    Map<String, AlbianServiceAopAttr> _aopAttributes = null;
     String sessionId = null;
 
-
-    public Object newInstance(String sessionId, IAlbianService service, Map<String, AlbianServiceAopAttribute> aopAttributes)  {
+    public Object newInstance(String sessionId, IAlbianService service, Map<String, AlbianServiceAopAttr> aopAttributes)  {
         this._service = service;
         this._aopAttributes = aopAttributes;
         try {
@@ -57,8 +58,8 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
         }
 
         Method rm = this._service.getClass().getMethod(mName, method.getParameterTypes());
-        AlbianAopAttribute attr = rm.getAnnotation(AlbianAopAttribute.class);
-        if (null != attr && attr.avoid()) {
+        AlbianAopRant attr = rm.getAnnotation(AlbianAopRant.class);
+        if (null != attr && attr.ignore()) {
             Object rc = methodProxy.invokeSuper(proxy, args);
             return rc;
         }
@@ -71,7 +72,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
         AlbianAopContext ctx = new AlbianAopContext();
 
         Object rc = null;
-        for (AlbianServiceAopAttribute asaa : _aopAttributes.values()) {
+        for (AlbianServiceAopAttr asaa : _aopAttributes.values()) {
             IAlbianAopService aas = AlbianServiceRouter.getService(sessionId,
                     IAlbianAopService.class, asaa.getServiceName(), false);
             if (null == aas) continue;
@@ -97,7 +98,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
                     this._service.getServiceName(), mName);
         }
 
-        for (AlbianServiceAopAttribute asaa : _aopAttributes.values()) {
+        for (AlbianServiceAopAttr asaa : _aopAttributes.values()) {
             IAlbianAopService aas = AlbianServiceRouter.getService(sessionId,
                     IAlbianAopService.class, asaa.getServiceName(), false);
             if (null == aas) continue;

@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.service;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
@@ -92,7 +92,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
     /**
      * 此service在service.xml中的id
      */
-    final static String Name = AlbianBuiltinServiceNamePair.AlbianPersistenceServiceName;
+    final static String Name = AlbianBuiltinServicesBkt.AlbianPersistenceServiceName;
 
     /**
      * 从存储中删除指定的对象

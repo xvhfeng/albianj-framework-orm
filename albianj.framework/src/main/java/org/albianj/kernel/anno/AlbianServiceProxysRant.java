@@ -1,4 +1,4 @@
-package org.albianj.kernel.aop;
+package org.albianj.kernel.anno;
 
 
 import java.lang.annotation.*;
@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianServiceProxyRants {
+public @interface AlbianServiceProxysRant {
     AlbianServiceProxyRant[] Rants() default {};
 }

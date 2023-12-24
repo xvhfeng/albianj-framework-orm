@@ -37,45 +37,17 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.loader;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.net.URI;
-import java.util.ArrayList;
 
 public class AlbianBootService {
     private static final Logger logger = LoggerFactory.getLogger(AlbianBootService.class);
     private static final String AlbianStarter = "org.albianj.kernel.impl.AlbianTransmitterService";
-    @SuppressWarnings("resource")
-//    private static ArrayList<byte[]> unpack(FileInputStream fis) {
-//        ArrayList<byte[]> list = null;
-//        try {
-//            list = new ArrayList<byte[]>();
-//            byte[] bsize = new byte[4];
-//            fis.read(bsize);
-//            long size = MemoryToIOStream.netStreamToInt(bsize, 0);
-//            for (int i = 0; i < size; i++) {
-//                byte[] blength = new byte[8];
-//                fis.read(blength);
-//                long length = MemoryToIOStream.netStreamToLong(blength, 0);
-//                byte[] ebytes = new byte[(int) length];
-//                fis.read(ebytes);
-//                Base64 b64 = new Base64();
-//                byte[] stream = b64.decode(ebytes);
-//                list.add(stream);
-//            }
-//            return list;
-//        } catch (Exception e) {
-//            logger.error("AlbianBootService ArrayList is error ",e);
-//        }
-//        return null;
-//    }
-
     private static URI lookupLoggerConfigFile(String configPath){
         String[] filenames = {
                 "log4j2.xml",
@@ -138,16 +110,6 @@ public class AlbianBootService {
             Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
             IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
             abs.start(settings);
-
-//            if (!Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
-//                abs.start(kernelPath, configPath);
-//            } else if (Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
-//            } else {
-//                abs.start();
-//            }
-//            if (AlbianState.Running != abs.getLifeState()) {
-//                return false;
-//            }
         } catch (Throwable e) {
             // TODO Auto-generated catch block
             logger.error("AlbianBootService start is error ",e);

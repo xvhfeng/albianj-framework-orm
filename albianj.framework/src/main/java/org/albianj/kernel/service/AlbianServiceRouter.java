@@ -38,6 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.kernel.service;
 
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.bkt.ServiceBkt;
 import org.albianj.kernel.logger.IAlbianLoggerService;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
@@ -48,7 +49,7 @@ import java.util.UUID;
 /**
  * albianj的service管理类，交由albianj托管的service全部由这个类提供获取service。
  */
-public class AlbianServiceRouter extends ServiceContainer {
+public class AlbianServiceRouter extends ServiceBkt {
 
     public static final String __StartupSessionId = "Albian-Startup";
 

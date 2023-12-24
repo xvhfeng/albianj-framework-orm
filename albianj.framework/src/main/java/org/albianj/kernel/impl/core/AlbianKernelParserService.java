@@ -37,19 +37,19 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
+import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 
 import java.util.Properties;
 
-@AlbianServiceRant(Id = AlbianBuiltinServiceNamePair.AlbianKernelServiceName, Interface = IAlbianParserService.class)
+@AlbianServiceRant(Id = AlbianBuiltinServicesBkt.AlbianKernelServiceName, Interface = IAlbianParserService.class)
 public class AlbianKernelParserService extends FreeAlbianParserService {
     private String file = "kernel.properties";
 
     public String getServiceName() {
-        return AlbianBuiltinServiceNamePair.AlbianKernelServiceName;
+        return AlbianBuiltinServicesBkt.AlbianKernelServiceName;
     }
 
 

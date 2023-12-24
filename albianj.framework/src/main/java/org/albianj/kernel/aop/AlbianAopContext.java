@@ -14,6 +14,4 @@ import lombok.ToString;
 @ToString
 public class AlbianAopContext { //} implements IAlbianAopContext {
     private Object data = null;
-
-
 }

@@ -4,11 +4,11 @@ import ognl.Ognl;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.kernel.impl.aop.AlbianServiceAopProxy;
-import org.albianj.kernel.impl.service.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceAttr;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceFieldAttribute;
-import org.albianj.kernel.service.AlbianServiceFieldSetterLifetime;
+import org.albianj.kernel.attr.AlbianServiceFieldAttr;
+import org.albianj.kernel.attr.opt.AlbianServiceFieldSetterLifecycleOpt;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.loader.AlbianClassLoader;
@@ -20,8 +20,8 @@ public class AlbianServiceLoader {
 
     private static String sessionId = "AlbianServiceLoader";
 
-    public static IAlbianService makeupService(GlobalSettings settings, AlbianServiceAttribute serviceAttr,
-                                               Map<String, AlbianServiceAttribute> servAttrs)  {
+    public static IAlbianService makeupService(GlobalSettings settings, AlbianServiceAttr serviceAttr,
+                                               Map<String, AlbianServiceAttr> servAttrs)  {
         String sImplClzz = serviceAttr.getType();
         String id = serviceAttr.getId();
         IAlbianService rtnService = null;
@@ -57,11 +57,11 @@ public class AlbianServiceLoader {
 
             IAlbianService service = (IAlbianService) cla.getDeclaredConstructor().newInstance();
             service.setSettings(settings);
-            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterNew, servAttrs);
+            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifecycleOpt.AfterNew, servAttrs);
             service.beforeLoad();
-            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.BeforeLoading, servAttrs);
+            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifecycleOpt.BeforeLoading, servAttrs);
             service.loading();
-            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterLoading, servAttrs);
+            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifecycleOpt.AfterLoading, servAttrs);
             service.afterLoading();
             if (CheckUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
                 rtnService = service;
@@ -81,11 +81,11 @@ public class AlbianServiceLoader {
         return rtnService;
     }
 
-    public static void setServiceFields(IAlbianService serv, AlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, AlbianServiceAttribute> servAttrs)  {
+    public static void setServiceFields(IAlbianService serv, AlbianServiceAttr servAttr, AlbianServiceFieldSetterLifecycleOpt lifetime, Map<String, AlbianServiceAttr> servAttrs)  {
         if(CheckUtil.isNullOrEmpty(servAttr.getServiceFields())) {
             return;
         }
-        for (AlbianServiceFieldAttribute fAttr : servAttr.getServiceFields().values()) {
+        for (AlbianServiceFieldAttr fAttr : servAttr.getServiceFields().values()) {
             if (lifetime != fAttr.getSetterLifetime() || fAttr.isReady()) { //when in the lifecycle
                 continue;
             }
@@ -138,7 +138,7 @@ public class AlbianServiceLoader {
             }
 
             if (null != refService) {
-                AlbianServiceAttribute sAttr = servAttrs.get(refServiceId);
+                AlbianServiceAttr sAttr = servAttrs.get(refServiceId);
                 Object refRealObj = sAttr.getServiceClass().cast(refService);//must get service full type sign
                 try {
                     realObject = Ognl.getValue(exp, refRealObj);// get read value from full-sgin ref service

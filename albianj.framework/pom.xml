@@ -13,8 +13,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locales>zh_CN</project.build.locales>
         <project.build.jdk>1.7</project.build.jdk>
-        <dbcp2.version>2.1.1</dbcp2.version>
-        <c3p0.version>0.9.5.2</c3p0.version>
         <hikari.version>2.4.12</hikari.version>
     </properties>
 
@@ -52,19 +50,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <version>${dbcp2.version}</version>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>${c3p0.version}</version>
-            <optional>true</optional>
         </dependency>
 
         <dependency>

@@ -41,9 +41,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -54,89 +51,27 @@ public final class Path {
 
         return Path.class.getClassLoader();
     }
-
     public static ClassLoader getClassLoader(
             @SuppressWarnings("rawtypes") Class cla) {
 
         return cla.getClassLoader();// Path.class.getClassLoader();
     }
-
-    public static String getAbsolutePathOfClassLoaderClassPath() {
+    public static String getResourceAbsPath() {
         return getClassLoader().getResource("").toString();
     }
 
-    public static String getAbsolutePathOfClassLoaderClassPath(
+    public static String getResourceAbsPath(
             @SuppressWarnings("rawtypes") Class cla) {
         return getClassLoader(cla).getResource("").toString();
     }
 
-    public static String getExtendResourcePath(String relativePath)
-            throws MalformedURLException, URISyntaxException {
-        return getExtendResourcePath(Path.class, relativePath);
+    public static String getResourceAbsPath(String resource) {
+        return getClassLoader().getResource(resource).toString();
     }
 
-    public static String getExtendResourcePath(
-            @SuppressWarnings("rawtypes") Class cla, String relativePath)
-            throws MalformedURLException, URISyntaxException {
-        URL resourceAbsoluteURL = null;
-
-        String path = null;
-        if (relativePath.startsWith("http://")) {
-//			if(relativePath.endsWith("/")){
-//				return relativePath;
-//			} else {
-            return relativePath;
-//			}
-        } else {
-            if (relativePath.startsWith("../")) {
-                String classPathAbsolutePath = getAbsolutePathOfClassLoaderClassPath(cla);
-                if (relativePath.substring(0, 1).equals("/")) {
-                    relativePath = relativePath.substring(1);
-                }
-                String wildcardString = relativePath.substring(0,
-                        relativePath.lastIndexOf("../") + 3);
-                relativePath = relativePath.substring(relativePath
-                        .lastIndexOf("../") + 3);
-                int containSum = containSum(wildcardString, "../");
-                classPathAbsolutePath = cutLastString(classPathAbsolutePath, "/",
-                        containSum);
-                String resourceAbsolutePath = classPathAbsolutePath + relativePath;
-                resourceAbsoluteURL = new URL(resourceAbsolutePath);
-                path = resourceAbsoluteURL.toURI().getPath();
-            } else {
-                path = relativePath;
-            }
-        }
-        return path;
-    }
-
-    private static int containSum(String source, String dest) {
-        int containSum = 0;
-        int destLength = dest.length();
-        while (source.contains(dest)) {
-            containSum = containSum + 1;
-            source = source.substring(destLength);
-
-        }
-        return containSum;
-    }
-
-    private static String cutLastString(String source, String dest, int num) {
-        for (int i = 0; i < num; i++) {
-            source = source.substring(0,
-                    source.lastIndexOf(dest, source.length() - 2) + 1);
-
-        }
-        return source;
-    }
-
-    public static URL getResource(String resource) {
-        return getClassLoader().getResource(resource);
-    }
-
-    public static URL getResource(@SuppressWarnings("rawtypes") Class cla,
+    public static String getResourceAbsPath(@SuppressWarnings("rawtypes") Class cla,
                                   String resource) {
-        return getClassLoader(cla).getResource(resource);
+        return getClassLoader(cla).getResource(resource).toString();
     }
 
     public static void traversalAllFolder(List<String> files, boolean isDepth, String path, String currSubFolder,
@@ -204,11 +139,6 @@ public final class Path {
                         }
                     }
                 }
-//                int idx = currSubFolder.lastIndexOf("/");
-//                if(idx >= 0) {
-//                    currSubFolder = currSubFolder.substring(0, idx);
-//                }
-
             }
         }
     }
@@ -216,12 +146,7 @@ public final class Path {
 
     public static String join(String... paths) {
         if (null == paths || 0 == paths.length) return null;
-//        StringBuilder sb = new StringBuilder( );
         String ps = File.separator;
-//        for ( String p : paths ) {
-//            if ( p.endsWith( ps ) ) sb.append( p );
-//            else sb.append( p ).append( ps );
-//        }
         boolean isLast = true;
         StringBuilder sb = null;
         boolean isLastAdd = false;
@@ -242,13 +167,6 @@ public final class Path {
             }
         }
         return sb.toString();
-//        boolean isBeginWith = false;
-//        StringBuffer sb = new StringBuffer();
-//            for(String s : paths){
-//                if(s.sta)
-//            }
-
-
     }
 
     public static String joinWithFilename(String filename, String... paths) {

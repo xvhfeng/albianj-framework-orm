@@ -1,6 +1,6 @@
-package org.albianj.kernel.service;
+package org.albianj.kernel.bkt;
 
-public class AlbianBuiltinServiceNamePair {
+public class AlbianBuiltinServicesBkt {
 
     public final static String AlbianLoggerServiceName = "AlbianLoggerService";
     public final static String AlbianKernelServiceName = "AlbianKernelService";

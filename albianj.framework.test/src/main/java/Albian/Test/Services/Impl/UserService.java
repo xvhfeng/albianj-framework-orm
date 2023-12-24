@@ -4,9 +4,9 @@ import Albian.Test.Model.IMultiUser;
 import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
-import org.albianj.kernel.service.AlbianServiceFieldRant;
-import org.albianj.kernel.service.AlbianServiceFieldType;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.AlbianServiceFieldRant;
+import org.albianj.kernel.attr.opt.AlbianServiceFieldTypeOpt;
+import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.context.dactx.IDataAccessContext;
@@ -30,7 +30,7 @@ public class UserService extends FreeAlbianService implements IUserService {
     //在没有确认与把握的情况下，慎用之慎用之慎用之（重要的话说三遍）
     //使用albianj的ioc直接对其属性进行赋值
     // 注意，所有使用AlbianServiceFieldRant赋值的值都是单利模式，故在albianj中会自动提升为静态变量状态
-    @AlbianServiceFieldRant(Type = AlbianServiceFieldType.Ref, Value = "AlbianDataAccessService")
+    @AlbianServiceFieldRant(Type = AlbianServiceFieldTypeOpt.Ref, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override

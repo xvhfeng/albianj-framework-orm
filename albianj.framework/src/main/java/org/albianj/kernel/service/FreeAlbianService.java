@@ -38,7 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.kernel.service;
 
 import org.albianj.common.io.Path;
-import org.albianj.kernel.aop.AlbianAopAttribute;
+import org.albianj.kernel.anno.AlbianAopRant;
+import org.albianj.kernel.attr.opt.AlbianServiceLifecycleOpt;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.loader.GlobalSettings;
@@ -67,68 +68,68 @@ public abstract class FreeAlbianService implements IAlbianService {
 
     GlobalSettings settings;
 
-    private AlbianServiceLifetime state = AlbianServiceLifetime.Normal;
+    private AlbianServiceLifecycleOpt state = AlbianServiceLifecycleOpt.Normal;
 
-    @AlbianAopAttribute(avoid = true)
-    public AlbianServiceLifetime getAlbianServiceState() {
+    @AlbianAopRant(ignore = true)
+    public AlbianServiceLifecycleOpt getAlbianServiceState() {
         // TODO Auto-generated method stub
         return this.state;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void beforeLoad() {
         // TODO Auto-generated method stub
-        this.state = AlbianServiceLifetime.BeforeLoading;
+        this.state = AlbianServiceLifecycleOpt.BeforeLoading;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void loading()  {
         // TODO Auto-generated method stub
-        this.state = AlbianServiceLifetime.Loading;
+        this.state = AlbianServiceLifecycleOpt.Loading;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void afterLoading()   {
         // TODO Auto-generated method stub
-        this.state = AlbianServiceLifetime.Running;
+        this.state = AlbianServiceLifecycleOpt.Running;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void beforeUnload()   {
         // TODO Auto-generated method stub
-        this.state = AlbianServiceLifetime.BeforeUnloading;
+        this.state = AlbianServiceLifecycleOpt.BeforeUnloading;
 
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void unload()   {
         // TODO Auto-generated method stub
-        this.state = AlbianServiceLifetime.Unloading;
+        this.state = AlbianServiceLifecycleOpt.Unloading;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void afterUnload()   {
         // TODO Auto-generated method stub
-        this.state = AlbianServiceLifetime.Unloaded;
+        this.state = AlbianServiceLifecycleOpt.Unloaded;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void init()  {
         // TODO Auto-generated method stub
 
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public boolean enableProxy() {
         return enableProxy;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public IAlbianService getRealService() {
         return null == service ? this : service;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void setRealService(IAlbianService service) {
         if (null != service) {
             this.service = service;
@@ -140,25 +141,25 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @Override
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public int hashCode() {
         return super.hashCode();
     }
 
     @Override
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public boolean equals(Object obj) {
         return super.equals(obj);
     }
 
     @Override
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
     @Override
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public String toString() {
         return super.toString();
     }
@@ -177,14 +178,14 @@ public abstract class FreeAlbianService implements IAlbianService {
      * @param filename
      * @return
      */
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     protected String findConfigFile(String filename)  {
         try {
             File f = new File(filename);
             if (f.exists()){
                 return filename;
             }
-            String fname = Path.getExtendResourcePath(settings.getConfigPath() + filename);
+            String fname = Path.getResourceAbsPath(settings.getConfigPath() + filename);
             f = new File(fname);
             if (f.exists()){
                 return f.getAbsolutePath();
@@ -200,7 +201,7 @@ public abstract class FreeAlbianService implements IAlbianService {
         return filename;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     @Deprecated
     protected String confirmConfigFile(String filename)  {
         return findConfigFile(filename);

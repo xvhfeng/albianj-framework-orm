@@ -42,9 +42,8 @@ import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.security.IAlbianSecurityService;
-import org.albianj.kernel.security.MACStyle;
-import org.albianj.kernel.security.StyleMapping;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.security.SecurityOpt;
+import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.service.AlbianServiceRouter;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.apache.commons.codec.binary.Base64;
@@ -143,19 +142,19 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
     public String encryptMD5(Object sessionId,String data)  {
-        return encryptHMAC(sessionId,DEFAULT_MD5_KEY, MACStyle.MD5, data);
+        return encryptHMAC(sessionId,DEFAULT_MD5_KEY, SecurityOpt.MD5, data);
     }
 
     public String encryptSHA(Object sessionId,String data)  {
-        return encryptHMAC(sessionId,DEFAULT_SHA_KEY, MACStyle.SHA1, data);
+        return encryptHMAC(sessionId,DEFAULT_SHA_KEY, SecurityOpt.SHA1, data);
     }
 
     public String initMacKey(Object sessionId)  {
-        return initMacKey(MACStyle.MD5);
+        return initMacKey(SecurityOpt.MD5);
     }
 
-    public String initMacKey(Object sessionId,MACStyle style)  {
-        return initMacKey(sessionId,StyleMapping.toMACStyleString(style));
+    public String initMacKey(Object sessionId, SecurityOpt style)  {
+        return initMacKey(sessionId,style.getName());
     }
 
     protected String initMacKey(Object sessionId,String key)  {
@@ -170,10 +169,10 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
         return encryptBASE64(sessionId,secretKey.getEncoded());
     }
 
-    public String encryptHMAC(Object sessionId, String key, MACStyle style, byte[] data) {
+    public String encryptHMAC(Object sessionId, String key, SecurityOpt style, byte[] data) {
         try {
             SecretKey secretKey = new SecretKeySpec(decryptBASE64(sessionId,key),
-                    StyleMapping.toMACStyleString(style));
+                    style.getName());
             Mac mac = Mac.getInstance(secretKey.getAlgorithm());
             mac.init(secretKey);
             return encryptBASE64(sessionId,mac.doFinal(data));
@@ -184,10 +183,10 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
         return null;
     }
 
-    public String encryptHMAC(Object sessionId,String key, MACStyle style, String data) {
+    public String encryptHMAC(Object sessionId, String key, SecurityOpt style, String data) {
         try {
             SecretKey secretKey = new SecretKeySpec(decryptBASE64(sessionId,key),
-                    StyleMapping.toMACStyleString(style));
+                    style.getName());
             Mac mac = Mac.getInstance(secretKey.getAlgorithm());
             mac.init(secretKey);
             return encryptBASE64(sessionId,mac.doFinal(decryptBASE64(sessionId,data)));
@@ -199,11 +198,11 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     }
 
     public String encryptHMAC(Object sessionId,String key, byte[] data)  {
-        return encryptHMAC(sessionId,key, MACStyle.MD5, data);
+        return encryptHMAC(sessionId,key, SecurityOpt.MD5, data);
     }
 
     public String encryptHMAC(Object sessionId,String key, String data)  {
-        return encryptHMAC(sessionId,key, MACStyle.MD5, data);
+        return encryptHMAC(sessionId,key, SecurityOpt.MD5, data);
     }
 
 

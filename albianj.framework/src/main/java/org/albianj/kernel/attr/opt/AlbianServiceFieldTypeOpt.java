@@ -1,9 +1,9 @@
-package org.albianj.kernel.service;
+package org.albianj.kernel.attr.opt;
 
 /**
  * Created by xuhaifeng on 2018/9/7.
  */
-public enum AlbianServiceFieldType {
+public enum AlbianServiceFieldTypeOpt {
     Ref,
     String,
     Integer,

@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.service;
 
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.ManualCommand;
 import org.albianj.orm.impl.context.ManualContext;

@@ -1,9 +1,13 @@
 package org.albianj.kernel.impl.service;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.aop.AlbianServiceProxyRant;
-import org.albianj.kernel.aop.AlbianServiceProxyRants;
-import org.albianj.kernel.impl.aop.AlbianServiceAopAttribute;
+import org.albianj.kernel.anno.AlbianServiceFieldRant;
+import org.albianj.kernel.anno.AlbianServiceProxyRant;
+import org.albianj.kernel.anno.AlbianServiceProxysRant;
+import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.kernel.attr.AlbianServiceAopAttr;
+import org.albianj.kernel.attr.AlbianServiceAttr;
+import org.albianj.kernel.attr.AlbianServiceFieldAttr;
 import org.albianj.kernel.service.*;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
@@ -40,8 +44,8 @@ public class AlbianServiceRantParser {
                 });
     }
 
-    public static AlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
-        AlbianServiceAttribute asa = new AlbianServiceAttribute();
+    public static AlbianServiceAttr scanAlbianService(Class<?> implClzz) {
+        AlbianServiceAttr asa = new AlbianServiceAttr();
         AlbianServiceRant rant = implClzz.getAnnotation(AlbianServiceRant.class);
         asa.setId(rant.Id());
         if (CheckUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
@@ -53,11 +57,11 @@ public class AlbianServiceRantParser {
         asa.setType(implClzz.getName());
         asa.setServiceClass(implClzz.asSubclass(IAlbianService.class));
 
-        if (implClzz.isAnnotationPresent(AlbianServiceProxyRants.class)) {
-            AlbianServiceProxyRants prants = implClzz.getAnnotation(AlbianServiceProxyRants.class);
-            Map<String, AlbianServiceAopAttribute> asaas = new HashMap<>();
+        if (implClzz.isAnnotationPresent(AlbianServiceProxysRant.class)) {
+            AlbianServiceProxysRant prants = implClzz.getAnnotation(AlbianServiceProxysRant.class);
+            Map<String, AlbianServiceAopAttr> asaas = new HashMap<>();
             for (AlbianServiceProxyRant prant : prants.Rants()) {
-                AlbianServiceAopAttribute aspa = new AlbianServiceAopAttribute();
+                AlbianServiceAopAttr aspa = new AlbianServiceAopAttr();
                 aspa.setServiceName(prant.ServiceName());
                 aspa.setProxyName(prant.ProxyName());
 
@@ -91,7 +95,7 @@ public class AlbianServiceRantParser {
             asa.setAopAttributes(asaas);
         }
 
-        Map<String, AlbianServiceFieldAttribute> fields = scanFields(implClzz);
+        Map<String, AlbianServiceFieldAttr> fields = scanFields(implClzz);
         if (!CheckUtil.isNullOrEmpty(fields)) {
             asa.setServiceFields(fields);
         }
@@ -99,18 +103,18 @@ public class AlbianServiceRantParser {
         return asa;
     }
 
-    private static Map<String, AlbianServiceFieldAttribute> scanFields(Class<?> clzz) {
+    private static Map<String, AlbianServiceFieldAttr> scanFields(Class<?> clzz) {
         Class tempClass = clzz;
         List<Field> fields = new ArrayList<>() ;
         while (tempClass !=null && !tempClass.getName().toLowerCase().equals("java.lang.object") ) {//当父类为null的时候说明到达了最上层的父类(Object类).
             fields.addAll(Arrays.asList(tempClass .getDeclaredFields()));
             tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
         }
-        Map<String, AlbianServiceFieldAttribute> fieldsAttr = new HashMap<>();
+        Map<String, AlbianServiceFieldAttr> fieldsAttr = new HashMap<>();
         for (Field f : fields) {
             if (f.isAnnotationPresent(AlbianServiceFieldRant.class)) {
                 f.setAccessible(true);
-                AlbianServiceFieldAttribute aspa = new AlbianServiceFieldAttribute();
+                AlbianServiceFieldAttr aspa = new AlbianServiceFieldAttr();
                 AlbianServiceFieldRant frant = f.getAnnotation(AlbianServiceFieldRant.class);
                 aspa.setName(f.getName());
                 aspa.setType(frant.Type().name());

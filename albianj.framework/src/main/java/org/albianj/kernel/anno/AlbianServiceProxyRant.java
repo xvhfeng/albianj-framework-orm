@@ -1,4 +1,4 @@
-package org.albianj.kernel.aop;
+package org.albianj.kernel.anno;
 
 import java.lang.annotation.*;
 

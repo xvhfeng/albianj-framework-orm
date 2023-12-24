@@ -35,16 +35,26 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.common.argument;
+package org.albianj.kernel.attr;
 
-public class RefArg<T> {
-    private T _t = null;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.albianj.kernel.service.IAlbianService;
 
-    public T getValue() {
-        return this._t;
-    }
+import java.util.Map;
 
-    public void setValue(T t) {
-        this._t = t;
-    }
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class AlbianServiceAttr {
+    Map<String, AlbianServiceFieldAttr> serviceFields;
+    Map<String, AlbianServiceAopAttr> aopAttributes = null;
+    private String id = "";
+    private String type = "";
+    private String itfClzzName;
+    private Class<? extends IAlbianService> serviceClass = null;
+    private boolean enable = true;
 }

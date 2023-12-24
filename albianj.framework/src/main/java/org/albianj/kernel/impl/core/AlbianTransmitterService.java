@@ -38,7 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.kernel.impl.core;
 
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.impl.service.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceAttr;
+import org.albianj.kernel.attr.opt.AlbianLifecycleOpt;
+import org.albianj.kernel.bkt.ServiceAttrBkt;
+import org.albianj.kernel.bkt.ServiceBkt;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
@@ -53,7 +56,7 @@ import java.util.*;
  */
 public class AlbianTransmitterService implements IAlbianTransmitterService {
 
-    private static AlbianState state = AlbianState.Normal;
+    private static AlbianLifecycleOpt state = AlbianLifecycleOpt.Normal;
     private static Date startDateTime;
     private static String serialId;
 
@@ -80,7 +83,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
     /* (non-Javadoc)
      * @see org.albianj.kernel.impl.IAlbianBootService#getLifeState()
      */
-    public AlbianState getLifeState() {
+    public AlbianLifecycleOpt getLifeState() {
         return state;
     }
 
@@ -111,13 +114,13 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
 
         // do load builtin service
         bltSevLoader.loadServices(AlbianServiceRouter.__StartupSessionId,settings);
-        Map<String, AlbianServiceAttribute> bltSrvAttrs = bltSevLoader.getBltSrvAttrs();
+        Map<String, AlbianServiceAttr> bltSrvAttrs = bltSevLoader.getBltSrvAttrs();
 
         //do load bussiness service
-        Map<String, AlbianServiceAttribute> bnsSrvAttrs =
-            (Map<String, AlbianServiceAttribute>) ServiceAttributeMap.get(FreeAlbianServiceParser.ALBIANJSERVICEKEY);
+        Map<String, AlbianServiceAttr> bnsSrvAttrs =
+            (Map<String, AlbianServiceAttr>) ServiceAttrBkt.get(FreeAlbianServiceParser.ALBIANJSERVICEKEY);
 
-        Map<String, AlbianServiceAttribute> mapAttr = new HashMap<>();
+        Map<String, AlbianServiceAttr> mapAttr = new HashMap<>();
         if (bnsSrvAttrs != null) {
             mapAttr.putAll(bnsSrvAttrs); // copy it for field setter
         }
@@ -127,7 +130,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             }
         }
 
-        Map<String, AlbianServiceAttribute> failMap = new LinkedHashMap<String, AlbianServiceAttribute>();
+        Map<String, AlbianServiceAttr> failMap = new LinkedHashMap<String, AlbianServiceAttr>();
         int lastFailSize = 0;
         int currentFailSize = 0;
         Exception e = null;
@@ -137,11 +140,11 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             String sType = null;
             String id = null;
             String sInterface = null;
-            for (Map.Entry<String, AlbianServiceAttribute> entry : mapAttr.entrySet())
+            for (Map.Entry<String, AlbianServiceAttr> entry : mapAttr.entrySet())
                 try {
-                    AlbianServiceAttribute serviceAttr = entry.getValue();
+                    AlbianServiceAttr serviceAttr = entry.getValue();
                     IAlbianService service = AlbianServiceLoader.makeupService(settings,serviceAttr, mapAttr);
-                    ServiceContainer.addService(serviceAttr.getId(), service);
+                    ServiceBkt.addService(serviceAttr.getId(), service);
                 } catch (Exception exc) {
                     e = exc;
                     currentFailSize++;
@@ -161,20 +164,20 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             if (lastFailSize == currentFailSize) {
                 // startup the service fail in this times,
                 // so throw the exception and stop the albianj engine
-                state = AlbianState.Unloading;
+                state = AlbianLifecycleOpt.Unloading;
                 AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                         "startup slbianJ engine is fail ,maybe cross refernce");
                 if (null != e) {
                     StringBuilder errBuilder = new StringBuilder();
-                    for (Map.Entry<String, AlbianServiceAttribute> entry : failMap.entrySet()) {
+                    for (Map.Entry<String, AlbianServiceAttr> entry : failMap.entrySet()) {
                         errBuilder.append(entry.getKey()).append(",");
                     }
 
                     AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                             "startup the service :{} is fail .", errBuilder.toString());
                 }
-                ServiceContainer.clear();
-                state = AlbianState.Unloaded;
+                ServiceBkt.clear();
+                state = AlbianLifecycleOpt.Unloaded;
                 throw new AlbianRuntimeException(e);
             } else {
                 mapAttr.clear();
@@ -188,7 +191,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         if (bnsSrvAttrs != null) {
             bltSrvAttrs.putAll(bnsSrvAttrs);
         }
-        ServiceAttributeMap.insert(FreeAlbianServiceParser.ALBIANJSERVICEKEY, bltSrvAttrs);
+        ServiceAttrBkt.insert(FreeAlbianServiceParser.ALBIANJSERVICEKEY, bltSrvAttrs);
         //set field in service
         //        if (!setServiceFields(bltSrvAttrs)) {
         //            AlbianServiceRouter.getLogger2().log(IAlbianLoggerService.AlbianRunningLoggerName,
@@ -198,7 +201,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         //            throw new AlbianRuntimeException("startup albianj is fail.");
         //
         //        }
-        state = AlbianState.Running;
+        state = AlbianLifecycleOpt.Running;
         AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                 "set fieds in the service over .Startup albianJ is success!");
     }
@@ -208,7 +211,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      */
     @Override
     public String requestHandlerContext() {
-        if (AlbianState.Running != state) {
+        if (AlbianLifecycleOpt.Running != state) {
             return "Albian is not ready,Please wait a minute or contact administrators!";
         }
         return "";
@@ -219,10 +222,10 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      */
     @Override
     public void unload()  {
-        Set<String> keys = ServiceContainer.getAllServiceNames();
+        Set<String> keys = ServiceBkt.getAllServiceNames();
         for (String key : keys) {
             try {
-                IAlbianService service = ServiceContainer.getService(key);
+                IAlbianService service = ServiceBkt.getService(key);
                 service.beforeUnload();
                 service.unload();
                 service.afterUnload();
@@ -233,18 +236,6 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#makeEnvironment()
-     */
-//    @Override
-//    public void makeEnvironment() {
-//        String system = System.getProperty("os.name");
-//        if (system.toLowerCase().contains("windows"))// start with '/'
-//        {
-//            KernelSetting.setSystem(KernelSetting.Windows);
-//        } else {
-//            KernelSetting.setSystem(KernelSetting.Linux);
-//        }
-//    }
+
 
 }

@@ -1,9 +1,10 @@
-package org.albianj.kernel.service;
+package org.albianj.kernel.attr;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.albianj.kernel.attr.opt.AlbianServiceFieldSetterLifecycleOpt;
 
 import java.lang.reflect.Field;
 
@@ -14,12 +15,12 @@ import java.lang.reflect.Field;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class AlbianServiceFieldAttribute { //implements IAlbianServiceFieldAttribute {
+public class AlbianServiceFieldAttr {
     String type;
     String value;
     String name;
     Field field;
     boolean allowNull = false;
     boolean ready = false;
-    AlbianServiceFieldSetterLifetime setterLifetime = AlbianServiceFieldSetterLifetime.AfterLoading;
+    AlbianServiceFieldSetterLifecycleOpt setterLifetime = AlbianServiceFieldSetterLifecycleOpt.AfterLoading;
 }

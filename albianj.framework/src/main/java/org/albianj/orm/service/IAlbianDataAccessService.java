@@ -1,6 +1,6 @@
 package org.albianj.orm.service;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
@@ -28,7 +28,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
     /**
      * 此service在service.xml中的id
      */
-    String Name = AlbianBuiltinServiceNamePair.AlbianDataAccessServiceName;
+    String Name = AlbianBuiltinServicesBkt.AlbianDataAccessServiceName;
 
     /**
      * 从存储中删除指定的对象

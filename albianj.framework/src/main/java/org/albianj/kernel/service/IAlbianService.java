@@ -38,7 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.kernel.service;
 
 import org.albianj.common.comment.Comments;
-import org.albianj.kernel.aop.AlbianAopAttribute;
+import org.albianj.kernel.anno.AlbianAopRant;
+import org.albianj.kernel.attr.opt.AlbianServiceLifecycleOpt;
 import org.albianj.loader.GlobalSettings;
 
 /**
@@ -55,37 +56,37 @@ public interface IAlbianService {
 
     void setSettings(GlobalSettings settings);
 
-    @AlbianAopAttribute(avoid = true)
-    public AlbianServiceLifetime getAlbianServiceState();
+    @AlbianAopRant(ignore = true)
+    public AlbianServiceLifecycleOpt getAlbianServiceState();
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void beforeLoad() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void loading() ;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void afterLoading() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void beforeUnload() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void unload() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void afterUnload() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public boolean enableProxy();
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public IAlbianService getRealService();
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     public void setRealService(IAlbianService service);
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianAopRant(ignore = true)
     @Comments("得到当前service的名字，service的子类必须实现该方法，并且值必须和service.xml中配置的Id一致。默认为当前类的名称。")
     public String getServiceName();
 }

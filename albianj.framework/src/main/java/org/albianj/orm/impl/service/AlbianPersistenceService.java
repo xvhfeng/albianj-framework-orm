@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.service;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;

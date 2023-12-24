@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.service;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.impl.object.StorageAttribute;
@@ -68,7 +68,7 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
     /**
      * 此service在service.xml中的id
      */
-    static String Name = AlbianBuiltinServiceNamePair.AlbianStorageServiceName;
+    static String Name = AlbianBuiltinServicesBkt.AlbianStorageServiceName;
 
     /**
      * 增加storage的元信息

@@ -1,6 +1,5 @@
 package org.albianj.kernel.logger;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

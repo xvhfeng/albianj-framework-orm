@@ -35,35 +35,54 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.kernel.service;
+package org.albianj.kernel.bkt;
 
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.albianj.kernel.logger.IAlbianLoggerService;
+import org.albianj.kernel.service.IAlbianService;
 
-public final class ServiceAttributeMap {
-    private static Map<String, Object> cached = new LinkedHashMap<String, Object>();
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-    public synchronized static boolean exist(String key)
+
+public class ServiceBkt {
+
+    private static ConcurrentHashMap<String, IAlbianService> _container = new ConcurrentHashMap<String, IAlbianService>();
+
+    public static boolean existService(String id)
             throws IllegalArgumentException {
-        return cached.containsKey(key);
+        return _container.contains(id);
     }
 
-    public static Object get(String key) throws IllegalArgumentException {
-        return cached.get(key);
+    // no synchronized
+    public static IAlbianService getService(String id) throws IllegalArgumentException {
+        return _container.get(id);
     }
 
-    public synchronized static void insert(String key, Object value)
+    public synchronized static void addService(String id, IAlbianService value)
             throws IllegalArgumentException {
-        cached.put(key, value);
+        if (null == id || null == value)
+            throw new IllegalArgumentException("argument is null.");
+        if (_container.containsKey(id)) {
+            _container.replace(id, value);
+        } else {
+            _container.put(id, value);
+        }
     }
 
-    public synchronized static void remove(String key)
+    public static void removeService(String id)
             throws IllegalArgumentException {
-        cached.remove(key);
+        //can not remove logger
+        if (IAlbianLoggerService.Name.equals(id))
+            return;
+        _container.remove(id);
     }
 
-    public synchronized static void clear() {
-        cached.clear();
+    public static void clear() {
+        _container.clear();
+    }
+
+    public static Set<String> getAllServiceNames() {
+        return _container.keySet();
     }
 }

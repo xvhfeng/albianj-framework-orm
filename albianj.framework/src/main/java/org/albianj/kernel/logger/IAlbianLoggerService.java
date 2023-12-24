@@ -1,7 +1,7 @@
 package org.albianj.kernel.logger;
 
 import org.albianj.common.comment.Comments;
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.service.IAlbianService;
 
 /**
@@ -11,7 +11,7 @@ import org.albianj.kernel.service.IAlbianService;
 public interface IAlbianLoggerService extends IAlbianService {
 
     @Comments("Albianj Logger Service2在server.xml中的标识")
-    String Name = AlbianBuiltinServiceNamePair.AlbianLoggerServiceName;
+    String Name = AlbianBuiltinServicesBkt.AlbianLoggerServiceName;
 
     void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras);
 
