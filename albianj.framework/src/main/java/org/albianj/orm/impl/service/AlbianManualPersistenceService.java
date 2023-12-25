@@ -1,14 +1,14 @@
 package org.albianj.orm.impl.service;
 
 import org.albianj.kernel.anno.AlbianServiceRant;
-import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.ManualCommand;
+import org.albianj.kernel.kit.service.FreeAlbianService;
+import org.albianj.orm.kit.context.ManualCommand;
 import org.albianj.orm.impl.context.ManualContext;
 import org.albianj.orm.impl.db.IManualCommandAdapter;
 import org.albianj.orm.impl.db.IManualTransactionScope;
 import org.albianj.orm.impl.db.ManualCommandAdapter;
 import org.albianj.orm.impl.db.ManualTransactionScope;
-import org.albianj.orm.service.IAlbianManualPersistenceService;
+import org.albianj.orm.kit.service.IAlbianManualPersistenceService;
 
 import java.util.List;
 import java.util.Vector;

@@ -1,10 +1,10 @@
 package org.albianj.orm.impl.db;
 
 
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.WriterJobLifeTime;
+import org.albianj.kernel.kit.logger.LogLevel;
+import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.orm.kit.context.WriterJobLifeTime;
 import org.albianj.orm.impl.context.ManualContext;
 
 /**

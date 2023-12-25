@@ -1,9 +1,9 @@
 package Albian.Test.Model.Impl;
 
 import Albian.Test.Model.IUTF8M64;
-import org.albianj.orm.object.FreeAlbianObject;
-import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.orm.object.rants.AlbianObjectRant;
+import org.albianj.orm.kit.object.FreeAlbianObject;
+import org.albianj.orm.kit.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.orm.kit.object.rants.AlbianObjectRant;
 
 @AlbianObjectRant(Interface = IUTF8M64.class)
 public class UTF8M64 extends FreeAlbianObject implements IUTF8M64 {

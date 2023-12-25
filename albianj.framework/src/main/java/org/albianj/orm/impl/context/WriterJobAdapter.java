@@ -39,20 +39,21 @@ package org.albianj.orm.impl.context;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.kit.logger.LogLevel;
+import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.impl.db.IPersistenceUpdateCommand;
 import org.albianj.orm.impl.db.PersistenceCommand;
-import org.albianj.orm.impl.db.localize.MysqlClientSection;
-import org.albianj.orm.impl.db.localize.SqlServerClientSection;
 import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.impl.object.DataRouterAttribute;
 import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.object.*;
-import org.albianj.orm.service.AlbianEntityMetadata;
-import org.albianj.orm.service.IAlbianStorageParserService;
+import org.albianj.orm.kit.object.DataRoutersAttribute;
+import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.kit.object.IAlbianObjectDataRouter;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.kit.service.AlbianEntityMetadata;
+import org.albianj.orm.kit.service.IAlbianStorageParserService;
 
 import java.util.*;
 
@@ -95,7 +96,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
     }
 
     protected List<DataRouterAttribute> parserRoutings(String sessionId, IAlbianObject object,
-                                                        DataRoutersAttribute routings, AlbianObjectAttribute albianObject) {
+                                                       DataRoutersAttribute routings, AlbianObjectAttribute albianObject) {
         List<DataRouterAttribute> useRoutings = new Vector<DataRouterAttribute>();
         if (null == routings) {
             DataRouterAttribute dra = albianObject.getDefaultRouting();
@@ -269,11 +270,11 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
             task.setCommands(cmds);
             task.setStorageSAttr(new RunningStorageAttribute(storage, database));
             tasks.put(key, task);
-            if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
-                task.setDbClientSection(new MysqlClientSection());
-            } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
-                task.setDbClientSection(new SqlServerClientSection());
-            }
+//            if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
+//                task.setDbClientSection(new MysqlClientSection());
+//            } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
+//                task.setDbClientSection(new SqlServerClientSection());
+//            }
             job.setWriterTasks(tasks);
         } else {
             if (job.getWriterTasks().containsKey(key)) {
@@ -284,11 +285,11 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                 cmds.add(pstCmd);
                 task.setCommands(cmds);
                 task.setStorageSAttr(new RunningStorageAttribute(storage, database));
-                if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
-                    task.setDbClientSection(new MysqlClientSection());
-                } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
-                    task.setDbClientSection(new SqlServerClientSection());
-                }
+//                if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
+//                    task.setDbClientSection(new MysqlClientSection());
+//                } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
+//                    task.setDbClientSection(new SqlServerClientSection());
+//                }
                 job.getWriterTasks().put(key, task);
             }
         }

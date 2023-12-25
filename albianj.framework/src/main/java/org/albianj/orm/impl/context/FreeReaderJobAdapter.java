@@ -39,17 +39,17 @@ package org.albianj.orm.impl.context;
 
 import org.albianj.common.utils.RefArg;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.orm.db.PersistenceCommandType;
+import org.albianj.orm.kit.db.PersistenceCommandType;
 import org.albianj.orm.impl.db.PersistenceCommand;
 import org.albianj.orm.impl.db.SqlParameter;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.ListConvert;
-import org.albianj.orm.object.IFilterCondition;
-import org.albianj.orm.object.IOrderByCondition;
-import org.albianj.orm.object.RunningStorageAttribute;
-import org.albianj.orm.object.filter.IChainExpression;
-import org.albianj.orm.service.AlbianEntityMetadata;
+import org.albianj.orm.kit.object.IFilterCondition;
+import org.albianj.orm.kit.object.IOrderByCondition;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.kit.object.filter.IChainExpression;
+import org.albianj.orm.kit.service.AlbianEntityMetadata;
 
 import java.util.HashMap;
 import java.util.LinkedList;

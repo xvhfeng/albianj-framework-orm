@@ -2,16 +2,16 @@ package org.albianj.orm.impl.db;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.InternalManualCommand;
-import org.albianj.orm.context.ManualCommand;
+import org.albianj.kernel.kit.logger.LogLevel;
+import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.orm.kit.context.InternalManualCommand;
+import org.albianj.orm.kit.context.ManualCommand;
 import org.albianj.orm.impl.context.ManualContext;
 import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.ListConvert;
-import org.albianj.orm.object.RunningStorageAttribute;
-import org.albianj.orm.service.IAlbianStorageParserService;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.kit.service.IAlbianStorageParserService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -41,7 +41,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.kernel.service.IAlbianService;
+import org.albianj.kernel.kit.service.IAlbianService;
 
 import java.util.Map;
 

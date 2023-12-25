@@ -1,6 +1,6 @@
 package org.albianj.kernel.anno;
 
-import org.albianj.kernel.service.IAlbianService;
+import org.albianj.kernel.kit.service.IAlbianService;
 
 import java.lang.annotation.*;
 

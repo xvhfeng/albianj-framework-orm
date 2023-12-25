@@ -39,11 +39,11 @@ package org.albianj.orm.impl.db;
 
 
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.orm.db.PersistenceCommandType;
+import org.albianj.orm.kit.db.PersistenceCommandType;
 import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
-import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.PersistenceDatabaseStyle;
+import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.kit.object.PersistenceDatabaseStyle;
 
 import java.util.HashMap;
 import java.util.Map;

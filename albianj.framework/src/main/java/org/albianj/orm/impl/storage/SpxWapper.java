@@ -1,14 +1,14 @@
 package org.albianj.orm.impl.storage;
 
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.impl.dbpool.ISpxDBPool;
-import org.albianj.orm.impl.dbpool.ISpxDBPoolConfig;
-import org.albianj.orm.impl.dbpool.impl.SpxDBPool;
-import org.albianj.orm.impl.dbpool.impl.SpxDBPoolConfig;
+import org.albianj.kernel.kit.logger.LogLevel;
+import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.orm.dbpool.ISpxDBPool;
+import org.albianj.orm.dbpool.ISpxDBPoolConfig;
+import org.albianj.orm.dbpool.impl.SpxDBPool;
+import org.albianj.orm.dbpool.impl.SpxDBPoolConfig;
 import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.object.RunningStorageAttribute;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

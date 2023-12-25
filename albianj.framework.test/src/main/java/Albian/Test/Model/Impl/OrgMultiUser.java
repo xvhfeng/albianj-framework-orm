@@ -1,7 +1,7 @@
 package Albian.Test.Model.Impl;
 
 import Albian.Test.Model.IOrgMultiUser;
-import org.albianj.orm.object.FreeAlbianObject;
+import org.albianj.orm.kit.object.FreeAlbianObject;
 
 public class OrgMultiUser extends FreeAlbianObject implements IOrgMultiUser {
 

@@ -2,7 +2,7 @@ package Albian.Test;
 
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianBootService;
 
 public class DoTest {

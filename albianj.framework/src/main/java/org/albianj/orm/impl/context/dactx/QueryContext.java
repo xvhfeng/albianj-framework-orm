@@ -2,15 +2,15 @@ package org.albianj.orm.impl.context.dactx;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.orm.context.dactx.IQueryContext;
+import org.albianj.orm.kit.context.dactx.IQueryContext;
 import org.albianj.orm.impl.context.ReaderJob;
 import org.albianj.orm.impl.context.ReaderJobAdapter;
 import org.albianj.orm.impl.db.IPersistenceQueryScope;
 import org.albianj.orm.impl.db.PersistenceQueryScope;
-import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.IOrderByCondition;
-import org.albianj.orm.object.filter.IChainExpression;
-import org.albianj.orm.service.LoadType;
+import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.kit.object.IOrderByCondition;
+import org.albianj.orm.kit.object.filter.IChainExpression;
+import org.albianj.orm.kit.service.LoadType;
 
 import java.util.LinkedList;
 import java.util.List;

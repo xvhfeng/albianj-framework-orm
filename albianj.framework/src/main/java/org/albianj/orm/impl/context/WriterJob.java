@@ -42,10 +42,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IPersistenceCompensateNotify;
-import org.albianj.orm.context.IPersistenceNotify;
-import org.albianj.orm.context.WriterJobLifeTime;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.orm.kit.context.IPersistenceCompensateNotify;
+import org.albianj.orm.kit.context.IPersistenceNotify;
+import org.albianj.orm.kit.context.WriterJobLifeTime;
 
 import java.util.Map;
 

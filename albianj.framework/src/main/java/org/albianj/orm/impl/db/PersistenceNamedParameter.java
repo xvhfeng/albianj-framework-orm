@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.orm.context.InternalManualCommand;
-import org.albianj.orm.context.ManualCommand;
+import org.albianj.orm.kit.context.InternalManualCommand;
+import org.albianj.orm.kit.context.ManualCommand;
 
 import java.util.HashMap;
 import java.util.Map;

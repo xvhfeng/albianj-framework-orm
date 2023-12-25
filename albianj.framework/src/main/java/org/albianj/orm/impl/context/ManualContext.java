@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.orm.context.InternalManualCommand;
-import org.albianj.orm.context.ManualCommand;
-import org.albianj.orm.context.WriterJobLifeTime;
-import org.albianj.orm.object.RunningStorageAttribute;
+import org.albianj.orm.kit.context.InternalManualCommand;
+import org.albianj.orm.kit.context.ManualCommand;
+import org.albianj.orm.kit.context.WriterJobLifeTime;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.Statement;

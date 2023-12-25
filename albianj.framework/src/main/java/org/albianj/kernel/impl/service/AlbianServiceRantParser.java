@@ -8,7 +8,7 @@ import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.attr.AlbianServiceAopAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
 import org.albianj.kernel.attr.AlbianServiceFieldAttr;
-import org.albianj.kernel.service.*;
+import org.albianj.kernel.kit.service.IAlbianService;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;

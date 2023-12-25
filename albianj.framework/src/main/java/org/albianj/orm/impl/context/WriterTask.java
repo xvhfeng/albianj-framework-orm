@@ -42,11 +42,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.orm.context.PersistenceStatement;
-import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.db.localize.IDBClientSection;
 import org.albianj.orm.impl.db.PersistenceCommand;
-import org.albianj.orm.object.RunningStorageAttribute;
+import org.albianj.orm.kit.context.PersistenceStatement;
+import org.albianj.orm.kit.db.IDataBasePool;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -69,7 +68,7 @@ public class WriterTask {
     private IDataBasePool pool = null;
     private boolean  batchSubmit = false;
     private Statement batchStmt = null;
-    private IDBClientSection dbClientSection =null;
+//    private IDBClientSection dbClientSection =null;
     private List<String> sqlTexts;
 
 

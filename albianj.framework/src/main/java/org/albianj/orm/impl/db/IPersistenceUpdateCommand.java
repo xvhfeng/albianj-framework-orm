@@ -39,7 +39,7 @@ package org.albianj.orm.impl.db;
 
 
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
-import org.albianj.orm.object.IAlbianObject;
+import org.albianj.orm.kit.object.IAlbianObject;
 
 import java.util.Map;
 

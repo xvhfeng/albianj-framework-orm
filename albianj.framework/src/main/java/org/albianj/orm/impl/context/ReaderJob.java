@@ -42,10 +42,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.db.IDataBasePool;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.orm.kit.db.IDataBasePool;
 import org.albianj.orm.impl.db.PersistenceCommand;
-import org.albianj.orm.object.RunningStorageAttribute;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

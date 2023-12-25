@@ -1,7 +1,7 @@
 package org.albianj.orm.impl.db;
 
-import org.albianj.orm.context.InternalManualCommand;
-import org.albianj.orm.context.ManualCommand;
+import org.albianj.orm.kit.context.InternalManualCommand;
+import org.albianj.orm.kit.context.ManualCommand;
 import org.albianj.orm.impl.context.ManualContext;
 
 import java.util.LinkedList;

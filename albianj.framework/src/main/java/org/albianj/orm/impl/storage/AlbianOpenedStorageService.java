@@ -1,12 +1,12 @@
 package org.albianj.orm.impl.storage;
 
 
-import org.albianj.kernel.service.FreeAlbianService;
+import org.albianj.kernel.kit.service.FreeAlbianService;
 import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.object.RunningStorageAttribute;
-import org.albianj.orm.service.AlbianServiceHub;
-import org.albianj.orm.service.IAlbianOpenedStorageService;
-import org.albianj.orm.service.IAlbianStorageParserService;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.kit.service.AlbianServiceHub;
+import org.albianj.orm.kit.service.IAlbianOpenedStorageService;
+import org.albianj.orm.kit.service.IAlbianStorageParserService;
 
 import java.sql.Connection;
 

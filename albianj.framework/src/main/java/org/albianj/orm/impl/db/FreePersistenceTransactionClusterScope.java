@@ -38,11 +38,11 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IPersistenceCompensateNotify;
-import org.albianj.orm.context.WriterJobLifeTime;
+import org.albianj.kernel.kit.logger.LogLevel;
+import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.orm.kit.context.IPersistenceCompensateNotify;
+import org.albianj.orm.kit.context.WriterJobLifeTime;
 import org.albianj.orm.impl.context.WriterJob;
 
 public abstract class FreePersistenceTransactionClusterScope implements IPersistenceTransactionClusterScope {

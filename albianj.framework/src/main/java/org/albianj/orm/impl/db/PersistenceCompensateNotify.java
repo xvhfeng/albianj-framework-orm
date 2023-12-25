@@ -39,10 +39,10 @@ package org.albianj.orm.impl.db;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.IPersistenceCompensateNotify;
+import org.albianj.kernel.kit.logger.LogLevel;
+import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.orm.kit.context.IPersistenceCompensateNotify;
 import org.albianj.orm.impl.context.WriterJob;
 import org.albianj.orm.impl.context.WriterTask;
 

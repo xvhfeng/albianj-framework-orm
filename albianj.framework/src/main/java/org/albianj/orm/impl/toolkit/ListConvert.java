@@ -39,7 +39,7 @@ package org.albianj.orm.impl.toolkit;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.orm.impl.db.SqlParameter;
-import org.albianj.orm.object.ICondition;
+import org.albianj.orm.kit.object.ICondition;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

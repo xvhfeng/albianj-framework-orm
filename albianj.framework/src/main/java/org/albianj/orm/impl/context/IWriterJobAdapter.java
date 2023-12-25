@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.context;
 
 
-import org.albianj.orm.context.dactx.AlbianObjectWarp;
-import org.albianj.orm.object.IAlbianObject;
+import org.albianj.orm.kit.context.dactx.AlbianObjectWarp;
+import org.albianj.orm.kit.object.IAlbianObject;
 
 import java.util.List;
 

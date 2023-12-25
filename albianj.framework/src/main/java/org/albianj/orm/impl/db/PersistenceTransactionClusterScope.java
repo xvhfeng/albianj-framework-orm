@@ -39,19 +39,18 @@ package org.albianj.orm.impl.db;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
-import org.albianj.orm.context.PersistenceStatement;
-import org.albianj.orm.context.WriterJobLifeTime;
-import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.db.localize.IDBClientSection;
+import org.albianj.kernel.kit.logger.LogLevel;
+import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.impl.context.WriterJob;
 import org.albianj.orm.impl.context.WriterTask;
 import org.albianj.orm.impl.object.StorageAttribute;
 import org.albianj.orm.impl.toolkit.ListConvert;
-import org.albianj.orm.object.RunningStorageAttribute;
-import org.albianj.orm.service.IAlbianStorageParserService;
+import org.albianj.orm.kit.context.PersistenceStatement;
+import org.albianj.orm.kit.context.WriterJobLifeTime;
+import org.albianj.orm.kit.db.IDataBasePool;
+import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.kit.service.IAlbianStorageParserService;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -73,7 +72,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             WriterTask t = task.getValue();
             RunningStorageAttribute rsa = t.getStorageSAttr();
             StorageAttribute storage = rsa.getStorageAttribute();
-            IDBClientSection dbClientSection = t.getDbClientSection();
+//            IDBClientSection dbClientSection = t.getDbClientSection();
             if (null == storage) {
                 throw new AlbianRuntimeException("The storage for task is null.");
             }
