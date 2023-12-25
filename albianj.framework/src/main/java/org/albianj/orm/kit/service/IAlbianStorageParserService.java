@@ -40,8 +40,8 @@ package org.albianj.orm.kit.service;
 import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.kit.service.parser.IAlbianParserService;
 import org.albianj.orm.kit.db.IDataBasePool;
-import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.attr.StorageAttribute;
+import org.albianj.orm.attr.RunningStorageAttribute;
 
 import java.sql.Connection;
 

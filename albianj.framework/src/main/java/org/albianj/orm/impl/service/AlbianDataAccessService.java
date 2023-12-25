@@ -3,24 +3,25 @@ package org.albianj.orm.impl.service;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.kit.service.FreeAlbianService;
-import org.albianj.orm.kit.context.IPersistenceCompensateNotify;
+import org.albianj.orm.kit.context.ICompensateNotify;
 import org.albianj.orm.kit.context.IPersistenceNotify;
-import org.albianj.orm.kit.context.dactx.IDataAccessContext;
-import org.albianj.orm.kit.context.dactx.IQueryContext;
+import org.albianj.orm.kit.dactx.IDataAccessContext;
+import org.albianj.orm.kit.dactx.IQueryContext;
 import org.albianj.orm.kit.db.PersistenceCommandType;
-import org.albianj.orm.impl.context.ReaderJob;
-import org.albianj.orm.impl.context.ReaderJobAdapter;
-import org.albianj.orm.impl.context.WriterJob;
-import org.albianj.orm.impl.context.WriterJobAdapter;
-import org.albianj.orm.impl.context.dactx.DataAccessContext;
-import org.albianj.orm.impl.context.dactx.QueryContext;
-import org.albianj.orm.impl.db.*;
+import org.albianj.orm.ctx.ReaderJob;
+import org.albianj.orm.impl.adapter.job.ReaderJobAdapter;
+import org.albianj.orm.ctx.WriterJob;
+import org.albianj.orm.impl.adapter.job.WriterJobAdapter;
+import org.albianj.orm.impl.dactx.DataAccessContext;
+import org.albianj.orm.impl.dactx.QueryContext;
+import org.albianj.orm.impl.scope.*;
+import org.albianj.orm.kit.db.SqlParameter;
 import org.albianj.orm.kit.object.IAlbianObject;
-import org.albianj.orm.kit.object.IOrderByCondition;
-import org.albianj.orm.kit.object.RunningStorageAttribute;
-import org.albianj.orm.kit.object.LogicalOperation;
-import org.albianj.orm.kit.object.filter.FilterExpression;
-import org.albianj.orm.kit.object.filter.IChainExpression;
+import org.albianj.orm.kit.expr.IOrderByCondition;
+import org.albianj.orm.attr.RunningStorageAttribute;
+import org.albianj.orm.kit.expr.LogicalOperation;
+import org.albianj.orm.kit.expr.FilterExpression;
+import org.albianj.orm.kit.expr.IChainExpression;
 import org.albianj.orm.kit.service.IAlbianDataAccessService;
 import org.albianj.orm.kit.service.LoadType;
 
@@ -46,7 +47,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
         WriterJobAdapter ja = new WriterJobAdapter();
         WriterJob job = ja.buildRemoved(sessionId, object);
@@ -58,7 +59,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
             job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
-        IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
+        ITransactionScope tcs = new TransactionScope();
         return tcs.execute(job);
     }
 
@@ -67,7 +68,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
         WriterJobAdapter ja = new WriterJobAdapter();
         WriterJob job = ja.buildRemoved(sessionId, objects);
@@ -79,7 +80,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
             job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
-        IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
+        ITransactionScope tcs = new TransactionScope();
         return tcs.execute(job);
     }
 
@@ -89,7 +90,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
 
     public boolean save(String sessionId, IAlbianObject object,
                         IPersistenceNotify notifyCallback, Object notifyCallbackObject,
-                        IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
+                        ICompensateNotify compensateCallback, Object compensateCallbackObject)
             {
         WriterJobAdapter ja = new WriterJobAdapter();
         WriterJob job = ja.buildSaving(sessionId, object);
@@ -101,7 +102,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
             job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
-        IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
+        ITransactionScope tcs = new TransactionScope();
         return tcs.execute(job);
     }
 
@@ -110,7 +111,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                        Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                        Object notifyCallbackObject, ICompensateNotify compensateCallback,
                         Object compensateCallbackObject)  {
         WriterJobAdapter ja = new WriterJobAdapter();
         WriterJob job = ja.buildSaving(sessionId, objects);
@@ -122,7 +123,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
             job.setCompensateCallback(compensateCallback);
         if (null != compensateCallbackObject)
             job.setCompensateCallbackObject(compensateCallbackObject);
-        IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
+        ITransactionScope tcs = new TransactionScope();
         return tcs.execute(job);
     }
 
@@ -341,7 +342,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
                                                               Class<T> cls, PersistenceCommandType cmdType, Statement statement)
             {
-        IPersistenceQueryScope scope = new PersistenceQueryScope();
+        IQueryScope scope = new QueryScope();
         List<T> list = null;
         list = scope.execute(sessionId, cls, cmdType, statement);
         return list;
@@ -375,7 +376,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
         List<T> list = null;
         ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName, start, step,
                 wheres, orderbys, idxName);
-        IPersistenceQueryScope scope = new PersistenceQueryScope();
+        IQueryScope scope = new QueryScope();
         list = scope.execute(cls, job);
         return list;
     }
@@ -388,7 +389,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
         ReaderJobAdapter ad = new ReaderJobAdapter();
         ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
                 wheres, orderbys, idxName);
-        IPersistenceQueryScope scope = new PersistenceQueryScope();
+        IQueryScope scope = new QueryScope();
         Object o = scope.execute(job);
         return (long) o;
     }
@@ -399,7 +400,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
         ReaderJobAdapter ad = new ReaderJobAdapter();
         ReaderJob job = ad.buildReaderJob(sessionId, cls, storage, cmdType,
                 text, paras);
-        IPersistenceQueryScope scope = new PersistenceQueryScope();
+        IQueryScope scope = new QueryScope();
         List<T> list = scope.execute(cls, job);
         return list;
     }

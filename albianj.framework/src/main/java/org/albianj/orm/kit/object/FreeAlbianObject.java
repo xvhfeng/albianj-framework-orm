@@ -43,11 +43,12 @@ import org.albianj.kernel.AlbianRuntimeException;
 import org.albianj.kernel.kit.logger.LogLevel;
 import org.albianj.kernel.kit.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.orm.kit.context.dactx.AlbianObjectWarp;
-import org.albianj.orm.impl.object.AlbianEntityFieldAttribute;
-import org.albianj.orm.impl.object.AlbianObjectAttribute;
-import org.albianj.orm.kit.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.orm.kit.service.AlbianEntityMetadata;
+import org.albianj.orm.attr.AlbianObjectMemberAttribute;
+import org.albianj.orm.ctx.AlbianObjectWarp;
+import org.albianj.orm.attr.AlbianEntityFieldAttribute;
+import org.albianj.orm.attr.AlbianObjectAttribute;
+import org.albianj.orm.anno.AlbianObjectDataFieldRant;
+import org.albianj.orm.bks.AlbianEntityMetadata;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package org.albianj.orm.kit.service;
 
 import org.albianj.kernel.kit.service.IAlbianService;
-import org.albianj.orm.kit.context.ManualCommand;
+import org.albianj.orm.ctx.ManualCommand;
 
 import java.util.List;
 

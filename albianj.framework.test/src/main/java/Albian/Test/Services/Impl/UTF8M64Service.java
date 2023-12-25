@@ -8,12 +8,12 @@ import org.albianj.kernel.anno.AlbianServiceFieldRant;
 import org.albianj.kernel.attr.opt.AlbianServiceFieldTypeOpt;
 import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.kit.service.FreeAlbianService;
-import org.albianj.orm.kit.context.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.kit.context.dactx.IDataAccessContext;
-import org.albianj.orm.kit.context.dactx.IQueryContext;
-import org.albianj.orm.kit.object.LogicalOperation;
-import org.albianj.orm.kit.object.filter.FilterExpression;
-import org.albianj.orm.kit.object.filter.IChainExpression;
+import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.kit.dactx.IDataAccessContext;
+import org.albianj.orm.kit.dactx.IQueryContext;
+import org.albianj.orm.kit.expr.LogicalOperation;
+import org.albianj.orm.kit.expr.FilterExpression;
+import org.albianj.orm.kit.expr.IChainExpression;
 import org.albianj.orm.kit.service.IAlbianDataAccessService;
 import org.albianj.orm.kit.service.LoadType;
 

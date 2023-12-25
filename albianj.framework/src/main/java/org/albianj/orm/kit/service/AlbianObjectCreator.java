@@ -5,7 +5,8 @@ import org.albianj.kernel.kit.logger.LogLevel;
 import org.albianj.kernel.kit.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.orm.impl.object.AlbianObjectAttribute;
+import org.albianj.orm.bks.AlbianEntityMetadata;
+import org.albianj.orm.attr.AlbianObjectAttribute;
 import org.albianj.orm.kit.object.IAlbianObject;
 
 /**

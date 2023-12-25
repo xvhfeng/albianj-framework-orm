@@ -6,13 +6,13 @@ import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
 import org.albianj.kernel.kit.service.FreeAlbianService;
-import org.albianj.orm.kit.context.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.kit.context.dactx.IDataAccessContext;
-import org.albianj.orm.kit.context.dactx.IQueryContext;
-import org.albianj.orm.kit.object.LogicalOperation;
-import org.albianj.orm.kit.object.filter.FilterExpression;
-import org.albianj.orm.kit.object.filter.IChainExpression;
-import org.albianj.orm.kit.service.AlbianServiceHub;
+import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.kit.dactx.IDataAccessContext;
+import org.albianj.orm.kit.dactx.IQueryContext;
+import org.albianj.orm.kit.expr.LogicalOperation;
+import org.albianj.orm.kit.expr.FilterExpression;
+import org.albianj.orm.kit.expr.IChainExpression;
+import org.albianj.AlbianBusHub;
 import org.albianj.orm.kit.service.IAlbianDataAccessService;
 import org.albianj.orm.kit.service.LoadType;
 
@@ -42,7 +42,7 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
     @Override
     public boolean addUser(String uname, String pwd)  {
         //创建对象请使用此方法
-        IOrgSingleUser user = AlbianServiceHub.newInstance("SessionId", IOrgSingleUser.class);
+        IOrgSingleUser user = AlbianBusHub.newInstance("SessionId", IOrgSingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword(pwd);
         user.setUserName(uname);
@@ -72,19 +72,19 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
     @Override
     public boolean batchAddUser()  {
         IDataAccessContext dctx = da.newDataAccessContext();
-        IOrgMultiUser mu1 = AlbianServiceHub.newInstance("sessionId", IOrgMultiUser.class);
+        IOrgMultiUser mu1 = AlbianBusHub.newInstance("sessionId", IOrgMultiUser.class);
         String id1 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 1, 1);
         mu1.setId(id1);
         mu1.setUserName("mu1_org");
         mu1.setPassword("mu1pwd_org");
 
-        IOrgMultiUser mu2 = AlbianServiceHub.newInstance("sessionId", IOrgMultiUser.class);
+        IOrgMultiUser mu2 = AlbianBusHub.newInstance("sessionId", IOrgMultiUser.class);
         String id2 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 2, 2);
         mu2.setId(id2);
         mu2.setUserName("mu2_org");
         mu2.setPassword("mu2pwd_org");
 
-        ISingleUser user = AlbianServiceHub.newInstance("SessionId", ISingleUser.class);
+        ISingleUser user = AlbianBusHub.newInstance("SessionId", ISingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword("batcher_by_org");
         user.setUserName("batcher_by_org");

@@ -37,8 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.kit.object;
 
-import org.albianj.orm.impl.object.DataRouterAttribute;
-import org.albianj.orm.impl.object.StorageAttribute;
+import org.albianj.orm.attr.DataRouterAttribute;
+import org.albianj.orm.attr.StorageAttribute;
+import org.albianj.orm.kit.expr.IFilterCondition;
+import org.albianj.orm.kit.expr.IOrderByCondition;
 
 import java.util.List;
 import java.util.Map;

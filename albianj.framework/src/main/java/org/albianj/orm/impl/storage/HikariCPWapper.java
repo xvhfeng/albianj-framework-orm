@@ -5,8 +5,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.albianj.kernel.kit.logger.LogLevel;
 import org.albianj.kernel.kit.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.attr.StorageAttribute;
+import org.albianj.orm.attr.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

@@ -2,7 +2,7 @@ package org.albianj.orm.impl.storage;
 
 
 import org.albianj.orm.kit.db.IDataBasePool;
-import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.attr.RunningStorageAttribute;
 import org.albianj.orm.kit.service.IAlbianConnectionMonitorService;
 
 import java.sql.Connection;

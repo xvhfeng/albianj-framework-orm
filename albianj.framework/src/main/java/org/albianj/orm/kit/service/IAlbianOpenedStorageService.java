@@ -1,7 +1,7 @@
 package org.albianj.orm.kit.service;
 
 import org.albianj.kernel.kit.service.IAlbianService;
-import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.attr.RunningStorageAttribute;
 
 import java.sql.Connection;
 

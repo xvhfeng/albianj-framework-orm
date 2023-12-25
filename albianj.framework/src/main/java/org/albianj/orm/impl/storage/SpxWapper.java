@@ -7,8 +7,8 @@ import org.albianj.orm.dbpool.ISpxDBPool;
 import org.albianj.orm.dbpool.ISpxDBPoolConfig;
 import org.albianj.orm.dbpool.impl.SpxDBPool;
 import org.albianj.orm.dbpool.impl.SpxDBPoolConfig;
-import org.albianj.orm.impl.object.StorageAttribute;
-import org.albianj.orm.kit.object.RunningStorageAttribute;
+import org.albianj.orm.attr.StorageAttribute;
+import org.albianj.orm.attr.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

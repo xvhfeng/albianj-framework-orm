@@ -8,15 +8,15 @@ import org.albianj.kernel.anno.AlbianServiceFieldRant;
 import org.albianj.kernel.attr.opt.AlbianServiceFieldTypeOpt;
 import org.albianj.kernel.anno.AlbianServiceRant;
 import org.albianj.kernel.kit.service.FreeAlbianService;
-import org.albianj.orm.kit.context.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.kit.context.dactx.IDataAccessContext;
-import org.albianj.orm.kit.context.dactx.IQueryContext;
-import org.albianj.orm.kit.object.LogicalOperation;
-import org.albianj.orm.kit.object.filter.FilterExpression;
-import org.albianj.orm.kit.object.filter.FilterGroupExpression;
-import org.albianj.orm.kit.object.filter.IChainExpression;
-import org.albianj.orm.kit.object.filter.IFilterGroupExpression;
-import org.albianj.orm.kit.service.AlbianServiceHub;
+import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.kit.dactx.IDataAccessContext;
+import org.albianj.orm.kit.dactx.IQueryContext;
+import org.albianj.orm.kit.expr.LogicalOperation;
+import org.albianj.orm.kit.expr.FilterExpression;
+import org.albianj.orm.kit.expr.FilterGroupExpression;
+import org.albianj.orm.kit.expr.IChainExpression;
+import org.albianj.orm.kit.expr.IFilterGroupExpression;
+import org.albianj.AlbianBusHub;
 import org.albianj.orm.kit.service.IAlbianDataAccessService;
 import org.albianj.orm.kit.service.LoadType;
 
@@ -60,7 +60,7 @@ public class UserService extends FreeAlbianService implements IUserService {
 //                AlbianLoggerLevel.Info, exc, "i am %s", "log");
 
         //创建对象请使用此方法
-        ISingleUser user = AlbianServiceHub.newInstance("SessionId", ISingleUser.class);
+        ISingleUser user = AlbianBusHub.newInstance("SessionId", ISingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword(pwd);
         user.setUserName(uname);
@@ -90,19 +90,19 @@ public class UserService extends FreeAlbianService implements IUserService {
     @Override
     public boolean batchAddUser()  {
         IDataAccessContext dctx = da.newDataAccessContext();
-        IMultiUser mu1 = AlbianServiceHub.newInstance("sessionId", IMultiUser.class);
+        IMultiUser mu1 = AlbianBusHub.newInstance("sessionId", IMultiUser.class);
         String id1 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 1, 1);
         mu1.setId(id1);
         mu1.setUserName("mu1");
         mu1.setPassword("mu1pwd");
 
-        IMultiUser mu2 = AlbianServiceHub.newInstance("sessionId", IMultiUser.class);
+        IMultiUser mu2 = AlbianBusHub.newInstance("sessionId", IMultiUser.class);
         String id2 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 2, 2);
         mu2.setId(id2);
         mu2.setUserName("mu2");
         mu2.setPassword("mu2pwd");
 
-        ISingleUser user = AlbianServiceHub.newInstance("SessionId", ISingleUser.class);
+        ISingleUser user = AlbianBusHub.newInstance("SessionId", ISingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword("batcher");
         user.setUserName("batcher");

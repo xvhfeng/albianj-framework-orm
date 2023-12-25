@@ -2,8 +2,8 @@ package Albian.Test.Model.Impl;
 
 import Albian.Test.Model.ISingleUser;
 import org.albianj.orm.kit.object.FreeAlbianObject;
-import org.albianj.orm.kit.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.orm.kit.object.rants.AlbianObjectRant;
+import org.albianj.orm.anno.AlbianObjectDataFieldRant;
+import org.albianj.orm.anno.AlbianObjectRant;
 
 import java.math.BigInteger;
 

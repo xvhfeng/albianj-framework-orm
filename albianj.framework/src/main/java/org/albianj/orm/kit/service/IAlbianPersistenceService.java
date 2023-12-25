@@ -39,13 +39,13 @@ package org.albianj.orm.kit.service;
 
 import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.kit.service.IAlbianService;
-import org.albianj.orm.kit.context.IPersistenceCompensateNotify;
+import org.albianj.orm.kit.context.ICompensateNotify;
 import org.albianj.orm.kit.context.IPersistenceNotify;
 import org.albianj.orm.kit.db.PersistenceCommandType;
-import org.albianj.orm.kit.object.IFilterCondition;
-import org.albianj.orm.kit.object.IOrderByCondition;
+import org.albianj.orm.kit.expr.IFilterCondition;
+import org.albianj.orm.kit.expr.IOrderByCondition;
 import org.albianj.orm.kit.object.IAlbianObject;
-import org.albianj.orm.kit.object.filter.IChainExpression;
+import org.albianj.orm.kit.expr.IChainExpression;
 
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -125,7 +125,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @
      */
     boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -159,7 +159,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
 
@@ -199,7 +199,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     boolean save(String sessionId, IAlbianObject object,
                  IPersistenceNotify notifyCallback, Object notifyCallbackObject,
-                 IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
+                 ICompensateNotify compensateCallback, Object compensateCallbackObject)
             ;
 
     /**
@@ -237,7 +237,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                 Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                 Object notifyCallbackObject, ICompensateNotify compensateCallback,
                  Object compensateCallbackObject) ;
 
     /**
@@ -494,7 +494,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     @Deprecated
     boolean create(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -518,7 +518,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     @Deprecated
     boolean create(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -542,7 +542,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     @Deprecated
     boolean modify(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -566,7 +566,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      */
     @Deprecated
     boolean modify(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     String makeDetailLogSessionId(String sessionId);

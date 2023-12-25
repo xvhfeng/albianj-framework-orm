@@ -2,16 +2,16 @@ package org.albianj.orm.kit.service;
 
 import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.kit.service.IAlbianService;
-import org.albianj.orm.kit.context.IPersistenceCompensateNotify;
+import org.albianj.orm.kit.context.ICompensateNotify;
 import org.albianj.orm.kit.context.IPersistenceNotify;
-import org.albianj.orm.kit.context.dactx.IDataAccessContext;
-import org.albianj.orm.kit.context.dactx.IQueryContext;
+import org.albianj.orm.kit.dactx.IDataAccessContext;
+import org.albianj.orm.kit.dactx.IQueryContext;
 import org.albianj.orm.kit.db.PersistenceCommandType;
-import org.albianj.orm.impl.db.SqlParameter;
+import org.albianj.orm.kit.db.SqlParameter;
 import org.albianj.orm.kit.object.IAlbianObject;
-import org.albianj.orm.kit.object.IOrderByCondition;
-import org.albianj.orm.kit.object.RunningStorageAttribute;
-import org.albianj.orm.kit.object.filter.IChainExpression;
+import org.albianj.orm.kit.expr.IOrderByCondition;
+import org.albianj.orm.attr.RunningStorageAttribute;
+import org.albianj.orm.kit.expr.IChainExpression;
 
 import java.math.BigInteger;
 import java.sql.Statement;
@@ -61,7 +61,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * 
      */
     boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -95,7 +95,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * 
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
 
@@ -135,7 +135,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      */
     boolean save(String sessionId, IAlbianObject object,
                  IPersistenceNotify notifyCallback, Object notifyCallbackObject,
-                 IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
+                 ICompensateNotify compensateCallback, Object compensateCallbackObject)
             ;
 
     /**
@@ -173,7 +173,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * 
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                 Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+                 Object notifyCallbackObject, ICompensateNotify compensateCallback,
                  Object compensateCallbackObject) ;
 
     /**
