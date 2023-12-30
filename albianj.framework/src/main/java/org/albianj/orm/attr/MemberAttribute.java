@@ -59,7 +59,4 @@ public class MemberAttribute {
     private boolean save = true;
     private String varField = null;
     private boolean autoGenKey = false;
-
-
-
 }

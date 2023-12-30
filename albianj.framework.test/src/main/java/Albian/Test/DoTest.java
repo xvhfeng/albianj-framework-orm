@@ -4,7 +4,9 @@ import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianBootService;
+import org.albianj.scanner.AlbianObjectPkgScanRant;
 
+@AlbianObjectPkgScanRant({"sdsds","sdfsdfsd"})
 public class DoTest {
     public static void main(String[] argv) {
         try {

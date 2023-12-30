@@ -1,12 +1,15 @@
 package Albian.Test.DataRouters;
 
 import Albian.Test.Model.IMultiUser;
+import Albian.Test.Model.Impl.MultiUser;
+import org.albianj.orm.anno.AlbianObjectDataRouterRant;
+import org.albianj.orm.anno.AlbianObjectDataRoutersRant;
 import org.albianj.orm.attr.DataRouterAttribute;
 import org.albianj.orm.attr.StorageAttribute;
-import org.albianj.orm.kit.object.FreeAlbianObjectDataRouter;
-import org.albianj.orm.kit.object.IAlbianObject;
 import org.albianj.orm.kit.expr.IFilterCondition;
 import org.albianj.orm.kit.expr.IOrderByCondition;
+import org.albianj.orm.kit.object.FreeAlbianObjectDataRouter;
+import org.albianj.orm.kit.object.IAlbianObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,18 @@ import java.util.Map;
  *  根据object的id进行划分，为了简单，我们将直接使用string类型的id
  *  id的组成为times_顺序号_库标识_表标识
  */
+
+@AlbianObjectDataRoutersRant( // 数据路由配置
+        EntitiyClass = MultiUser.class, //指定数据路由算法
+        ReaderRouters = { // 配置读路由
+                @AlbianObjectDataRouterRant(Name = "MUserRead1", StorageName = "MUserStorage1", TableName = "MUser"),
+                @AlbianObjectDataRouterRant(Name = "MUserRead2", StorageName = "MUserStorage2")
+        },
+        WriterRouters = { //配置写路由
+                @AlbianObjectDataRouterRant(Name = "MUserWrite1", StorageName = "MUserStorage1", TableName = "MUser"),
+                @AlbianObjectDataRouterRant(Name = "MUserWrite2", StorageName = "MUserStorage2")
+        }
+)
 public class MultiUserDataRouter extends FreeAlbianObjectDataRouter {
     @Override
     public List<DataRouterAttribute> mappingWriterRouting(

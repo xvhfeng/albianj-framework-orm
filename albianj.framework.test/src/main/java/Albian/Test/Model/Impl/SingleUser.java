@@ -14,7 +14,7 @@ public class SingleUser extends FreeAlbianObject implements ISingleUser {
     @AlbianObjectDataFieldRant(IsPrimaryKey = true)
     private BigInteger id;
     private String userName;
-    @AlbianObjectDataFieldRant(FieldName = "Pwd")
+    @AlbianObjectDataFieldRant(DbFieldName = "Pwd")
     private String password;
 
     @Override

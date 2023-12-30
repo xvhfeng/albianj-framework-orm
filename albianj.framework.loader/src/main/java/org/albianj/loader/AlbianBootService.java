@@ -78,7 +78,7 @@ public class AlbianBootService {
     public static boolean start(String configPath) {
 
         String cfPath = configPath;
-        if(null == configPath || 0 == configPath.length() || 0 ==  configPath.trim().length()) {
+        if(null == configPath || configPath.isEmpty() || configPath.trim().isEmpty()) {
             cfPath = AlbianClassLoader.getResourcePath();
         }
 
@@ -108,7 +108,7 @@ public class AlbianBootService {
         try {
             GlobalSettings settings = new GlobalSettings();
             Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
-            IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
+            IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.getConstructor().newInstance();
             abs.start(settings);
         } catch (Throwable e) {
             // TODO Auto-generated catch block
@@ -116,5 +116,9 @@ public class AlbianBootService {
             return false;
         }
         return true;
+    }
+
+    public static boolean start(){
+        return start(null);
     }
 }

@@ -37,28 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.loader;
 
-import java.util.Date;
-
 public interface IAlbianTransmitterService {
-    static String Name = "AlbianKernelBootService";
-
-    Date getStartDateTime();
-
-    String getSerialId();
 
     void start( GlobalSettings settings) ;
-
-//    void start(String kernelpath, String configPath) ;
-
-    public void lunch( GlobalSettings settings) ;
-
-//    void start() ;
-
-//    void setGlobalSettings(GlobalSettings settings);
-//
-//    GlobalSettings getGlobalSettings();
-
-    String requestHandlerContext();
 
     void unload() ;
 

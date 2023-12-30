@@ -58,53 +58,15 @@ import java.util.*;
 public class AlbianTransmitterService implements IAlbianTransmitterService {
 
     private static AlbianLifecycleOpt state = AlbianLifecycleOpt.Normal;
-    private static Date startDateTime;
-    private static String serialId;
 
-    public String getServiceName() {
-        return Name;
-    }
-
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#getStartDateTime()
-     */
-    @Override
-    public Date getStartDateTime() {
-        return startDateTime;
-    }
-
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#getSerialId()
-     */
-    @Override
-    public String getSerialId() {
-        return serialId;
-    }
-
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#getLifeState()
-     */
-    public AlbianLifecycleOpt getLifeState() {
-        return state;
-    }
-
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String)
-     */
     @Override
     public void start(GlobalSettings settings)  {
         this.settings =  settings;
-        lunch(this.settings);
+        starting(this.settings);
     }
-
     private GlobalSettings settings;
 
-//    @Override
-//    public GlobalSettings getGlobalSettings() {
-//        return this.settings;
-//    }
-
-    public void lunch(GlobalSettings settings)  {
+    private void starting(GlobalSettings settings)  {
 
         // first load logger
         // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
@@ -207,16 +169,6 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                 "set fieds in the service over .Startup albianJ is success!");
     }
 
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#requestHandlerContext()
-     */
-    @Override
-    public String requestHandlerContext() {
-        if (AlbianLifecycleOpt.Running != state) {
-            return "Albian is not ready,Please wait a minute or contact administrators!";
-        }
-        return "";
-    }
 
     /* (non-Javadoc)
      * @see org.albianj.kernel.impl.IAlbianBootService#unload()

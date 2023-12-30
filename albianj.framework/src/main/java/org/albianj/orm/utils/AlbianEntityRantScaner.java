@@ -118,11 +118,11 @@ public class AlbianEntityRantScaner {
     }
 
     private static DataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
-        if (null == drr.DataRouter()) {
+        if (null == drr.EntitiyClass()) {
             return null;
         }
 
-        Class<?> clazz = drr.DataRouter();
+        Class<?> clazz = drr.EntitiyClass();
 
         if (!IAlbianObjectDataRouter.class.isAssignableFrom(clazz)) {
             // datarouter not impl IAlbianObjectDataRouter
@@ -206,10 +206,10 @@ public class AlbianEntityRantScaner {
                 }
 
 
-                if (CheckUtil.isNullOrEmptyOrAllSpace(fr.FieldName())) {
+                if (CheckUtil.isNullOrEmptyOrAllSpace(fr.DbFieldName())) {
                     fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
                 } else {
-                    fAttr.setSqlFieldName(fr.FieldName());
+                    fAttr.setSqlFieldName(fr.DbFieldName());
                 }
 
 
