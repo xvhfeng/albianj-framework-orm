@@ -3,7 +3,7 @@ package org.albianj.kernel.attr.opt;
 /**
  * Created by xuhaifeng on 2018/9/7.
  */
-public enum AlbianServiceFieldTypeOpt {
+public enum AlbianBuiltinTypeOpt {
     Ref,
     String,
     Integer,

@@ -39,9 +39,9 @@ package org.albianj.kernel.kit.service;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.bkt.ServiceBkt;
-import org.albianj.kernel.kit.logger.IAlbianLoggerService;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.IAlbianLoggerService;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 
 import java.math.BigInteger;
 import java.util.UUID;

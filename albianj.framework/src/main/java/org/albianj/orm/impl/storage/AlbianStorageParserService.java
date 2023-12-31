@@ -39,10 +39,10 @@ package org.albianj.orm.impl.storage;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
-import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.AlbianRuntimeException;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
+import org.albianj.kernel.anno.AlbianServRant;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.kit.db.IDataBasePool;
 import org.albianj.orm.attr.StorageAttribute;
@@ -60,7 +60,7 @@ import java.util.concurrent.ConcurrentMap;
 
 
 
-@AlbianServiceRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
+@AlbianServRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
 public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     public final static String DEFAULT_STORAGE_NAME = "!@#$%Albianj_Default_Storage%$#@!";

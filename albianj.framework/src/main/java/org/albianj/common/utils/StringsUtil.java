@@ -176,7 +176,7 @@ public class StringsUtil extends StringUtils {
         return MessageFormat.format(format,paras);
     }
 
-    public static  String formatWithoutIndex(String formatTemplate,Object...objects){
+    public static  String nonIdxFormat(String formatTemplate,Object...objects){
 
         String regex = "\\{\\}";
         Pattern pattern = Pattern.compile(regex);
@@ -189,6 +189,7 @@ public class StringsUtil extends StringUtils {
             matcher.appendReplacement(sb,replacement);
             i++;
         }
+        matcher.appendTail(sb); // 必现补上这一句，否者后面的内容截断了
         return sb.toString();
     }
 

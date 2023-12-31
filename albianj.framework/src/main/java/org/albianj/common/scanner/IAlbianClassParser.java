@@ -5,6 +5,6 @@ package org.albianj.common.scanner;
  *  它主要对于经过IAlbianClassFilter过滤的class进行解析
  *  通过反射拿到对于这个类的各种元数据（比如类型，名字等等），还有标注的anno，组合成当前class的attr进行返回
  */
-public interface IAlbianClassExcavator {
-    public Object finder(Class<?> clzz) ;
+public interface IAlbianClassParser {
+    public Object parser(Class<?> clzz) ;
 }

@@ -2,8 +2,8 @@ package org.albianj.orm.impl.storage;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.attr.StorageAttribute;
 import org.albianj.orm.attr.RunningStorageAttribute;

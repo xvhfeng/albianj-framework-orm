@@ -41,7 +41,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.kernel.kit.service.IAlbianService;
 
 import java.util.Map;
 
@@ -50,11 +49,14 @@ import java.util.Map;
 @NoArgsConstructor
 @ToString
 public class AlbianServiceAttr {
-    Map<String, AlbianServiceFieldAttr> serviceFields;
-    Map<String, AlbianServiceAopAttr> aopAttributes = null;
+    Map<String, AlbianServiceFieldAttr> fieldAttrs;
+    Map<String, AlbianServiceAspectAttr> aspectAttrs = null;
     private String id = "";
     private String type = "";
-    private String itfClzzName;
-    private Class<? extends IAlbianService> serviceClass = null;
+    private Class<?> selfClass = null;
     private boolean enable = true;
+    private AlbianMethodAttr initFnAttr;
+    private Object[] parasOfInitFn;
+    private AlbianMethodAttr unloadFnAttr;
+    private Map<String, AlbianMethodAttr> funcAttrs;
 }

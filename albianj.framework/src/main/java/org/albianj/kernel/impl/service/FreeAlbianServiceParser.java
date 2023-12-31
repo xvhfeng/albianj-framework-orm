@@ -40,12 +40,12 @@ package org.albianj.kernel.impl.service;
 import org.albianj.common.io.Path;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.anno.AlbianServAspectRant;
+import org.albianj.AlbianRuntimeException;
+import org.albianj.kernel.anno.AlbianAspectIgnoreRant;
 import org.albianj.kernel.attr.AlbianServiceAspectAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.attr.AlbianServiceFieldAttr;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.kernel.bkt.ServiceAttrBkt;
@@ -65,12 +65,12 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
     private final static String pkgTagName = "Services/Packages/Package";
     private String file = "service.xml";
 
-    @AlbianServAspectRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public String getConfigFileName() {
         return file;
     }
 
-    @AlbianServAspectRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void init()  {
 
         Map<String, AlbianServiceAttr> map = new LinkedHashMap<>();
@@ -212,11 +212,11 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                 continue;
             }
 
-            Map<String, AlbianServiceFieldAttr> asaFieldAttr = asa.getServiceFields();
-            Map<String, AlbianServiceFieldAttr> pkgFieldAttr = asaPkg.getServiceFields();
+            Map<String, AlbianServiceFieldAttr> asaFieldAttr = asa.getFieldAttrs();
+            Map<String, AlbianServiceFieldAttr> pkgFieldAttr = asaPkg.getFieldAttrs();
 
             if (CheckUtil.isNullOrEmpty(asaFieldAttr)) {
-                asa.setServiceFields(pkgFieldAttr);
+                asa.setFieldAttrs(pkgFieldAttr);
             } else {
                 if (!CheckUtil.isNullOrEmpty(pkgFieldAttr)) {
                     // merger field attribute
@@ -230,10 +230,10 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                 }
             }
 
-            Map<String, AlbianServiceAspectAttr> asaAopAttr = asa.getAopAttributes();
-            Map<String, AlbianServiceAspectAttr> pkgAopAttr = asaPkg.getAopAttributes();
+            Map<String, AlbianServiceAspectAttr> asaAopAttr = asa.getAspectAttrs();
+            Map<String, AlbianServiceAspectAttr> pkgAopAttr = asaPkg.getAspectAttrs();
             if (CheckUtil.isNullOrEmpty(asaAopAttr)) {
-                asa.setAopAttributes(pkgAopAttr);
+                asa.setAspectAttrs(pkgAopAttr);
             } else {
                 if (!CheckUtil.isNullOrEmpty(pkgAopAttr)) {
                     // merger field attribute

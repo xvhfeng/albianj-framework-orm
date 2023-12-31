@@ -1,4 +1,4 @@
-package org.albianj.kernel.kit.aop;
+package org.albianj.kernel.kit.aspect;
 
 import org.albianj.kernel.kit.service.FreeAlbianService;
 import org.albianj.kernel.kit.service.IAlbianService;
@@ -10,11 +10,11 @@ import java.lang.reflect.Method;
  */
 public abstract class FreeAlbianAopService extends FreeAlbianService implements IAlbianAopService {
 
-    public void before(AlbianAopContext ctx, IAlbianService service, Method method, Object[] args) {
+    public void before(AlbianAspectContext ctx, IAlbianService service, Method method, Object[] args) {
         return;
     }
 
-    public void after(AlbianAopContext ctx, IAlbianService service, Method method, Object rc, Throwable t, Object[] args) {
+    public void after(AlbianAspectContext ctx, IAlbianService service, Method method, Object rc, Throwable t, Object[] args) {
         return;
     }
 

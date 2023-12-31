@@ -1,8 +1,8 @@
 package org.albianj.orm.kit.service;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.bks.AlbianEntityMetadata;

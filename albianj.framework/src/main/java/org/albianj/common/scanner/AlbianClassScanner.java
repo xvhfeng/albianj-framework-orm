@@ -1,8 +1,7 @@
-package org.albianj.loader;
+package org.albianj.common.scanner;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -26,10 +25,10 @@ public class AlbianClassScanner {
      * @param pkgName
      * @return
      */
-    public static HashMap<String, Object> filter(ClassLoader classLoader,
-                                                 String pkgName,
-                                                 IAlbianClassFilter filter,
-                                                 IAlbianClassExcavator excavator) throws Throwable {
+    public static HashMap<String, Object> findAllClassFromPkg(ClassLoader classLoader,
+                                                              String pkgName,
+                                                              IAlbianClassFilter filter,
+                                                              IAlbianClassParser excavator) throws Throwable {
 
         // 第一个class类的集合
         HashMap<String, Object> classes = new HashMap<String, Object>();
@@ -82,12 +81,12 @@ public class AlbianClassScanner {
                                           Object> classes,
                                   String packageName,
                                   String className,
-                                  IAlbianClassExcavator excavator)
+                                  IAlbianClassParser excavator)
             throws Throwable {
         String fullClassName = packageName + '.' + className;
         Class<?> cls = classLoader.loadClass(fullClassName);
-        if (filter.verify(cls)) {
-            Object info = excavator.finder(cls);
+        if (filter.lookup(cls)) {
+            Object info = excavator.parser(cls);
             classes.put(fullClassName, info);
         }
     }
@@ -107,7 +106,7 @@ public class AlbianClassScanner {
                                                         final boolean recursive,
                                                         HashMap<String, Object> classes,
                                                         IAlbianClassFilter filter,
-                                                        IAlbianClassExcavator excavator)
+                                                        IAlbianClassParser excavator)
             throws Throwable {
         File dir = new File(packagePath);
         if (!dir.exists() || !dir.isDirectory()) {

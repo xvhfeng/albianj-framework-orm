@@ -1,7 +1,7 @@
 package org.albianj.orm.impl.storage;
 
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.dbpool.ISpxDBPool;
 import org.albianj.orm.dbpool.ISpxDBPoolConfig;

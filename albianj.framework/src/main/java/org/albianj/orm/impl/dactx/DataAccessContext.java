@@ -1,7 +1,7 @@
 package org.albianj.orm.impl.dactx;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.AlbianRuntimeException;
+import org.albianj.AlbianRuntimeException;
 import org.albianj.orm.kit.context.ICompensateNotify;
 import org.albianj.orm.kit.context.IPersistenceNotify;
 import org.albianj.orm.ctx.AlbianObjectWarp;

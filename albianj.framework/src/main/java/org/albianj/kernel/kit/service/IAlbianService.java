@@ -37,10 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.kit.service;
 
-import org.albianj.common.comment.Comments;
-import org.albianj.kernel.anno.AlbianAopRant;
+import org.albianj.common.anno.AlbianCommentRant;
+import org.albianj.kernel.anno.AlbianAspectIgnoreRant;
 import org.albianj.kernel.attr.opt.AlbianServiceLifecycleOpt;
-import org.albianj.loader.GlobalSettings;
+import org.albianj.kernel.attr.GlobalSettings;
 
 /**
  * ??????albianj???service??????????????????????????????FreeAlbianService???????
@@ -56,37 +56,37 @@ public interface IAlbianService {
 
     void setSettings(GlobalSettings settings);
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public AlbianServiceLifecycleOpt getAlbianServiceState();
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void beforeLoad() throws RuntimeException;
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void loading() ;
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void afterLoading() throws RuntimeException;
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void beforeUnload() throws RuntimeException;
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void unload() throws RuntimeException;
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void afterUnload() throws RuntimeException;
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public boolean enableProxy();
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public IAlbianService getRealService();
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     public void setRealService(IAlbianService service);
 
-    @AlbianAopRant(ignore = true)
-    @Comments("得到当前service的名字，service的子类必须实现该方法，并且值必须和service.xml中配置的Id一致。默认为当前类的名称。")
+    @AlbianAspectIgnoreRant(value = true)
+    @AlbianCommentRant("得到当前service的名字，service的子类必须实现该方法，并且值必须和service.xml中配置的Id一致。默认为当前类的名称。")
     public String getServiceName();
 }

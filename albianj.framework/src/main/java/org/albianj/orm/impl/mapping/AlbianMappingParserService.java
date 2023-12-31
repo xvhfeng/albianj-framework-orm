@@ -41,10 +41,10 @@ import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
-import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.AlbianRuntimeException;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
+import org.albianj.kernel.anno.AlbianServRant;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.attr.AlbianEntityFieldAttribute;
@@ -67,7 +67,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@AlbianServiceRant(Id = IAlbianMappingParserService.Name, Interface = IAlbianMappingParserService.class)
+@AlbianServRant(Id = IAlbianMappingParserService.Name, Interface = IAlbianMappingParserService.class)
 public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     private static final String cacheTagName = "Cache";

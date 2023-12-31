@@ -5,12 +5,12 @@
     <parent>
         <artifactId>albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>04-refactoring-code-struct</version>
+        <version>05-start-flow</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework.test</artifactId>
-    <version>04-refactoring-code-struct</version>
+    <version>05-start-flow</version>
     <dependencies>
 
         <dependency>

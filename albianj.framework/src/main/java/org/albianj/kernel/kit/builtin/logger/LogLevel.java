@@ -1,4 +1,4 @@
-package org.albianj.kernel.kit.logger;
+package org.albianj.kernel.kit.builtin.logger;
 
 /**
  * Created by xuhaifeng on 17/2/9.

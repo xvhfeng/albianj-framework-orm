@@ -6,7 +6,7 @@
 
     <artifactId>albianj</artifactId>
     <groupId>albianj-framework</groupId>
-    <version>04-refactoring-code-struct</version>
+    <version>05-start-flow</version>
     <modules>
         <module>albianj.framework.loader</module>
         <module>albianj.framework</module>

@@ -1,13 +1,13 @@
-package org.albianj.kernel.impl.aop;
+package org.albianj.kernel.impl.aspect;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.anno.AlbianServAspectRant;
-import org.albianj.kernel.kit.aop.AlbianAopContext;
+import org.albianj.kernel.anno.AlbianAspectIgnoreRant;
+import org.albianj.kernel.kit.aspect.AlbianAspectContext;
 import org.albianj.kernel.attr.AlbianServiceAspectAttr;
-import org.albianj.kernel.kit.aop.IAlbianAopService;
+import org.albianj.kernel.kit.aspect.IAlbianAopService;
 import org.albianj.kernel.kit.builtin.logger.LogLevel;
 import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
@@ -58,8 +58,8 @@ public class AlbianServAspectProxy implements MethodInterceptor {
         }
 
         Method rm = this._service.getClass().getMethod(mName, method.getParameterTypes());
-        AlbianServAspectRant attr = rm.getAnnotation(AlbianServAspectRant.class);
-        if (null != attr && attr.ignore()) {
+        AlbianAspectIgnoreRant attr = rm.getAnnotation(AlbianAspectIgnoreRant.class);
+        if (null != attr && attr.value()) {
             Object rc = methodProxy.invokeSuper(proxy, args);
             return rc;
         }
@@ -69,7 +69,7 @@ public class AlbianServAspectProxy implements MethodInterceptor {
             return rc;
         }
 
-        AlbianAopContext ctx = new AlbianAopContext();
+        AlbianAspectContext ctx = new AlbianAspectContext();
 
         Object rc = null;
         for (AlbianServiceAspectAttr asaa : _aopAttributes.values()) {

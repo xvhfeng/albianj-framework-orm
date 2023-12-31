@@ -7,6 +7,7 @@ import org.albianj.loader.AlbianBootService;
 import org.albianj.scanner.AlbianObjectPkgScanRant;
 
 @AlbianObjectPkgScanRant({"sdsds","sdfsdfsd"})
+
 public class DoTest {
     public static void main(String[] argv) {
         try {

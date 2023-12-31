@@ -37,10 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.kit.service.parser;
 
-import org.albianj.kernel.anno.AlbianAopRant;
+import org.albianj.kernel.anno.AlbianAspectIgnoreRant;
 
 public interface IAlbianParser {
 
-    @AlbianAopRant(ignore = true)
+    @AlbianAspectIgnoreRant(value = true)
     void init() ;
 }

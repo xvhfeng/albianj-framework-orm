@@ -1,4 +1,4 @@
-package org.albianj.common.comment;
+package org.albianj.common.anno;
 
 import java.lang.annotation.*;
 

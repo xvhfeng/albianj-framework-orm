@@ -1,7 +1,7 @@
 package org.albianj.orm.impl.service;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.kernel.anno.AlbianServRant;
 import org.albianj.kernel.kit.service.FreeAlbianService;
 import org.albianj.orm.kit.context.ICompensateNotify;
 import org.albianj.orm.kit.context.IPersistenceNotify;
@@ -34,7 +34,7 @@ import java.util.Map;
 /**
  * Created by xuhaifeng on 16/12/22.
  */
-@AlbianServiceRant(Id = IAlbianDataAccessService.Name, Interface = IAlbianDataAccessService.class)
+@AlbianServRant(Id = IAlbianDataAccessService.Name, Interface = IAlbianDataAccessService.class)
 public class AlbianDataAccessService extends FreeAlbianService implements IAlbianDataAccessService {
 
     public String getServiceName() {

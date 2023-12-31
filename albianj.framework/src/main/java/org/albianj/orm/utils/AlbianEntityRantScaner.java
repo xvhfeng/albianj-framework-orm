@@ -3,13 +3,13 @@ package org.albianj.orm.utils;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.loader.AlbianClassScanner;
-import org.albianj.loader.IAlbianClassExcavator;
-import org.albianj.loader.IAlbianClassFilter;
+import org.albianj.common.scanner.AlbianClassScanner;
+import org.albianj.common.scanner.IAlbianClassParser;
+import org.albianj.common.scanner.IAlbianClassFilter;
 import org.albianj.orm.anno.AlbianObjectDataFieldRant;
 import org.albianj.orm.anno.AlbianObjectDataRouterRant;
 import org.albianj.orm.anno.AlbianObjectDataRoutersRant;
@@ -34,12 +34,12 @@ import java.util.*;
 public class AlbianEntityRantScaner {
 
     public static HashMap<String, Object> scanPackage(final String pkgName) throws Throwable {
-        return AlbianClassScanner.filter(AlbianClassLoader.getInstance(),
+        return AlbianClassScanner.findAllClassFromPkg(AlbianClassLoader.getInstance(),
                 pkgName,
 
                 new IAlbianClassFilter() {
                     @Override
-                    public boolean verify(Class<?> cls) {
+                    public boolean lookup(Class<?> cls) {
                         //must flag with anno and extends IAlbianObject
                         // extends interface is compatibling the last version
                         return cls.isAnnotationPresent(AlbianObjectRant.class)
@@ -49,9 +49,9 @@ public class AlbianEntityRantScaner {
                     }
                 },
 
-                new IAlbianClassExcavator() {
+                new IAlbianClassParser() {
                     @Override
-                    public Object finder(Class<?> clzz)  {
+                    public Object parser(Class<?> clzz)  {
                         AlbianObjectAttribute objAttr = null;
                         AlbianObjectRant or = clzz.getAnnotation(AlbianObjectRant.class);
                         if (null == or.Interface()) {

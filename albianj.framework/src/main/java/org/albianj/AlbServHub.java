@@ -14,7 +14,7 @@ import org.albianj.orm.kit.service.AlbianObjectCreator;
 import org.albianj.orm.kit.service.IAlbianDataAccessService;
 import org.albianj.orm.kit.service.IAlbianOpenedStorageService;
 
-public final class AlbianBusHub extends AlbianServiceRouter {
+public final class AlbServHub extends AlbianServiceRouter {
 
     public static IAlbianObject newInstance(Object sessionId, String itf)  {
         return AlbianObjectCreator.newInstance(sessionId, itf);

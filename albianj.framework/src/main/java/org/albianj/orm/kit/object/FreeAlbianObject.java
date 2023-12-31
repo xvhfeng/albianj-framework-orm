@@ -37,11 +37,11 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.kit.object;
 
-import org.albianj.common.comment.SpecialWarning;
+import org.albianj.common.anno.SpecialWarning;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.AlbianRuntimeException;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.attr.AlbianObjectMemberAttribute;
 import org.albianj.orm.ctx.AlbianObjectWarp;

@@ -12,6 +12,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class AlbianAopContext { //} implements IAlbianAopContext {
+public class AlbianAspectContext { //} implements IAlbianAopContext {
     private Object data = null;
 }

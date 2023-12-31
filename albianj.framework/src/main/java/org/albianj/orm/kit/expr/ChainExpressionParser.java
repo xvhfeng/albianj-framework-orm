@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.kit.expr;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.AlbianRuntimeException;
+import org.albianj.AlbianRuntimeException;
 import org.albianj.orm.attr.AlbianEntityFieldAttribute;
 import org.albianj.orm.attr.AlbianObjectAttribute;
 import org.albianj.orm.attr.StorageAttribute;

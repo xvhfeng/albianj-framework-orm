@@ -39,7 +39,9 @@ package org.albianj.loader;
 
 public interface IAlbianTransmitterService {
 
-    void start( GlobalSettings settings) ;
+    String ImplClassName = "org.albianj.kernel.starter.AlbianTransmitterService";
+
+    void startup(Class<?> mainClass, String configPath) ;
 
     void unload() ;
 

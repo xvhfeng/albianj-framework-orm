@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.service;
 
-import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.kernel.anno.AlbianServRant;
 import org.albianj.kernel.kit.service.FreeAlbianService;
 import org.albianj.orm.ctx.ManualCommand;
 import org.albianj.orm.ctx.ManualContext;
@@ -17,7 +17,7 @@ import java.util.Vector;
 /**
  * Created by xuhaifeng on 17/8/17.
  */
-@AlbianServiceRant(Id = IAlbianManualPersistenceService.Name, Interface = IAlbianManualPersistenceService.class)
+@AlbianServRant(Id = IAlbianManualPersistenceService.Name, Interface = IAlbianManualPersistenceService.class)
 public class AlbianManualService extends FreeAlbianService implements IAlbianManualPersistenceService {
 
     public String getServiceName() {

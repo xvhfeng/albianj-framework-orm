@@ -10,12 +10,12 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Inherited
 @Documented
-public @interface AlbianServAspectRant {
+public @interface AlbianAspectIgnoreRant {
     /**
      * give up the aop when value is true
      * default is false then execute aop proxy
      *
      * @return
      */
-    boolean ignore() default false;
+    boolean value() default true;
 }

@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.kernel.bkt;
 
 
-import org.albianj.kernel.kit.logger.IAlbianLoggerService;
+import org.albianj.kernel.kit.builtin.logger.IAlbianLoggerService;
 import org.albianj.kernel.kit.service.IAlbianService;
 
 import java.util.Set;

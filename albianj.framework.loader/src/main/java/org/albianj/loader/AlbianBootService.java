@@ -47,8 +47,8 @@ import java.net.URI;
 
 public class AlbianBootService {
     private static final Logger logger = LoggerFactory.getLogger(AlbianBootService.class);
-    private static final String AlbianStarter = "org.albianj.kernel.impl.AlbianTransmitterService";
-    private static URI lookupLoggerConfigFile(String configPath){
+    private static ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    private static URI deduceLoggerConfigFile(String configPath){
         String[] filenames = {
                 "log4j2.xml",
                 "log4j2.properties",
@@ -75,14 +75,14 @@ public class AlbianBootService {
         return null;
     }
 
-    public static boolean start(String configPath) {
+    public static boolean startup(Class<?> mainClass,String configPath) {
 
         String cfPath = configPath;
         if(null == configPath || configPath.isEmpty() || configPath.trim().isEmpty()) {
-            cfPath = AlbianClassLoader.getResourcePath();
+            cfPath = classLoader.getResource("").getPath();
         }
 
-        URI cfFileName = lookupLoggerConfigFile(cfPath);
+        URI cfFileName = deduceLoggerConfigFile(cfPath);
         if (null != cfFileName) {
             LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
             logContext.setConfigLocation(cfFileName);
@@ -106,10 +106,9 @@ public class AlbianBootService {
         }
 
         try {
-            GlobalSettings settings = new GlobalSettings();
-            Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
+            Class<?> clss = classLoader.loadClass(IAlbianTransmitterService.ImplClassName);
             IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.getConstructor().newInstance();
-            abs.start(settings);
+            abs.startup(mainClass,cfPath);
         } catch (Throwable e) {
             // TODO Auto-generated catch block
             logger.error("AlbianBootService start is error ",e);
@@ -117,8 +116,26 @@ public class AlbianBootService {
         }
         return true;
     }
+    public static boolean startup(Class<?> mainClass){
+        return startup(mainClass,null);
+    }
+    public static boolean startup(){
+        Class<?> mainClass =  deduceMainClass(classLoader);
+        return startup(mainClass,null);
+    }
 
-    public static boolean start(){
-        return start(null);
+    private static Class<?> deduceMainClass(ClassLoader cl) {
+        try {
+            StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTrace) {
+                if ("main".equals(stackTraceElement.getMethodName())) {
+                    return cl.loadClass(stackTraceElement.getClassName());
+                }
+            }
+        }
+        catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+        return null;
     }
 }

@@ -37,6 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.common.utils;
 
+import org.albianj.AlbianRuntimeException;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -47,6 +49,8 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ReflectUtil {
@@ -92,11 +96,10 @@ public class ReflectUtil {
             NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
         Constructor<T> cons = null;
         if (null == parameterTypes || 0 == parameterTypes.length) {
-            return cls.newInstance();
+            return cls.getConstructor().newInstance();
         }
         cons = cls.getConstructor(parameterTypes);
-        T instance = cons.newInstance(initArgs);
-        return instance;
+        return cons.newInstance(initArgs);
     }
 
     /**
@@ -345,6 +348,42 @@ public class ReflectUtil {
             return o;
         }
     }
+
+    public static Class<?> deduceMainClass(ClassLoader cl) {
+        try {
+            StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTrace) {
+                if ("main".equals(stackTraceElement.getMethodName())) {
+                    return cl.loadClass(stackTraceElement.getClassName());
+                }
+            }
+        }
+        catch (ClassNotFoundException ex) {
+            throw new AlbianRuntimeException(ex);
+        }
+        return null;
+    }
+
+    public static Set<Class<?>> findRootInterfaces(Class<?> clazz) {
+        Set<Class<?>> rootInterfaces = new HashSet<>();
+        findRootInterfacesRecursively(clazz, rootInterfaces);
+        return rootInterfaces;
+    }
+
+    private static void findRootInterfacesRecursively(Class<?> clazz, Set<Class<?>> rootInterfaces) {
+        Class<?>[] interfaces = clazz.getInterfaces();
+
+        if (interfaces.length == 0) {
+            // 当前类没有实现接口，将其加入结果集
+            rootInterfaces.add(clazz);
+        } else {
+            // 递归处理继承的接口
+            for (Class<?> intf : interfaces) {
+                findRootInterfacesRecursively(intf, rootInterfaces);
+            }
+        }
+    }
+
 }
 
 

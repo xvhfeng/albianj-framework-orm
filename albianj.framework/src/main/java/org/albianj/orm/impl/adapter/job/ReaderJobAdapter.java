@@ -39,7 +39,7 @@ package org.albianj.orm.impl.adapter.job;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.RefArg;
-import org.albianj.kernel.AlbianRuntimeException;
+import org.albianj.AlbianRuntimeException;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.attr.DataRoutersAttribute;
 import org.albianj.orm.kit.db.SqlParameter;

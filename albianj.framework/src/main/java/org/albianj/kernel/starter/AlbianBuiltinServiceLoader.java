@@ -2,18 +2,18 @@ package org.albianj.kernel.starter;
 
 import org.albianj.common.utils.KeyValuePair;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.AlbianRuntimeException;
+import org.albianj.AlbianRuntimeException;
 import org.albianj.kernel.attr.AlbianBuiltinServiceAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
 import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.bkt.ServiceBkt;
 import org.albianj.kernel.impl.service.AlbianServiceRantParser;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.kernel.kit.service.IAlbianService;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.loader.GlobalSettings;
+import org.albianj.kernel.attr.GlobalSettings;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -171,7 +171,7 @@ public class AlbianBuiltinServiceLoader {
      * @return
      * @throws ClassNotFoundException
      */
-    public KeyValuePair<String, AlbianServiceAttr> sacnService(AlbianBuiltinServiceAttr servAttr) {
+    public KeyValuePair<String, AlbianServiceAttr> sacnService(String sessionId,AlbianBuiltinServiceAttr servAttr) {
             String id = servAttr.getId();
             String sImplClzz = servAttr.getImplClzz();
             KeyValuePair kvp = null;
@@ -186,13 +186,26 @@ public class AlbianBuiltinServiceLoader {
             return kvp;
     }
 
+    public KeyValuePair<String, AlbianServiceAttr> sacnService(String sessionId,ClassLoader loader,String servImplClassName) {
+        KeyValuePair kvp = null;
+        try {
+            Class<?> implClzz = loader.loadClass(servImplClassName);
+            AlbianServiceAttr attr = AlbianServiceRantParser.scanAlbianService(sessionId,implClzz);
+            kvp = new KeyValuePair(attr.getId(),attr);
+        }catch (Throwable e){
+            throw new AlbianRuntimeException(e);
+        }
+
+        return kvp;
+    }
+
     /**
      * 单独建立日志service，必须在startup方法的第一条就调用，以便后续启动的时候日志可以记录
      * @throws ClassNotFoundException
      */
     public void loadLoggerService(GlobalSettings settings)  {
-        KeyValuePair<String, AlbianServiceAttr>  logServAttr =  sacnService(new AlbianBuiltinServiceAttr(AlbianBuiltinServicesBkt.AlbianLoggerServicePair[0],
-                                                                    AlbianBuiltinServicesBkt.AlbianLoggerServicePair[1],true));
+        KeyValuePair<String, AlbianServiceAttr>  logServAttr =  sacnService(settings.getBatchId(),settings.getClassLoader(),
+                "org.albianj.kernel.impl.builtin.AlbianLoggerService");
         IAlbianService service = AlbianServiceLoader.makeupService(settings,logServAttr.getValue(),null);
         ServiceBkt.addService(logServAttr.getKey(), service);
     }

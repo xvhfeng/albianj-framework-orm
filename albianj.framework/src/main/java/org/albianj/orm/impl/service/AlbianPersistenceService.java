@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.service;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.kernel.anno.AlbianServRant;
 import org.albianj.kernel.kit.service.FreeAlbianService;
 import org.albianj.orm.kit.context.ICompensateNotify;
 import org.albianj.orm.kit.context.IPersistenceNotify;
@@ -62,7 +62,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-@AlbianServiceRant(Id = IAlbianPersistenceService.Name, Interface = IAlbianPersistenceService.class)
+@AlbianServRant(Id = IAlbianPersistenceService.Name, Interface = IAlbianPersistenceService.class)
 public class AlbianPersistenceService extends FreeAlbianService implements IAlbianPersistenceService {
 
     @Deprecated

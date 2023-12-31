@@ -37,20 +37,25 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.starter;
 
-import org.albianj.kernel.AlbianRuntimeException;
+import org.albianj.AlbianRuntimeException;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.attr.AlbianServiceAttr;
+import org.albianj.kernel.attr.GlobalSettings;
 import org.albianj.kernel.attr.opt.AlbianLifecycleOpt;
+import org.albianj.kernel.bkt.GlobalSettingsBkt;
 import org.albianj.kernel.bkt.ServiceAttrBkt;
 import org.albianj.kernel.bkt.ServiceBkt;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.kernel.kit.service.IAlbianService;
-import org.albianj.loader.GlobalSettings;
 import org.albianj.loader.IAlbianTransmitterService;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Seapeak
@@ -60,18 +65,26 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
     private static AlbianLifecycleOpt state = AlbianLifecycleOpt.Normal;
 
     @Override
-    public void start(GlobalSettings settings)  {
-        this.settings =  settings;
-        starting(this.settings);
+    public void startup(Class<?> mainClass,String configPath)  {
+        starting( mainClass,configPath);
     }
-    private GlobalSettings settings;
 
-    private void starting(GlobalSettings settings)  {
+    private void starting(Class<?> mainClass,String configPath)  {
 
-        // first load logger
-        // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
+        String batchId =  AlbianServiceRouter.makeBatchId().toString();
+        // first set globalsettings and open it to global
+        GlobalSettings settings = new GlobalSettings();
+        settings.setBatchId(StringsUtil.nonIdxFormat("Transmitter-{}",batchId));
+        settings.setClassLoader(Thread.currentThread().getContextClassLoader());
+        settings.setMainClass(mainClass);
+        settings.setConfigPath(configPath);
+        GlobalSettingsBkt.setSelf(settings);
+
+        // 2th load logger
+        // 必须起logger service，以保证后续日志可以被记录
         AlbianBuiltinServiceLoader bltSevLoader = new AlbianBuiltinServiceLoader();
         bltSevLoader.loadLoggerService(settings);
+
 
         // 从这里以后，就可以正常使用log了，前面的logger自行处理，但是一般不需要任何的处理
 

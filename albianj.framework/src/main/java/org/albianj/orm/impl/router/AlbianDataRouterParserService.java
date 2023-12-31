@@ -39,10 +39,10 @@ package org.albianj.orm.impl.router;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.anno.AlbianServiceRant;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.AlbianRuntimeException;
+import org.albianj.kernel.anno.AlbianServRant;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.attr.AlbianObjectAttribute;
@@ -59,7 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AlbianServiceRant(Id = IAlbianDataRouterParserService.Name, Interface = IAlbianDataRouterParserService.class)
+@AlbianServRant(Id = IAlbianDataRouterParserService.Name, Interface = IAlbianDataRouterParserService.class)
 public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserService {
 
     public static final String DEFAULT_ROUTING_NAME = "!@#$%Albianj_Default_DataRouter%$#@!";

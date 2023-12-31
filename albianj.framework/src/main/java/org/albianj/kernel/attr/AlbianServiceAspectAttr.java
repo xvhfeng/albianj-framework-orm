@@ -13,7 +13,7 @@ import org.albianj.common.utils.CheckUtil;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class AlbianServiceAopAttr {
+public class AlbianServiceAspectAttr {
     String serviceName = null;
     String beginWith = null;
     String notBeginWith = null;

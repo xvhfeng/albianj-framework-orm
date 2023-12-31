@@ -1,6 +1,6 @@
 package org.albianj.kernel.anno;
 
-import org.albianj.kernel.kit.service.IAlbianService;
+import org.albianj.common.utils.NullValue;
 
 import java.lang.annotation.*;
 
@@ -13,11 +13,11 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianServiceRant {
+public @interface AlbianServRant {
     /*
      * service id,it must not be null or empty.
      */
-    String Id();
+    String value() default "";
 
     /*
      * if value is true load this service to albian kernel,
@@ -27,13 +27,7 @@ public @interface AlbianServiceRant {
     boolean Enable() default true;
 
     /*
-     * string format for service's interface
-     * this interface must be IAlbianService's child class
-     */
-    String sInterface() default IAlbianService.FullName;
-
-    /*
      * Class object format for service's interface
      */
-    Class<? extends IAlbianService> Interface() default IAlbianService.class;
+    Class<?> Interface() default NullValue.class;
 }

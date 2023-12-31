@@ -1,4 +1,4 @@
-package org.albianj.kernel.kit.logger;
+package org.albianj.kernel.kit.builtin.logger;
 
 import org.albianj.common.anno.AlbianCommentRant;
 

@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.scope;
 
 
-import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.AlbianRuntimeException;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.orm.kit.db.PersistenceCommandType;
 import org.albianj.orm.ctx.ReaderJob;

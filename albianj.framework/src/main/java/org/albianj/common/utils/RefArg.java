@@ -47,4 +47,8 @@ public class RefArg<T> {
     public void setValue(T t) {
         this._t = t;
     }
+
+    public boolean hasValue(){
+        return _t != null;
+    }
 }

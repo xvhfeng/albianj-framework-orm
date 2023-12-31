@@ -1,7 +1,7 @@
 package org.albianj.kernel.anno;
 
 import org.albianj.kernel.attr.opt.AlbianServiceFieldSetterLifecycleOpt;
-import org.albianj.kernel.attr.opt.AlbianServiceFieldTypeOpt;
+import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
 
 import java.lang.annotation.*;
 
@@ -14,12 +14,12 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Inherited
 @Documented
-public @interface AlbianServiceFieldRant {
+public @interface AlbianServFieldRant {
     /*
      * field value type
      * default is string
      */
-    AlbianServiceFieldTypeOpt Type() default AlbianServiceFieldTypeOpt.String;
+    AlbianBuiltinTypeOpt Type() default AlbianBuiltinTypeOpt.String;
 
     /*
      * field value

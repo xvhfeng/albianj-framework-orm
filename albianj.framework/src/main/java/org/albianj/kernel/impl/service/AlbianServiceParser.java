@@ -44,8 +44,8 @@ import org.albianj.kernel.attr.AlbianServiceAspectAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
 import org.albianj.kernel.attr.AlbianServiceFieldAttr;
 import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.kernel.kit.service.parser.IAlbianParserService;
 import org.albianj.loader.AlbianClassLoader;
@@ -119,7 +119,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
                     "service {} by type {} is not loaded.",id,type);
         }
 
-        serviceAttr.setServiceClass(clzz);
+        serviceAttr.setSelfClass(clzz);
 
         String sitf = XmlUtil.getAttributeValue(elt, "Interface");
         if (!CheckUtil.isNullOrEmptyOrAllSpace(sitf)) {
@@ -135,7 +135,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         if (!CheckUtil.isNullOrEmpty(nodes)) {
             Map<String, AlbianServiceFieldAttr> ps = parserAlbianServiceFieldsAttribute(clzz, id, nodes);
             if (!CheckUtil.isNullOrEmpty(ps)) {
-                serviceAttr.setServiceFields(ps);
+                serviceAttr.setFieldAttrs(ps);
             }
 
         }
@@ -144,7 +144,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         if (!CheckUtil.isNullOrEmpty(aopNodes)) {
             Map<String, AlbianServiceAspectAttr> aas = parserAlbianServiceAopAttribute(id, aopNodes);
             if (!CheckUtil.isNullOrEmpty(aas)) {
-                serviceAttr.setAopAttributes(aas);
+                serviceAttr.setAspectAttrs(aas);
             }
 
         }
