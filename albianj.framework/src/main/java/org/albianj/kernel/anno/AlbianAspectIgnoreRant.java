@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Inherited
 @Documented
-public @interface AlbianAopRant {
+public @interface AlbianServAspectRant {
     /**
      * give up the aop when value is true
      * default is false then execute aop proxy

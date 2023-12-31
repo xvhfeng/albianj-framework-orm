@@ -39,11 +39,11 @@ package org.albianj.kernel.impl.security;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
-import org.albianj.kernel.kit.security.IAlbianSecurityService;
-import org.albianj.kernel.kit.security.SecurityOpt;
-import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.security.IAlbianSecurityService;
+import org.albianj.kernel.kit.builtin.security.SecurityOpt;
+import org.albianj.kernel.anno.AlbianServRant;
 import org.albianj.kernel.kit.service.AlbianServiceRouter;
 import org.albianj.kernel.kit.service.FreeAlbianService;
 import org.apache.commons.codec.binary.Base64;
@@ -54,7 +54,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 
-@AlbianServiceRant(Id = IAlbianSecurityService.Name, Interface = IAlbianSecurityService.class)
+@AlbianServRant(Id = IAlbianSecurityService.Name, Interface = IAlbianSecurityService.class)
 public class AlbianSecurityService extends FreeAlbianService implements IAlbianSecurityService {
 
     //donot try in my system,we not use this key

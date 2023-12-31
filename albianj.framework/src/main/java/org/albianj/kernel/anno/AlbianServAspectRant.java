@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianServiceProxyRant {
+public @interface AlbianServProxyRant {
 
     String ProxyName();
 

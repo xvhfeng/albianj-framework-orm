@@ -10,8 +10,17 @@ public enum AlbianServiceFieldTypeOpt {
     Long,
     BigInterger,
     Float,
-    Double,
-//    /*
+    Double;
+
+//    private int style;
+//    private T value;
+//
+//    AlbianServiceFieldTypeOpt(int style, T value) {
+//        this.style = style;
+//        this.value = value;
+//    }
+
+    //    /*
 //     赋值的时候，使用标注的service的属性
 //     */
 //    Property,

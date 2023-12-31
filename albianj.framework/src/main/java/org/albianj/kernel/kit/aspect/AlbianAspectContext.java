@@ -1,4 +1,4 @@
-package org.albianj.kernel.kit.aop;
+package org.albianj.kernel.kit.aspect;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,12 +1,12 @@
 package org.albianj.kernel.impl.logger;
 
-import org.albianj.common.comment.Comments;
+import org.albianj.common.anno.AlbianCommentRant;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.kit.logger.IAlbianLoggerService;
-import org.albianj.kernel.kit.logger.LogLevel;
-import org.albianj.kernel.kit.logger.LogTarget;
-import org.albianj.kernel.kit.logger.StackFrame;
-import org.albianj.kernel.anno.AlbianServiceRant;
+import org.albianj.kernel.kit.builtin.logger.IAlbianLoggerService;
+import org.albianj.kernel.kit.builtin.logger.LogLevel;
+import org.albianj.kernel.kit.builtin.logger.LogTarget;
+import org.albianj.kernel.kit.builtin.logger.StackFrame;
+import org.albianj.kernel.anno.AlbianServRant;
 import org.albianj.kernel.kit.service.FreeAlbianService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +16,8 @@ import java.util.Formatter;
 /**
  * Created by xuhaifeng on 17/2/9.
  */
-@Comments("新的logger日志类，解决log-v1中无法正确标识文件位置问题")
-@AlbianServiceRant(Id = IAlbianLoggerService.Name, Interface = IAlbianLoggerService.class)
+@AlbianCommentRant("新的logger日志类，解决log-v1中无法正确标识文件位置问题")
+@AlbianServRant(Id = IAlbianLoggerService.Name, Interface = IAlbianLoggerService.class)
 public class AlbianLoggerService extends FreeAlbianService implements IAlbianLoggerService {
 
     public String getServiceName() {

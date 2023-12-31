@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianServiceProxysRant {
-    AlbianServiceProxyRant[] Rants() default {};
+public @interface AlbianServProxysRant {
+    AlbianServProxyRant[] Rants() default {};
 }

@@ -1,4 +1,4 @@
-package org.albianj.common.comment;
+package org.albianj.common.anno;
 
 import java.lang.annotation.*;
 
@@ -14,7 +14,7 @@ import java.lang.annotation.*;
         ElementType.ANNOTATION_TYPE,
         ElementType.CONSTRUCTOR
 })
-public @interface Comments {
+public @interface AlbianCommentRant {
     /**
      * comments context
      *

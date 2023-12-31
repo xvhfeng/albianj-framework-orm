@@ -41,8 +41,8 @@ import org.albianj.common.io.Path;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.kernel.AlbianRuntimeException;
-import org.albianj.kernel.anno.AlbianAopRant;
-import org.albianj.kernel.attr.AlbianServiceAopAttr;
+import org.albianj.kernel.anno.AlbianServAspectRant;
+import org.albianj.kernel.attr.AlbianServiceAspectAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
 import org.albianj.kernel.kit.logger.LogLevel;
 import org.albianj.kernel.kit.logger.LogTarget;
@@ -65,12 +65,12 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
     private final static String pkgTagName = "Services/Packages/Package";
     private String file = "service.xml";
 
-    @AlbianAopRant(ignore = true)
+    @AlbianServAspectRant(ignore = true)
     public String getConfigFileName() {
         return file;
     }
 
-    @AlbianAopRant(ignore = true)
+    @AlbianServAspectRant(ignore = true)
     public void init()  {
 
         Map<String, AlbianServiceAttr> map = new LinkedHashMap<>();
@@ -230,8 +230,8 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                 }
             }
 
-            Map<String, AlbianServiceAopAttr> asaAopAttr = asa.getAopAttributes();
-            Map<String, AlbianServiceAopAttr> pkgAopAttr = asaPkg.getAopAttributes();
+            Map<String, AlbianServiceAspectAttr> asaAopAttr = asa.getAopAttributes();
+            Map<String, AlbianServiceAspectAttr> pkgAopAttr = asaPkg.getAopAttributes();
             if (CheckUtil.isNullOrEmpty(asaAopAttr)) {
                 asa.setAopAttributes(pkgAopAttr);
             } else {
@@ -239,7 +239,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                     // merger field attribute
                     // base on service.xml and merger field from pkg
                     // if exist in service.xml not merger field from pkg
-                    for (Map.Entry<String, AlbianServiceAopAttr> fe : pkgAopAttr.entrySet()) {
+                    for (Map.Entry<String, AlbianServiceAspectAttr> fe : pkgAopAttr.entrySet()) {
                         if (!asaAopAttr.containsKey(fe.getKey())) {
                             asaAopAttr.put(fe.getKey(), fe.getValue());
                         }
