@@ -42,8 +42,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.orm.kit.db.DatabasePoolStyle;
-import org.albianj.orm.kit.db.PersistenceDatabaseStyle;
+import org.albianj.orm.itf.db.DatabasePoolStyle;
+import org.albianj.orm.itf.db.PersistenceDatabaseStyle;
 
 @Data
 @NoArgsConstructor

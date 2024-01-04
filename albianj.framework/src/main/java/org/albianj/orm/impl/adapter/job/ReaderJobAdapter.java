@@ -40,20 +40,20 @@ package org.albianj.orm.impl.adapter.job;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.RefArg;
 import org.albianj.AlbianRuntimeException;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.kernel.itf.service.AlbianServRouter;
 import org.albianj.orm.attr.DataRoutersAttribute;
-import org.albianj.orm.kit.db.SqlParameter;
+import org.albianj.orm.itf.db.SqlParameter;
 import org.albianj.orm.attr.AlbianEntityFieldAttribute;
 import org.albianj.orm.attr.AlbianObjectAttribute;
 import org.albianj.orm.attr.DataRouterAttribute;
 import org.albianj.orm.attr.StorageAttribute;
-import org.albianj.orm.kit.expr.IFilterCondition;
-import org.albianj.orm.kit.expr.IOrderByCondition;
+import org.albianj.orm.itf.expr.IFilterCondition;
+import org.albianj.orm.itf.expr.IOrderByCondition;
 import org.albianj.orm.utils.Convert;
 import org.albianj.orm.utils.EnumMapping;
-import org.albianj.orm.kit.db.PersistenceDatabaseStyle;
-import org.albianj.orm.kit.object.*;
-import org.albianj.orm.kit.service.IAlbianStorageParserService;
+import org.albianj.orm.itf.db.PersistenceDatabaseStyle;
+import org.albianj.orm.itf.object.*;
+import org.albianj.orm.itf.service.IAlbianStorageParserService;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                                                       String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
                                                       Map<String, IOrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
         StorageAttribute stgAttr = null;
-        IAlbianStorageParserService asps = AlbianServiceRouter
+        IAlbianStorageParserService asps = AlbianServRouter
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         if (CheckUtil.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
             if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback

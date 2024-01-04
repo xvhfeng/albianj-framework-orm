@@ -3,10 +3,10 @@ package org.albianj.kernel.impl.builtin;
 import org.albianj.AlbianRuntimeException;
 import org.albianj.common.anno.AlbianCommentRant;
 import org.albianj.kernel.anno.AlbianServRant;
-import org.albianj.kernel.kit.builtin.logger.IAlbianLoggerService;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.builtin.logger.StackFrame;
+import org.albianj.kernel.itf.builtin.logger.IAlbianLoggerService;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.builtin.logger.StackFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

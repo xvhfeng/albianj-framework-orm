@@ -1,9 +1,9 @@
 package org.albianj.orm.impl.scope;
 
 
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
 import org.albianj.orm.ctx.WriterJobLifeTime;
 import org.albianj.orm.ctx.ManualContext;
 
@@ -25,7 +25,7 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
             mctx.setLifeTime(WriterJobLifeTime.Commited);
         } catch (Exception e) {
             isSuccess = false;
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "Execute the manual command is fail.");
             try {
                 switch (mctx.getLifeTime()) {
@@ -43,7 +43,7 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
                         try {
                             this.exceptionHandler(mctx);
                         } catch (Exception exc) {
-                            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
+                            AlbianServRouter.log(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
                                     "auto rollback  the manual command is fail.");
                         }
                         mctx.setLifeTime(WriterJobLifeTime.Rollbacked);
@@ -54,14 +54,14 @@ public abstract class FreeManualTransactionScope implements IManualTransactionSc
                 }
 
             } catch (Exception exc) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                         "rollback the query the manual command is fail.");
             }
         } finally {
             try {
                 unLoadExecute(mctx);
             } catch (Exception exc) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
                         "unload the manual command is fail.");
             }
 

@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.kernel.attr.opt.AlbianServiceFieldSetterLifecycleOpt;
+import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
+import org.albianj.kernel.attr.opt.AlbianServFieldSetStageOpt;
 
 import java.lang.reflect.Field;
 
@@ -16,11 +17,13 @@ import java.lang.reflect.Field;
 @AllArgsConstructor
 @ToString
 public class AlbianServiceFieldAttr {
-    String type;
+    AlbianVarTypeOpt typeOpt;
     String value;
     String name;
     Field field;
     boolean allowNull = false;
     boolean ready = false;
-    AlbianServiceFieldSetterLifecycleOpt setterLifetime = AlbianServiceFieldSetterLifecycleOpt.AfterLoading;
+    Class<?> itfClzz;
+    Class<?> fieldType;
+    AlbianServFieldSetStageOpt setterLifetime = AlbianServFieldSetStageOpt.AfterNew;
 }

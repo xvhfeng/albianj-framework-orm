@@ -42,7 +42,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.orm.kit.db.IDataBasePool;
+import org.albianj.orm.itf.db.IDataBasePool;
 import org.albianj.orm.attr.RunningStorageAttribute;
 
 import java.sql.Connection;

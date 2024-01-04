@@ -2,7 +2,7 @@ package Albian.Test.Model.Impl;
 
 import Albian.Test.DataRouters.MultiUserDataRouter;
 import Albian.Test.Model.IMultiUser;
-import org.albianj.orm.kit.object.FreeAlbianObject;
+import org.albianj.orm.itf.object.FreeAlbianObject;
 import org.albianj.orm.anno.AlbianObjectDataFieldRant;
 import org.albianj.orm.anno.AlbianObjectDataRouterRant;
 import org.albianj.orm.anno.AlbianObjectDataRoutersRant;

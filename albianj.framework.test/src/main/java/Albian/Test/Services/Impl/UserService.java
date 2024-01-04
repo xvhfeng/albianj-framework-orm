@@ -5,20 +5,20 @@ import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
 import org.albianj.kernel.anno.AlbianServFieldRant;
-import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
+import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
 import org.albianj.kernel.anno.AlbianServRant;
-import org.albianj.kernel.kit.service.FreeAlbianService;
-import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.kit.dactx.IDataAccessContext;
-import org.albianj.orm.kit.dactx.IQueryContext;
-import org.albianj.orm.kit.expr.LogicalOperation;
-import org.albianj.orm.kit.expr.FilterExpression;
-import org.albianj.orm.kit.expr.FilterGroupExpression;
-import org.albianj.orm.kit.expr.IChainExpression;
-import org.albianj.orm.kit.expr.IFilterGroupExpression;
+import org.albianj.kernel.itf.service.FreeAlbianService;
+import org.albianj.orm.itf.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.itf.dactx.IDataAccessContext;
+import org.albianj.orm.itf.dactx.IQueryContext;
+import org.albianj.orm.itf.expr.LogicalOperation;
+import org.albianj.orm.itf.expr.FilterExpression;
+import org.albianj.orm.itf.expr.FilterGroupExpression;
+import org.albianj.orm.itf.expr.IChainExpression;
+import org.albianj.orm.itf.expr.IFilterGroupExpression;
 import org.albianj.AlbServHub;
-import org.albianj.orm.kit.service.IAlbianDataAccessService;
-import org.albianj.orm.kit.service.LoadType;
+import org.albianj.orm.itf.service.IAlbianDataAccessService;
+import org.albianj.orm.itf.service.LoadType;
 
 import java.math.BigInteger;
 
@@ -30,7 +30,7 @@ public class UserService extends FreeAlbianService implements IUserService {
     //在没有确认与把握的情况下，慎用之慎用之慎用之（重要的话说三遍）
     //使用albianj的ioc直接对其属性进行赋值
     // 注意，所有使用AlbianServiceFieldRant赋值的值都是单利模式，故在albianj中会自动提升为静态变量状态
-    @AlbianServFieldRant(Type = AlbianBuiltinTypeOpt.Ref, Value = "AlbianDataAccessService")
+    @AlbianServFieldRant(Type = AlbianVarTypeOpt.Ref, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override

@@ -29,12 +29,12 @@ public class AlbianServiceAspectAttr {
         if (this.all) return true;
         return CheckUtil.isNullOrEmptyOrAllSpace(this.fullName)
                 ?
-                CheckUtil.isNullOrEmptyOrAllSpace(this.beginWith) ? true : name.startsWith(this.beginWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notBeginWith) ? true : !name.startsWith(this.notBeginWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.endWith) ? true : name.endsWith(this.endWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notEndWith) ? true : !name.endsWith(this.notEndWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.contain) ? true : name.contains(this.contain)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notContain) ? true : !name.contains(this.notContain)
+                CheckUtil.isNullOrEmptyOrAllSpace(this.beginWith) || name.startsWith(this.beginWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notBeginWith) || (!name.startsWith(this.notBeginWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.endWith) || (name.endsWith(this.endWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notEndWith) || (!name.endsWith(this.notEndWith)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.contain) || (name.contains(this.contain)
+                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notContain) || !name.contains(this.notContain)))))
                 : name.equals(this.fullName);
 
     }

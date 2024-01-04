@@ -5,16 +5,16 @@ import Albian.Test.Model.IOrgSingleUser;
 import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
-import org.albianj.kernel.kit.service.FreeAlbianService;
-import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.kit.dactx.IDataAccessContext;
-import org.albianj.orm.kit.dactx.IQueryContext;
-import org.albianj.orm.kit.expr.LogicalOperation;
-import org.albianj.orm.kit.expr.FilterExpression;
-import org.albianj.orm.kit.expr.IChainExpression;
+import org.albianj.kernel.itf.service.FreeAlbianService;
+import org.albianj.orm.itf.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.itf.dactx.IDataAccessContext;
+import org.albianj.orm.itf.dactx.IQueryContext;
+import org.albianj.orm.itf.expr.LogicalOperation;
+import org.albianj.orm.itf.expr.FilterExpression;
+import org.albianj.orm.itf.expr.IChainExpression;
 import org.albianj.AlbServHub;
-import org.albianj.orm.kit.service.IAlbianDataAccessService;
-import org.albianj.orm.kit.service.LoadType;
+import org.albianj.orm.itf.service.IAlbianDataAccessService;
+import org.albianj.orm.itf.service.LoadType;
 
 
 import java.math.BigInteger;

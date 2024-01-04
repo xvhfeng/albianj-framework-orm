@@ -1,7 +1,7 @@
 package Albian.Test.Services;
 
 
-import org.albianj.kernel.kit.service.IAlbianService;
+import org.albianj.kernel.itf.service.IAlbianService;
 
 public interface IUserService extends IAlbianService {
     final String Name = "UserService";

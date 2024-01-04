@@ -42,8 +42,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.orm.kit.db.IDataBasePool;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.orm.itf.db.IDataBasePool;
 import org.albianj.orm.attr.RunningStorageAttribute;
 
 import java.sql.Connection;
@@ -65,7 +65,7 @@ public class ReaderJob {
 
     public ReaderJob(String sessionId) {
         if (CheckUtil.isNullOrEmptyOrAllSpace(sessionId)) {
-            this.id = AlbianServiceRouter.make32UUID();
+            this.id = AlbianServRouter.make32UUID();
         } else {
             this.id = sessionId;
         }

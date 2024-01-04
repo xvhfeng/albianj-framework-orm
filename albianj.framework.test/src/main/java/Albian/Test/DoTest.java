@@ -2,11 +2,11 @@ package Albian.Test;
 
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.kernel.itf.service.AlbianServRouter;
 import org.albianj.loader.AlbianBootService;
-import org.albianj.scanner.AlbianObjectPkgScanRant;
+import org.albianj.anno.AlbianMappingScanRant;
 
-@AlbianObjectPkgScanRant({"sdsds","sdfsdfsd"})
+@AlbianMappingScanRant({"sdsds","sdfsdfsd"})
 
 public class DoTest {
     public static void main(String[] argv) {
@@ -115,7 +115,7 @@ public class DoTest {
     }
 
     private static void test1()  {
-        IUserService us = AlbianServiceRouter.getService("",IUserService.class, IUserService.Name);
+        IUserService us = AlbianServRouter.getService("",IUserService.class, IUserService.Name);
         //            us.addUser("uname","pwd");
 //            if(us.login("uname","pwd")) {
 //                System.out.println("login success.");
@@ -135,7 +135,7 @@ public class DoTest {
     }
 
     private static void test2()  {
-        IOrgUserService us = AlbianServiceRouter.getService("",IOrgUserService.class, IOrgUserService.Name);
+        IOrgUserService us = AlbianServRouter.getService("",IOrgUserService.class, IOrgUserService.Name);
 //                   if( us.addUser("uname-org","pwd-org")){
 //                       System.out.println("add org user success.");
 //                   } else {

@@ -39,8 +39,8 @@ package org.albianj.kernel.starter;
 
 import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
 import org.albianj.kernel.anno.AlbianServRant;
-import org.albianj.kernel.kit.service.parser.FreeAlbianParserService;
-import org.albianj.kernel.kit.service.parser.IAlbianParserService;
+import org.albianj.kernel.itf.service.parser.FreeAlbianParserService;
+import org.albianj.kernel.itf.service.parser.IAlbianParserService;
 
 import java.util.Properties;
 

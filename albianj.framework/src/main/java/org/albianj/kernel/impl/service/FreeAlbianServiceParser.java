@@ -44,12 +44,12 @@ import org.albianj.AlbianRuntimeException;
 import org.albianj.kernel.anno.AlbianAspectIgnoreRant;
 import org.albianj.kernel.attr.AlbianServiceAspectAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
 import org.albianj.kernel.attr.AlbianServiceFieldAttr;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.kernel.bkt.ServiceAttrBkt;
-import org.albianj.kernel.kit.service.parser.FreeAlbianParserService;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.kernel.bkt.AlbianServiceAttrsBkt;
+import org.albianj.kernel.itf.service.parser.FreeAlbianParserService;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -81,17 +81,17 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
 
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "loading the service.xml is error." );
         }
 
         if (0 == map.size()) {
 //            logger.error("The albian services is empty.");
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                     "The albian services is empty." );
             return;
         }
-        ServiceAttrBkt.insert(ALBIANJSERVICEKEY, map);
+        AlbianServiceAttrsBkt.insert(ALBIANJSERVICEKEY, map);
         return;
     }
 
@@ -106,7 +106,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
             }
             doc = XmlUtil.load(realFilename);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "loading the service.xml is error." );
         }
         if (null == doc) {
@@ -137,7 +137,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                     if (!b) {
 //                        logger.warn("Path:{} in the Package enable is false,so not load it.",
 //                            Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
-                        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                        AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                                 "Path:{} in the Package enable is false,so not load it.",
                                 CheckUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
 
@@ -157,7 +157,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                             pkgMetedataMap.putAll(pkgMap);//merger the metedata
                         }
                     } catch (Throwable e) {
-                        AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                        AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                                 "loading the service.xml is error. Path :{}s in Package is fail.",pkg );
                     }
                 }

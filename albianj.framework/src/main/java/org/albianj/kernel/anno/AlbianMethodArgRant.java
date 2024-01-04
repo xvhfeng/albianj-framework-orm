@@ -1,6 +1,6 @@
 package org.albianj.kernel.anno;
 
-import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
+import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
 
 import java.lang.annotation.*;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface AlbianMethodArgRant {
-    AlbianBuiltinTypeOpt Type() default AlbianBuiltinTypeOpt.String;
+    AlbianVarTypeOpt Type() default AlbianVarTypeOpt.String;
     String Name();
     String Value() default "";
 

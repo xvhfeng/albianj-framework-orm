@@ -1,14 +1,14 @@
 package org.albianj.kernel.impl.service;
 
-import org.albianj.AlbianRuntimeException;
 import org.albianj.common.scanner.AlbianClassScanner;
 import org.albianj.common.scanner.IAlbianClassFilter;
 import org.albianj.common.scanner.IAlbianClassParser;
 import org.albianj.common.utils.*;
 import org.albianj.kernel.anno.*;
 import org.albianj.kernel.attr.*;
-import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
-import org.albianj.kernel.kit.service.IAlbianService;
+import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.kernel.itf.service.IAlbianService;
 import org.albianj.loader.AlbianClassLoader;
 
 import java.lang.reflect.Field;
@@ -78,14 +78,16 @@ public class AlbianServiceRantParser {
 
         // 因为存在servid可能重叠，和一个接口被多个class实现的情况
         // 所以需要校验servid是否唯一，另外还要校验itfName为servid的也是否唯一
-        String servId = deduceServId(implClzz,rant);
+        Class<?> rootItf = deduceRootItf(implClzz,rant);
+        String servId = deduceServId(rant,implClzz,rootItf);
         asa.setId(servId);
         asa.setEnable(rant.Enable());
-        asa.setType(implClzz.getName());
+//        asa.setType(implClzz.getName());
         asa.setSelfClass(implClzz);
+        asa.setRootItfClass(rootItf);
 
         if (implClzz.isAnnotationPresent(AlbianServAspectsRant.class)) {
-            Map<String, AlbianServiceAspectAttr> asaas = scanServAspectAttrs(implClzz.getAnnotation(AlbianServAspectsRant.class));
+            Map<String, AlbianServiceAspectAttr> asaas = scanServAspect(implClzz.getAnnotation(AlbianServAspectsRant.class));
             asa.setAspectAttrs(asaas);
         }
 
@@ -114,32 +116,45 @@ public class AlbianServiceRantParser {
      * @param rant
      * @return
      */
-    private static String deduceServId(Class<?> implClzz,AlbianServRant rant) {
+    private static String deduceServId(AlbianServRant rant,Class<?> implClzz,Class<?> rootItf) {
         String servId = rant.value();
         if(!CheckUtil.isNullOrEmptyOrAllSpace(servId)) { // 配置了，直接使用配置的
             return servId;
         }
+        return rootItf.getName();
+    }
 
+    /**
+     * 推断唯一的接口
+     * @param implClzz
+     * @param rant
+     * @return
+     */
+    private static Class<?> deduceRootItf(Class<?> implClzz, AlbianServRant rant) {
         if(rant.Interface() != NullValue.class) { // 配置了interface,使用接口名
-            return rant.Interface().getName();
+            return rant.Interface();
         }
 
         Class<?> itfs[] =  implClzz.getInterfaces();
         if(1 == itfs.length) { // 唯一接口，那么接口名可以当servId
-            return  itfs[0].getName();
+            return itfs[0];
         }
 
         // 接口不唯一，判断是否有最终的根接口，如果有，那么根接口就是ServId，
         // 如果根接口有多个，那么必须配置servId，否则报异常
         Set<Class<?>> rootItfs = ReflectUtil.findRootInterfaces(implClzz);
-        if (1 != rootItfs.size()) { // 多个root接口的，必须配置AlbianServRant的ServId,否则无法找到
-            throw new AlbianRuntimeException(
-                    StringsUtil.nonIdxFormat(
-                            "{} have mulit root interfaces,so it's AlbianServRant(ServId) cannot NullOrEmpty.",
-                            implClzz.getName()));
-        }
+
+        AlbianServRouter.throwIfTrue(CheckUtil.isNullOrEmpty(rootItfs),
+                StringsUtil.nonIdxFormat("{} have one root interfaces.",
+                        implClzz.getName()));
+
+        AlbianServRouter.throwIfFalse(1 == rootItfs.size(),
+                StringsUtil.nonIdxFormat("{} have mulit root interfaces,so it's AlbianServRant(ServId) cannot NullOrEmpty.",
+                        implClzz.getName())
+                );
+
         Class<?> rootItf = (Class<?>) rootItfs.toArray()[0];
-        return  rootItf.getName();
+        return rootItf;
     }
 
     /**
@@ -150,26 +165,55 @@ public class AlbianServiceRantParser {
     private static Map<String, AlbianServiceFieldAttr> scanFields(Class<?> clzz) {
         Class tempClass = clzz;
         List<Field> fields = new ArrayList<>() ;
-        while (tempClass !=null && !tempClass.getName().toLowerCase().equals("java.lang.object") ) {//当父类为null的时候说明到达了最上层的父类(Object类).
+        while (tempClass !=null && !tempClass.getName().equalsIgnoreCase("java.lang.object") ) {//当父类为null的时候说明到达了最上层的父类(Object类).
             fields.addAll(Arrays.asList(tempClass .getDeclaredFields()));
             tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
         }
         Map<String, AlbianServiceFieldAttr> fieldsAttr = new HashMap<>();
         for (Field f : fields) {
+            f.setAccessible(true);
             if (f.isAnnotationPresent(AlbianServFieldRant.class)) {
-                f.setAccessible(true);
                 AlbianServiceFieldAttr aspa = new AlbianServiceFieldAttr();
                 AlbianServFieldRant frant = f.getAnnotation(AlbianServFieldRant.class);
-                aspa.setName(f.getName());
-                aspa.setType(frant.Type().name());
-                aspa.setValue(frant.Value());
+                String name = f.getName();
+                aspa.setName(name);
+                aspa.setTypeOpt(frant.Type());
+                String value = deduceFieldValueWhenRef(f,frant);
+                aspa.setValue(value);
                 aspa.setField(f);
+                aspa.setItfClzz(frant.itfClzz());
+                aspa.setFieldType(f.getType());
                 aspa.setAllowNull(frant.AllowNull());
                 aspa.setSetterLifetime(frant.SetterLifetime());
                 fieldsAttr.put(f.getName(), aspa);
             }
         }
         return fieldsAttr.isEmpty() ? null : fieldsAttr;
+    }
+
+    private static String deduceFieldValueWhenRef(Field f,AlbianServFieldRant frant ){
+        if(CheckUtil.isNullOrEmptyOrAllSpace(frant.Value())) {
+            // 直接配置了
+            return frant.Value();
+        }
+        if(AlbianVarTypeOpt.Ref == frant.Type()) {
+            Class<?> itf = frant.itfClzz();
+            if(null != itf && itf != NullValue.class && itf.isInterface()) {
+                // 引用service赋值，没有配置name，但是配置了接口
+                // 那么不管是不是root接口，直接使用该接口
+                return itf.getName();
+            }
+
+            //只是打了anno，没有配置任何信息
+            //首先通过field的类型来判断，如果是接口，直接使用，不管是不是root 接口
+            Class<?> clzz = f.getType();
+            if(clzz.isInterface()) {
+                return clzz.getName();
+            }
+
+            //如果都不是，那么尽力了，只能通过field的name来去碰碰运气
+        }
+        return f.getName();
     }
 
     private static  Map<String, AlbianMethodAttr> scanMethods(Class<?> clzz, RefArg<AlbianMethodAttr> initFn,RefArg<AlbianMethodAttr> unloadFn){
@@ -183,7 +227,7 @@ public class AlbianServiceRantParser {
                 String methodName = method.getName();
                 Class<?> returnType = method.getReturnType();
                 Class<?>[] parameterTypes = method.getParameterTypes();
-                AlbianMethodAttr methodAttr = new AlbianMethodAttr(returnType, methodName, parameterTypes,null);
+                AlbianMethodAttr methodAttr = new AlbianMethodAttr(returnType, methodName, parameterTypes,method,null);
 
                 if(method.isAnnotationPresent(AlbianServInitRant.class) && null != initFn && !initFn.hasValue() ) {
                     List<AlbianMethodArgAttr> argAttrs =  parserInitMethodArgs(method);
@@ -199,15 +243,23 @@ public class AlbianServiceRantParser {
                     }
                 }
 
+                String methodSign = makeMethodSignName(methodName,parameterTypes);
+
                 // 创建 MethodInfo 对象保存方法信息
-                if(!methodAttrs.containsKey(methodName)) { // 子类重写父类方法,选子类
-                    methodAttrs.put(methodName, methodAttr);
+                if(!methodAttrs.containsKey(methodSign)) { // 子类重写父类方法,选子类
+                    methodAttrs.put(methodSign, methodAttr);
                 }
             }
             // 获取父类的 Class 对象
             clazz = clazz.getSuperclass();
         }
         return methodAttrs;
+    }
+
+    public static  String makeMethodSignName(String methodName,Class<?>[] parameterTypes) {
+        StringBuilder sbParas = new StringBuilder(methodName);
+        Arrays.stream(parameterTypes).forEach(e -> sbParas.append("-").append(e.getName()));
+        return sbParas.toString();
     }
 
     /**
@@ -222,7 +274,7 @@ public class AlbianServiceRantParser {
             List<AlbianMethodArgAttr> argAttrs = new ArrayList<>();
             for(AlbianMethodArgRant argRant : args){
                String name = argRant.Name();
-               AlbianBuiltinTypeOpt typeOpt = argRant.Type();
+               AlbianVarTypeOpt typeOpt = argRant.Type();
                String value = argRant.Value();
                argAttrs.add(new AlbianMethodArgAttr(name,typeOpt,value));
             }
@@ -231,7 +283,7 @@ public class AlbianServiceRantParser {
         return null;
     }
 
-    private static Map<String, AlbianServiceAspectAttr> scanServAspectAttrs(AlbianServAspectsRant implClzz) {
+    private static Map<String, AlbianServiceAspectAttr> scanServAspect(AlbianServAspectsRant implClzz) {
         AlbianServAspectsRant prants = implClzz;
         Map<String, AlbianServiceAspectAttr> asaas = new HashMap<>();
         for (AlbianServAspectRant prant : prants.Aspects()) {

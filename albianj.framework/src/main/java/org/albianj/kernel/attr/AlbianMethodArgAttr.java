@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
+import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
 
 @Data
 @NoArgsConstructor
@@ -13,12 +13,12 @@ import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
 @ToString
 public class AlbianMethodArgAttr {
     private String argName;
-    private AlbianBuiltinTypeOpt typeOpt;
+    private AlbianVarTypeOpt typeOpt;
     private Class<?> realType;
     private String value;
     private Object realValue;
 
-    public AlbianMethodArgAttr(String argName, AlbianBuiltinTypeOpt typeOpt, String value) {
+    public AlbianMethodArgAttr(String argName, AlbianVarTypeOpt typeOpt, String value) {
         this.argName = argName;
         this.typeOpt = typeOpt;
         this.value = value;

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 @Data
@@ -15,5 +16,6 @@ public class AlbianMethodAttr {
     private Class<?> returnType;
     private String methodName;
     private Class<?>[] parameterTypes;
+    private Method self;
     private List<AlbianMethodArgAttr> argumentValues;
 }

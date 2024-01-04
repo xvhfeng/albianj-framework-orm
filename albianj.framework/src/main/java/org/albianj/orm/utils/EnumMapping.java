@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.utils;
 
 
-import org.albianj.orm.kit.expr.LogicalOperation;
-import org.albianj.orm.kit.expr.RelationalOperator;
-import org.albianj.orm.kit.expr.SortStyle;
+import org.albianj.orm.itf.expr.LogicalOperation;
+import org.albianj.orm.itf.expr.RelationalOperator;
+import org.albianj.orm.itf.expr.SortStyle;
 
 public class EnumMapping {
     public static String toRelationalOperators(RelationalOperator opt) {

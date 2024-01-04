@@ -52,8 +52,9 @@ public class AlbianServiceAttr {
     Map<String, AlbianServiceFieldAttr> fieldAttrs;
     Map<String, AlbianServiceAspectAttr> aspectAttrs = null;
     private String id = "";
-    private String type = "";
+//    private String type = "";
     private Class<?> selfClass = null;
+    private Class<?> rootItfClass = null;
     private boolean enable = true;
     private AlbianMethodAttr initFnAttr;
     private Object[] parasOfInitFn;

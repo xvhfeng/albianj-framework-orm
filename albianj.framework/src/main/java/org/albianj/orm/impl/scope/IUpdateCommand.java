@@ -40,7 +40,7 @@ package org.albianj.orm.impl.scope;
 
 import org.albianj.orm.attr.AlbianObjectAttribute;
 import org.albianj.orm.ctx.PersistenceCommand;
-import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.itf.object.IAlbianObject;
 
 import java.util.Map;
 

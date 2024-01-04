@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.scope;
 
 
-import org.albianj.orm.kit.db.PersistenceCommandType;
+import org.albianj.orm.itf.db.PersistenceCommandType;
 import org.albianj.orm.ctx.ReaderJob;
-import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.itf.object.IAlbianObject;
 
 import java.sql.Statement;
 import java.util.List;

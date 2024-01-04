@@ -42,8 +42,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.orm.kit.db.SqlParameter;
-import org.albianj.orm.kit.db.PersistenceCommandType;
+import org.albianj.orm.itf.db.SqlParameter;
+import org.albianj.orm.itf.db.PersistenceCommandType;
 
 import java.util.Map;
 

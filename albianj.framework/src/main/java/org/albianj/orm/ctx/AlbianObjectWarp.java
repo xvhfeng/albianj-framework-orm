@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.itf.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.itf.object.IAlbianObject;
 
 @Data
 @AllArgsConstructor

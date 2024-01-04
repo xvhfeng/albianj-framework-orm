@@ -5,23 +5,23 @@ import Albian.Test.Model.Impl.UTF8M64;
 import Albian.Test.Services.IUTF8M64Service;
 import Albian.Test.Services.Metadata.StorageInfo;
 import org.albianj.kernel.anno.AlbianServFieldRant;
-import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
+import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
 import org.albianj.kernel.anno.AlbianServRant;
-import org.albianj.kernel.kit.service.FreeAlbianService;
-import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.kit.dactx.IDataAccessContext;
-import org.albianj.orm.kit.dactx.IQueryContext;
-import org.albianj.orm.kit.expr.LogicalOperation;
-import org.albianj.orm.kit.expr.FilterExpression;
-import org.albianj.orm.kit.expr.IChainExpression;
-import org.albianj.orm.kit.service.IAlbianDataAccessService;
-import org.albianj.orm.kit.service.LoadType;
+import org.albianj.kernel.itf.service.FreeAlbianService;
+import org.albianj.orm.itf.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.itf.dactx.IDataAccessContext;
+import org.albianj.orm.itf.dactx.IQueryContext;
+import org.albianj.orm.itf.expr.LogicalOperation;
+import org.albianj.orm.itf.expr.FilterExpression;
+import org.albianj.orm.itf.expr.IChainExpression;
+import org.albianj.orm.itf.service.IAlbianDataAccessService;
+import org.albianj.orm.itf.service.LoadType;
 
 
 @AlbianServRant(Id = "UTF8M64Service")
 public class UTF8M64Service extends FreeAlbianService implements IUTF8M64Service {
 
-    @AlbianServFieldRant(Type = AlbianBuiltinTypeOpt.Ref, Value = "AlbianDataAccessService")
+    @AlbianServFieldRant(Type = AlbianVarTypeOpt.Ref, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override

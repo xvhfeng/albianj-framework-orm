@@ -42,9 +42,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.orm.kit.context.ICompensateNotify;
-import org.albianj.orm.kit.context.IPersistenceNotify;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.orm.itf.context.ICompensateNotify;
+import org.albianj.orm.itf.context.IPersistenceNotify;
 
 import java.util.Map;
 
@@ -67,7 +67,7 @@ public class WriterJob {
     public WriterJob(String sessionId) {
         // TODO Auto-generated constructor stub
         if (CheckUtil.isNullOrEmptyOrAllSpace(sessionId)) {
-            this.id = AlbianServiceRouter.make32UUID();
+            this.id = AlbianServRouter.make32UUID();
         } else {
             this.id = sessionId;
         }

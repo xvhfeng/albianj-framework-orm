@@ -2,10 +2,10 @@ package Albian.Test.DataRouters;
 
 import Albian.Test.Model.IOrgMultiUser;
 import org.albianj.orm.attr.DataRouterAttribute;
-import org.albianj.orm.kit.object.FreeAlbianObjectDataRouter;
-import org.albianj.orm.kit.object.IAlbianObject;
-import org.albianj.orm.kit.expr.IFilterCondition;
-import org.albianj.orm.kit.expr.IOrderByCondition;
+import org.albianj.orm.itf.object.FreeAlbianObjectDataRouter;
+import org.albianj.orm.itf.object.IAlbianObject;
+import org.albianj.orm.itf.expr.IFilterCondition;
+import org.albianj.orm.itf.expr.IOrderByCondition;
 
 import java.util.ArrayList;
 import java.util.List;

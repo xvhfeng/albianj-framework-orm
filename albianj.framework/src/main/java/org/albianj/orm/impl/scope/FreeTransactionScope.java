@@ -38,10 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.scope;
 
 
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.orm.kit.context.ICompensateNotify;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.orm.itf.context.ICompensateNotify;
 import org.albianj.orm.ctx.WriterJobLifeTime;
 import org.albianj.orm.ctx.WriterJob;
 
@@ -66,7 +66,7 @@ public abstract class FreeTransactionScope implements ITransactionScope {
             sbMsg.append("Execute job is error.Job lifetime is:").append(writerJob.getWriterJobLifeTime())
                 .append(",exception msg:").append(e.getMessage()).append(",Current task:")
                 .append(writerJob.getCurrentStorage()).append(",job id:").append(writerJob.getId());
-            AlbianServiceRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,sbMsg.toString());
+            AlbianServRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,sbMsg.toString());
             try {
                 switch (writerJob.getWriterJobLifeTime()) {
                     case Opened:
@@ -84,7 +84,7 @@ public abstract class FreeTransactionScope implements ITransactionScope {
                             this.exceptionHandler(writerJob);
                         } catch (Exception exc) {
                             isAutoRollbackSuccess = false;
-                            AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                            AlbianServRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                                     "auto rollback  the job {} is fail.",writerJob.getId());
                         }
                         if (writerJob.isNeedManualRollback()) {
@@ -93,7 +93,7 @@ public abstract class FreeTransactionScope implements ITransactionScope {
                                 isManualRollbackSuccess = this.exceptionManualRollback(writerJob);
                             } catch (Exception exc) {
                                 isManualRollbackSuccess = false;
-                                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                                AlbianServRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                                         "manual rollback  the job {} is fail.",writerJob.getId());
                             }
                         }
@@ -106,7 +106,7 @@ public abstract class FreeTransactionScope implements ITransactionScope {
                 }
 
             } catch (Exception exc) {
-                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                AlbianServRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                         " rollback  the job {} is fail.",writerJob.getId());
             }
 
@@ -123,7 +123,7 @@ public abstract class FreeTransactionScope implements ITransactionScope {
                     }
                 }
             } catch (Exception exc) {
-                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                AlbianServRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                         " Execute the compensate callback of job {} is fail.",writerJob.getId());
 
             }
@@ -132,7 +132,7 @@ public abstract class FreeTransactionScope implements ITransactionScope {
             try {
                 unLoadExecute(writerJob);
             } catch (Exception exc) {
-                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                AlbianServRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                         " unload job {} is fail.",writerJob.getId());
             }
             if (null != writerJob.getNotifyCallback()) {
@@ -141,7 +141,7 @@ public abstract class FreeTransactionScope implements ITransactionScope {
                     writerJob.getNotifyCallback().notice(isSuccess, sbMsg.toString(),
                             writerJob.getNotifyCallback());
                 } catch (Exception exc) {
-                    AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                    AlbianServRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
                             " Execute the notice of job {} is fail.",writerJob.getId());
                 }
             }

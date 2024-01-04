@@ -39,10 +39,10 @@ package org.albianj.orm.impl.scope;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.AlbianRuntimeException;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.orm.kit.context.ICompensateNotify;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.orm.itf.context.ICompensateNotify;
 import org.albianj.orm.ctx.WriterJob;
 import org.albianj.orm.ctx.WriterTask;
 
@@ -67,9 +67,9 @@ public class CompensateNotify implements ICompensateNotify {
         try {
             sb = writerJobCommandToString(job);
         } catch (AlbianRuntimeException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "jon {} send persistence notify is fail.",job.getId());
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "the job {} is not compensate then the all sql is:{}",job.getId(), sb.toString());
         }
     }

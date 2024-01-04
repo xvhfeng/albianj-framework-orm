@@ -40,13 +40,13 @@ package org.albianj.orm.impl.router;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.AlbianRuntimeException;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.kernel.kit.service.parser.FreeAlbianParserService;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.kernel.itf.service.parser.FreeAlbianParserService;
 import org.albianj.orm.attr.DataRouterAttribute;
 import org.albianj.orm.attr.DataRoutersAttribute;
-import org.albianj.orm.kit.service.IAlbianDataRouterParserService;
+import org.albianj.orm.itf.service.IAlbianDataRouterParserService;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -71,7 +71,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         try {
             parserFile(file);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
                     "loading the drouter.xml is error.");
         }
         return;
@@ -84,13 +84,13 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
             String fname = findConfigFile(filename);
             //配置文件不存在则不用加载，不报错
             if(fname.isBlank()){
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                         "loading the drouter.xml is error. drouter.xml is not exist");
                 return;
             }
             doc = XmlUtil.load(fname);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the drouter.xml is error.");
         }
         if (null == doc) {
@@ -111,7 +111,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         @SuppressWarnings("rawtypes")
         List objNodes = XmlUtil.selectNodes(doc, tagName);
         if (CheckUtil.isNullOrEmpty(objNodes)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Warn,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Warn,
                     "parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
                 tagName);
             return;

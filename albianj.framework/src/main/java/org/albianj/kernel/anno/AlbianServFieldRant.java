@@ -1,7 +1,8 @@
 package org.albianj.kernel.anno;
 
-import org.albianj.kernel.attr.opt.AlbianServiceFieldSetterLifecycleOpt;
-import org.albianj.kernel.attr.opt.AlbianBuiltinTypeOpt;
+import org.albianj.common.utils.NullValue;
+import org.albianj.kernel.attr.opt.AlbianServFieldSetStageOpt;
+import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
 
 import java.lang.annotation.*;
 
@@ -19,7 +20,9 @@ public @interface AlbianServFieldRant {
      * field value type
      * default is string
      */
-    AlbianBuiltinTypeOpt Type() default AlbianBuiltinTypeOpt.String;
+    AlbianVarTypeOpt Type() default AlbianVarTypeOpt.Ref;
+
+    Class<?> itfClzz() default NullValue.class;
 
     /*
      * field value
@@ -32,5 +35,5 @@ public @interface AlbianServFieldRant {
 
     boolean AllowNull() default false;
 
-    AlbianServiceFieldSetterLifecycleOpt SetterLifetime() default AlbianServiceFieldSetterLifecycleOpt.AfterNew;
+    AlbianServFieldSetStageOpt SetterLifetime() default AlbianServFieldSetStageOpt.AfterNew;
 }

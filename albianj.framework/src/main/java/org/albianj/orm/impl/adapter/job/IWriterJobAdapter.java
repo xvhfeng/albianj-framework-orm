@@ -40,7 +40,7 @@ package org.albianj.orm.impl.adapter.job;
 
 import org.albianj.orm.ctx.AlbianObjectWarp;
 import org.albianj.orm.ctx.WriterJob;
-import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.itf.object.IAlbianObject;
 
 import java.util.List;
 

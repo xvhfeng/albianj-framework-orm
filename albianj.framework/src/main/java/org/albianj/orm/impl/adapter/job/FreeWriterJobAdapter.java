@@ -38,13 +38,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.adapter.job;
 
 import org.albianj.orm.ctx.WriterJob;
-import org.albianj.orm.kit.dactx.AlbianDataAccessOpt;
+import org.albianj.orm.itf.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.ctx.AlbianObjectWarp;
 import org.albianj.orm.impl.adapter.cmd.CreateCommandAdapter;
 import org.albianj.orm.impl.scope.IUpdateCommand;
 import org.albianj.orm.impl.adapter.cmd.ModifyCommandAdapter;
 import org.albianj.orm.impl.adapter.cmd.RemoveCommandAdapter;
-import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.itf.object.IAlbianObject;
 
 import java.util.List;
 

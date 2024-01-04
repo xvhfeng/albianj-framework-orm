@@ -39,24 +39,24 @@ package org.albianj.orm.impl.scope;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.AlbianRuntimeException;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.ctx.PersistenceCommand;
-import org.albianj.orm.kit.db.IDataBasePool;
-import org.albianj.orm.kit.db.PersistenceCommandType;
+import org.albianj.orm.itf.db.IDataBasePool;
+import org.albianj.orm.itf.db.PersistenceCommandType;
 import org.albianj.orm.ctx.ReaderJob;
 import org.albianj.orm.attr.AlbianEntityFieldAttribute;
 import org.albianj.orm.attr.AlbianObjectAttribute;
-import org.albianj.orm.kit.db.SqlParameter;
+import org.albianj.orm.itf.db.SqlParameter;
 import org.albianj.orm.utils.ListConvert;
 import org.albianj.orm.utils.PersistenceNamedParameter;
 import org.albianj.orm.utils.ResultConvert;
-import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.itf.object.IAlbianObject;
 import org.albianj.orm.attr.RunningStorageAttribute;
 import org.albianj.orm.bks.AlbianEntityMetadata;
-import org.albianj.orm.kit.service.IAlbianStorageParserService;
+import org.albianj.orm.itf.service.IAlbianStorageParserService;
 
 import java.sql.*;
 import java.util.List;
@@ -70,7 +70,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
         String sessionId = job.getId();
         PersistenceNamedParameter.parseSql(job.getCommand());
         RunningStorageAttribute rsa = job.getStorageAttr();
-        IAlbianStorageParserService asps = AlbianServiceRouter
+        IAlbianStorageParserService asps = AlbianServRouter
             .getService(job.getId(), IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         IDataBasePool dbp = asps.getDatabasePool(sessionId, rsa);
         Connection conn = dbp.getConnection(sessionId, rsa, true);
@@ -87,7 +87,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
         try {
             statement = job.getConnection().prepareStatement(cmd.getCommandText());
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
                     "get the statement is fail." );
         }
         Map<Integer, String> map = cmd.getParameterMapper();
@@ -103,7 +103,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
                         statement.setObject(i, para.getValue(), para.getSqlType());
                     }
                 } catch (SQLException e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+                    AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                         "set the sql paras is error.para name: {} ,para value: {}" ,
                             para.getName() ,ResultConvert.sqlValueToString(para.getSqlType(), para.getValue()));
                 }
@@ -120,7 +120,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
 
         ResultSet result = null;
         try {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                     "job:{} Storage:{},database:{},SqlText:{},paras:{}.",
                    job.getId(), st.getStorageAttribute().getName(),
                 st.getDatabase(), text, ListConvert.toString(map));
@@ -129,17 +129,17 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
 
             if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
                 long end1 = System.currentTimeMillis();
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                         "SpxLog job:{} execute query use times:{}.", job.getId(),end1 - begin1);
             }
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "execute the reader job:{} is fail." ,job.getId());
         } finally {
             try {
                 job.getConnection().commit();
             } catch (Exception e) {
-                AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+                AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                         "commit the reader job:{} is fail." ,job.getId());
             }
         }
@@ -153,14 +153,14 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
         List<T> list = executed(cls, job.getId(), job.getResult());
         if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
             long end1 = System.currentTimeMillis();
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                     "SpxLog executed query and make data result use times:{}.",
                     end1 - begin1);
         }
         String text = job.getCommand().getCommandText();
         Map<String, SqlParameter> map = job.getCommand().getParameters();
         RunningStorageAttribute st = job.getStorageAttr();
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+        AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
             CheckUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
@@ -183,7 +183,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
             }
             return ((CallableStatement)statement).executeQuery();
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "execute the reader job fail");
         }
 
@@ -202,7 +202,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
         try {
             cls = AlbianClassLoader.getInstance().loadClass(className);
         } catch (ClassNotFoundException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "class:{} is not found.",className);
         }
         List<T> list = new Vector<T>();
@@ -225,12 +225,12 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
                     obj.setIsAlbianNew(false);
                     list.add(obj);
                 } catch (Exception e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+                    AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                             "create object from class::{} is fail.",className);
                 }
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "loop the result from database for class:{} is error.",
                      className);
         }
@@ -248,13 +248,13 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
                 String text = job.getCommand().getCommandText();
                 Map<String, SqlParameter> map = job.getCommand().getParameters();
                 RunningStorageAttribute st = job.getStorageAttr();
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                         "Storage:{},database:{},SqlText:{},paras:{}.return COUNT(1) :{}",
                     st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
                     String.valueOf(v));
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                     "get pagesize is null."
             );
         }

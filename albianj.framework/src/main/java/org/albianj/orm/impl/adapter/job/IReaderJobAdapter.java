@@ -38,12 +38,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.adapter.job;
 
 import org.albianj.orm.ctx.ReaderJob;
-import org.albianj.orm.kit.db.PersistenceCommandType;
-import org.albianj.orm.kit.db.SqlParameter;
-import org.albianj.orm.kit.expr.IFilterCondition;
-import org.albianj.orm.kit.expr.IOrderByCondition;
+import org.albianj.orm.itf.db.PersistenceCommandType;
+import org.albianj.orm.itf.db.SqlParameter;
+import org.albianj.orm.itf.expr.IFilterCondition;
+import org.albianj.orm.itf.expr.IOrderByCondition;
 import org.albianj.orm.attr.RunningStorageAttribute;
-import org.albianj.orm.kit.expr.IChainExpression;
+import org.albianj.orm.itf.expr.IChainExpression;
 
 import java.util.LinkedList;
 import java.util.Map;

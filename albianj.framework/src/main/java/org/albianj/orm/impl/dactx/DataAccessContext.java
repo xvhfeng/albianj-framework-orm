@@ -2,15 +2,15 @@ package org.albianj.orm.impl.dactx;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.AlbianRuntimeException;
-import org.albianj.orm.kit.context.ICompensateNotify;
-import org.albianj.orm.kit.context.IPersistenceNotify;
+import org.albianj.orm.itf.context.ICompensateNotify;
+import org.albianj.orm.itf.context.IPersistenceNotify;
 import org.albianj.orm.ctx.AlbianObjectWarp;
-import org.albianj.orm.kit.dactx.IDataAccessContext;
+import org.albianj.orm.itf.dactx.IDataAccessContext;
 import org.albianj.orm.ctx.WriterJob;
 import org.albianj.orm.impl.adapter.job.WriterJobAdapter;
 import org.albianj.orm.impl.scope.ITransactionScope;
 import org.albianj.orm.impl.scope.TransactionScope;
-import org.albianj.orm.kit.object.IAlbianObject;
+import org.albianj.orm.itf.object.IAlbianObject;
 
 import java.util.ArrayList;
 import java.util.List;

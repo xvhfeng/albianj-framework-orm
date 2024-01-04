@@ -44,10 +44,10 @@ import org.albianj.kernel.attr.AlbianServiceAspectAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
 import org.albianj.kernel.attr.AlbianServiceFieldAttr;
 import org.albianj.kernel.bkt.AlbianBuiltinServicesBkt;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.kernel.kit.service.parser.IAlbianParserService;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.kernel.itf.service.parser.IAlbianParserService;
 import org.albianj.loader.AlbianClassLoader;
 import org.dom4j.Element;
 
@@ -70,7 +70,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     protected void parserServices(Map<String, AlbianServiceAttr> map,
                                   String tagName, @SuppressWarnings("rawtypes") List nodes)  {
         if (CheckUtil.isNullOrEmpty(nodes)) {
-            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            AlbianServRouter.logAndThrowNew(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                     "parser the nodes named {} for service is null or empty.",tagName);
         }
         String name = null;
@@ -79,7 +79,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
             name = null == name ? "tagName" : name;
             AlbianServiceAttr serviceAttr = parserService(name, elt);
             if (null == serviceAttr) {
-                AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+                AlbianServRouter.logAndThrowNew(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                         "Tags {} as xml {} not lookup service.",tagName,elt.asXML());
             }
             name = serviceAttr.getId();
@@ -91,20 +91,20 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     @Override
     protected AlbianServiceAttr parserService(String name, Element elt)  {
         if (null == elt) {
-            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            AlbianServRouter.logAndThrowNew(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     "Parser service {} fail.",name);
         }
         AlbianServiceAttr serviceAttr = new AlbianServiceAttr();
         String id = XmlUtil.getAttributeValue(elt, ID_ATTRBUITE_NAME);
         if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                     "parser service node id is null or empty ,the node next id:{}", name);
             return null;
         }
         serviceAttr.setId(id);
         String type = XmlUtil.getAttributeValue(elt, TYPE_ATTRBUITE_NAME);
         if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                     "The type for service :{} is null or empty .", serviceAttr.getId());
             return null;
         }
@@ -115,7 +115,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
             clzz = AlbianClassLoader.getInstance().loadClass(type);
 
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "service {} by type {} is not loaded.",id,type);
         }
 
@@ -165,17 +165,17 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         String name = XmlUtil.getAttributeValue(e, "Name");
         AlbianServiceFieldAttr pa = new AlbianServiceFieldAttr();
         if (CheckUtil.isNullOrEmptyOrAllSpace(name)) {
-            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            AlbianServRouter.logAndThrowNew(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     " name of service {} is null or empty.",id);
 
         }
         pa.setName(name);
         String type = XmlUtil.getAttributeValue(e, "Type");
         if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
-            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            AlbianServRouter.logAndThrowNew(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     " type of service {} is null or empty.",id);
         }
-        pa.setType(type);
+        pa.setTypeOpt(type);
         String value = XmlUtil.getAttributeValue(e, "Value");
         if (!CheckUtil.isNullOrEmptyOrAllSpace(name)) {
             pa.setValue(value);
@@ -191,7 +191,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
             f.setAccessible(true);
             pa.setField(f);
         } catch (NoSuchFieldException exc) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,exc,
                     " Field {} of service {} is not exist.",name,id);
         }
 
@@ -254,7 +254,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         String proxy = XmlUtil.getAttributeValue(e, "Proxy");
         if (CheckUtil.isNullOrEmptyOrAllSpace(proxy)) {
-            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            AlbianServRouter.logAndThrowNew(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     " Aop proxy of  service {} is null or empty.",id);
         }
         aa.setServiceName(proxy);
@@ -262,7 +262,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         String proxyName = XmlUtil.getAttributeValue(e, "ProxyName");
         if (CheckUtil.isNullOrEmptyOrAllSpace(proxyName)) {
-            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            AlbianServRouter.logAndThrowNew(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
                     " Aop proxyName of  service {} is null or empty.",id);
         }
         aa.setProxyName(proxyName);

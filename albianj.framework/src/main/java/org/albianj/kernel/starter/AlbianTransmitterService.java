@@ -38,18 +38,23 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.kernel.starter;
 
 import org.albianj.AlbianRuntimeException;
+import org.albianj.anno.AlbianConfigurationRant;
+import org.albianj.anno.AlbianDataRouterScanRant;
+import org.albianj.anno.AlbianMappingScanRant;
+import org.albianj.anno.AlbianServiceScanRant;
+import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.kernel.attr.AlbianMethodAttr;
 import org.albianj.kernel.attr.AlbianServiceAttr;
 import org.albianj.kernel.attr.GlobalSettings;
 import org.albianj.kernel.attr.opt.AlbianLifecycleOpt;
+import org.albianj.kernel.bkt.AlbianServiceAttrsBkt;
+import org.albianj.kernel.bkt.AlbianServicesBkt;
 import org.albianj.kernel.bkt.GlobalSettingsBkt;
-import org.albianj.kernel.bkt.ServiceAttrBkt;
-import org.albianj.kernel.bkt.ServiceBkt;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.kernel.kit.service.IAlbianService;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
 import org.albianj.loader.IAlbianTransmitterService;
 
 import java.util.HashMap;
@@ -71,7 +76,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
 
     private void starting(Class<?> mainClass,String configPath)  {
 
-        String batchId =  AlbianServiceRouter.makeBatchId().toString();
+        String batchId =  AlbianServRouter.makeBatchId().toString();
         // first set globalsettings and open it to global
         GlobalSettings settings = new GlobalSettings();
         settings.setBatchId(StringsUtil.nonIdxFormat("Transmitter-{}",batchId));
@@ -85,16 +90,31 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         AlbianBuiltinServiceLoader bltSevLoader = new AlbianBuiltinServiceLoader();
         bltSevLoader.loadLoggerService(settings);
 
+        // 解析config anno,整合配置信息
+        Class<?> mainClzz  = mainClass;
+        if(null == mainClzz) {
+            mainClzz = ReflectUtil.deduceMainClass(settings.getClassLoader());
+        }
+
+        AlbianServRouter.throwIfNull( mainClzz,"Albian cannot get/deduce main-class.");
+
+        AlbianConfigurationRant configRant =  mainClzz.getAnnotation(AlbianConfigurationRant.class);
+        AlbianServiceScanRant servRant =  mainClzz.getAnnotation(AlbianServiceScanRant.class);
+        AlbianMappingScanRant mappingRant =  mainClzz.getAnnotation(AlbianMappingScanRant.class);
+        AlbianDataRouterScanRant drRant =  mainClzz.getAnnotation(AlbianDataRouterScanRant.class);
+
+
 
         // 从这里以后，就可以正常使用log了，前面的logger自行处理，但是一般不需要任何的处理
+        // 3th 启动除logger service以外的builtin services
+        bltSevLoader.loadServices(batchId,settings);
 
-        // do load builtin service
-        bltSevLoader.loadServices(AlbianServiceRouter.__StartupSessionId,settings);
+
         Map<String, AlbianServiceAttr> bltSrvAttrs = bltSevLoader.getBltSrvAttrs();
 
         //do load bussiness service
         Map<String, AlbianServiceAttr> bnsSrvAttrs =
-            (Map<String, AlbianServiceAttr>) ServiceAttrBkt.get(FreeAlbianServiceParser.ALBIANJSERVICEKEY);
+            (Map<String, AlbianServiceAttr>) AlbianServiceAttrsBkt.get(FreeAlbianServiceParser.ALBIANJSERVICEKEY);
 
         Map<String, AlbianServiceAttr> mapAttr = new HashMap<>();
         if (bnsSrvAttrs != null) {
@@ -119,20 +139,20 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             for (Map.Entry<String, AlbianServiceAttr> entry : mapAttr.entrySet())
                 try {
                     AlbianServiceAttr serviceAttr = entry.getValue();
-                    IAlbianService service = AlbianServiceLoader.makeupService(settings,serviceAttr, mapAttr);
-                    ServiceBkt.addService(serviceAttr.getId(), service);
+                    Object service = AlbianServiceCreator.newService(settings,serviceAttr, mapAttr);
+                    AlbianServicesBkt.addService(serviceAttr.getId(), service);
                 } catch (Exception exc) {
                     e = exc;
                     currentFailSize++;
                     failMap.put(entry.getKey(), entry.getValue());
-                    AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,exc,
+                    AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,exc,
                             "Kernel is error.load and init service:{} with class:{} is fail.",
                             id,sType);
                 }
             if (0 == currentFailSize) {
                 // if open the distributed mode,
                 // please contact to manager machine to logout the system.
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                         "load service is success,then set field in the services!");
                 break;// load service successen
             }
@@ -141,7 +161,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                 // startup the service fail in this times,
                 // so throw the exception and stop the albianj engine
                 state = AlbianLifecycleOpt.Unloading;
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                         "startup slbianJ engine is fail ,maybe cross refernce");
                 if (null != e) {
                     StringBuilder errBuilder = new StringBuilder();
@@ -149,10 +169,10 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                         errBuilder.append(entry.getKey()).append(",");
                     }
 
-                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                    AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                             "startup the service :{} is fail .", errBuilder.toString());
                 }
-                ServiceBkt.clear();
+                AlbianServicesBkt.clear();
                 state = AlbianLifecycleOpt.Unloaded;
                 throw new AlbianRuntimeException(e);
             } else {
@@ -167,7 +187,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         if (bnsSrvAttrs != null) {
             bltSrvAttrs.putAll(bnsSrvAttrs);
         }
-        ServiceAttrBkt.insert(FreeAlbianServiceParser.ALBIANJSERVICEKEY, bltSrvAttrs);
+        AlbianServiceAttrsBkt.insert(FreeAlbianServiceParser.ALBIANJSERVICEKEY, bltSrvAttrs);
         //set field in service
         //        if (!setServiceFields(bltSrvAttrs)) {
         //            AlbianServiceRouter.getLogger2().log(IAlbianLoggerService.AlbianRunningLoggerName,
@@ -178,7 +198,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         //
         //        }
         state = AlbianLifecycleOpt.Running;
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+        AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                 "set fieds in the service over .Startup albianJ is success!");
     }
 
@@ -188,20 +208,19 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      */
     @Override
     public void unload()  {
-        Set<String> keys = ServiceBkt.getAllServiceNames();
+        Set<String> keys = AlbianServicesBkt.getAllServiceNames();
         for (String key : keys) {
             try {
-                IAlbianService service = ServiceBkt.getService(key);
-                service.beforeUnload();
-                service.unload();
-                service.afterUnload();
+                Object service = AlbianServicesBkt.getService(key);
+                AlbianServiceAttr servAttr = (AlbianServiceAttr) AlbianServiceAttrsBkt.get(key);
+                AlbianMethodAttr unloadFn = servAttr.getUnloadFnAttr();
+                if(null != unloadFn) {
+                    unloadFn.getSelf().invoke(service,null);
+                }
             } catch (Throwable e) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,e,
+                AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,e,
                         "ubload albianj framework is fail!");
             }
         }
     }
-
-
-
 }

@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.utils;
 
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.orm.kit.db.SqlParameter;
-import org.albianj.orm.kit.expr.ICondition;
+import org.albianj.orm.itf.db.SqlParameter;
+import org.albianj.orm.itf.expr.ICondition;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

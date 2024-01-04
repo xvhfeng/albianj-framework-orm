@@ -1,8 +1,8 @@
 package org.albianj.orm.anno;
 
 
-import org.albianj.orm.kit.object.IAlbianObject;
-import org.albianj.orm.kit.service.AlbianObjectDataRouterDefaulter;
+import org.albianj.orm.itf.object.IAlbianObject;
+import org.albianj.orm.itf.service.AlbianObjectDataRouterDefaulter;
 
 import java.lang.annotation.*;
 

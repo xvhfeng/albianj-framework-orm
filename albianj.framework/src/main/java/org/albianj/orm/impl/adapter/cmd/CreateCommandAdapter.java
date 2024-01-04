@@ -42,12 +42,12 @@ import org.albianj.AlbianRuntimeException;
 import org.albianj.orm.ctx.PersistenceCommand;
 import org.albianj.orm.impl.scope.IUpdateCommand;
 import org.albianj.orm.utils.PersistenceNamedParameter;
-import org.albianj.orm.kit.db.PersistenceCommandType;
+import org.albianj.orm.itf.db.PersistenceCommandType;
 import org.albianj.orm.attr.AlbianEntityFieldAttribute;
 import org.albianj.orm.attr.AlbianObjectAttribute;
-import org.albianj.orm.kit.db.SqlParameter;
-import org.albianj.orm.kit.object.IAlbianObject;
-import org.albianj.orm.kit.db.PersistenceDatabaseStyle;
+import org.albianj.orm.itf.db.SqlParameter;
+import org.albianj.orm.itf.object.IAlbianObject;
+import org.albianj.orm.itf.db.PersistenceDatabaseStyle;
 
 import java.util.HashMap;
 import java.util.Map;

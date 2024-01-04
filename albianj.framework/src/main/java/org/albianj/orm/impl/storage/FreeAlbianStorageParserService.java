@@ -40,14 +40,14 @@ package org.albianj.orm.impl.storage;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.AlbianRuntimeException;
-import org.albianj.kernel.kit.builtin.logger.LogLevel;
-import org.albianj.kernel.kit.builtin.logger.LogTarget;
-import org.albianj.kernel.kit.service.AlbianServiceRouter;
-import org.albianj.kernel.kit.service.parser.FreeAlbianParserService;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.itf.service.AlbianServRouter;
+import org.albianj.kernel.itf.service.parser.FreeAlbianParserService;
 import org.albianj.orm.attr.StorageAttribute;
-import org.albianj.orm.kit.db.PersistenceDatabaseStyle;
+import org.albianj.orm.itf.db.PersistenceDatabaseStyle;
 import org.albianj.orm.attr.RunningStorageAttribute;
-import org.albianj.orm.kit.service.IAlbianStorageParserService;
+import org.albianj.orm.itf.service.IAlbianStorageParserService;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -64,7 +64,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     public static String generateConnectionUrl(
             RunningStorageAttribute rsa) {
         if (null == rsa) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+            AlbianServRouter.log(AlbianServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                     "The argument storageAttribute is null.");
             return null;
         }
@@ -127,7 +127,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         try {
             parserFile(file);
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the storage.xml is error." );
         }
         return;
@@ -140,7 +140,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
             String fname = findConfigFile(filename);
             doc = XmlUtil.load(fname);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            AlbianServRouter.logAndThrowAgain(AlbianServRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
                     "loading the storage.xml is error.");
         }
         if (null == doc) {
