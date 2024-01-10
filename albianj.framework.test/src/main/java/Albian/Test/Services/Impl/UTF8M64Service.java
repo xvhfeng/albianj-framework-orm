@@ -4,9 +4,9 @@ import Albian.Test.Model.IUTF8M64;
 import Albian.Test.Model.Impl.UTF8M64;
 import Albian.Test.Services.IUTF8M64Service;
 import Albian.Test.Services.Metadata.StorageInfo;
-import org.albianj.kernel.anno.AlbianServFieldRant;
-import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
-import org.albianj.kernel.anno.AlbianServRant;
+import org.albianj.kernel.anno.AblServFieldAnno;
+import org.albianj.kernel.attr.opt.AblVarTypeOpt;
+import org.albianj.kernel.anno.AblServAnno;
 import org.albianj.kernel.itf.service.FreeAlbianService;
 import org.albianj.orm.itf.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.itf.dactx.IDataAccessContext;
@@ -18,10 +18,10 @@ import org.albianj.orm.itf.service.IAlbianDataAccessService;
 import org.albianj.orm.itf.service.LoadType;
 
 
-@AlbianServRant(Id = "UTF8M64Service")
+@AblServAnno(Id = "UTF8M64Service")
 public class UTF8M64Service extends FreeAlbianService implements IUTF8M64Service {
 
-    @AlbianServFieldRant(Type = AlbianVarTypeOpt.Ref, Value = "AlbianDataAccessService")
+    @AblServFieldAnno(Type = AblVarTypeOpt.Service, ServId = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override

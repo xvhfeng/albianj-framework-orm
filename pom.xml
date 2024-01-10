@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>albianj</artifactId>
+    <artifactId>albianj-framework</artifactId>
     <groupId>albianj-framework</groupId>
     <version>05-start-flow</version>
     <modules>
         <module>albianj.framework.loader</module>
-        <module>albianj.framework</module>
+        <module>albianj.framework.core</module>
         <module>albianj.framework.test</module>
     </modules>
     <packaging>pom</packaging>

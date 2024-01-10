@@ -5,9 +5,9 @@ package Albian.Test.Services.Impl;
 //       @AlbianServiceProxyRant(ProxyName="OrgUserService",ServiceName="OrgUserInlService",Contain="get")
 //})
 
-import org.albianj.kernel.anno.AlbianServRant;
+import org.albianj.kernel.anno.AblServAnno;
 
-@AlbianServRant()
+@AblServAnno()
 public class OrgUserInlService {
 
 }

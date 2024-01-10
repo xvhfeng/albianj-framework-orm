@@ -4,9 +4,9 @@ import Albian.Test.Model.IMultiUser;
 import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
-import org.albianj.kernel.anno.AlbianServFieldRant;
-import org.albianj.kernel.attr.opt.AlbianVarTypeOpt;
-import org.albianj.kernel.anno.AlbianServRant;
+import org.albianj.kernel.anno.AblServFieldAnno;
+import org.albianj.kernel.attr.opt.AblVarTypeOpt;
+import org.albianj.kernel.anno.AblServAnno;
 import org.albianj.kernel.itf.service.FreeAlbianService;
 import org.albianj.orm.itf.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.itf.dactx.IDataAccessContext;
@@ -16,21 +16,21 @@ import org.albianj.orm.itf.expr.FilterExpression;
 import org.albianj.orm.itf.expr.FilterGroupExpression;
 import org.albianj.orm.itf.expr.IChainExpression;
 import org.albianj.orm.itf.expr.IFilterGroupExpression;
-import org.albianj.AlbServHub;
+import org.albianj.AblServRouter;
 import org.albianj.orm.itf.service.IAlbianDataAccessService;
 import org.albianj.orm.itf.service.LoadType;
 
 import java.math.BigInteger;
 
 // service必须使用此特性进行标注，否则albianj不对其进行解析
-@AlbianServRant(Id = "UserService", Interface = IUserService.class)
+@AblServAnno(Id = "UserService", Interface = IUserService.class)
 public class UserService extends FreeAlbianService implements IUserService {
 
     int idx = 0;
     //在没有确认与把握的情况下，慎用之慎用之慎用之（重要的话说三遍）
     //使用albianj的ioc直接对其属性进行赋值
     // 注意，所有使用AlbianServiceFieldRant赋值的值都是单利模式，故在albianj中会自动提升为静态变量状态
-    @AlbianServFieldRant(Type = AlbianVarTypeOpt.Ref, Value = "AlbianDataAccessService")
+    @AblServFieldAnno(Type = AblVarTypeOpt.Service, ServId = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override
@@ -60,7 +60,7 @@ public class UserService extends FreeAlbianService implements IUserService {
 //                AlbianLoggerLevel.Info, exc, "i am %s", "log");
 
         //创建对象请使用此方法
-        ISingleUser user = AlbServHub.newInstance("SessionId", ISingleUser.class);
+        ISingleUser user = AblServRouter.newInstance("SessionId", ISingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword(pwd);
         user.setUserName(uname);
@@ -90,19 +90,19 @@ public class UserService extends FreeAlbianService implements IUserService {
     @Override
     public boolean batchAddUser()  {
         IDataAccessContext dctx = da.newDataAccessContext();
-        IMultiUser mu1 = AlbServHub.newInstance("sessionId", IMultiUser.class);
+        IMultiUser mu1 = AblServRouter.newInstance("sessionId", IMultiUser.class);
         String id1 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 1, 1);
         mu1.setId(id1);
         mu1.setUserName("mu1");
         mu1.setPassword("mu1pwd");
 
-        IMultiUser mu2 = AlbServHub.newInstance("sessionId", IMultiUser.class);
+        IMultiUser mu2 = AblServRouter.newInstance("sessionId", IMultiUser.class);
         String id2 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 2, 2);
         mu2.setId(id2);
         mu2.setUserName("mu2");
         mu2.setPassword("mu2pwd");
 
-        ISingleUser user = AlbServHub.newInstance("SessionId", ISingleUser.class);
+        ISingleUser user = AblServRouter.newInstance("SessionId", ISingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword("batcher");
         user.setUserName("batcher");

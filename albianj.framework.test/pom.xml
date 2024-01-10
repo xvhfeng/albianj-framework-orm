@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>albianj</artifactId>
+        <artifactId>albianj-framework</artifactId>
         <groupId>albianj-framework</groupId>
         <version>05-start-flow</version>
     </parent>
@@ -15,7 +15,7 @@
 
         <dependency>
             <groupId>albianj-framework</groupId>
-            <artifactId>albianj.framework</artifactId>
+            <artifactId>albianj.framework.core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -2,11 +2,11 @@ package Albian.Test;
 
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
-import org.albianj.kernel.itf.service.AlbianServRouter;
-import org.albianj.loader.AlbianBootService;
-import org.albianj.anno.AlbianMappingScanRant;
+import org.albianj.kernel.ServRouter;
+import org.albianj.loader.AadBootStarter;
+import org.albianj.anno.AblMappingScannerAnno;
 
-@AlbianMappingScanRant({"sdsds","sdfsdfsd"})
+@AblMappingScannerAnno({"sdsds","sdfsdfsd"})
 
 public class DoTest {
     public static void main(String[] argv) {
@@ -23,7 +23,7 @@ public class DoTest {
             re.printStackTrace();
 
 
-            AlbianBootService.start(argv[0]);
+            AadBootStarter.start(argv[0]);
             test1();
 
 //            IAlbianLoggerService2 logServ = AlbianServiceRouter.getLogger2();
@@ -115,7 +115,7 @@ public class DoTest {
     }
 
     private static void test1()  {
-        IUserService us = AlbianServRouter.getService("",IUserService.class, IUserService.Name);
+        IUserService us = ServRouter.getService("",IUserService.class, IUserService.Name);
         //            us.addUser("uname","pwd");
 //            if(us.login("uname","pwd")) {
 //                System.out.println("login success.");
@@ -135,7 +135,7 @@ public class DoTest {
     }
 
     private static void test2()  {
-        IOrgUserService us = AlbianServRouter.getService("",IOrgUserService.class, IOrgUserService.Name);
+        IOrgUserService us = ServRouter.getService("",IOrgUserService.class, IOrgUserService.Name);
 //                   if( us.addUser("uname-org","pwd-org")){
 //                       System.out.println("add org user success.");
 //                   } else {
