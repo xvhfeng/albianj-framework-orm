@@ -41,7 +41,7 @@ import org.albianj.AblThrowable;
 import org.albianj.common.apj.util.LangUtil;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.bkt.ServicesBkt;
-import org.albianj.kernel.itf.builtin.logger.IAadLoggerService;
+import org.albianj.kernel.itf.builtin.logger.IAblLoggerService;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
 import org.albianj.kernel.starter.AlbianServiceCreator;
@@ -150,42 +150,42 @@ public class ServRouter extends ServicesBkt {
     }
 
     public static void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras)  {
-        IAadLoggerService ls = getService(sessionId, IAadLoggerService.class, IAadLoggerService.Name);
+        IAblLoggerService ls = getService(sessionId, IAblLoggerService.class, IAblLoggerService.Name);
         if(null != ls) {
             ls.log(sessionId,target,level,format,paras);
         }
     }
 
     public static void log(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras)  {
-        IAadLoggerService ls = getService(sessionId, IAadLoggerService.class, IAadLoggerService.Name);
+        IAblLoggerService ls = getService(sessionId, IAblLoggerService.class, IAblLoggerService.Name);
         if(null != ls) {
             ls.log(sessionId,target,level,t,format,paras);
         }
     }
 
     public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras)  {
-        IAadLoggerService ls = getService(sessionId, IAadLoggerService.class, IAadLoggerService.Name);
+        IAblLoggerService ls = getService(sessionId, IAblLoggerService.class, IAblLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowNew(sessionId,target,level,format,paras);
         }
     }
 
     public static void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras) {
-        IAadLoggerService ls = getService(sessionId, IAadLoggerService.class, IAadLoggerService.Name);
+        IAblLoggerService ls = getService(sessionId, IAblLoggerService.class, IAblLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowAgain(sessionId,target,level,t,format,paras);
         }
     }
 
     public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras) {
-        IAadLoggerService ls = getService(sessionId, IAadLoggerService.class, IAadLoggerService.Name);
+        IAblLoggerService ls = getService(sessionId, IAblLoggerService.class, IAblLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowNew(sessionId,target,level,newThrow,format,paras);
         }
     }
 
     public static void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable t, Throwable newThrow, String format, Object... paras) {
-        IAadLoggerService ls = getService(sessionId, IAadLoggerService.class, IAadLoggerService.Name);
+        IAblLoggerService ls = getService(sessionId, IAblLoggerService.class, IAblLoggerService.Name);
         if(null != ls) {
             ls.logAndThrowNew(sessionId,target,level, newThrow, t, format,paras);
         }

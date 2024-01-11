@@ -37,8 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.itf.builtin.security;
 
-public interface IAadSecurityService {
-
+public interface IAblSecurityService {
 
     public String decryptDES(Object sessionId,String message) ;
 

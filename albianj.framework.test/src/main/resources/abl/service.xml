@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- 此配置文件提供所有的servie功能，所有的业务service必须使用此配置文件； 使用此配置文件的对象必须实现IAlbianService或者继承FreeAlbianService -->
-<Services>
+<beans>
     <!-- Kernel ，这部分必须存在并且不要更改任何项，此部分是albianj的基础服务 -->
     <!--<Service Id="AlbianKernelService" Type="impl.org.albianj.kernel.core.AlbianKernelParserService"/>-->
     <!--<Service Id="AlbianStorageService" Type="org.albianj.persistence.impl.storage.AlbianStorageParserService"/>-->
@@ -12,15 +12,24 @@
     <!--<Service Id="AlbianDataAccessService" Type="org.albianj.persistence.impl.service.AlbianDataAccessService"/>-->
 
     <!-- 使用rant进行标注的service必须要在这里配置所在的包，否则albianj不会加载 -->
-    <Packages>
-        <Package Path="Albian.Test.Services.Impl" Enable="true"></Package>
-    </Packages>
+    <scanner>
+        <package value="Albian.Test.Services.Impl" enable="true"/>
+    </scanner>
 
-    <Service Id="OrgUserService" Type="Albian.Test.Services.Impl.OrgUserService">
-        <Properties>
-            <Property Type="Ref" Name="da" Value="AlbianDataAccessService"/>
-        </Properties>
-    </Service>
+    <service id="OrgUserService" type="Albian.Test.Services.Impl.OrgUserService">
+        <properties>
+            <property type="service" name="da" value="AlbianDataAccessService"/>
+            <property type = "bean" name="class.of.bean">
+                <arg type="boolean" value="true"/>
+                <arg type="bean" value="class.of.bean"/>
+                <arg type="int" value="5"/>
+            </property>
+        </properties>
+    </service>
+
+    <bean id="class.of.bean" type="class.of.bean" itf="interface.of bean">
+        <init mode="factory"  type="pkg.of.factory.class" method="newBeanInstance"/>
+    </bean>
 
 
     <!--<Service Id="AlbianRemoteIdService" Type="org.albianj.unid.service.impl.AlbianRemoteUNIDService" />-->
@@ -58,4 +67,4 @@
 
   -->
 
-</Services>
+</beans>

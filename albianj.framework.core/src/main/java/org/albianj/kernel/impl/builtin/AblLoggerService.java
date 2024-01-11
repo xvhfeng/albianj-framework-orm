@@ -3,7 +3,7 @@ package org.albianj.kernel.impl.builtin;
 import org.albianj.AblThrowable;
 import org.albianj.common.anno.AblCommentAnno;
 import org.albianj.kernel.anno.AblServAnno;
-import org.albianj.kernel.itf.builtin.logger.IAadLoggerService;
+import org.albianj.kernel.itf.builtin.logger.IAblLoggerService;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
 import org.albianj.kernel.itf.builtin.logger.StackFrame;
@@ -17,7 +17,7 @@ import java.util.Formatter;
  */
 @AblCommentAnno("新的logger日志类，解决log-v1中无法正确标识文件位置问题")
 @AblServAnno(ServId = "AblLoggerService")
-public class AblLoggerService implements IAadLoggerService {
+public class AblLoggerService implements IAblLoggerService {
 
     @Override
     public void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) {

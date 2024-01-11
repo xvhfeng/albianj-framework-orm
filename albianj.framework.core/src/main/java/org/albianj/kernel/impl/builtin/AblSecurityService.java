@@ -46,7 +46,7 @@ import org.albianj.kernel.bkt.GlobalSettingsBkt;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
 import org.albianj.kernel.itf.builtin.security.AblSecurityOpt;
-import org.albianj.kernel.itf.builtin.security.IAadSecurityService;
+import org.albianj.kernel.itf.builtin.security.IAblSecurityService;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.*;
@@ -55,8 +55,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 
-@AblServAnno(ServId = "AblSecurityService", Interface = IAadSecurityService.class)
-public class AblSecurityService implements IAadSecurityService {
+@AblServAnno(ServId = "AblSecurityService", Interface = IAblSecurityService.class)
+public class AblSecurityService implements IAblSecurityService {
 
     //donot try in my system,we not use this key
     private String DEFAULT_SHA_KEY = "oskey:sdfgrgeyt*&43543dfgsdfgs6454";

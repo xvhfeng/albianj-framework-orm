@@ -39,7 +39,7 @@ package org.albianj.kernel.bkt;
 
 
 import org.albianj.common.apj.util.LangUtil;
-import org.albianj.kernel.itf.builtin.logger.IAadLoggerService;
+import org.albianj.kernel.itf.builtin.logger.IAblLoggerService;
 import org.albianj.kernel.ServRouter;
 
 import java.util.Set;
@@ -74,7 +74,7 @@ public class ServicesBkt {
     public static void removeService(String id) {
         ServRouter.throwIaxIfFalse(LangUtil.isEmpty(id),"Service Id is nullOrEmpty");
         //can not remove logger
-        if (IAadLoggerService.Name.equals(id))
+        if (IAblLoggerService.Name.equals(id))
             return;
         _container.remove(id);
     }

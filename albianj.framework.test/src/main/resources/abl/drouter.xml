@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- 数据路由配置文件，使用此配置的类必须实现IAlbianObjectRouter或者继承FreeAlbianObjectRouter -->
+<datarouters>
+    <scanner>
+        <package value="Albian.Test.Services.Impl" enable="true"/>
+        <package value="Albian.Test.Services.Impl" enable="true"/>
+    </scanner>
+
+    <datarouter value ="Albian.Test.DataRouters.OrgMultiUserDataRouter"
+                entity = "Albian.Test.Model.Impl.OrgMultiUser">
+        <writers enable="true">
+            <writer name="MUserWrite1" storage="MUserStorage1"
+                    table="MUser" enable="true"/>
+            <writer name="MUserWrite2" storage="MUserStorage2"
+                    table="MultiUser" enable="true"/>
+        </writers>
+        <readers enable="true">
+            <reader name="MUserRead1" storage="MUserStorage1"
+                    table="MUser" enable="true"/>
+            <reader name="MUserRead2" storage="MUserStorage2"
+                    table="MultiUser" enable="true"/>
+        </readers>
+    </datarouter>
+
+</datarouters>
+
