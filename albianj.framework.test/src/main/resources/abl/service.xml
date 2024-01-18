@@ -16,7 +16,7 @@
         <package value="Albian.Test.Services.Impl" enable="true"/>
     </scanner>
 
-    <service id="OrgUserService" type="Albian.Test.Services.Impl.OrgUserService">
+    <service id="OrgUserService" class="Albian.Test.Services.Impl.OrgUserService">
         <properties>
             <property type="service" name="da" value="AlbianDataAccessService"/>
             <property type = "bean" name="class.of.bean">
@@ -27,8 +27,8 @@
         </properties>
     </service>
 
-    <bean id="class.of.bean" type="class.of.bean" itf="interface.of bean">
-        <init mode="factory"  type="pkg.of.factory.class" method="newBeanInstance"/>
+    <bean id="class.of.bean" class="class.of.bean" itf="interface.of bean">
+        <init mode="factory"  class="pkg.of.factory.class" method="newBeanInstance"/>
     </bean>
 
 

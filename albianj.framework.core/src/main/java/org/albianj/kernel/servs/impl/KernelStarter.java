@@ -35,82 +35,39 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.kernel.starter;
+package org.albianj.kernel.servs.impl;
 
-import org.albianj.kernel.bkt.BuiltinServicesBkt;
+import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.anno.AblServAnno;
-import org.albianj.kernel.itf.service.parser.FreeAlbianParserService;
-import org.albianj.kernel.itf.service.parser.IAlbianParserService;
+import org.albianj.kernel.anno.AblServInitAnno;
+import org.albianj.kernel.attr.GlobalSettings;
+import org.albianj.kernel.itf.builtin.logger.LogLevel;
+import org.albianj.kernel.itf.builtin.logger.LogTarget;
+import org.albianj.kernel.servs.IConfigServ;
+import org.albianj.kernel.servs.IKernelStarter;
 
-import java.util.Properties;
+@AblServAnno
+public class KernelStarter implements IKernelStarter {
 
-@AblServAnno(Id = BuiltinServicesBkt.AlbianKernelServiceName, Interface = IAlbianParserService.class)
-public class AlbianKernelParserService extends FreeAlbianParserService {
-    private String file = "kernel.properties";
+    @AblServInitAnno
+    @Override
+    public void loadConf(GlobalSettings settings){
+        IConfigServ configServ = ServRouter.getService(settings.getBatchId(),IConfigServ.class);
+        String configFilename = configServ.decideConfigFilename(settings,"abl");
+        if(CheckUtil.isNullOrEmptyOrAllSpace(configFilename)) {
+            ServRouter.log(settings.getBatchId(), LogTarget.Running, LogLevel.Warn,"no abl config file,but not affect startup,running...");
+            return;
+        }
+        ServRouter.log(settings.getBatchId(), LogTarget.Running, LogLevel.Info,"abl config:{} is exist,parser it.",configFilename);
 
-    public String getServiceName() {
-        return BuiltinServicesBkt.AlbianKernelServiceName;
-    }
-
-
-    public void setConfigFileName(String fileName) {
-        this.file = fileName;
-    }
-
-    public void init()  {
-//        try {
-//            Properties props = PropUtil.load(Path
-//                    .getExtendResourcePath(KernelSetting
-//                            .getAlbianKernelConfigFilePath() + file));
-//            parser(props);
-//        } catch (Exception e) {
-//            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
-//                    "load the kernel properties is fail.pls look at the file:{} ", file);
-//        }
-    }
-
-    public void parser(Properties props) {
-//        String id = PropUtil.getValue(props, "Id");
-//        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
-//            KernelSetting.setKernelId("001");
-//        } else {
-//            KernelSetting.setKernelId(id);
-//        }
-//
-//        String appName = PropUtil.getValue(props, "AppName");
-//        if (!CheckUtil.isNullOrEmptyOrAllSpace(appName)) {
-//            KernelSetting.setAppName(appName);
-//        }
-//
-//        String coreSize = PropUtil
-//                .getValue(props, "ThreadPoolCoreSize");
-//        if (CheckUtil.isNullOrEmptyOrAllSpace(coreSize)) {
-//            KernelSetting.setThreadPoolCoreSize(5);
-//        } else {
-//            KernelSetting.setThreadPoolCoreSize(Integer.parseInt(coreSize));
-//        }
-//        String maxSize = PropUtil.getValue(props, "ThreadPoolMaxSize");
-//        if (CheckUtil.isNullOrEmptyOrAllSpace(maxSize)) {
-//            KernelSetting.setThreadPoolMaxSize(Runtime.getRuntime()
-//                    .availableProcessors() * 2 + 1);
-//        } else {
-//            KernelSetting.setThreadPoolMaxSize(Integer.parseInt(maxSize));
-//        }
-
-//        String sLevel = PropUtil.getValue(props, "Level");
-//        if (CheckUtil.isNullOrEmptyOrAllSpace(sLevel)
-//                || sLevel.equalsIgnoreCase("debug")) {
-//            KernelSetting.setAlbianLevel(AlbianLevel.Debug);
-//        } else {
-//            KernelSetting.setAlbianLevel(AlbianLevel.Release);
-//        }
-
-
-
-//        String sMachineKey = PropUtil.getValue(props, "MachineKey");
-//        if (!CheckUtil.isNullOrEmptyOrAllSpace(sMachineKey)) {
-//            KernelSetting.setMachineKey(sMachineKey);
-//        }
+//        () -> ServRouter.logbuilder()
+//                .ifexp(CheckUtil.isNullOrEmptyOrAllSpace(configFilename))
+//                .batchid(settings.getBatchId())
+//                .target(LogTarget.Running)
+//                .level(LogLevel.Info)
+//                .format("abl config:{} is exist,parser it.", configFilename)
+//                .log();
     }
 
 

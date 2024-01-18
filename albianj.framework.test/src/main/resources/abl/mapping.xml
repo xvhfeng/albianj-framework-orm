@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- 保存对象的映射配置表，使用这个配置的所有对象必须实现IAlbianObject或者直接继承FreeAlbianObject -->
-<AlbianObjects>
+<mapping>
     <!-- 使用rant进行标注的albian object必须要在这里配置所在的包，否则albianj不会加载 -->
-    <Packages>
-        <Package Path="Albian.Test.Model.Impl" Enable="true"></Package>
-    </Packages>
+    <scanner>
+        <package value="Albian.Test.Model.Impl" enable="true" />
+    </scanner>
 
-    <AlbianObject Interface="Albian.Test.Model.IOrgSingleUser" Type="Albian.Test.Model.Impl.OrgSingleUser">
-        <Cache Enable="false" LifeTime="300" Name=""></Cache>
-        <!-- 删除了缓存服务。所以这部分配置一直为false，等待开启了缓存服务，再更加实际情况配置 -->
-        <Members> <!-- 所有对象的属性映射，如果使用默认，可以不需要配置 -->
-            <Member Name="Id" FieldName="Id" AllowNull="false"
-                    DbType="Bigint" IsSave="true" PrimaryKey="true"/>
-            <Member Name="password" FieldName="Pwd"/>
+    <entity class="Albian.Test.Model.Impl.OrgSingleUser">
+            <member dbname="Id" fieldname="Id" allownull="false"
+                    dbtype="Bigint" fieldonly="true" pk="true" autoincr="true"
+                    length = "30" desc="" default="">
+                <encrypt mode="md5" salt="" decrypt="true"/>
+                <set service="serv" clazz="aa.ee.qq.class" method="getMethod" when="load" />
+            </member>
+    </entity>
+    <!--
+        每个object有多个member，每个member表示一个字段
 
-        </Members>
-    </AlbianObject>
+        dbname : 数据库字段的名称
+        fieldname ； 程序中字段的名称
+        allownull: 在数据库中是否可以为null
+        dbtype： 在数据库中的类型
+        fieldonly： 只是程序中的字段，不会保存到数据库，也不会从数据库中加载
+        pk： 是否为主键
+        autoincr：是否为自增字段
+        length： 当字段为string时，字段的长度，该长度程序不会最任何的校验，只会在打开创建表的时候起作用
+        desc：该字段在数据库中的注释
+        default： 该字段的默认值
 
-    <AlbianObject Interface="Albian.Test.Model.IOrgMultiUser" Type="Albian.Test.Model.Impl.OrgMultiUser">
-        <Cache Enable="false" LifeTime="300" Name=""></Cache>
-        <!-- 删除了缓存服务。所以这部分配置一直为false，等待开启了缓存服务，再更加实际情况配置 -->
-        <Members> <!-- 所有对象的属性映射，如果使用默认，可以不需要配置 -->
-            <Member Name="Id" FieldName="Id" AllowNull="false"
-                    DbType="String" IsSave="true" PrimaryKey="true"/>
-            <Member Name="password" FieldName="Pwd"/>
-        </Members>
-    </AlbianObject>
+        encrypt配置节： 加解密的配置节
+            mode：启用加密的方式，支持md5等
+            salt：加密时候加的盐，一般可以为该对象的id等等
+            decrypt：从数据库中加载的时候是否需要解密
 
-</AlbianObjects>
+        set配置节： 设置值的配置节
+            service：set的时候需要调用的service，它和clazz不能同时存在
+            method： set的是否需要调用的方法
+            clazz: 当需要调用static方法的时候，clazz为静态方法所在的class，它和service不能同时存在
+            when：什么时候需要调用set配置的service.method，取值范围：new（创建的时候），load（从数据库加载的时候），save（保存到数据库的时候）
+    -->
+</mapping>
 

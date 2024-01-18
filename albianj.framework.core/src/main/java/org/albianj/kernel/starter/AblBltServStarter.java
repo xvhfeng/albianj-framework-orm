@@ -5,6 +5,7 @@ import org.albianj.common.utils.CheckUtil;
 import org.albianj.AblThrowable;
 import org.albianj.kernel.attr.BuiltinServiceAttr;
 import org.albianj.kernel.attr.ServiceAttr;
+import org.albianj.kernel.bkt.ServiceAttrsBkt;
 import org.albianj.kernel.bkt.ServicesBkt;
 import org.albianj.kernel.impl.service.AlbianServiceRantParser;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
@@ -13,6 +14,7 @@ import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.itf.service.IAlbianService;
 import org.albianj.kernel.attr.GlobalSettings;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -166,10 +168,35 @@ public class AblBltServStarter {
     public void newLoggerService(GlobalSettings settings)  {
         KeyValuePair<String, ServiceAttr>  logServAttr =  sacnService(settings.getBatchId(),settings.getClassLoader(),
                 "org.albianj.kernel.impl.builtin.AlbianLoggerService");
-        Object service = AlbianServiceCreator.newService(settings,logServAttr.getValue(),null);
+        ServiceAttrsBkt.insert(logServAttr.getKey(),logServAttr.getValue());
+        Object service = AlbianServiceCreator.newService(settings,logServAttr.getValue(),ServiceAttrsBkt.getReadOnlySelf());
         ServicesBkt.addService(logServAttr.getKey(), service);
     }
 
+    public void newBltServs(GlobalSettings settings){
+        Arrays.stream(BltServClazzs).forEach(e ->{
+            KeyValuePair<String, ServiceAttr>  servAttr =  sacnService(settings.getBatchId(),settings.getClassLoader(), e);
+            ServiceAttrsBkt.insert(servAttr.getKey(),servAttr.getValue());
+            Object serv = AlbianServiceCreator.newService(settings,servAttr.getValue(),ServiceAttrsBkt.getReadOnlySelf());
+            ServicesBkt.addService(servAttr.getKey(), serv);
+        });
+    }
+
+    public Object newBltServ(GlobalSettings settings,String servId){
+        ServiceAttr servAttr = ServiceAttrsBkt.get(servId);
+        return AlbianServiceCreator.newService(settings,servAttr,ServiceAttrsBkt.getReadOnlySelf());
+    }
+
+    private static String[] BltServClazzs = {
+            "org.albianj.kernel.impl.builtin.AlbianLoggerService",
+            "org.albianj.kernel.starter.ConfigServ",
+            "org.albianj.kernel.servs.impl.KernelStarter",
+            "org.albianj.kernel.starter.ServStarter",
+            "org.albianj.kernel.starter.SecurityServ",
+            "org.albianj.kernel.starter.MappingStarter",
+            "org.albianj.kernel.starter.StorageStarter",
+            "org.albianj.kernel.starter.DataRouterStarter",
+    };
 
 
 }

@@ -58,9 +58,7 @@ import java.util.UUID;
 /**
  * albianj的service管理类，交由albianj托管的service全部由这个类提供获取service。
  */
-public class ServRouter extends ServicesBkt {
-
-
+public class ServRouter {
     /**
      * 获取service.xml中配置的service.
      * 注意： 1：获取的service都是单例模式
@@ -83,7 +81,7 @@ public class ServRouter extends ServicesBkt {
         }
 
         try {
-            Object serv  =  getService(servId);
+            Object serv  =  ServicesBkt.getService(servId);
 
             if (null == serv)
                 return null;

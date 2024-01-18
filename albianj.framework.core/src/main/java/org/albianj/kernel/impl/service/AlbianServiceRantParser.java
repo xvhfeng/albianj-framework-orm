@@ -269,10 +269,10 @@ public class AlbianServiceRantParser {
      */
     private static List<MethodArgAttr> parserInitMethodArgs(Method method) {
         AblServInitAnno initRant = method.getAnnotation(AblServInitAnno.class);
-        AblMethodArgRant[] args = initRant.Args();
+        AblArgumentAnno[] args = initRant.Args();
         if(null != args && 0 != args.length){
             List<MethodArgAttr> argAttrs = new ArrayList<>();
-            for(AblMethodArgRant argRant : args){
+            for(AblArgumentAnno argRant : args){
                String name = argRant.Name();
                AblVarTypeOpt typeOpt = argRant.Type();
                String value = argRant.Value();

@@ -56,7 +56,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AblServAnno(Id = BuiltinServicesBkt.AlbianServiceParserName, Interface = IAlbianParserService.class)
+@AblServAnno(ServId = BuiltinServicesBkt.AlbianServiceParserName, Interface = IAlbianParserService.class)
 public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     private final static String ID_ATTRBUITE_NAME = "Id";

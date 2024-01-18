@@ -6,7 +6,7 @@
         <package value="Albian.Test.Services.Impl" enable="true"/>
     </scanner>
 
-    <datarouter value ="Albian.Test.DataRouters.OrgMultiUserDataRouter"
+    <datarouter class ="Albian.Test.DataRouters.OrgMultiUserDataRouter"
                 entity = "Albian.Test.Model.Impl.OrgMultiUser">
         <writers enable="true">
             <writer name="MUserWrite1" storage="MUserStorage1"
