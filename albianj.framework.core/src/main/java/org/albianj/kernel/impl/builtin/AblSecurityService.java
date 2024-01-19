@@ -37,7 +37,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.builtin;
 
-import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.anno.AblServInitAnno;
@@ -70,7 +69,7 @@ public class AblSecurityService implements IAblSecurityService {
     @AblServInitAnno
     public void init()  {
         String mkey = GlobalSettingsBkt.getSelf().getMachineKey();
-        if (CheckUtil.isNullOrEmptyOrAllSpace(mkey)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(mkey)) {
             return;
         }
         if (40 <= mkey.length()) {

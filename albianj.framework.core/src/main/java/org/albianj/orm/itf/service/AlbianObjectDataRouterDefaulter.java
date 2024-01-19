@@ -1,6 +1,6 @@
 package org.albianj.orm.itf.service;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.orm.attr.DataRouterAttribute;
 import org.albianj.orm.itf.object.FreeAlbianObjectDataRouter;
 import org.albianj.orm.itf.object.IAlbianObject;
@@ -18,7 +18,7 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
     public List<DataRouterAttribute> mappingWriterRouting(
             Map<String, DataRouterAttribute> routings, IAlbianObject obj) {
         // TODO Auto-generated method stub
-        if (CheckUtil.isNullOrEmpty(routings)) return null;
+        if (CollectionUtil.isNullOrEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;
@@ -38,7 +38,7 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
             Map<String, IFilterCondition> wheres,
             Map<String, IOrderByCondition> orderbys) {
         // TODO Auto-generated method stub
-        if (CheckUtil.isNullOrEmpty(routings)) return null;
+        if (CollectionUtil.isNullOrEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;

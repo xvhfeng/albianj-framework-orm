@@ -37,8 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.scope;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.AblThrowable;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
 import org.albianj.kernel.ServRouter;
@@ -91,7 +92,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
                     "get the statement is fail." );
         }
         Map<Integer, String> map = cmd.getParameterMapper();
-        if (!CheckUtil.isNullOrEmpty(map)) {
+        if (!CollectionUtil.isNullOrEmpty(map)) {
             for (int i = 1; i <= map.size(); i++) {
                 String paraName = map.get(i);
                 SqlParameter para = cmd.getParameters().get(paraName);
@@ -127,7 +128,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
             long begin1 = System.currentTimeMillis();
             result = ((PreparedStatement)job.getStatement()).executeQuery();
 
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
                 long end1 = System.currentTimeMillis();
                 ServRouter.log(ServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
                         "SpxLog job:{} execute query use times:{}.", job.getId(),end1 - begin1);
@@ -151,7 +152,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
         long begin1 = System.currentTimeMillis();
         String sessionId = job.getId();
         List<T> list = executed(cls, job.getId(), job.getResult());
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
             long end1 = System.currentTimeMillis();
             ServRouter.log(ServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                     "SpxLog executed query and make data result use times:{}.",
@@ -163,7 +164,7 @@ public class QueryScope extends FreeQueryScope implements IQueryScope {
         ServRouter.log(ServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
-            CheckUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
+            CollectionUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
         return list;
     }
 

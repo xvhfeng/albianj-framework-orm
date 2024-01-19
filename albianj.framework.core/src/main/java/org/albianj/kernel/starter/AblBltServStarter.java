@@ -1,7 +1,7 @@
 package org.albianj.kernel.starter;
 
 import org.albianj.common.utils.KeyValuePair;
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.AblThrowable;
 import org.albianj.kernel.attr.BuiltinServiceAttr;
 import org.albianj.kernel.attr.ServiceAttr;
@@ -123,7 +123,7 @@ public class AblBltServStarter {
                 }
             }
         }
-        if(CheckUtil.isNullOrEmpty(bltSrvAttrs))  return null;
+        if(CollectionUtil.isNullOrEmpty(bltSrvAttrs))  return null;
         return bltSrvAttrs;
     }
 

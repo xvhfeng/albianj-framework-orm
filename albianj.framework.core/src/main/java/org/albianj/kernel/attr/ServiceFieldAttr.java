@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.albianj.kernel.attr.opt.AblVarTypeOpt;
-import org.albianj.kernel.attr.opt.AblFieldSetStageOpt;
+import org.albianj.kernel.attr.opt.AblFieldSetWhenOpt;
 
 import java.lang.reflect.Field;
 
@@ -25,5 +25,5 @@ public class ServiceFieldAttr {
     boolean ready = false;
     Class<?> itfClzz;
     Class<?> fieldType;
-    AblFieldSetStageOpt setterLifetime = AblFieldSetStageOpt.AfterNew;
+    AblFieldSetWhenOpt setterLifetime = AblFieldSetWhenOpt.AfterNew;
 }

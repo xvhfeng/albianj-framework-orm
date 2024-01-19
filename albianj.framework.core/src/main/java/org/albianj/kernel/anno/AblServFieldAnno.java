@@ -1,7 +1,8 @@
 package org.albianj.kernel.anno;
 
 import org.albianj.common.utils.NullValue;
-import org.albianj.kernel.attr.opt.AblFieldSetStageOpt;
+import org.albianj.kernel.attr.opt.AblFieldSetWhenOpt;
+import org.albianj.kernel.attr.opt.AblVarModeOpt;
 import org.albianj.kernel.attr.opt.AblVarTypeOpt;
 
 import java.lang.annotation.*;
@@ -31,9 +32,11 @@ public @interface AblServFieldAnno {
      * default is Empty
      * when type is ref,this value is the service id
      */
-    String ServId() default "";
+    String Value() default "";
 
     boolean AllowNull() default false;
 
-    AblFieldSetStageOpt SetterLifetime() default AblFieldSetStageOpt.AfterNew;
+    AblVarModeOpt Mode() default AblVarModeOpt.Direct;
+
+    AblFieldSetWhenOpt SetWhen() default AblFieldSetWhenOpt.AfterNew;
 }

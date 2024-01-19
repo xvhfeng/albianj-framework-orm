@@ -37,37 +37,140 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.servs.impl;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.ServRouter;
+import org.albianj.kernel.anno.AblArgumentAnno;
 import org.albianj.kernel.anno.AblServAnno;
+import org.albianj.kernel.anno.AblServFieldAnno;
 import org.albianj.kernel.anno.AblServInitAnno;
 import org.albianj.kernel.attr.GlobalSettings;
+import org.albianj.kernel.attr.config.KernelConfigAttr;
+import org.albianj.kernel.attr.opt.AblFieldSetWhenOpt;
+import org.albianj.kernel.attr.opt.AblVarModeOpt;
+import org.albianj.kernel.attr.opt.AblVarTypeOpt;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
 import org.albianj.kernel.servs.IConfigServ;
+import org.albianj.kernel.servs.IKernelAttrInjector;
 import org.albianj.kernel.servs.IKernelStarter;
+import org.apache.commons.configuration2.CompositeConfiguration;
+import org.apache.commons.configuration2.SystemConfiguration;
 
 @AblServAnno
 public class KernelStarter implements IKernelStarter {
 
-    @AblServInitAnno
+    @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew)
+    IConfigServ cfServ;
+
+    @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew,Type = AblVarTypeOpt.Data,Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt@getSelf" )
+    GlobalSettings settings;
+
+    KernelConfigAttr attr;
+
+    @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew)
+    IKernelAttrInjector injector;
+
+    @AblServInitAnno(Args = {
+            @AblArgumentAnno(Name="settings",Type = AblVarTypeOpt.Data,Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt@getSelf"),
+            @AblArgumentAnno(Name="simpleFileName",Value="abl"),
+    })
     @Override
-    public void loadConf(GlobalSettings settings){
-        IConfigServ configServ = ServRouter.getService(settings.getBatchId(),IConfigServ.class);
-        String configFilename = configServ.decideConfigFilename(settings,"abl");
-        if(CheckUtil.isNullOrEmptyOrAllSpace(configFilename)) {
-            ServRouter.log(settings.getBatchId(), LogTarget.Running, LogLevel.Warn,"no abl config file,but not affect startup,running...");
+    public void loadConf( GlobalSettings settings,String simpleFileName) {
+        /**
+         * 外部注射值进入
+         * 只有这个配置是有特殊性的，别的都不会存在这种需求
+         * 因为有一些像key一样的值是有保密需求的
+         */
+        if(null != injector){
+            attr = injector.execute();
             return;
         }
-        ServRouter.log(settings.getBatchId(), LogTarget.Running, LogLevel.Info,"abl config:{} is exist,parser it.",configFilename);
 
-//        () -> ServRouter.logbuilder()
-//                .ifexp(CheckUtil.isNullOrEmptyOrAllSpace(configFilename))
-//                .batchid(settings.getBatchId())
-//                .target(LogTarget.Running)
-//                .level(LogLevel.Info)
-//                .format("abl config:{} is exist,parser it.", configFilename)
-//                .log();
+        String configFilename = cfServ.decideConfigFilename(settings, simpleFileName);
+
+        if (StringsUtil.isNullOrEmptyOrAllSpace(configFilename)) {
+            ServRouter.logBuilder(settings.getBatchId(), LogTarget.Running, LogLevel.Warn)
+                    .format("no abl config file,but not affect startup,running...")
+                    .done();
+            return;
+        }
+
+        ServRouter.logBuilder(settings.getBatchId(), LogTarget.Running, LogLevel.Info)
+                .format("abl config:{} is exist,parser it.", configFilename)
+                .done();
+
+        attr = new KernelConfigAttr();
+        parserConfig(configFilename, attr);
+        parserConfigFromSysConfig(attr);
+    }
+
+    /**
+     *  系统变量的值只会在abl的这个配置项中存在
+     *  因为该项有一定的保密性质，有一些需要系统管理员来处理
+     * @param attr
+     */
+    private void parserConfigFromSysConfig(KernelConfigAttr  attr){
+        SystemConfiguration sysConfig = new SystemConfiguration();
+        String mkey = sysConfig.getString("abl.machinekey");
+        String mid = sysConfig.getString("abl.machineId");
+        String appname = sysConfig.getString("abl.appname");
+        if(StringsUtil.existValue(mkey)) {
+            attr.setMachineKey(mkey);
+        }
+        if(StringsUtil.existValue(mid)){
+            attr.setMachineId(mid);
+        }
+
+        if(StringsUtil.existValue(appname)){
+            attr.setAppName(appname);
+        }
+    }
+
+
+    private void parserConfig(String configFilename, KernelConfigAttr  attr){
+        CompositeConfiguration config =  cfServ.neatConfigurtion(configFilename);
+        if(null == config){
+            ServRouter.logBuilder(settings.getBatchId(),LogTarget.Running,LogLevel.Warn)
+                    .format("no config file -> {} for neatting",configFilename)
+                    .done();
+            return;
+        }
+
+        String mkey = config.getString("machinekey[@value]",config.getString("machinekey"));
+        String mid = config.getString("machineId[@value]",config.getString("machineId"));
+        String appname = config.getString("appname[@value]",config.getString("appname"));
+
+        if(StringsUtil.existValue(mkey)) {
+            attr.setMachineKey(mkey);
+        }
+        if(StringsUtil.existValue(mid)){
+            attr.setMachineId(mid);
+        }
+
+        if(StringsUtil.existValue(appname)){
+            attr.setAppName(appname);
+        }
+    }
+
+    /**
+     *
+     * 修改abl的特性，用于将值配置入数据库的情况
+     * @param machinekey
+     * @param machineId
+     * @param appName
+     */
+    @Override
+    public void modifyKernelAttr(String machinekey, String machineId, String appName){
+        if(StringsUtil.existValue(machinekey)) {
+            attr.setMachineKey(machinekey);
+        }
+        if(StringsUtil.existValue(machineId)){
+            attr.setMachineId(machineId);
+        }
+
+        if(StringsUtil.existValue(appName)){
+            attr.setAppName(appName);
+        }
     }
 
 

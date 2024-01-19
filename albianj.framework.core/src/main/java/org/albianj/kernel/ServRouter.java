@@ -39,8 +39,9 @@ package org.albianj.kernel;
 
 import org.albianj.AblThrowable;
 import org.albianj.common.apj.util.LangUtil;
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.bkt.ServicesBkt;
+import org.albianj.kernel.data.LogData;
 import org.albianj.kernel.itf.builtin.logger.IAblLoggerService;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
@@ -72,7 +73,7 @@ public class ServRouter {
      */
     public static <T> T getService(Object sessionId,Class<T> cla, String id, boolean isThrowIfException) {
         String servId = id;
-        if(CheckUtil.isNullOrEmptyOrAllSpace(servId)) {
+        if(StringsUtil.isNullOrEmptyOrAllSpace(servId)) {
             if(null == cla) {
                 ServRouter.throwIfTrue(isThrowIfException,"Service Id is nullOrEmpty and interface is Null.");
                 return null;
@@ -147,6 +148,10 @@ public class ServRouter {
         return null;
     }
 
+    public static LogData logBuilder(Object sessionId,LogTarget target,LogLevel level){
+        return LogData.builder(sessionId,target,level);
+    }
+
     public static void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras)  {
         IAblLoggerService ls = getService(sessionId, IAblLoggerService.class, IAblLoggerService.Name);
         if(null != ls) {
@@ -213,8 +218,8 @@ public class ServRouter {
         }
     }
 
-    public static void throwAgain(String msg){
-            throw new AblThrowable(msg);
+    public static void throwNew(String msg,Object...paras){
+            throw new AblThrowable(StringsUtil.nonIdxFormat(msg,paras));
     }
 
     public static void throwAgain(Throwable t){
@@ -234,6 +239,24 @@ public class ServRouter {
     public static void throwAgainIfTrue(boolean cond,String msg,Throwable t){
         if(cond) {
             throw new AblThrowable(msg,t);
+        }
+    }
+
+    public static void throwNewIfTrue(boolean cond,String msg,Object... paras){
+        if(cond) {
+            throw new AblThrowable(StringsUtil.nonIdxFormat(msg,paras));
+        }
+    }
+
+    public static void throwNewIfNull(Object obj,String msg,Object... paras){
+        if(null == obj) {
+            throw new AblThrowable(StringsUtil.nonIdxFormat(msg,paras));
+        }
+    }
+
+    public static void throwNewIfNotNull(Object obj,String msg,Object... paras){
+        if(null != obj) {
+            throw new AblThrowable(StringsUtil.nonIdxFormat(msg,paras));
         }
     }
 
@@ -257,6 +280,11 @@ public class ServRouter {
             String message = "null " + (null == name ? "input" : name);
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public static void throwIax(String name,Object value) {
+        String message = "null " + (null == name ? "input" : name);
+        throw new IllegalArgumentException(StringsUtil.nonIdxFormat("Error By: {} = {}",message,value));
     }
 
     /**

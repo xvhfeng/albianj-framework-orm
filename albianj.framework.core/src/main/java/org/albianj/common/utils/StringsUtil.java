@@ -128,7 +128,7 @@ public class StringsUtil extends StringUtils {
     }
 
     public static String censoredZero(String s) {
-        if (CheckUtil.isNullOrEmptyOrAllSpace(s)) {
+        if (isNullOrEmptyOrAllSpace(s)) {
             return null;
         }
         int idx = s.lastIndexOf("0");
@@ -237,4 +237,15 @@ public class StringsUtil extends StringUtils {
         return sb.toString();
     }
 
+    public static boolean isNullOrEmpty(String value) {
+        return null == value || value.isEmpty();
+    }
+
+    public static boolean isNullOrEmptyOrAllSpace(String value) {
+        return null == value || value.trim().isEmpty();
+    }
+
+    public static boolean existValue(String value){
+        return !isNullOrEmptyOrAllSpace(value);
+    }
 }

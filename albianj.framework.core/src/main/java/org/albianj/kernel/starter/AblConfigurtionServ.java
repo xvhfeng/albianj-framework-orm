@@ -4,7 +4,7 @@ import org.albianj.anno.AblConfigurationAnno;
 import org.albianj.anno.AblDataRouterScannerAnno;
 import org.albianj.anno.AblMappingScannerAnno;
 import org.albianj.anno.AblServiceScannerAnno;
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.attr.PackageAttr;
 
@@ -73,7 +73,7 @@ public class AblConfigurtionServ {
                 "@classpath:serv.xml",
                 "@classpath:serv.yaml",
         };
-        if(CheckUtil.isNullOrEmptyOrAllSpace(servFilename)) {
+        if(StringsUtil.isNullOrEmptyOrAllSpace(servFilename)) {
 
         }
 
@@ -111,7 +111,7 @@ public class AblConfigurtionServ {
             filenameCf = servRantCf.FileName();
         }
 
-        if(!CheckUtil.isNullOrEmptyOrAllSpace(filenameCf)) {
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(filenameCf)) {
             return filenameCf;
         }
 
@@ -130,7 +130,7 @@ public class AblConfigurtionServ {
             filenameCf = servRantCf.FileName();
         }
 
-        if(!CheckUtil.isNullOrEmptyOrAllSpace(filenameCf)) {
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(filenameCf)) {
             return filenameCf;
         }
 
@@ -149,7 +149,7 @@ public class AblConfigurtionServ {
             filenameCf = servRantCf.FileName();
         }
 
-        if(!CheckUtil.isNullOrEmptyOrAllSpace(filenameCf)) {
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(filenameCf)) {
             return filenameCf;
         }
 

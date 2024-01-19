@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.utils;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.orm.ctx.InternalManualCommand;
 import org.albianj.orm.ctx.ManualCommand;
 import org.albianj.orm.ctx.PersistenceCommand;
@@ -67,7 +67,7 @@ public class PersistenceNamedParameter {
         cmd.setCommandText(cmdText);
         cmd.setParameterMapper(paramsMap);
 
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(cmd.getRollbackCommandText())) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(cmd.getRollbackCommandText())) {
             String rollbackText = cmd.getRollbackCommandText();
             Matcher rm = p.matcher(rollbackText);
             Map<Integer, String> rollbackParamsMap = new HashMap<Integer, String>();

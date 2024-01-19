@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.dactx;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.AblThrowable;
 import org.albianj.orm.itf.context.ICompensateNotify;
 import org.albianj.orm.itf.context.IPersistenceNotify;
@@ -144,7 +144,7 @@ public class DataAccessContext implements IDataAccessContext {
         this.notifyCallbackObject = null;
         this.notifyCallback = null;
         this.notifyCallbackObject = null;
-        if (!CheckUtil.isNullOrEmpty(entitis)) {
+        if (!CollectionUtil.isNullOrEmpty(entitis)) {
             entitis.clear();
         }
     }

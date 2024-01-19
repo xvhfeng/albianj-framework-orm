@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.scope;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.AblThrowable;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
@@ -77,7 +77,7 @@ public class CompensateNotify implements ICompensateNotify {
     public StringBuilder writerJobCommandToString(WriterJob writerJob)  {
         StringBuilder sb = new StringBuilder();
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
 

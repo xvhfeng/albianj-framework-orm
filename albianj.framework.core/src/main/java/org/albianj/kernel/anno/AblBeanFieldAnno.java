@@ -2,7 +2,7 @@ package org.albianj.kernel.anno;
 
 import org.albianj.common.utils.NullValue;
 import org.albianj.kernel.attr.opt.AblBeanSetOpt;
-import org.albianj.kernel.attr.opt.AblFieldSetStageOpt;
+import org.albianj.kernel.attr.opt.AblFieldSetWhenOpt;
 
 import java.lang.annotation.*;
 
@@ -26,7 +26,7 @@ public @interface AblBeanFieldAnno {
 
     boolean AllowNull() default false;
 
-    AblFieldSetStageOpt SetStage() default AblFieldSetStageOpt.AfterNew;
+    AblFieldSetWhenOpt SetStage() default AblFieldSetWhenOpt.AfterNew;
 
     AblArgumentAnno[] Args() default {};
 }

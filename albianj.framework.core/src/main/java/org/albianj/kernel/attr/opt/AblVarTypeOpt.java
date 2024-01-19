@@ -16,8 +16,16 @@ public enum AblVarTypeOpt {
     BigDecimal,
     List,
     Map,
+
     Service,
+
+    /**
+     * 程序中的数据类型
+     * 一般为过程中的数据量
+     */
+    Data,
     Bean;
+
 
 
 //    private int style;

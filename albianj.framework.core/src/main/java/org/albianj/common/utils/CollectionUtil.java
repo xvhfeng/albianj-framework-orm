@@ -35,60 +35,23 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.orm.utils;
+package org.albianj.common.utils;
 
-import org.albianj.common.utils.StringsUtil;
-import org.albianj.orm.itf.db.SqlParameter;
-import org.albianj.orm.itf.expr.ICondition;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
-public class ListConvert {
-    public static <T extends ICondition> Map<String, T> toLinkedHashMap(
-            LinkedList<T> filters) {
-        if (null == filters) {
-            return null;
-        }
-        int len = filters.size();
-        if (0 == len) {
-            return new LinkedHashMap<String, T>(0);
-        }
-        Map<String, T> map = new LinkedHashMap<String, T>(len);
-        for (T filter : filters) {
-            map.put(StringsUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
-        }
-        return map;
+public class CollectionUtil extends org.apache.commons.lang3.Validate {
+
+    public static boolean isNullOrEmpty(Collection<?> collection) {
+        return null == collection || collection.isEmpty();
     }
 
-    public static <T extends ICondition> Map<String, T> toLinkedHashMap(
-            List<T> filters) {
-        if (null == filters) {
-            return null;
-        }
-        int size = filters.size();
-        if (0 == size) {
-            return new LinkedHashMap<String, T>(0);
-        }
-        Map<String, T> map = new LinkedHashMap<String, T>(size);
-        for (T filter : filters) {
-            map.put(StringsUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
-        }
-        return map;
+    public static boolean isNullOrEmpty(@SuppressWarnings("rawtypes") Map map) {
+        return null == map || map.isEmpty();
     }
 
-    public static String toString(Map<String, SqlParameter> paras) {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, SqlParameter> para : paras.entrySet()) {
-            SqlParameter sp = para.getValue();
-            sb.append(para.getKey()).append(" = ")
-                    .append(ResultConvert.sqlValueToString(sp.getSqlType(), sp.getValue()))
-                    .append(" ");
-        }
-        return sb.toString();
+    public static boolean isNull(@SuppressWarnings("rawtypes") Map map) {
+        return null == map;
     }
-
 
 }

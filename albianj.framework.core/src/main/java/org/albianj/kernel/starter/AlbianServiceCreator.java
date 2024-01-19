@@ -1,14 +1,14 @@
 package org.albianj.kernel.starter;
 
 import ognl.Ognl;
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.attr.MethodAttr;
 import org.albianj.kernel.attr.ServiceAttr;
 import org.albianj.kernel.attr.ServiceFieldAttr;
 import org.albianj.kernel.attr.GlobalSettings;
-import org.albianj.kernel.attr.opt.AblFieldSetStageOpt;
+import org.albianj.kernel.attr.opt.AblFieldSetWhenOpt;
 import org.albianj.kernel.attr.opt.AblVarTypeOpt;
 import org.albianj.kernel.bkt.ServiceAttrsBkt;
 import org.albianj.kernel.bkt.GlobalSettingsBkt;
@@ -48,14 +48,14 @@ public class AlbianServiceCreator {
 
             Object serv = implClzz.getDeclaredConstructor().newInstance();
 
-            setServiceFields(settings,serv, selfServAttr, AblFieldSetStageOpt.AfterNew, servAttrs);
+            setServiceFields(settings,serv, selfServAttr, AblFieldSetWhenOpt.AfterNew, servAttrs);
             MethodAttr initFnAttr = selfServAttr.getInitFnAttr();
             if(null != initFnAttr) {
                 initFnAttr.getSelf().invoke(serv,null);
             }
-            setServiceFields(settings,serv, selfServAttr, AblFieldSetStageOpt.AfterInit, servAttrs);
+            setServiceFields(settings,serv, selfServAttr, AblFieldSetWhenOpt.AfterInit, servAttrs);
 
-            if (CheckUtil.isNullOrEmpty(selfServAttr.getAspectAttrs())) {
+            if (CollectionUtil.isNullOrEmpty(selfServAttr.getAspectAttrs())) {
                 rtnServ = serv;
             } else {
                 ServAspectProxy proxy = new ServAspectProxy();
@@ -70,14 +70,14 @@ public class AlbianServiceCreator {
 
     public static void setServiceFields(GlobalSettings settings,
                                         Object serv, ServiceAttr servAttr,
-                                        AblFieldSetStageOpt lifetime,
+                                        AblFieldSetWhenOpt lifetime,
                                         Map<String, ServiceAttr> servAttrs)  {
         /**
          * 对于service字段的注入，目前只支持service（使用ref和ervid）的注入和 builtinTpeOpt支持的类型直接量注入
          * 暂不考虑对于实体的注入，
          * 如需注入一个实体（java bean）请在init anno的方法中自行解决
          */
-        if(CheckUtil.isNullOrEmpty(servAttr.getFieldAttrs())) {
+        if(CollectionUtil.isNullOrEmpty(servAttr.getFieldAttrs())) {
             return;
         }
         for (ServiceFieldAttr fAttr : servAttr.getFieldAttrs().values()) {

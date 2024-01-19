@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.scope;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.AblThrowable;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
 import org.albianj.kernel.itf.builtin.logger.LogTarget;
@@ -61,7 +61,7 @@ public class TransactionScope extends FreeTransactionScope
     protected void preExecute(WriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Opening);
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty.");
         }
 
@@ -85,7 +85,7 @@ public class TransactionScope extends FreeTransactionScope
                         storage.getName());
             }
             List<PersistenceCommand> cmds = t.getCommands();
-            if (CheckUtil.isNullOrEmpty(cmds)) {
+            if (CollectionUtil.isNullOrEmpty(cmds)) {
                 throw new AblThrowable("The commands for task is empty or null");
             }
 
@@ -105,7 +105,7 @@ public class TransactionScope extends FreeTransactionScope
                             psDb.addBatch();
                         }
                         Map<Integer, String> map = cmd.getParameterMapper();
-                        if (CheckUtil.isNullOrEmpty(map)) {
+                        if (CollectionUtil.isNullOrEmpty(map)) {
                             continue;
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
@@ -125,7 +125,7 @@ public class TransactionScope extends FreeTransactionScope
                         PreparedStatement prepareStatement = t
                                 .getConnection().prepareStatement(cmdTxt);
                         Map<Integer, String> map = cmd.getParameterMapper();
-                        if (CheckUtil.isNullOrEmpty(map)) {
+                        if (CollectionUtil.isNullOrEmpty(map)) {
                             continue;
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
@@ -236,7 +236,7 @@ public class TransactionScope extends FreeTransactionScope
     protected void executeHandler(WriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Running);
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
@@ -314,7 +314,7 @@ public class TransactionScope extends FreeTransactionScope
     protected void commit(WriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Commiting);
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
         for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
@@ -336,7 +336,7 @@ public class TransactionScope extends FreeTransactionScope
     protected void exceptionHandler(WriterJob writerJob)  {
         boolean isThrow = false;
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
         for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
@@ -374,7 +374,7 @@ public class TransactionScope extends FreeTransactionScope
     protected void unLoadExecute(WriterJob writerJob)  {
         boolean isThrow = false;
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
         WriterTask t = null;
@@ -405,7 +405,7 @@ public class TransactionScope extends FreeTransactionScope
 
     private void manualRollbackPreExecute(WriterJob writerJob)  {
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty when manual rollbacking.");
         }
 
@@ -414,7 +414,7 @@ public class TransactionScope extends FreeTransactionScope
             if (!t.isCommited()) continue;// not commit then use auto rollback
 
             List<PersistenceCommand> cmds = t.getCommands();
-            if (CheckUtil.isNullOrEmpty(cmds)) {
+            if (CollectionUtil.isNullOrEmpty(cmds)) {
                 throw new AblThrowable("The commands for task is empty or null when manual rollbacking.");
             }
             List<Statement> statements = new Vector<Statement>();
@@ -425,7 +425,7 @@ public class TransactionScope extends FreeTransactionScope
                     PreparedStatement prepareStatement = t
                             .getConnection().prepareStatement(cmd.getRollbackCommandText());
                     Map<Integer, String> map = cmd.getRollbackParameterMapper();
-                    if (CheckUtil.isNullOrEmpty(map)) {
+                    if (CollectionUtil.isNullOrEmpty(map)) {
                         continue;
                     } else {
                         for (int i = 1; i <= map.size(); i++) {
@@ -446,7 +446,7 @@ public class TransactionScope extends FreeTransactionScope
                 ServRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
                     "make sql command for task is empty or null when maunal rollbacking.");
             }
-            if (!CheckUtil.isNullOrEmpty(statements)) {
+            if (!CollectionUtil.isNullOrEmpty(statements)) {
                 t.setRollbackStatements(statements);
                 t.setRbkCmds(rbkCmds);
                 t.setCompensating(true);
@@ -456,7 +456,7 @@ public class TransactionScope extends FreeTransactionScope
 
     private void manualRollbackExecuteHandler(WriterJob writerJob)  {
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
@@ -467,7 +467,7 @@ public class TransactionScope extends FreeTransactionScope
 
             List<Statement> statements = t.getRollbackStatements();
             List<PersistenceCommand> cmds = t.getRbkCmds();
-            if (CheckUtil.isNullOrEmpty(statements)) continue;
+            if (CollectionUtil.isNullOrEmpty(statements)) continue;
             ;
             for (int i = 0; i < statements.size(); i++) {
                 try {
@@ -488,7 +488,7 @@ public class TransactionScope extends FreeTransactionScope
 
     private void manualRollbackCommit(WriterJob writerJob)  {
         Map<String, WriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (CollectionUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
         for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {

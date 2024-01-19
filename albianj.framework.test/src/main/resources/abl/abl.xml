@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <abl>
     <machinekey value="23543tdfgh56u67jhgkiuo789oghmj353443254ghnvnergrhkyu" />
-    <mid></mid>
-    <appname></appname>
+    <machineId value="mid">2222</machineId>
+    <appname value="appname"></appname>
 </abl>

@@ -30,7 +30,7 @@ public class UserService extends FreeAlbianService implements IUserService {
     //在没有确认与把握的情况下，慎用之慎用之慎用之（重要的话说三遍）
     //使用albianj的ioc直接对其属性进行赋值
     // 注意，所有使用AlbianServiceFieldRant赋值的值都是单利模式，故在albianj中会自动提升为静态变量状态
-    @AblServFieldAnno(Type = AblVarTypeOpt.Service, ServId = "AlbianDataAccessService")
+    @AblServFieldAnno(Type = AblVarTypeOpt.Service, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override

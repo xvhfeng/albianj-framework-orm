@@ -21,7 +21,7 @@ import org.albianj.orm.itf.service.LoadType;
 @AblServAnno(Id = "UTF8M64Service")
 public class UTF8M64Service extends FreeAlbianService implements IUTF8M64Service {
 
-    @AblServFieldAnno(Type = AblVarTypeOpt.Service, ServId = "AlbianDataAccessService")
+    @AblServFieldAnno(Type = AblVarTypeOpt.Service, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override

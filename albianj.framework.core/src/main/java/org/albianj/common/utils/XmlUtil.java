@@ -45,7 +45,7 @@ import java.util.List;
 
 public final class XmlUtil {
     public static Document load(String path) throws DocumentException {
-        if (CheckUtil.isNullOrEmptyOrAllSpace(path)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(path)) {
             throw new IllegalArgumentException("path");
         }
         try {
@@ -69,7 +69,7 @@ public final class XmlUtil {
             throw new IllegalArgumentException("doc");
         }
 
-        if (CheckUtil.isNullOrEmptyOrAllSpace(tagName)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName)) {
             throw new IllegalArgumentException("tagName");
         }
         return doc.selectNodes(tagName);
@@ -86,7 +86,7 @@ public final class XmlUtil {
         if (null == doc) {
             throw new IllegalArgumentException("doc");
         }
-        if (CheckUtil.isNullOrEmptyOrAllSpace(tagName)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName)) {
             throw new IllegalArgumentException("tagName");
         }
         @SuppressWarnings("rawtypes") List nodes = selectNodes(doc, tagName);
@@ -100,7 +100,7 @@ public final class XmlUtil {
         if (null == elt) {
             throw new IllegalArgumentException("elt");
         }
-        if (CheckUtil.isNullOrEmptyOrAllSpace(attributeName)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(attributeName)) {
             throw new IllegalArgumentException("attributeName");
         }
         Attribute attr = elt.attribute(attributeName);
@@ -112,9 +112,9 @@ public final class XmlUtil {
     public static String getAttributeValue(Document doc, String tagName, String attributeName) {
         if (null == doc)
             throw new IllegalArgumentException("doc");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(tagName))
+        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName))
             throw new IllegalArgumentException("tagName");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(attributeName))
+        if (StringsUtil.isNullOrEmptyOrAllSpace(attributeName))
             throw new IllegalArgumentException("attributeName");
         Element elt = selectNode(doc, tagName);
         if (null == elt)
@@ -137,7 +137,7 @@ public final class XmlUtil {
     public static String getNodeValue(Document doc, String tagName) {
         if (null == doc)
             throw new IllegalArgumentException("doc");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(tagName))
+        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName))
             throw new IllegalArgumentException("tagName");
         Element ele = selectNode(doc, tagName);
         if (null == ele)
@@ -148,7 +148,7 @@ public final class XmlUtil {
     public static String getAttributeValue(Node node, String attributeName) {
         if (null == node)
             throw new IllegalArgumentException("node");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(attributeName))
+        if (StringsUtil.isNullOrEmptyOrAllSpace(attributeName))
             throw new IllegalArgumentException("attributeName");
         return getAttributeValue((Element)node, attributeName);
     }
@@ -156,7 +156,7 @@ public final class XmlUtil {
     public static String getSingleChildNodeValue(Element elt, String childTagName) {
         if (null == elt)
             throw new IllegalArgumentException("elt");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(childTagName))
+        if (StringsUtil.isNullOrEmptyOrAllSpace(childTagName))
             throw new IllegalArgumentException("childTagName");
         Node chird = elt.selectSingleNode(childTagName);
         if (null == chird)
@@ -165,17 +165,17 @@ public final class XmlUtil {
     }
 
     public static List getChildNodes(Element elt, String childTagName) {
-        CheckUtil.notNull(elt, "the element of xml-doc is null.");
-        CheckUtil.notBlank(childTagName, "the childTagName of element is blank.");
+        CollectionUtil.notNull(elt, "the element of xml-doc is null.");
+        CollectionUtil.notBlank(childTagName, "the childTagName of element is blank.");
         List chirds = elt.selectNodes(childTagName);
         return chirds;
     }
 
     public static Node getChildNode(Element elt, String childTagName) {
-        CheckUtil.notNull(elt, "the element of xml-doc is null.");
-        CheckUtil.notBlank(childTagName, "the childTagName of element is blank.");
+        CollectionUtil.notNull(elt, "the element of xml-doc is null.");
+        CollectionUtil.notBlank(childTagName, "the childTagName of element is blank.");
         List chirds = elt.selectNodes(childTagName);
-        if (CheckUtil.isNullOrEmpty(chirds))
+        if (CollectionUtil.isNullOrEmpty(chirds))
             return null;
         return (Node)chirds.get(0);
     }

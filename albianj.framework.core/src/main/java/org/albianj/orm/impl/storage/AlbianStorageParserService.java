@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.storage;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.AblThrowable;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
@@ -96,7 +97,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     @Override
     protected void parserStorages(@SuppressWarnings("rawtypes") List nodes) {
-        if (CheckUtil.isNullOrEmpty(nodes)) {
+        if (CollectionUtil.isNullOrEmpty(nodes)) {
             ServRouter.log(ServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
                     "Storage node is null or size is 0.");
             return;
@@ -170,18 +171,18 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         storage.setServer(server);
         storage.setDatabase(database);
         storage.setUser(user);
-        storage.setPassword(CheckUtil.isNullOrEmptyOrAllSpace(password) ? "" : password);
-        storage.setPooling(CheckUtil.isNullOrEmptyOrAllSpace(pooling) ? true :  Boolean.parseBoolean(pooling));
-        int minsize = CheckUtil.isNullOrEmptyOrAllSpace(minPoolSize) ? 2 : Integer.parseInt(minPoolSize);
+        storage.setPassword(StringsUtil.isNullOrEmptyOrAllSpace(password) ? "" : password);
+        storage.setPooling(StringsUtil.isNullOrEmptyOrAllSpace(pooling) ? true :  Boolean.parseBoolean(pooling));
+        int minsize = StringsUtil.isNullOrEmptyOrAllSpace(minPoolSize) ? 2 : Integer.parseInt(minPoolSize);
         minsize = 2 < minsize ? 2 : minsize;
         storage.setMinSize(minsize);//固定数据库链接池最小的链接为2
-        storage.setMaxSize(CheckUtil.isNullOrEmptyOrAllSpace(maxPoolSize) ? 20 : Integer.parseInt(maxPoolSize));
-        storage.setTimeout(CheckUtil.isNullOrEmptyOrAllSpace(timeout) ? 30 : Integer.parseInt(timeout));
-        storage.setCharset(CheckUtil.isNullOrEmptyOrAllSpace(charset) ? null : charset);
-        storage.setTransactional(CheckUtil.isNullOrEmptyOrAllSpace(transactional) ? true :  Boolean.parseBoolean(transactional));
-        storage.setAliveTime(CheckUtil.isNullOrEmptyOrAllSpace(sidleTime) ? 120 : Integer.parseInt(sidleTime));
+        storage.setMaxSize(StringsUtil.isNullOrEmptyOrAllSpace(maxPoolSize) ? 20 : Integer.parseInt(maxPoolSize));
+        storage.setTimeout(StringsUtil.isNullOrEmptyOrAllSpace(timeout) ? 30 : Integer.parseInt(timeout));
+        storage.setCharset(StringsUtil.isNullOrEmptyOrAllSpace(charset) ? null : charset);
+        storage.setTransactional(StringsUtil.isNullOrEmptyOrAllSpace(transactional) ? true :  Boolean.parseBoolean(transactional));
+        storage.setAliveTime(StringsUtil.isNullOrEmptyOrAllSpace(sidleTime) ? 120 : Integer.parseInt(sidleTime));
         storage.setDatabasePoolStyle(
-            CheckUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? DatabasePoolStyle.SpxDBCP.name() : sDatabasePoolStyle);
+            StringsUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? DatabasePoolStyle.SpxDBCP.name() : sDatabasePoolStyle);
         storage.setUrlParaments(sUrlParaments);
 
         String sWaitTimeWhenGetMs = XmlUtil.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");
@@ -191,28 +192,28 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         String sCleanupTimestampMs = XmlUtil.getSingleChildNodeValue(node, "CleanupTimestampMs");
         String sMaxRequestTimeMs = XmlUtil.getSingleChildNodeValue(node, "MaxRequestTimeMs");
 
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sWaitTimeWhenGetMs)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sWaitTimeWhenGetMs)) {
             storage.setWaitTimeWhenGetMs(Integer.parseInt(sWaitTimeWhenGetMs));
         }
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sLifeCycleTime)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sLifeCycleTime)) {
             storage.setLifeCycleTime(Integer.parseInt(sLifeCycleTime));
         }
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sWaitInFreePoolMs)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sWaitInFreePoolMs)) {
             storage.setWaitInFreePoolMs(Integer.parseInt(sWaitInFreePoolMs));
         }
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sMaxRemedyConnectionCount)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sMaxRemedyConnectionCount)) {
             storage.setMaxRemedyConnectionCount(Integer.parseInt(sMaxRemedyConnectionCount));
         }
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sCleanupTimestampMs)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sCleanupTimestampMs)) {
             storage.setCleanupTimestampMs(Integer.parseInt(sCleanupTimestampMs));
         }
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sMaxRequestTimeMs)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sMaxRequestTimeMs)) {
             storage.setMaxRequestTimeMs(Integer.parseInt(sMaxRequestTimeMs));
         }
         storage.setOptions(options);
 
         if (storage.isTransactional()) {
-            if (CheckUtil.isNullOrEmpty(transactionLevel)) {
+            if (StringsUtil.isNullOrEmpty(transactionLevel)) {
                 // default level and do not means no suppert tran
                 storage.setTransactionLevel(Connection.TRANSACTION_NONE);
             } else {
@@ -231,7 +232,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
             }
         }
 
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(port)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(port)) {
             storage.setPort(Integer.parseInt(port));
         }
 

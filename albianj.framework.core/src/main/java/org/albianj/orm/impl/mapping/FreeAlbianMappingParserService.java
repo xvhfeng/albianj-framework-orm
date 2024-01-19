@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.mapping;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.AblThrowable;
 import org.albianj.kernel.itf.builtin.logger.LogLevel;
@@ -97,35 +98,35 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
         @SuppressWarnings("rawtypes")
         List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-        if (!CheckUtil.isNullOrEmpty(nodes)) {
+        if (!CollectionUtil.isNullOrEmpty(nodes)) {
             for (Object node : nodes) {
                 Element elt = XmlUtil.toElement(node);
                 String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (CheckUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
                 parserFile(path);
             }
         }
 
         // add rant scaner
         List pkgNodes = XmlUtil.selectNodes(doc, "AlbianObjects/Packages/Package");
-        if (!CheckUtil.isNullOrEmpty(pkgNodes)) {
+        if (!CollectionUtil.isNullOrEmpty(pkgNodes)) {
             for (Object node : pkgNodes) {
                 Element elt = XmlUtil.toElement(node);
 
                 String enable = XmlUtil.getAttributeValue(elt, "Enable");
                 String pkg = XmlUtil.getAttributeValue(elt, "Path");
 
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(enable)) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
                     boolean b = Boolean.parseBoolean(enable);
                     if (!b) {
                         ServRouter.log(ServRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
                                 "Path -> :{} in the Package enable is false,so not load it.",
-                            CheckUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+                            StringsUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
                         continue;// not load pkg
                     }
                 }
 
-                if (CheckUtil.isNullOrEmptyOrAllSpace(pkg)) {
+                if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
                     throw new AblThrowable(
                         "loading the persistence.xml is error. 'Path' attribute in  Package config-item is null or empty.");
                 } else {
@@ -144,7 +145,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         }
 
         List objNodes = XmlUtil.selectNodes(doc, tagName);
-        if (!CheckUtil.isNullOrEmpty(objNodes)) {
+        if (!CollectionUtil.isNullOrEmpty(objNodes)) {
             parserAlbianObjects(objNodes);
 //            AlbianServiceRouter.getLogger2().logAndThrow(IAlbianLoggerService2.AlbianRunningLoggerName,
 //                    IAlbianLoggerService2.InnerThreadName, AlbianLoggerLevel.Error,null,

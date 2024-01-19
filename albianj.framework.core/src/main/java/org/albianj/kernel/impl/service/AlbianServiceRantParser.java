@@ -103,7 +103,7 @@ public class AlbianServiceRantParser {
         asa.setFuncAttrs(funcAttrs);
 
         Map<String, ServiceFieldAttr> fields = scanFields(implClzz);
-        if (!CheckUtil.isNullOrEmpty(fields)) {
+        if (!CollectionUtil.isNullOrEmpty(fields)) {
             asa.setFieldAttrs(fields);
         }
 
@@ -118,7 +118,7 @@ public class AlbianServiceRantParser {
      */
     private static String deduceServId(AblServAnno rant, Class<?> implClzz, Class<?> rootItf) {
         String servId = rant.ServId();
-        if(!CheckUtil.isNullOrEmptyOrAllSpace(servId)) { // 配置了，直接使用配置的
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(servId)) { // 配置了，直接使用配置的
             return servId;
         }
         return rootItf.getName();
@@ -144,7 +144,7 @@ public class AlbianServiceRantParser {
         // 如果根接口有多个，那么必须配置servId，否则报异常
         Set<Class<?>> rootItfs = ReflectUtil.findRootInterfaces(implClzz);
 
-        ServRouter.throwIfTrue(CheckUtil.isNullOrEmpty(rootItfs),
+        ServRouter.throwIfTrue(CollectionUtil.isNullOrEmpty(rootItfs),
                 StringsUtil.nonIdxFormat("{} have one root interfaces.",
                         implClzz.getName()));
 
@@ -184,7 +184,7 @@ public class AlbianServiceRantParser {
                 aspa.setItfClzz(frant.itfClzz());
                 aspa.setFieldType(f.getType());
                 aspa.setAllowNull(frant.AllowNull());
-                aspa.setSetterLifetime(frant.SetterLifetime());
+                aspa.setSetterLifetime(frant.SetWhen());
                 fieldsAttr.put(f.getName(), aspa);
             }
         }
@@ -192,9 +192,9 @@ public class AlbianServiceRantParser {
     }
 
     private static String deduceFieldValueWhenRef(Field f, AblServFieldAnno frant ){
-        if(CheckUtil.isNullOrEmptyOrAllSpace(frant.ServId())) {
+        if(StringsUtil.isNullOrEmptyOrAllSpace(frant.Value())) {
             // 直接配置了
-            return frant.ServId();
+            return frant.Value();
         }
         if(AblVarTypeOpt.Service == frant.Type()) {
             Class<?> itf = frant.itfClzz();
@@ -291,27 +291,27 @@ public class AlbianServiceRantParser {
             aspa.setServiceName(prant.ServiceName());
             aspa.setProxyName(prant.ProxyName());
 
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.BeginWith())) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.BeginWith())) {
                 aspa.setBeginWith(prant.BeginWith());
             }
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.NotBeginWith())) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.NotBeginWith())) {
                 aspa.setNotBeginWith(prant.NotBeginWith());
             }
 
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.EndWith())) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.EndWith())) {
                 aspa.setEndWith(prant.EndWith());
             }
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.NotEndWith())) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.NotEndWith())) {
                 aspa.setNotEndWith(prant.NotEndWith());
             }
 
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.Contain())) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.Contain())) {
                 aspa.setContain(prant.Contain());
             }
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.NotContain())) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.NotContain())) {
                 aspa.setNotContain(prant.NotContain());
             }
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.FullName())) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.FullName())) {
                 aspa.setFullName(prant.FullName());
             }
             aspa.setAll(prant.IsAll());

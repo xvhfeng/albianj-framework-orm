@@ -3,7 +3,7 @@ package org.albianj.kernel.impl.aspect;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.common.utils.CollectionUtil;
 import org.albianj.kernel.anno.AblAspectIgnoreAnno;
 import org.albianj.kernel.attr.ServiceAspectAttr;
 import org.albianj.kernel.attr.ServiceAttr;
@@ -68,7 +68,7 @@ public class ServAspectProxy implements MethodInterceptor {
             return rc;
         }
 
-        if (CheckUtil.isNullOrEmpty(_aspectAttrs)) {
+        if (CollectionUtil.isNullOrEmpty(_aspectAttrs)) {
             Object rc = methodProxy.invokeSuper(proxy, args);
             return rc;
         }
