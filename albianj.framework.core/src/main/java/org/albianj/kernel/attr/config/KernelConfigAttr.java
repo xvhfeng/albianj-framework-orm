@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class KernelConfigAttr {
-    private String machineKey;
-    private String machineId;
-    private String appName;
+    private String machineKey = null;
+    private String machineId = null ;
+    private String appName = null;
 }

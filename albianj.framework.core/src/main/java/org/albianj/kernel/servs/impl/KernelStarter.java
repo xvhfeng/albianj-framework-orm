@@ -37,6 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.servs.impl;
 
+import org.albianj.anno.AblApplicationAnno;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.anno.AblArgumentAnno;
@@ -56,60 +57,60 @@ import org.albianj.kernel.servs.IKernelStarter;
 import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.SystemConfiguration;
 
+import java.util.List;
+
 @AblServAnno
 public class KernelStarter implements IKernelStarter {
 
     @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew)
     IConfigServ cfServ;
 
-    @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew,Type = AblVarTypeOpt.Data,Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt@getSelf" )
+    @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew,Type = AblVarTypeOpt.Data,
+            Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt@getSelf" )
     GlobalSettings settings;
-
-    KernelConfigAttr attr;
 
     @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew)
     IKernelAttrInjector injector;
 
     @AblServInitAnno(Args = {
-            @AblArgumentAnno(Name="settings",Type = AblVarTypeOpt.Data,Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt@getSelf"),
+            @AblArgumentAnno(Name="settings",Type = AblVarTypeOpt.Data,
+                    Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt@getSelf"),
             @AblArgumentAnno(Name="simpleFileName",Value="abl"),
     })
     @Override
     public void loadConf( GlobalSettings settings,String simpleFileName) {
+
+        KernelConfigAttr attrAnno = parserAnno(settings);
+
+        String configFilename = cfServ.decideConfigFilename(settings, simpleFileName);
+        KernelConfigAttr attrFile = parserConfig(configFilename);
+
+        KernelConfigAttr attrInjector = null;
         /**
          * 外部注射值进入
          * 只有这个配置是有特殊性的，别的都不会存在这种需求
          * 因为有一些像key一样的值是有保密需求的
          */
         if(null != injector){
-            attr = injector.execute();
-            return;
+            attrInjector = injector.execute();
         }
+       KernelConfigAttr attrEnv =  parserConfigFromSysConfig();
 
-        String configFilename = cfServ.decideConfigFilename(settings, simpleFileName);
-
-        if (StringsUtil.isNullOrEmptyOrAllSpace(configFilename)) {
-            ServRouter.logBuilder(settings.getBatchId(), LogTarget.Running, LogLevel.Warn)
-                    .format("no abl config file,but not affect startup,running...")
-                    .done();
-            return;
+        KernelConfigAttr total = new KernelConfigAttr();
+        if(null != attrInjector) {
+            cfServ.mergeFieldsTo(KernelConfigAttr.class,total, attrEnv, attrInjector);
         }
-
-        ServRouter.logBuilder(settings.getBatchId(), LogTarget.Running, LogLevel.Info)
-                .format("abl config:{} is exist,parser it.", configFilename)
-                .done();
-
-        attr = new KernelConfigAttr();
-        parserConfig(configFilename, attr);
-        parserConfigFromSysConfig(attr);
+        cfServ.mergeFieldsTo(KernelConfigAttr.class,total, total, attrFile);
+        cfServ.mergeFieldsTo(KernelConfigAttr.class,total, total, attrAnno);
+        settings.setKernelConfigAttr(total);
     }
 
     /**
      *  系统变量的值只会在abl的这个配置项中存在
      *  因为该项有一定的保密性质，有一些需要系统管理员来处理
-     * @param attr
      */
-    private void parserConfigFromSysConfig(KernelConfigAttr  attr){
+    private KernelConfigAttr parserConfigFromSysConfig(){
+        KernelConfigAttr  attr = new KernelConfigAttr();
         SystemConfiguration sysConfig = new SystemConfiguration();
         String mkey = sysConfig.getString("abl.machinekey");
         String mid = sysConfig.getString("abl.machineId");
@@ -124,17 +125,31 @@ public class KernelStarter implements IKernelStarter {
         if(StringsUtil.existValue(appname)){
             attr.setAppName(appname);
         }
+        return attr;
     }
 
 
-    private void parserConfig(String configFilename, KernelConfigAttr  attr){
+    private KernelConfigAttr parserConfig(String configFilename){
+        if (StringsUtil.isNullOrEmptyOrAllSpace(configFilename)) {
+            ServRouter.logBuilder(settings.getBatchId(), LogTarget.Running, LogLevel.Warn)
+                    .format("no abl config file,but not affect startup,running...")
+                    .done();
+            return null;
+        }
+
+        ServRouter.logBuilder(settings.getBatchId(), LogTarget.Running, LogLevel.Info)
+                .format("abl config:{} is exist,parser it.", configFilename)
+                .done();
+
         CompositeConfiguration config =  cfServ.neatConfigurtion(configFilename);
         if(null == config){
             ServRouter.logBuilder(settings.getBatchId(),LogTarget.Running,LogLevel.Warn)
                     .format("no config file -> {} for neatting",configFilename)
                     .done();
-            return;
+            return null;
         }
+
+        KernelConfigAttr  attr = new KernelConfigAttr();
 
         String mkey = config.getString("machinekey[@value]",config.getString("machinekey"));
         String mid = config.getString("machineId[@value]",config.getString("machineId"));
@@ -150,6 +165,7 @@ public class KernelStarter implements IKernelStarter {
         if(StringsUtil.existValue(appname)){
             attr.setAppName(appname);
         }
+        return attr;
     }
 
     /**
@@ -162,16 +178,32 @@ public class KernelStarter implements IKernelStarter {
     @Override
     public void modifyKernelAttr(String machinekey, String machineId, String appName){
         if(StringsUtil.existValue(machinekey)) {
-            attr.setMachineKey(machinekey);
+            settings.getKernelConfigAttr().setMachineKey(machinekey);
         }
         if(StringsUtil.existValue(machineId)){
-            attr.setMachineId(machineId);
+            settings.getKernelConfigAttr().setMachineId(machineId);
         }
 
         if(StringsUtil.existValue(appName)){
-            attr.setAppName(appName);
+            settings.getKernelConfigAttr().setAppName(appName);
         }
     }
 
+    private KernelConfigAttr parserAnno(GlobalSettings settings) {
+        List<AblApplicationAnno> appAnnos = cfServ.listApplicationAnno(settings.getMainClass(), AblApplicationAnno.class);
+        KernelConfigAttr attr = new KernelConfigAttr();
+        appAnnos.forEach(appAnno -> {
+            if (StringsUtil.existValue(appAnno.MachineId())) {
+                attr.setMachineId(appAnno.MachineId());
+            }
+            if (StringsUtil.existValue(appAnno.MachineKey())) {
+                attr.setMachineKey(appAnno.MachineKey());
+            }
+            if (StringsUtil.existValue(appAnno.Name())) {
+                attr.setAppName(appAnno.Name());
+            }
+        });
 
+        return attr;
+    }
 }

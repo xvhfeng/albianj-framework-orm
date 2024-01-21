@@ -9,6 +9,9 @@ public class NullValue {
 
     public final static Class<?> Clazz = NullValue.class;
 
-
+    public static NullValue Self ;
+    static {
+        Self = new NullValue();
+    }
 
 }

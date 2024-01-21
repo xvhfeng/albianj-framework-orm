@@ -48,9 +48,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class ReflectUtil {
@@ -382,6 +380,16 @@ public class ReflectUtil {
                 findRootInterfacesRecursively(intf, rootInterfaces);
             }
         }
+    }
+
+    public static Map<String,Field> getAllFields(Class<?> clzz){
+        Field[] allPublic =  clzz.getFields();
+        Field[] AllSelf = clzz.getDeclaredFields();
+        Map<String,Field> total = new LinkedHashMap<>();
+
+        Arrays.stream(AllSelf).forEach( e-> total.putIfAbsent(e.getName(),e));
+        Arrays.stream(allPublic).forEach( e-> total.putIfAbsent(e.getName(),e));
+        return total;
     }
 
 }

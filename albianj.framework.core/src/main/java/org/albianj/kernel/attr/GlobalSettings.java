@@ -2,6 +2,7 @@ package org.albianj.kernel.attr;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.albianj.kernel.attr.config.KernelConfigAttr;
 
 import java.util.List;
 
@@ -17,12 +18,12 @@ public class GlobalSettings {
 
     private String configPath;
 
-    private String machineKey;
+    private List<String> servScanners;
 
-    private List<String> servsPkgPath;
+    private List<String> entityScanners;
 
-    private List<String> entitiyPkgPath;
+    private List<String> datarouterScanners;
 
-    private List<String> drPkgPath;
+    private KernelConfigAttr kernelConfigAttr;
 
 }
