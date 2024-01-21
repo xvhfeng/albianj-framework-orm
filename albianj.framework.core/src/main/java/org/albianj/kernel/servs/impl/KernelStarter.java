@@ -66,7 +66,7 @@ public class KernelStarter implements IKernelStarter {
     IConfigServ cfServ;
 
     @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew,Type = AblVarTypeOpt.Data,
-            Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt@getSelf" )
+            Mode = AblVarModeOpt.Static, Value="org.albianj.kernel.bkt.GlobalSettingsBkt",MethodName = "getSelf" )
     GlobalSettings settings;
 
     @AblServFieldAnno(SetWhen = AblFieldSetWhenOpt.AfterNew)

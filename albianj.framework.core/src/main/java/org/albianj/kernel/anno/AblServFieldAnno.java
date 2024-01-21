@@ -39,4 +39,6 @@ public @interface AblServFieldAnno {
     AblVarModeOpt Mode() default AblVarModeOpt.Direct;
 
     AblFieldSetWhenOpt SetWhen() default AblFieldSetWhenOpt.AfterNew;
+
+    String MethodName() default "";
 }

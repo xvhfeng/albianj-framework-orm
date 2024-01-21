@@ -22,6 +22,7 @@ public enum AblVarTypeOpt {
     /**
      * 程序中的数据类型
      * 一般为过程中的数据量
+     * 得到的方式通常为某个field的get函数
      */
     Data,
     Bean;

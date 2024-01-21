@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- 此配置文件提供所有的servie功能，所有的业务service必须使用此配置文件； 使用此配置文件的对象必须实现IAlbianService或者继承FreeAlbianService -->
 <beans>
-    <!-- Kernel ，这部分必须存在并且不要更改任何项，此部分是albianj的基础服务 -->
-    <!--<Service Id="AlbianKernelService" Type="impl.org.albianj.kernel.core.AlbianKernelParserService"/>-->
-    <!--<Service Id="AlbianStorageService" Type="org.albianj.persistence.impl.storage.AlbianStorageParserService"/>-->
-    <!--<Service Id="AlbianDataRouterService" Type="org.albianj.persistence.impl.routing.AlbianDataRouterParserService"/>-->
-    <!--<Service Id="AlbianMappingService" Type="org.albianj.persistence.impl.mapping.AlbianMappingParserService"/>-->
-    <!--<Service Id="AlbianPersistenceService" Type="org.albianj.persistence.impl.service.AlbianPersistenceService"/>-->
-    <!--<Service Id="AlbianThreadPoolService" Type="org.albianj.concurrent.impl.AlbianThreadPoolService"/>-->
-    <!--<Service Id="AlbianSecurityService" Type="org.albianj.kernel.impl.builtin.AblSecurityService"/>-->
-    <!--<Service Id="AlbianDataAccessService" Type="org.albianj.persistence.impl.service.AlbianDataAccessService"/>-->
-
-    <!-- 使用rant进行标注的service必须要在这里配置所在的包，否则albianj不会加载 -->
     <scanner>
         <package value="Albian.Test.Services.Impl" enable="true"/>
     </scanner>
@@ -20,51 +9,28 @@
         <properties>
             <property type="service" name="da" value="AlbianDataAccessService"/>
             <property type = "bean" name="class.of.bean">
-                <arg type="boolean" value="true"/>
-                <arg type="bean" value="class.of.bean"/>
-                <arg type="int" value="5"/>
+                <argument type="boolean" value="true"/>
+                <argument type="bean" value="class.of.bean"/>
+                <argument type="int" value="5"/>
             </property>
         </properties>
+        <initializer method="newBeanInstance">
+            <argument name="arg1" type="string" value="" index="" mode=""/>
+            <argument name="arg2" type="list">
+                <value key="0" value="12121" valuetype="" method=""/>
+                <value key="1" value="233" />
+            </argument>
+            <argument name="arg3" type="map" >
+                <value key="1" value="1" keytype="" valuetype="" method=""/>
+                <value key="2" value="23"/>
+                <value key="3" value="34"/>
+            </argument>
+            <argument name="arg4" type="string" value="" />
+        </initializer>
+        <unloader name="unload_method"/>
     </service>
 
     <bean id="class.of.bean" class="class.of.bean" itf="interface.of bean">
         <init mode="factory"  class="pkg.of.factory.class" method="newBeanInstance"/>
     </bean>
-
-
-    <!--<Service Id="AlbianRemoteIdService" Type="org.albianj.unid.service.impl.AlbianRemoteUNIDService" />-->
-    <!-- 	<service Id="AlbianCachedService" Type="org.albianj.cached.impl.service.AlbianCachedService" />-->
-    <!-- 	<service Id="AlbianConfigurtionService" Type="org.albianj.configurtion.impl.AlbianConfigurtionService" />  -->
-    <!--  <service Id="TafcommService" Type="org.albianj.taf.service.impl.TAFcommService" /> -->
-
-    <!--<Service Id="AlbianYdbService" Type="org.albianj.dfs.ydb.client.impl.service.AlbianYDBService" />-->
-
-
-    <!--mvc service -->
-    <!--
-    <Service Id="AlbianMvcConfigurtionService" Type="org.albianj.mvc.config.impl.AlbianMVCConfigurtionService"/>
-    <Service Id="AlbianFileUploadService" Type="org.albianj.mvc.service.impl.AlbianFileUploadService">
-        <Properties>
-            <Property Type="Ref" Name="HttpConfigurtion" Value="AlbianMvcConfigurtionService.HttpConfigurtion"/>
-        </Properties>
-    </Service>
-    <Service Id="AlbianResourceService" Type="org.albianj.mvc.service.impl.AlbianResourceService">
-        <Properties>
-            <Property Type="Ref" Name="HttpConfigurtion" Value="AlbianMvcConfigurtionService.HttpConfigurtion"/>
-        </Properties>
-    </Service>
-    <Service Id="AlbianTemplateService" Type="org.albianj.mvc.service.impl.AlbianBeetlTemplateService">
-        <Properties>
-            <Property Type="Ref" Name="HttpConfigurtion" Value="AlbianMvcConfigurtionService.HttpConfigurtion"/>
-        </Properties>
-    </Service>
-
-    <Service Id="AlbianBrushingService" Type="org.albianj.mvc.service.impl.AlbianBrushingService">
-        <Properties>
-            <Property Type="Ref" Name="HttpConfigurtion" Value="AlbianMvcConfigurtionService.HttpConfigurtion"/>
-        </Properties>
-    </Service>
-
-  -->
-
 </beans>
