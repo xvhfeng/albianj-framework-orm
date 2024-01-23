@@ -5,7 +5,7 @@
         <package value="Albian.Test.Services.Impl" enable="true"/>
     </scanner>
 
-    <service id="OrgUserService" class="Albian.Test.Services.Impl.OrgUserService">
+    <service id="OrgUserService" class="Albian.Test.Services.Impl.OrgUserService" interface="">
         <properties>
             <property type="service" name="da" value="AlbianDataAccessService"/>
             <property type = "bean" name="class.of.bean">
@@ -13,20 +13,25 @@
                 <argument type="bean" value="class.of.bean"/>
                 <argument type="int" value="5"/>
             </property>
+            <property type="string" name="strval" value="value for strval"/>
+            <property type="property" name="propertyVal" value="data.class" method="getStrval"  mode="direct" setwhen="afternew"/>
         </properties>
-        <initializer method="newBeanInstance">
-            <argument name="arg1" type="string" value="" index="" mode=""/>
-            <argument name="arg2" type="list">
-                <value key="0" value="12121" valuetype="" method=""/>
+        <initer method="newBeanInstance">
+            <argument name="arg1" type="string" value="value for strval" index="" />
+            <argument name="propertyVal" type="int" value="data.class" method="getStrval" mode="direct"/>
+            <argument name="arg2" type="list" value="data.class" method="getStrval" mode="direct"/>
+            <argument name="arg2" type="list" valuetype="int">
+                <value key="0" value="12121"/>
                 <value key="1" value="233" />
             </argument>
-            <argument name="arg3" type="map" >
-                <value key="1" value="1" keytype="" valuetype="" method=""/>
+            <argument name="arg3" type="map" keytype="string" valuetype="int">
+                <value key="1" value="1"  />
                 <value key="2" value="23"/>
                 <value key="3" value="34"/>
             </argument>
+            <argument name="arg2" type="map" value="data.class" method="getStrval" mode="direct"/>
             <argument name="arg4" type="string" value="" />
-        </initializer>
+        </initer>
         <unloader name="unload_method"/>
     </service>
 
