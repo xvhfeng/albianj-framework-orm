@@ -37,7 +37,7 @@
 		<Charset>utf8</Charset>
 		<Transactional>true</Transactional>
 		<AliveTime>300</AliveTime>
-		<PoolStyle>SpxDBCP</PoolStyle>
+		<PoolStyle>HIKARICP</PoolStyle>
 	</Storage>
 
 	<Storage>
@@ -55,7 +55,7 @@
 		<Charset>utf8</Charset>
 		<Transactional>true</Transactional>
 		<AliveTime>300</AliveTime>
-		<PoolStyle>SpxDBCP</PoolStyle>
+		<PoolStyle>HIKARICP</PoolStyle>
 	</Storage>
 
 	<Storage>

@@ -39,7 +39,7 @@ package org.albianj.orm.impl.context;
 
 import org.albianj.common.argument.RefArg;
 import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.db.SqlParameter;

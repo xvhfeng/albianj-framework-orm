@@ -40,17 +40,20 @@ package org.albianj.loader;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 
 public class AlbianBootService {
     private static final Logger logger = LoggerFactory.getLogger(AlbianBootService.class);
-    private static final String AlbianStarter = "org.albianj.kernel.impl.AlbianTransmitterService";
+    private static final String AlbianStarter = "org.albianj.kernel.impl.core.AlbianTransmitterService";
     @SuppressWarnings("resource")
 //    private static ArrayList<byte[]> unpack(FileInputStream fis) {
 //        ArrayList<byte[]> list = null;
@@ -112,14 +115,19 @@ public class AlbianBootService {
 
         URI cfFileName = lookupLoggerConfigFile(cfPath);
         if (null != cfFileName) {
-            LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
-            logContext.setConfigLocation(cfFileName);
-            logContext.reconfigure();
+//            LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
+//            logContext.setConfigLocation(cfFileName);
+//            logContext.reconfigure();
+            try {
+                File log4j2File = new File(cfFileName.toURL().getFile());
+                System.setProperty("log4j2.configurationFile", log4j2File.toURI().toString());
+            }catch (Throwable t){
+                throw new RuntimeException(t);
+            }
+
 
         /* 上面不行的话，换这个试试
-         InputStream inputStream = new FileInputStream("C:/path/to/log4j2.xml");
-        ConfigurationSource source = new ConfigurationSource(inputStream);
-        Configurator.initialize(null, source);
+
 
         -----
 

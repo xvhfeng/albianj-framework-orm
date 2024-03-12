@@ -7,7 +7,7 @@ import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.security.IAlbianSecurityService;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
@@ -22,7 +22,7 @@ import java.sql.SQLException;
  */
 public class HikariCPWapper extends FreeDataBasePool {
 
-    public final static String DRIVER_CLASSNAME = "com.mysql.jdbc.Driver";
+    public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
     public HikariCPWapper() {
         AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,

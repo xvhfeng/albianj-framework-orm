@@ -5,8 +5,8 @@ public class AlbianBuiltinServiceNamePair {
     public final static String AlbianLoggerServiceName = "AlbianLoggerService";
 //    public final static String AlbianLoggerService2Name = "AlbianLoggerService2";
     public final static String AlbianKernelServiceName = "AlbianKernelService";
-    public final static String AlbianLogicIdServiceName = "AlbianLogicIdService";
-    public final static String AlbianThreadPoolServiceName = "AlbianThreadPoolService";
+//    public final static String AlbianLogicIdServiceName = "AlbianLogicIdService";
+//    public final static String AlbianThreadPoolServiceName = "AlbianThreadPoolService";
     public final static String AlbianSecurityServiceName = "AlbianSecurityService";
     // persistence
     public final static String AlbianStorageServiceName = "AlbianStorageService";
@@ -16,7 +16,7 @@ public class AlbianBuiltinServiceNamePair {
     public final static String AlbianDataAccessServiceName = "AlbianDataAccessService";
 
     //pplog monitor
-    public final static String YuewenPPLogServiceName = "YuewenPPLogService";
+//    public final static String YuewenPPLogServiceName = "YuewenPPLogService";
 
     // web mvf framework
     public final static String AlbianMvcConfigurtionServiceName = "AlbianMvcConfigurtionService";
@@ -29,21 +29,21 @@ public class AlbianBuiltinServiceNamePair {
     public final static String AlbianServiceParserName = "AlbianServiceParserService";
 
 
-    public final static String[] AlbianLoggerServicePair = {AlbianLoggerServiceName, "org.albianj.logger.impl.AlbianLoggerService"};
+    public final static String[] AlbianLoggerServicePair = {AlbianLoggerServiceName, "org.albianj.kernel.impl.logger.AlbianLoggerService"};
 //    public final static String[] AlbianLoggerService2Pair = {AlbianLoggerService2Name, "org.albianj.logger.impl.AlbianLoggerService2"};
-    public final static String[] AlbianKernelServicePair = {AlbianKernelServiceName, "org.albianj.kernel.impl.AlbianKernelParserService"};
-    public final static String[] AlbianLogicIdServicePair = {AlbianLogicIdServiceName, "org.albianj.kernel.impl.AlbianLogicIdService"};
-    public final static String[] AlbianThreadPoolServicePair = {AlbianThreadPoolServiceName, "org.albianj.concurrent.impl.AlbianThreadPoolService"};
-    public final static String[] AlbianSecurityServicePair = {AlbianSecurityServiceName, "org.albianj.security.impl.AlbianSecurityService"};
+    public final static String[] AlbianKernelServicePair = {AlbianKernelServiceName, "org.albianj.kernel.impl.core.AlbianKernelParserService"};
+//    public final static String[] AlbianLogicIdServicePair = {AlbianLogicIdServiceName, "org.albianj.kernel.impl.AlbianLogicIdService"};
+//    public final static String[] AlbianThreadPoolServicePair = {AlbianThreadPoolServiceName, "org.albianj.concurrent.impl.AlbianThreadPoolService"};
+    public final static String[] AlbianSecurityServicePair = {AlbianSecurityServiceName, "org.albianj.kernel.impl.security.AlbianSecurityService"};
     // persistence
-    public final static String[] AlbianStorageServicePair = {AlbianStorageServiceName, "org.albianj.persistence.impl.storage.AlbianStorageParserService"};
-    public final static String[] AlbianMappingServicePair = {AlbianMappingServiceName, "org.albianj.persistence.impl.mapping.AlbianMappingParserService"};
-    public final static String[] AlbianDataRouterServicePair = {AlbianDataRouterServiceName, "org.albianj.persistence.impl.routing.AlbianDataRouterParserService"};
-    public final static String[] AlbianPersistenceServicePair = {AlbianPersistenceServiceName, "org.albianj.persistence.impl.service.AlbianPersistenceService"};
-    public final static String[] AlbianDataAccessServicePair = {AlbianDataAccessServiceName, "org.albianj.persistence.impl.service.AlbianDataAccessService"};
+    public final static String[] AlbianStorageServicePair = {AlbianStorageServiceName, "org.albianj.orm.impl.storage.AlbianStorageParserService"};
+    public final static String[] AlbianMappingServicePair = {AlbianMappingServiceName, "org.albianj.orm.impl.mapping.AlbianMappingParserService"};
+    public final static String[] AlbianDataRouterServicePair = {AlbianDataRouterServiceName, "org.albianj.orm.impl.routing.AlbianDataRouterParserService"};
+    public final static String[] AlbianPersistenceServicePair = {AlbianPersistenceServiceName, "org.albianj.orm.impl.service.AlbianPersistenceService"};
+    public final static String[] AlbianDataAccessServicePair = {AlbianDataAccessServiceName, "org.albianj.orm.impl.service.AlbianDataAccessService"};
 
     //pplog monitor
-    public final static String[] YuewenPPLogPair = {YuewenPPLogServiceName, "com.yuewen.pplogstat.impl.YuewenPPLogStatService"};
+//    public final static String[] YuewenPPLogPair = {YuewenPPLogServiceName, "com.yuewen.pplogstat.impl.YuewenPPLogStatService"};
 
     // web mvf framework
     public final static String[] AlbianMvcConfigurtionServicePair = {AlbianMvcConfigurtionServiceName, "org.albianj.mvc.config.impl.AlbianMVCConfigurtionService"};
@@ -53,5 +53,5 @@ public class AlbianBuiltinServiceNamePair {
     public final static String[] AlbianBrushingServicePair = {AlbianBrushingServiceName, "org.albianj.mvc.service.impl.AlbianBrushingService"};
 
     // load service.xml
-    public final static String[] AlbianServiceParserPair = {AlbianServiceParserName, "org.albianj.service.impl.AlbianServiceParser"};
+    public final static String[] AlbianServiceParserPair = {AlbianServiceParserName, "org.albianj.kernel.impl.service.AlbianServiceParser"};
 }

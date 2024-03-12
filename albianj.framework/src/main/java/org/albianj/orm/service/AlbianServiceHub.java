@@ -1,6 +1,6 @@
 package org.albianj.orm.service;
 
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
 import org.albianj.orm.object.IAlbianObject;

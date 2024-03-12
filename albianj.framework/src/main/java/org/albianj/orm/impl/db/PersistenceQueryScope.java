@@ -40,7 +40,7 @@ package org.albianj.orm.impl.db;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.*;
@@ -132,7 +132,9 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     "execute the reader job:{} is fail." ,job.getId());
         } finally {
             try {
-                job.getConnection().commit();
+                if(!job.getConnection().getAutoCommit()) {
+                    job.getConnection().commit();
+                }
             } catch (Exception e) {
                 AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
                         "commit the reader job:{} is fail." ,job.getId());

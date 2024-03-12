@@ -37,7 +37,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
-import org.albianj.common.io.Path;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.PropUtil;
 import org.albianj.kernel.core.AlbianLevel;
@@ -47,7 +46,7 @@ import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 
@@ -68,9 +67,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
 
     public void init()  {
         try {
-            Properties props = PropUtil.load(Path
-                    .getExtendResourcePath(KernelSetting
-                            .getAlbianKernelConfigFilePath() + file));
+            Properties props = PropUtil.load(decideConfigFile(file));
             parser(props);
         } catch (Exception e) {
             AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,

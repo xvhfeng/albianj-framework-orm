@@ -42,7 +42,7 @@ import org.albianj.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.kernel.service.parser.AlbianParserException;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.IDataBasePool;
@@ -256,19 +256,19 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
                 if (dbp != null) {
                     return dbp;
                 }
-                switch (sa.getDatabasePoolStyle()) {
-                    case "C3P0": {
-                        dbp = new C3P0Wapper();
-                        break;
-                    }
+                switch (sa.getDatabasePoolStyle().toUpperCase()) {
+//                    case "C3P0": {
+//                        dbp = new C3P0Wapper();
+//                        break;
+//                    }
                     case "HIKARICP": {
                         dbp = new HikariCPWapper();
                         break;
                     }
-                    case "DBCP": {
-                        dbp = new DBCPWapper();
-                        break;
-                    }
+//                    case "DBCP": {
+//                        dbp = new DBCPWapper();
+//                        break;
+//                    }
                     case "SpxDBCP": {
                         dbp = new SpxWapper();
                         break;
@@ -278,7 +278,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
                             dbp = databasePoolMaker.support(sa.getDatabasePoolStyle());
                         }
                         if (dbp == null) {
-                            dbp = new C3P0Wapper();
+                            dbp = new SpxWapper();
                         }
                         break;
                     }

@@ -5,7 +5,7 @@ import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.security.IAlbianSecurityService;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.dbpool.ISpxDBPool;
 import org.albianj.orm.impl.dbpool.ISpxDBPoolConfig;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SpxWapper extends FreeDataBasePool {
 
-    public final static String DRIVER_CLASSNAME = "com.mysql.jdbc.Driver";
+    public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
     public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
         IStorageAttribute sa = rsa.getStorageAttribute();

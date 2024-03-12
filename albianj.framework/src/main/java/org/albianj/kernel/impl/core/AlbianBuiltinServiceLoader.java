@@ -2,6 +2,7 @@ package org.albianj.kernel.impl.core;
 
 import org.albianj.common.argument.KeyValuePair;
 import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.kernel.core.AlbianRuntimeException;
 import org.albianj.kernel.impl.service.AlbianServiceRantParser;
 import org.albianj.kernel.logger.LogLevel;
@@ -31,9 +32,9 @@ public class AlbianBuiltinServiceLoader {
         bltServ.put(AlbianBuiltinServiceNamePair.AlbianKernelServicePair[0],
                 new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianKernelServicePair[0],
                         AlbianBuiltinServiceNamePair.AlbianKernelServicePair[1], true));
-        bltServ.put(AlbianBuiltinServiceNamePair.AlbianLogicIdServicePair[0],
-                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLogicIdServicePair[0],
-                        AlbianBuiltinServiceNamePair.AlbianLogicIdServicePair[1], true));
+//        bltServ.put(AlbianBuiltinServiceNamePair.AlbianLogicIdServicePair[0],
+//                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianLogicIdServicePair[0],
+//                        AlbianBuiltinServiceNamePair.AlbianLogicIdServicePair[1], true));
 //        bltServ.put(AlbianBuiltinServiceNamePair.AlbianThreadPoolServicePair[0],
 //                new AlbianBuiltinServiceAttribute(AlbianBuiltinServiceNamePair.AlbianThreadPoolServicePair[0],
 //                        AlbianBuiltinServiceNamePair.AlbianThreadPoolServicePair[1], true));

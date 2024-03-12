@@ -41,7 +41,7 @@ import org.albianj.common.utils.CheckUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.kernel.service.parser.AlbianParserException;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.orm.db.AlbianDataServiceException;

@@ -2,7 +2,7 @@ package org.albianj.orm.impl.dbpool.impl;
 
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.impl.dbpool.IPoolingConnection;
 import org.albianj.orm.impl.dbpool.ISpxDBPool;
 import org.albianj.orm.impl.dbpool.ISpxDBPoolConfig;

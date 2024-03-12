@@ -3,7 +3,7 @@ package org.albianj.orm.impl.db;
 
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.context.IManualContext;
 import org.albianj.orm.context.WriterJobLifeTime;
 

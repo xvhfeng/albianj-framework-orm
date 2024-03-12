@@ -37,6 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.kernel.core.*;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
 import org.albianj.kernel.logger.LogLevel;
@@ -117,7 +118,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
         AlbianBuiltinServiceLoader bltSevLoader = new AlbianBuiltinServiceLoader();
         bltSevLoader.loadLoggerService();
-
+        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Info,"Logger Service startup normal.");
         // 从这里以后，就可以正常使用log了，前面的logger自行处理，但是一般不需要任何的处理
 
         // do load builtin service

@@ -2,7 +2,7 @@ package Albian.Test;
 
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.loader.AlbianBootService;
 
 public class DoTest {
@@ -15,9 +15,9 @@ public class DoTest {
 //            int cmdId = Integer.valueOf(l5ts[2]);
 //            float tst = Float.valueOf(l5ts[3]);
 
-            Exception exc = new Exception("what is exception??");
-            RuntimeException re = new RuntimeException(exc);
-            re.printStackTrace();
+//            Exception exc = new Exception("what is exception??");
+//            RuntimeException re = new RuntimeException(exc);
+//            re.printStackTrace();
 
 
             AlbianBootService.start(argv[0]);
@@ -113,7 +113,8 @@ public class DoTest {
 
     private static void test1()  {
         IUserService us = AlbianServiceRouter.getService("",IUserService.class, IUserService.Name);
-        //            us.addUser("uname","pwd");
+
+//        us.addUser("uname","pwd");
 //            if(us.login("uname","pwd")) {
 //                System.out.println("login success.");
 //            }
@@ -123,11 +124,11 @@ public class DoTest {
 //            }
 //            System.out.println("modify password fail.");
 
-//            if(us.batchAddUser()){
-//                System.out.println("batch add use success");
-//            } else {
-//                System.out.println("batch add user fail.");
-//            }
+            if(us.batchAddUser()){
+                System.out.println("batch add use success");
+            } else {
+                System.out.println("batch add user fail.");
+            }
         us.queryMulitUserById();
     }
 

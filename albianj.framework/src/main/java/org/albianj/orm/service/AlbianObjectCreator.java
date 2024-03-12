@@ -3,7 +3,7 @@ package org.albianj.orm.service;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IAlbianObjectAttribute;

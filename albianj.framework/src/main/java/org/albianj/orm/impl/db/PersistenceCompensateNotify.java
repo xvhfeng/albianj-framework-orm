@@ -40,7 +40,7 @@ package org.albianj.orm.impl.db;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.IWriterTask;

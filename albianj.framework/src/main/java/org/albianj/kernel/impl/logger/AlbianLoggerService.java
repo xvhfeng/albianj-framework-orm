@@ -81,9 +81,13 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
         throw newThrow;
     }
 
-    private Logger getLogger(String name) {
-        return LoggerFactory.getLogger(name);
-    }
+//    private Logger getLogger(String name) {
+//        return LoggerFactory.getLogger(name);
+//    }
+
+//    private Logger getLogger(Class<?> clzz) {
+//        return LoggerFactory.getLogger(clzz);
+//    }
 
     private String makeLogInfo(Object sessionId,String stackInfo, String format, Object... values) {
         StringBuilder sb = new StringBuilder();
@@ -99,8 +103,8 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
         return sb.toString();
     }
 
-    private void flushToFile(LogTarget target, LogLevel level, String ctx, Throwable e) {
-        Logger logger = getLogger(target.getName());
+    private void flushToFile(Class<?> clzz, LogLevel level, String ctx, Throwable e) {
+        Logger logger = LoggerFactory.getLogger(clzz);
         switch (level) {
             case Debug:
                 if (logger.isDebugEnabled()) {

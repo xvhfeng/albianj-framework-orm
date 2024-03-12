@@ -46,7 +46,7 @@ import org.albianj.kernel.core.AlbianRuntimeException;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.kernel.service.IAlbianServiceAttribute;
 import org.albianj.kernel.service.IAlbianServiceFieldAttribute;
 import org.albianj.kernel.service.ServiceAttributeMap;

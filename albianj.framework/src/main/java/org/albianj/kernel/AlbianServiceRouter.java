@@ -35,12 +35,14 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.kernel.service;
+package org.albianj.kernel;
 
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.logger.IAlbianLoggerService;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
+import org.albianj.kernel.service.IAlbianService;
+import org.albianj.kernel.service.ServiceContainer;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -63,7 +65,7 @@ public class AlbianServiceRouter extends ServiceContainer {
      * @return 返回获取的service
      * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
      */
-    public static <T extends IAlbianService> T getService(Object sessionId,Class<T> cla, String id, boolean isThrowIfException) {
+    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, String id, boolean isThrowIfException) {
         IAlbianLoggerService ls = (IAlbianLoggerService) getService(IAlbianLoggerService.FullName);
         if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
             ls.log(sessionId, LogTarget.Running, LogLevel.Error,

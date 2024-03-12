@@ -41,7 +41,7 @@ import org.albianj.common.comment.SpecialWarning;
 import org.albianj.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.service.AlbianServiceRouter;
+import org.albianj.kernel.AlbianServiceRouter;
 import org.albianj.orm.context.dactx.IAlbianObjectWarp;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;

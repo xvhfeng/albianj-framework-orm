@@ -122,7 +122,7 @@ public class UserService extends FreeAlbianService implements IUserService {
         IChainExpression whrs1 = new FilterExpression("Id", LogicalOperation.Equal, "1539240117605_1_1_1");
 
         IFilterGroupExpression st = new FilterGroupExpression();
-        st.add("stauts",LogicalOperation.Equal,1).or("stauts","st",LogicalOperation.Equal,3);
+        st.add("userName",LogicalOperation.Equal,1).or("userName","st",LogicalOperation.Equal,3);
         whrs1.and(st);
 
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
