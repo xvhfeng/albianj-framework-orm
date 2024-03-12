@@ -153,4 +153,213 @@ public class AlbianServiceRouter extends ServiceContainer {
     public static synchronized BigInteger makeBatchId(){
         return new BigInteger(make32UUID());
     }
+
+    public static void throwIfTrue(boolean cond,String msg){
+        if(cond){
+            throw new AblThrowable(msg);
+        }
+    }
+
+    public static void throwIfFalse(boolean cond,String msg){
+        if(cond){
+            throw new AblThrowable(msg);
+        }
+    }
+
+    public static void throwIfNull(Object v,String msg){
+        if(null == v){
+            throw new AblThrowable(msg);
+        }
+    }
+
+    public static void throwIfNonNull(Object v,String msg){
+        if(null != v){
+            throw new AblThrowable(msg);
+        }
+    }
+
+    public static void throwAgain(String msg){
+        throw new AblThrowable(msg);
+    }
+
+    public static void throwAgain(Throwable t){
+        throw new AblThrowable(t);
+    }
+
+    public static void throwAgainIfTrue(boolean cond,Throwable t){
+        if(cond) {
+            throw new AblThrowable(t);
+        }
+    }
+
+    public static void throwAgain(String msg,Throwable t){
+        throw new AblThrowable(msg,t);
+    }
+
+    public static void throwAgainIfTrue(boolean cond,String msg,Throwable t){
+        if(cond) {
+            throw new AblThrowable(msg,t);
+        }
+    }
+
+    /**
+     * Shorthand for "if null, throw IllegalArgumentException"
+     *
+     * @throws IllegalArgumentException "null {name}" if o is null
+     */
+    public static void throwIaxIfNull(final Object o, final String name) {
+        if (null == o) {
+            String message = "null " + (null == name ? "input" : name);
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Shorthand for "if not null or not assignable, throw IllegalArgumentException"
+     *
+     * @param c the Class to check - use null to ignore type check
+     * @throws IllegalArgumentException "null {name}" if o is null
+     */
+    public static final void throwIaxIfNotAssignable(final Object ra[], final Class<?> c, final String name) {
+        throwIaxIfNull(ra, name);
+        String label = (null == name ? "input" : name);
+        for (int i = 0; i < ra.length; i++) {
+            if (null == ra[i]) {
+                String m = " null " + label + "[" + i + "]";
+                throw new IllegalArgumentException(m);
+            } else if (null != c) {
+                Class<?> actualClass = ra[i].getClass();
+                if (!c.isAssignableFrom(actualClass)) {
+                    String message = label + " not assignable to " + c.getName();
+                    throw new IllegalArgumentException(message);
+                }
+            }
+        }
+    }
+
+    /**
+     * Shorthand for "if not null or not assignable, throw IllegalArgumentException"
+     *
+     * @throws IllegalArgumentException "null {name}" if o is null
+     */
+    public static final void throwIaxIfNotAssignable(final Object o, final Class<?> c, final String name) {
+        throwIaxIfNull(o, name);
+        if (null != c) {
+            Class<?> actualClass = o.getClass();
+            if (!c.isAssignableFrom(actualClass)) {
+                String message = name + " not assignable to " + c.getName();
+                throw new IllegalArgumentException(message);
+            }
+        }
+    }
+
+    /**
+     * Shorthand for "if false, throw IllegalArgumentException"
+     *
+     * @throws IllegalArgumentException "{message}" if test is false
+     */
+    public static final void throwIaxIfFalse(final boolean test, final String message) {
+        if (!test) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * @return "({UnqualifiedExceptionClass}) {message}"
+     */
+    public static String renderExceptionShort(Throwable e) {
+        if (null == e) {
+            return "(Throwable) null";
+        }
+        return "(" + LangUtil.unqualifiedClassName(e) + ") " + e.getMessage();
+    }
+
+    /**
+     * Renders exception <code>t</code> after unwrapping and eliding any test packages.
+     *
+     * @param t <code>Throwable</code> to print.
+     * @see LangUtil.StringChecker#TEST_PACKAGES
+     */
+    public static String renderException(Throwable t) {
+        return renderException(t, true);
+    }
+
+    /**
+     * Renders exception <code>t</code>, unwrapping, optionally eliding and limiting total number of lines.
+     *
+     * @param t <code>Throwable</code> to print.
+     * @param elide true to limit to 100 lines and elide test packages
+     * @see LangUtil.StringChecker#TEST_PACKAGES
+     */
+    public static String renderException(Throwable t, boolean elide) {
+        if (null == t) {
+            return "null throwable";
+        }
+        t = unwrapException(t);
+        StringBuffer stack = stackToString(t, false);
+        if (elide) {
+            LangUtil.elideEndingLines(LangUtil.StringChecker.TEST_PACKAGES, stack, 100);
+        }
+        return stack.toString();
+    }
+
+    /** Dump message and stack to StringBuffer. */
+    public static StringBuffer stackToString(Throwable throwable, boolean skipMessage) {
+        if (null == throwable) {
+            return new StringBuffer();
+        }
+        StringWriter buf = new StringWriter();
+        PrintWriter writer = new PrintWriter(buf);
+        if (!skipMessage) {
+            writer.println(throwable.getMessage());
+        }
+        throwable.printStackTrace(writer);
+        try {
+            buf.close();
+        } catch (IOException ioe) {
+        } // ignored
+        return buf.getBuffer();
+    }
+
+    /** @return Throwable input or tail of any wrapped exception chain */
+    public static Throwable unwrapException(Throwable t) {
+        Throwable current = t;
+        Throwable next = null;
+        while (current != null) {
+            // Java 1.2 exceptions that carry exceptions
+            if (current instanceof InvocationTargetException) {
+                next = ((InvocationTargetException) current).getTargetException();
+            } else if (current instanceof ClassNotFoundException) {
+                next = ((ClassNotFoundException) current).getException();
+            } else if (current instanceof ExceptionInInitializerError) {
+                next = ((ExceptionInInitializerError) current).getException();
+            } else if (current instanceof PrivilegedActionException) {
+                next = ((PrivilegedActionException) current).getException();
+            } else if (current instanceof SQLException) {
+                next = ((SQLException) current).getNextException();
+            }
+            // ...getException():
+            // javax.naming.event.NamingExceptionEvent
+            // javax.naming.ldap.UnsolicitedNotification
+            // javax.xml.parsers.FactoryConfigurationError
+            // javax.xml.transform.TransformerFactoryConfigurationError
+            // javax.xml.transform.TransformerException
+            // org.xml.sax.SAXException
+            // 1.4: Throwable.getCause
+            // java.util.logging.LogRecord.getThrown()
+            if (null == next) {
+                break;
+            } else {
+                current = next;
+                next = null;
+            }
+        }
+        return current;
+    }
 }
+
+
+
+
+
+
