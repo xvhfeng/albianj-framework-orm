@@ -50,10 +50,8 @@ import java.util.*;
 /**
  * @author Seapeak
  */
-@AlbianKernel
 public class AlbianTransmitterService implements IAlbianTransmitterService {
 
-    private static AlbianState state = AlbianState.Normal;
     private static Date startDateTime;
     private static String serialId;
 
@@ -77,12 +75,6 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         return serialId;
     }
 
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#getLifeState()
-     */
-    public AlbianState getLifeState() {
-        return state;
-    }
 
     /* (non-Javadoc)
      * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String)
@@ -173,7 +165,6 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             if (lastFailSize == currentFailSize) {
                 // startup the service fail in this times,
                 // so throw the exception and stop the albianj engine
-                state = AlbianState.Unloading;
                 ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                         "startup slbianJ engine is fail ,maybe cross refernce");
                 if (null != e) {
@@ -186,7 +177,6 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                             "startup the service :{} is fail .", errBuilder.toString());
                 }
                 ServiceContainer.clear();
-                state = AlbianState.Unloaded;
                 throw new AblThrowable(e);
             } else {
                 mapAttr.clear();
@@ -210,21 +200,11 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         //            throw new AlbianRuntimeException("startup albianj is fail.");
         //
         //        }
-        state = AlbianState.Running;
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                 "set fieds in the service over .Startup albianJ is success!");
     }
 
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#requestHandlerContext()
-     */
-    @Override
-    public String requestHandlerContext() {
-        if (AlbianState.Running != state) {
-            return "Albian is not ready,Please wait a minute or contact administrators!";
-        }
-        return "";
-    }
+
 
     /* (non-Javadoc)
      * @see org.albianj.kernel.impl.IAlbianBootService#unload()

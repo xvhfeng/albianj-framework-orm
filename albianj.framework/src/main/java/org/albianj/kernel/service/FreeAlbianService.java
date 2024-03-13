@@ -40,7 +40,6 @@ package org.albianj.kernel.service;
 import org.albianj.kernel.common.io.Path;
 import org.albianj.ServRouter;
 import org.albianj.kernel.aop.AlbianAopAttribute;
-import org.albianj.kernel.core.AlbianKernel;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 
@@ -51,7 +50,7 @@ import java.io.File;
  *
  * @author Seapeak
  */
-@AlbianKernel
+//@AlbianKernel
 public abstract class FreeAlbianService implements IAlbianService {
 
     boolean enableProxy = false;

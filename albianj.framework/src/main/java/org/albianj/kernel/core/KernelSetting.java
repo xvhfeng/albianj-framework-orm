@@ -47,10 +47,6 @@ public class KernelSetting {
 
     private static String kernelId = null;
     private static String appName = null;
-    private static int threadPoolCoreSize = 5;
-    private static int threadPoolMaxSize = 20;
-    private static AlbianLevel level = AlbianLevel.Release;
-    private static AlbianStartupMode mode = AlbianStartupMode.Normal;
     private static String fpath = "../config/";
     private static String kernelpath = "../config/";
     private static int system = 0;
@@ -70,38 +66,6 @@ public class KernelSetting {
 
     public static void setAppName(String appName) {
         KernelSetting.appName = appName;
-    }
-
-    public static int getThreadPoolMaxSize() {
-        return threadPoolMaxSize;
-    }
-
-    public static void setThreadPoolMaxSize(int threadPoolMaxSize) {
-        KernelSetting.threadPoolMaxSize = threadPoolMaxSize;
-    }
-
-    public static int getThreadPoolCoreSize() {
-        return threadPoolCoreSize;
-    }
-
-    public static void setThreadPoolCoreSize(int threadPoolCoreSize) {
-        KernelSetting.threadPoolCoreSize = threadPoolCoreSize;
-    }
-
-    public static AlbianLevel getAlbianLevel() {
-        return KernelSetting.level;
-    }
-
-    public static void setAlbianLevel(AlbianLevel l) {
-        KernelSetting.level = l;
-    }
-
-    public static AlbianStartupMode getAlbianStartupMode() {
-        return mode;
-    }
-
-    public static void setAlbianStartupMode(AlbianStartupMode m) {
-        mode = m;
     }
 
     public static String getAlbianConfigFilePath() {

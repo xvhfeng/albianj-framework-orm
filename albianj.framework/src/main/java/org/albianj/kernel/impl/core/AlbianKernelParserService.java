@@ -39,8 +39,6 @@ package org.albianj.kernel.impl.core;
 
 import org.albianj.kernel.common.utils.PropUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
-import org.albianj.kernel.core.AlbianLevel;
-import org.albianj.kernel.core.AlbianStartupMode;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
@@ -85,37 +83,6 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
         String appName = PropUtil.getValue(props, "AppName");
         if (!StringsUtil.isNullOrEmptyOrAllSpace(appName)) {
             KernelSetting.setAppName(appName);
-        }
-
-        String coreSize = PropUtil
-                .getValue(props, "ThreadPoolCoreSize");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(coreSize)) {
-            KernelSetting.setThreadPoolCoreSize(5);
-        } else {
-            KernelSetting.setThreadPoolCoreSize(Integer.parseInt(coreSize));
-        }
-        String maxSize = PropUtil.getValue(props, "ThreadPoolMaxSize");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(maxSize)) {
-            KernelSetting.setThreadPoolMaxSize(Runtime.getRuntime()
-                    .availableProcessors() * 2 + 1);
-        } else {
-            KernelSetting.setThreadPoolMaxSize(Integer.parseInt(maxSize));
-        }
-
-        String sLevel = PropUtil.getValue(props, "Level");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(sLevel)
-                || sLevel.equalsIgnoreCase("debug")) {
-            KernelSetting.setAlbianLevel(AlbianLevel.Debug);
-        } else {
-            KernelSetting.setAlbianLevel(AlbianLevel.Release);
-        }
-
-        String sMode = PropUtil.getValue(props, "StartupMode");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(sMode)
-                || sMode.equalsIgnoreCase("normal")) {
-            KernelSetting.setAlbianStartupMode(AlbianStartupMode.Normal);
-        } else {
-            KernelSetting.setAlbianStartupMode(AlbianStartupMode.Async);
         }
 
         String sMachineKey = PropUtil.getValue(props, "MachineKey");

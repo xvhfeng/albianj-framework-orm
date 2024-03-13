@@ -1,10 +1,6 @@
 package org.albianj.orm.impl.storage;
 
-import org.albianj.AblThrowable;
-import org.albianj.kernel.core.AlbianLevel;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.ServRouter;
 import org.albianj.orm.impl.dbpool.ISpxDBPool;
 import org.albianj.orm.impl.dbpool.ISpxDBPoolConfig;
@@ -63,22 +59,22 @@ public class SpxWapper extends FreeDataBasePool {
             String url = FreeAlbianStorageParserService.generateConnectionUrl(rsa);
             cf.setDriverName(DRIVER_CLASSNAME);
             cf.setUrl(url);
-            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
+//            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
                 cf.setUsername(stgAttr.getUser());
                 cf.setPassword(stgAttr.getPassword());
-            } else {
-                IAlbianSecurityService ass = ServRouter
-                        .getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
-                if (null != ass) {
-                    cf.setUsername(ass.decryptDES(sessionid,stgAttr.getUser()));
-                    cf.setPassword(ass.decryptDES(sessionid,stgAttr.getPassword()));
-                } else {
-                    cf.setUsername(stgAttr.getUser());
-                    cf.setPassword(stgAttr.getPassword());
-                    throw new AblThrowable(
-                        "the run level is release in the kernel config but security is null,so not use security service.");
-                }
-            }
+//            } else {
+//                IAlbianSecurityService ass = ServRouter
+//                        .getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
+//                if (null != ass) {
+//                    cf.setUsername(ass.decryptDES(sessionid,stgAttr.getUser()));
+//                    cf.setPassword(ass.decryptDES(sessionid,stgAttr.getPassword()));
+//                } else {
+//                    cf.setUsername(stgAttr.getUser());
+//                    cf.setPassword(stgAttr.getPassword());
+//                    throw new AblThrowable(
+//                        "the run level is release in the kernel config but security is null,so not use security service.");
+//                }
+//            }
 
             cf.setMaxConnections(stgAttr.getMaxSize());
             cf.setMinConnections(stgAttr.getMinSize());

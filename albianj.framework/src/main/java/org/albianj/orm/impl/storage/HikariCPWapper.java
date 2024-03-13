@@ -2,11 +2,7 @@ package org.albianj.orm.impl.storage;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.albianj.AblThrowable;
-import org.albianj.kernel.core.AlbianLevel;
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.ServRouter;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
@@ -61,21 +57,21 @@ public class HikariCPWapper extends FreeDataBasePool {
                     .generateConnectionUrl(rsa);
             config.setDriverClassName(DRIVER_CLASSNAME);
             config.setJdbcUrl(url);
-            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
+//            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
                 config.setUsername(storageAttribute.getUser());
                 config.setPassword(storageAttribute.getPassword());
-            } else {
-                IAlbianSecurityService ass = ServRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
-                if (null != ass) {
-                    config.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
-                    config.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
-                } else {
-                    config.setUsername(storageAttribute.getUser());
-                    config.setPassword(storageAttribute.getPassword());
-                    throw new AblThrowable(
-                        "the run level is release in the kernel config but security is null,so not use security service.");
-                }
-            }
+//            } else {
+//                IAlbianSecurityService ass = ServRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
+//                if (null != ass) {
+//                    config.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
+//                    config.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
+//                } else {
+//                    config.setUsername(storageAttribute.getUser());
+//                    config.setPassword(storageAttribute.getPassword());
+//                    throw new AblThrowable(
+//                        "the run level is release in the kernel config but security is null,so not use security service.");
+//                }
+//            }
             config.setAutoCommit(false);
             config.setReadOnly(false);
             //            config.setTransactionIsolation(storageAttribute.getTransactionLevel());

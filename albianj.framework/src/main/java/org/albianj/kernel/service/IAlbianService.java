@@ -39,7 +39,7 @@ package org.albianj.kernel.service;
 
 import org.albianj.kernel.common.comment.Comments;
 import org.albianj.kernel.aop.AlbianAopAttribute;
-import org.albianj.kernel.core.AlbianKernel;
+//import org.albianj.kernel.core.AlbianKernel;
 
 /**
  * ??????albianj???service??????????????????????????????FreeAlbianService???????
@@ -47,7 +47,6 @@ import org.albianj.kernel.core.AlbianKernel;
  *
  * @author Seapeak
  */
-@AlbianKernel
 public interface IAlbianService {
 
     String FullName = "org.albianj.service.IAlbianService";
