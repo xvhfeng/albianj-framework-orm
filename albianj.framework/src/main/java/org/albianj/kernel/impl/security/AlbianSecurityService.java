@@ -44,7 +44,7 @@ import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.kernel.security.MACStyle;
 import org.albianj.kernel.security.StyleMapping;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.apache.commons.codec.binary.Base64;
 

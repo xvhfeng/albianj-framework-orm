@@ -1,5 +1,6 @@
 package org.albianj.orm.impl.context.dactx;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
@@ -7,7 +8,6 @@ import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.dactx.AlbianObjectWarp;
 import org.albianj.orm.context.dactx.IAlbianObjectWarp;
 import org.albianj.orm.context.dactx.IDataAccessContext;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.context.IWriterJobAdapter;
 import org.albianj.orm.impl.context.WriterJobAdapter;
 import org.albianj.orm.impl.db.IPersistenceTransactionClusterScope;
@@ -101,7 +101,7 @@ public class DataAccessContext implements IDataAccessContext {
 
     public IDataAccessContext withQueryGenKey() {
         if (this.isSetQueryIdentity) {
-            throw new AlbianDataServiceException("da-ctx exist query auto genkey");
+            throw new AblThrowable("da-ctx exist query auto genkey");
         }
         entitis.get(entitis.size() - 1).setQueryIdentitry(true);
         this.isSetQueryIdentity = true;

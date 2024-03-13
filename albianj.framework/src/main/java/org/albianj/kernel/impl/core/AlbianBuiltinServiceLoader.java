@@ -1,9 +1,9 @@
 package org.albianj.kernel.impl.core;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.values.KeyValuePair;
 import org.albianj.kernel.common.utils.SetUtil;
-import org.albianj.kernel.ServRouter;
-import org.albianj.kernel.core.AlbianRuntimeException;
+import org.albianj.ServRouter;
 import org.albianj.kernel.impl.service.AlbianServiceRantParser;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.*;
@@ -148,7 +148,7 @@ public class AlbianBuiltinServiceLoader {
                 if (requiredServiceFail) {
                     //required service can not load fail.
                     ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
-                            new AlbianRuntimeException("loader required service is fail.sbFailReqServiceBiref:" + sbFailReqServiceBiref),
+                            new AblThrowable("loader required service is fail.sbFailReqServiceBiref:" + sbFailReqServiceBiref),
                             "loader plugin ReService：{} is error",sbFailReqServiceBiref);
                 }
                 return;
@@ -174,11 +174,11 @@ public class AlbianBuiltinServiceLoader {
             }catch (Exception e){
                 if(bltSerAttr.isRequired()) {
                     ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
-                            new AlbianRuntimeException("loader builtin  service:"+bltSerAttr.getId()+" is fail."),
+                            new AblThrowable("loader builtin  service:"+bltSerAttr.getId()+" is fail."),
                             "BuiltinServiceLoader loader builtin  service:{} is fail. but it is must load.",bltSerAttr.getId());
                 } else {
                     ServRouter.log(sessionId,  LogLevel.Warn,
-                            new AlbianRuntimeException("loader builtin  service:"+bltSerAttr.getId()+" is fail."),
+                            new AblThrowable("loader builtin  service:"+bltSerAttr.getId()+" is fail."),
                             "BuiltinServiceLoader loader builtin  service:{} is fail. but it is not must load.",bltSerAttr.getId());
                 }
             }
@@ -202,7 +202,7 @@ public class AlbianBuiltinServiceLoader {
                 IAlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
                 kvp = new KeyValuePair(id,attr);
             }catch (Throwable e){
-                throw new AlbianRuntimeException(e);
+                throw new AblThrowable(e);
             }
 
             return kvp;

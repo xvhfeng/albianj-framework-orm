@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.AblThrowable;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
@@ -54,7 +54,7 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
 
     public static Map<String, ISqlParameter> makeCreateCommand(String sessionId, int dbStyle, String tableName,
                                                                IAlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
-                                                               StringBuilder sqlText) throws AlbianDataServiceException {
+                                                               StringBuilder sqlText)   {
         StringBuilder cols = new StringBuilder();
         StringBuilder paras = new StringBuilder();
 
@@ -108,9 +108,9 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
     }
 
     public IPersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError) throws AlbianDataServiceException {
+                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)   {
         if (!object.getIsAlbianNew()) {
-            throw new AlbianDataServiceException(
+            throw new AblThrowable(
                 "the loaded albianj object can not be insert.please new the object from database first.");
         }
 

@@ -13,7 +13,7 @@
  * ******************************************************************/
 package org.albianj.kernel.common.utils;
 
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

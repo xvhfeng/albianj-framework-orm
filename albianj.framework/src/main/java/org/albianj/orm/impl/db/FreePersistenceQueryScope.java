@@ -38,10 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.db;
 
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianObject;
 
@@ -91,7 +91,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
         try {
             result = executing(sessionId, cmdType, statement);
             list = executed(cls, ServRouter.make32UUID(), result);
-        } catch (AlbianDataServiceException e) {
+        } catch (AblThrowable e) {
             ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
@@ -116,7 +116,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
     protected abstract Object executed(String jobId, IReaderJob job)
            ;
 
-    protected abstract void unloadExecute(IReaderJob job) throws AlbianDataServiceException;
+    protected abstract void unloadExecute(IReaderJob job)  ;
 
     protected abstract ResultSet executing(String sessionId, PersistenceCommandType cmdType,
                                            Statement statement) ;

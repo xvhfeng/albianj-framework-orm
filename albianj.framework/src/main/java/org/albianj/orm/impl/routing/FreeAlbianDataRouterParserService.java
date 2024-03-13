@@ -37,13 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.routing;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IDataRouterAttribute;
 import org.albianj.orm.object.IDataRoutersAttribute;
 import org.albianj.orm.service.IAlbianDataRouterParserService;
@@ -95,7 +95,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
                     "loading the drouter.xml is error.");
         }
         if (null == doc) {
-            throw new AlbianDataServiceException("loading the drouter.xml is error.");
+            throw new AblThrowable("loading the drouter.xml is error.");
         }
 
         @SuppressWarnings("rawtypes")

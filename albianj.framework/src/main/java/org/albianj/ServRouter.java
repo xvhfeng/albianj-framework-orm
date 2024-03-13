@@ -35,7 +35,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.kernel;
+package org.albianj;
 
 import org.albianj.kernel.common.utils.LangUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
@@ -58,14 +58,12 @@ import java.util.*;
  */
 public class ServRouter extends ServiceContainer {
 
+    public static final String __StartupSessionId = "Albian-Startup";
     public static Set<String> _FilterStackFrameClasses = new HashSet<>();
 
     static {
         _FilterStackFrameClasses.add(ServRouter.class.getName());
     }
-
-
-    public static final String __StartupSessionId = "Albian-Startup";
 
     /**
      * 获取service.xml中配置的service.
@@ -80,25 +78,25 @@ public class ServRouter extends ServiceContainer {
      */
     public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, String id, boolean isThrowIfException) {
         String servId = id;
-        if(StringsUtil.isNullOrEmptyOrAllSpace(servId)) {
-            if(null == cla) {
-                ServRouter.throwIfTrue(isThrowIfException,"Service Id is nullOrEmpty and interface is Null.");
+        if (StringsUtil.isNullOrEmptyOrAllSpace(servId)) {
+            if (null == cla) {
+                ServRouter.throwIfTrue(isThrowIfException, "Service Id is nullOrEmpty and interface is Null.");
                 return null;
             }
             servId = cla.getName();
         }
 
         try {
-            Object serv  =  getService(servId);
+            Object serv = getService(servId);
 
             if (null == serv)
                 return null;
             return cla.cast(serv);
         } catch (Throwable exc) {
 
-            log(sessionId,LogLevel.Warn,exc,
-                    "get service {} for class {} is fail.",id,cla.getName());
-            throwAgainIfTrue(isThrowIfException,exc);
+            log(sessionId, LogLevel.Warn, exc,
+                    "get service {} for class {} is fail.", id, cla.getName());
+            throwAgainIfTrue(isThrowIfException, exc);
         }
         return null;
     }
@@ -113,119 +111,120 @@ public class ServRouter extends ServiceContainer {
      * @return 返回获取的service，在获取service出错或者没有获取service时候抛出异常
      * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
      */
-    public static <T extends IAlbianService> T getService(Object sessionId,Class<T> cla, String id) {
-        return getService(sessionId,cla, id, false);
+    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, String id) {
+        return getService(sessionId, cla, id, false);
     }
 
-    public static <T extends IAlbianService> T getService(Object sessionId,Class<T> cla, boolean isThrowIfException) {
-        return getService(sessionId,cla,null,isThrowIfException);
+    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, boolean isThrowIfException) {
+        return getService(sessionId, cla, null, isThrowIfException);
     }
 
-    public static  <T extends IAlbianService> T getService(Object sessionId,Class<T> cla) {
-        return getService(sessionId,cla,null,false);
+    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla) {
+        return getService(sessionId, cla, null, false);
     }
 
-    public static void log(Object sessionId,  LogLevel level, String format, Object... paras)  {
-        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
-        if(null != ls) {
+    public static void log(Object sessionId, LogLevel level, String format, Object... paras) {
+        IAlbianLoggerService ls = getService(sessionId, IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if (null != ls) {
             String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
-            ls.log(sessionId,target,level,format,paras);
+            ls.log(sessionId, target, level, format, paras);
         }
     }
 
-    public static void log(Object sessionId,  LogLevel level, Throwable t, String format, Object... paras)  {
-        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
-        if(null != ls) {
+    public static void log(Object sessionId, LogLevel level, Throwable t, String format, Object... paras) {
+        IAlbianLoggerService ls = getService(sessionId, IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if (null != ls) {
             String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
-            ls.log(sessionId,target,level,t,format,paras);
+            ls.log(sessionId, target, level, t, format, paras);
         }
     }
 
-    public static void logAndThrowNew(Object sessionId, LogLevel level, String format, Object... paras)  {
-        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
-        if(null != ls) {
+    public static void logAndThrowNew(Object sessionId, LogLevel level, String format, Object... paras) {
+        IAlbianLoggerService ls = getService(sessionId, IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if (null != ls) {
             String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
-            ls.logAndThrowNew(sessionId,target,level,format,paras);
+            ls.logAndThrowNew(sessionId, target, level, format, paras);
         }
     }
 
     public static void logAndThrowAgain(Object sessionId, LogLevel level, Throwable t, String format, Object... paras) {
-        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
-        if(null != ls) {
+        IAlbianLoggerService ls = getService(sessionId, IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if (null != ls) {
             String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
-            ls.logAndThrowAgain(sessionId,target,level,t,format,paras);
+            ls.logAndThrowAgain(sessionId, target, level, t, format, paras);
         }
     }
 
     public static void logAndThrowNew(Object sessionId, LogLevel level, Throwable newThrow, String format, Object... paras) {
-        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
-        if(null != ls) {
+        IAlbianLoggerService ls = getService(sessionId, IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if (null != ls) {
             String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
-            ls.logAndThrowNew(sessionId,target,level,newThrow,format,paras);
+            ls.logAndThrowNew(sessionId, target, level, newThrow, format, paras);
         }
     }
 
-    public static void logAndThrowNew(Object sessionId,  LogLevel level, Throwable t, Throwable newThrow, String format, Object... paras) {
-        IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
-        if(null != ls) {
+    public static void logAndThrowNew(Object sessionId, LogLevel level, Throwable t, Throwable newThrow, String format, Object... paras) {
+        IAlbianLoggerService ls = getService(sessionId, IAlbianLoggerService.class, IAlbianLoggerService.Name);
+        if (null != ls) {
             String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
-            ls.logAndThrowNew(sessionId,target,level, newThrow, t, format,paras);
+            ls.logAndThrowNew(sessionId, target, level, newThrow, t, format, paras);
         }
     }
 
     public static synchronized String make32UUID() {
-        return UUID.randomUUID().randomUUID().toString().replaceAll("-", "");
+        UUID.randomUUID();
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public static synchronized BigInteger makeBatchId(){
+    public static synchronized BigInteger makeBatchId() {
         return new BigInteger(make32UUID());
     }
 
-    public static void throwIfTrue(boolean cond,String fmt,Object...paras){
-        if(cond){
-            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt,paras));
+    public static void throwIfTrue(boolean cond, String fmt, Object... paras) {
+        if (cond) {
+            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt, paras));
         }
     }
 
-    public static void throwIfFalse(boolean cond,String fmt,Object...paras){
-        if(cond){
-            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt,paras));
+    public static void throwIfFalse(boolean cond, String fmt, Object... paras) {
+        if (cond) {
+            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt, paras));
         }
     }
 
-    public static void throwIfNull(Object v,String fmt,Object...paras){
-        if(null == v){
-            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt,paras));
+    public static void throwIfNull(Object v, String fmt, Object... paras) {
+        if (null == v) {
+            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt, paras));
         }
     }
 
-    public static void throwIfNonNull(Object v,String fmt,Object...paras){
-        if(null != v){
-            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt,paras));
+    public static void throwIfNonNull(Object v, String fmt, Object... paras) {
+        if (null != v) {
+            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt, paras));
         }
     }
 
-    public static void throwAgain(String fmt,Object...paras){
-        throw new AblThrowable(StringsUtil.nonIdxFmt(fmt,paras));
+    public static void throwAgain(String fmt, Object... paras) {
+        throw new AblThrowable(StringsUtil.nonIdxFmt(fmt, paras));
     }
 
-    public static void throwAgain(Throwable t){
+    public static void throwAgain(Throwable t) {
         throw new AblThrowable(t);
     }
 
-    public static void throwAgainIfTrue(boolean cond,Throwable t){
-        if(cond) {
+    public static void throwAgainIfTrue(boolean cond, Throwable t) {
+        if (cond) {
             throw new AblThrowable(t);
         }
     }
 
-    public static void throwAgain(Throwable t,String fmt,Object...paras){
-        throw new AblThrowable(StringsUtil.nonIdxFmt(fmt,paras),t);
+    public static void throwAgain(Throwable t, String fmt, Object... paras) {
+        throw new AblThrowable(StringsUtil.nonIdxFmt(fmt, paras), t);
     }
 
-    public static void throwAgainIfTrue(boolean cond,Throwable t,String fmt,Object...paras){
-        if(cond) {
-            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt,paras),t);
+    public static void throwAgainIfTrue(boolean cond, Throwable t, String fmt, Object... paras) {
+        if (cond) {
+            throw new AblThrowable(StringsUtil.nonIdxFmt(fmt, paras), t);
         }
     }
 
@@ -247,7 +246,7 @@ public class ServRouter extends ServiceContainer {
      * @param c the Class to check - use null to ignore type check
      * @throws IllegalArgumentException "null {name}" if o is null
      */
-    public static final void throwIaxIfNotAssignable(final Object ra[], final Class<?> c, final String name) {
+    public static final void throwIaxIfNotAssignable(final Object[] ra, final Class<?> c, final String name) {
         throwIaxIfNull(ra, name);
         String label = (null == name ? "input" : name);
         for (int i = 0; i < ra.length; i++) {
@@ -285,9 +284,9 @@ public class ServRouter extends ServiceContainer {
      *
      * @throws IllegalArgumentException "{message}" if test is false
      */
-    public static final void throwIaxIfFalse( boolean test,  String fmt,Object...paras) {
+    public static final void throwIaxIfFalse(boolean test, String fmt, Object... paras) {
         if (!test) {
-            throw new IllegalArgumentException(StringsUtil.nonIdxFmt(fmt,paras));
+            throw new IllegalArgumentException(StringsUtil.nonIdxFmt(fmt, paras));
         }
     }
 
@@ -314,7 +313,7 @@ public class ServRouter extends ServiceContainer {
     /**
      * Renders exception <code>t</code>, unwrapping, optionally eliding and limiting total number of lines.
      *
-     * @param t <code>Throwable</code> to print.
+     * @param t     <code>Throwable</code> to print.
      * @param elide true to limit to 100 lines and elide test packages
      * @see StringsUtil.StringChecker#TEST_PACKAGES
      */
@@ -330,7 +329,9 @@ public class ServRouter extends ServiceContainer {
         return stack.toString();
     }
 
-    /** Dump message and stack to StringBuffer. */
+    /**
+     * Dump message and stack to StringBuffer.
+     */
     public static StringBuffer stackToString(Throwable throwable, boolean skipMessage) {
         if (null == throwable) {
             return new StringBuffer();
@@ -348,7 +349,9 @@ public class ServRouter extends ServiceContainer {
         return buf.getBuffer();
     }
 
-    /** @return Throwable input or tail of any wrapped exception chain */
+    /**
+     * @return Throwable input or tail of any wrapped exception chain
+     */
     public static Throwable unwrapException(Throwable t) {
         Throwable current = t;
         Throwable next = null;
@@ -386,7 +389,8 @@ public class ServRouter extends ServiceContainer {
 
     /**
      * Shorthand for
-     "if any not null or not assignable, throw IllegalArgumentException"
+     * "if any not null or not assignable, throw IllegalArgumentException"
+     *
      * @throws IllegalArgumentException "{name} is not assignable to {c}"
      */
     public static final void throwIaxIfNotAllAssignable(final Collection
@@ -394,7 +398,7 @@ public class ServRouter extends ServiceContainer {
                                                         final Class c, final String name) {
         throwIaxIfNull(collection, name);
         if (null != c) {
-            for (Iterator iter = collection.iterator(); iter.hasNext();) {
+            for (Iterator iter = collection.iterator(); iter.hasNext(); ) {
                 throwIaxIfNotAssignable(iter.next(), c, name);
             }
         }

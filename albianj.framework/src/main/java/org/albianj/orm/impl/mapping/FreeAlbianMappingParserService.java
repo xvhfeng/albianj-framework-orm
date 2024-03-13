@@ -37,13 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.mapping;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.rant.AlbianEntityRantScaner;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianMappingParserService;
@@ -92,7 +92,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
         }
         if (null == doc) {
-            throw new AlbianDataServiceException("loading the persisten.xml is error.");
+            throw new AblThrowable("loading the persisten.xml is error.");
         }
 
         @SuppressWarnings("rawtypes")
@@ -126,7 +126,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                 }
 
                 if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
-                    throw new AlbianDataServiceException(
+                    throw new AblThrowable(
                         "loading the persistence.xml is error. 'Path' attribute in  Package config-item is null or empty.");
                 } else {
                     try {

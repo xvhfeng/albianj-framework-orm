@@ -37,14 +37,14 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.routing;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
 import org.albianj.orm.impl.object.DataRouterAttribute;
 import org.albianj.orm.object.*;
@@ -94,17 +94,17 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
             Class<?> cls = AlbianClassLoader.getInstance().loadClass(type);
             Class<?> itf = AlbianClassLoader.getInstance().loadClass(inter);
             if (!itf.isAssignableFrom(cls)) {
-                throw new AlbianDataServiceException(
+                throw new AblThrowable(
                     "the albian-object class:" + type + " is not implements from interface:" + inter + ".");
             }
 
             if (!IAlbianObject.class.isAssignableFrom(cls)) {
-                throw new AlbianDataServiceException(
+                throw new AblThrowable(
                     "the albian-object class:" + type + " is not implements from interface: IAlbianObject.");
             }
 
             if (!IAlbianObject.class.isAssignableFrom(itf)) {
-                throw new AlbianDataServiceException(
+                throw new AblThrowable(
                     "the albian-object interface:" + inter + " is not implements from interface: IAlbianObject.");
             }
 
@@ -123,7 +123,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         try {
             Class<?> cls = AlbianClassLoader.getInstance().loadClass(hashMapping);
             if (!IAlbianObjectDataRouter.class.isAssignableFrom(cls)) {
-                throw new AlbianDataServiceException(
+                throw new AblThrowable(
                     "the datarouter class:" + type + " is not implements from IAlbianObjectDataRouter.");
             }
 

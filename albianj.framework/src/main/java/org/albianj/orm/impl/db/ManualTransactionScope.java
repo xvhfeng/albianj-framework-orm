@@ -1,13 +1,13 @@
 package org.albianj.orm.impl.db;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.orm.context.IInternalManualCommand;
 import org.albianj.orm.context.IManualCommand;
 import org.albianj.orm.context.IManualContext;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.toolkit.ListConvert;
 import org.albianj.orm.object.IRunningStorageAttribute;
@@ -143,7 +143,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 mctx.getDatabaseName());
         }
         if (isThrow)
-            throw new AlbianDataServiceException("there is error in the unload trancation scope.");
+            throw new AblThrowable("there is error in the unload trancation scope.");
     }
 
 }

@@ -37,10 +37,11 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.*;
@@ -71,7 +72,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         Connection conn = dbp.getConnection(sessionId, rsa, true);
 
         if (conn == null) {
-            throw new AlbianDataServiceException(
+            throw new AblThrowable(
                 "could't get connection from " + job.getStorage().getStorageAttribute().getName());
         }
 
@@ -164,7 +165,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         return list;
     }
 
-    protected void unloadExecute(IReaderJob job) throws AlbianDataServiceException {
+    protected void unloadExecute(IReaderJob job)   {
         String sessionId = job.getId();
         IRunningStorageAttribute rsa = job.getStorage();
         IDataBasePool dbp = job.getDatabasePool();

@@ -39,11 +39,10 @@ package org.albianj.orm.impl.db;
 
 
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.WriterJobLifeTime;
-import org.albianj.orm.db.AlbianDataServiceException;
 
 public abstract class FreePersistenceTransactionClusterScope implements IPersistenceTransactionClusterScope {
 
@@ -157,9 +156,9 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
 
     protected abstract void commit(IWriterJob writerJob) ;
 
-    protected abstract void exceptionHandler(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract void exceptionHandler(IWriterJob writerJob)  ;
 
-    protected abstract void unLoadExecute(IWriterJob writerJob) throws AlbianDataServiceException;
+    protected abstract void unLoadExecute(IWriterJob writerJob)  ;
 
     protected abstract boolean exceptionManualRollback(IWriterJob writerJob) ;
 }

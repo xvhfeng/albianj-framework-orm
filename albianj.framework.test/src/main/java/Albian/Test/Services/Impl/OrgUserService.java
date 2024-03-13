@@ -12,7 +12,7 @@ import org.albianj.orm.context.dactx.IQueryContext;
 import org.albianj.orm.object.LogicalOperation;
 import org.albianj.orm.object.filter.FilterExpression;
 import org.albianj.orm.object.filter.IChainExpression;
-import org.albianj.orm.service.AlbianServiceHub;
+import org.albianj.AblServRouter;
 import org.albianj.orm.service.IAlbianDataAccessService;
 import org.albianj.orm.service.LoadType;
 
@@ -42,7 +42,7 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
     @Override
     public boolean addUser(String uname, String pwd)  {
         //创建对象请使用此方法
-        IOrgSingleUser user = AlbianServiceHub.newInstance("SessionId", IOrgSingleUser.class);
+        IOrgSingleUser user = AblServRouter.newInstance("SessionId", IOrgSingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword(pwd);
         user.setUserName(uname);
@@ -72,19 +72,19 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
     @Override
     public boolean batchAddUser()  {
         IDataAccessContext dctx = da.newDataAccessContext();
-        IOrgMultiUser mu1 = AlbianServiceHub.newInstance("sessionId", IOrgMultiUser.class);
+        IOrgMultiUser mu1 = AblServRouter.newInstance("sessionId", IOrgMultiUser.class);
         String id1 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 1, 1);
         mu1.setId(id1);
         mu1.setUserName("mu1_org");
         mu1.setPassword("mu1pwd_org");
 
-        IOrgMultiUser mu2 = AlbianServiceHub.newInstance("sessionId", IOrgMultiUser.class);
+        IOrgMultiUser mu2 = AblServRouter.newInstance("sessionId", IOrgMultiUser.class);
         String id2 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 2, 2);
         mu2.setId(id2);
         mu2.setUserName("mu2_org");
         mu2.setPassword("mu2pwd_org");
 
-        ISingleUser user = AlbianServiceHub.newInstance("SessionId", ISingleUser.class);
+        ISingleUser user = AblServRouter.newInstance("SessionId", ISingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword("batcher_by_org");
         user.setUserName("batcher_by_org");

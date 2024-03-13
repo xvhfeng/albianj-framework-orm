@@ -1,10 +1,10 @@
 package org.albianj.orm.impl.context.dactx;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.context.dactx.IQueryContext;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.context.IReaderJobAdapter;
 import org.albianj.orm.impl.context.ReaderJobAdapter;
 import org.albianj.orm.impl.db.IPersistenceQueryScope;
@@ -83,10 +83,10 @@ public class QueryContext implements IQueryContext {
         this.wheres = wheres;
 
         if (!StringsUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) || !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
-            throw new AlbianDataServiceException("drouterAlias is not coexist with storageAlias or tableAlias.");
+            throw new AblThrowable("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
         if (StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) && !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
-            throw new AlbianDataServiceException("tableAlias exist but storageAlias is not exist.");
+            throw new AblThrowable("tableAlias exist but storageAlias is not exist.");
         }
 
         IReaderJobAdapter ad = new ReaderJobAdapter();
@@ -104,10 +104,10 @@ public class QueryContext implements IQueryContext {
         this.wheres = wheres;
 
         if (!StringsUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) || !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
-            throw new AlbianDataServiceException("drouterAlias is not coexist with storageAlias or tableAlias.");
+            throw new AblThrowable("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
         if (StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) && !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
-            throw new AlbianDataServiceException("tableAlias exist but storageAlias is not exist.");
+            throw new AblThrowable("tableAlias exist but storageAlias is not exist.");
         }
 
         IReaderJobAdapter ad = new ReaderJobAdapter();

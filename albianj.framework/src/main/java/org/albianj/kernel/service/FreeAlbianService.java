@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.kernel.service;
 
 import org.albianj.kernel.common.io.Path;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.aop.AlbianAopAttribute;
 import org.albianj.kernel.core.AlbianKernel;
 import org.albianj.kernel.core.KernelSetting;
@@ -65,7 +65,7 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void beforeLoad() throws AlbianServiceException {
+    public void beforeLoad()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.BeforeLoading;
     }
@@ -77,26 +77,26 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void afterLoading() throws AlbianServiceException {
+    public void afterLoading()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Running;
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void beforeUnload() throws AlbianServiceException {
+    public void beforeUnload()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.BeforeUnloading;
 
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void unload() throws AlbianServiceException {
+    public void unload()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Unloading;
     }
 
     @AlbianAopAttribute(avoid = true)
-    public void afterUnload() throws AlbianServiceException {
+    public void afterUnload()   {
         // TODO Auto-generated method stub
         this.state = AlbianServiceLifetime.Unloaded;
     }

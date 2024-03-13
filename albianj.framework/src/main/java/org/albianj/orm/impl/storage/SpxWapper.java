@@ -1,11 +1,11 @@
 package org.albianj.orm.impl.storage;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.core.AlbianLevel;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.security.IAlbianSecurityService;
-import org.albianj.kernel.ServRouter;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.ServRouter;
 import org.albianj.orm.impl.dbpool.ISpxDBPool;
 import org.albianj.orm.impl.dbpool.ISpxDBPoolConfig;
 import org.albianj.orm.impl.dbpool.impl.SpxDBPool;
@@ -75,7 +75,7 @@ public class SpxWapper extends FreeDataBasePool {
                 } else {
                     cf.setUsername(stgAttr.getUser());
                     cf.setPassword(stgAttr.getPassword());
-                    throw new AlbianDataServiceException(
+                    throw new AblThrowable(
                         "the run level is release in the kernel config but security is null,so not use security service.");
                 }
             }

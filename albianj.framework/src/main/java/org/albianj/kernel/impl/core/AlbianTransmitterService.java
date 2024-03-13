@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
-import org.albianj.kernel.ServRouter;
+import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.kernel.core.*;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
 import org.albianj.kernel.logger.LogLevel;
@@ -186,7 +187,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                 }
                 ServiceContainer.clear();
                 state = AlbianState.Unloaded;
-                throw new AlbianRuntimeException(e);
+                throw new AblThrowable(e);
             } else {
                 mapAttr.clear();
                 mapAttr.putAll(failMap);

@@ -40,7 +40,7 @@ package org.albianj.kernel.impl.service;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
 import org.albianj.kernel.impl.aop.AlbianServiceAopAttribute;
 import org.albianj.kernel.logger.LogLevel;

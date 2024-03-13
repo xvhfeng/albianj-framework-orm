@@ -4,7 +4,7 @@ import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.ReflectUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;

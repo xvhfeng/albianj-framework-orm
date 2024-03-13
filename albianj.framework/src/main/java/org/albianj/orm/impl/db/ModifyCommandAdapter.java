@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.AblThrowable;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
@@ -54,9 +54,9 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
 
     public IPersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
                                            IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)
-            throws AlbianDataServiceException {
+              {
         if (object.getIsAlbianNew()) {
-            throw new AlbianDataServiceException(
+            throw new AblThrowable(
                 "the new albianj object can not be update.please load the object from database first.");
         }
 
@@ -177,7 +177,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
         }
 
         if (0 == where.length()) {
-            throw new AlbianDataServiceException(
+            throw new AblThrowable(
                 "the new albianj object can not be update .there is not PrimaryKey in the object.");
         }
 

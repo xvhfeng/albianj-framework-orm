@@ -39,7 +39,6 @@ package org.albianj.orm.impl.db;
 
 
 import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianObject;
 
@@ -48,8 +47,8 @@ import java.util.List;
 
 public interface IQueryScope {
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     IReaderJob job) throws AlbianDataServiceException;
+                                                     IReaderJob job)  ;
 
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     PersistenceCommandType cmdType, Statement statement) throws AlbianDataServiceException;
+                                                     PersistenceCommandType cmdType, Statement statement)  ;
 }

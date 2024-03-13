@@ -1,9 +1,9 @@
 package org.albianj.orm.impl.storage;
 
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.ServRouter;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.object.IRunningStorageAttribute;
 
@@ -37,7 +37,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
                     _dataSource.putIfAbsent(key, ds);
                 } catch (Throwable t) {
                     ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,t,
-                            new AlbianDataServiceException("setup datasource error , key =" + key, t),
+                            new AblThrowable("setup datasource error , key =" + key, t),
                             "setupDatasourceError|{}", key);
                 }
             }

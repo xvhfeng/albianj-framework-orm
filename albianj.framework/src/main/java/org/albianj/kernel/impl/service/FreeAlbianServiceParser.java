@@ -37,16 +37,16 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.service;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.io.Path;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.aop.AlbianAopAttribute;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
-import org.albianj.kernel.core.AlbianRuntimeException;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.service.IAlbianServiceAttribute;
 import org.albianj.kernel.service.IAlbianServiceFieldAttribute;
 import org.albianj.kernel.service.ServiceAttributeMap;
@@ -112,7 +112,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                     "loading the service.xml is error." );
         }
         if (null == doc) {
-            throw new AlbianRuntimeException("loading the service.xml is error. the file is null.");
+            throw new AblThrowable("loading the service.xml is error. the file is null.");
         }
         @SuppressWarnings("rawtypes")
         List nodes = XmlUtil.selectNodes(doc, "Services/IncludeSet/Include");
@@ -148,7 +148,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                 }
 
                 if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
-                    throw new AlbianRuntimeException(
+                    throw new AblThrowable(
                         "loading the service.xml is error. 'Path' attribute in  Package config-item is null or empty.");
                 } else {
                     try {

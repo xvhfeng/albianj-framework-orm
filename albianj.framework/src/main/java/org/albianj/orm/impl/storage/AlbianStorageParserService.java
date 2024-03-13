@@ -37,14 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.storage;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.ServRouter;
-import org.albianj.kernel.service.parser.AlbianParserException;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.ServRouter;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.impl.object.PluginDatabasePoolMarker;
 import org.albianj.orm.impl.object.StorageAttribute;
@@ -99,7 +98,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     }
 
     @Override
-    protected void parserStorages(@SuppressWarnings("rawtypes") List nodes) throws AlbianParserException {
+    protected void parserStorages(@SuppressWarnings("rawtypes") List nodes)   {
         if (SetUtil.isNullOrEmpty(nodes)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "Storage node is null or size is 0.");
@@ -108,7 +107,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         for (int i = 0; i < nodes.size(); i++) {
             IStorageAttribute storage = parserStorage((Element)nodes.get(i));
             if (null == storage) {
-                throw new AlbianDataServiceException(
+                throw new AblThrowable(
                     "parser storage in the storage.xml is fail.xml:" + ((Element)nodes.get(i)).asXML() + ".");
             }
             addStorageAttribute(storage.getName(), storage);

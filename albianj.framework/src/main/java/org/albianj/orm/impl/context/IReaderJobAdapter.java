@@ -38,7 +38,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.context;
 
 import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IFilterCondition;
@@ -54,23 +53,23 @@ public interface IReaderJobAdapter {
     @Deprecated
     public IReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String drouterAlias, int start,
                                      int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-        throws AlbianDataServiceException;
+         ;
 
     @Deprecated
     public IReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String drouterAlias,
         LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
-        throws AlbianDataServiceException;
+         ;
 
     public IReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String storageAlias,
         String tableAlias, String drouterAlias, int start, int step, IChainExpression f,
-        LinkedList<IOrderByCondition> orderbys, String idxName) throws AlbianDataServiceException;
+        LinkedList<IOrderByCondition> orderbys, String idxName)  ;
 
     public IReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String storageAlias,
         String tableAlias, String drouterAlias, IChainExpression f, LinkedList<IOrderByCondition> orderbys,
-        String idxName) throws AlbianDataServiceException;
+        String idxName)  ;
 
     public IReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
                                      PersistenceCommandType cmdType, String text, Map<String, ISqlParameter> paras)
-        throws AlbianDataServiceException;
+         ;
 
 }

@@ -2,12 +2,12 @@ package org.albianj.orm.impl.storage;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.albianj.AblThrowable;
 import org.albianj.kernel.core.AlbianLevel;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.security.IAlbianSecurityService;
-import org.albianj.kernel.ServRouter;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.ServRouter;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
 
@@ -72,7 +72,7 @@ public class HikariCPWapper extends FreeDataBasePool {
                 } else {
                     config.setUsername(storageAttribute.getUser());
                     config.setPassword(storageAttribute.getPassword());
-                    throw new AlbianDataServiceException(
+                    throw new AblThrowable(
                         "the run level is release in the kernel config but security is null,so not use security service.");
                 }
             }

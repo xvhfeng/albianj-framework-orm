@@ -41,7 +41,6 @@ import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IFilterCondition;

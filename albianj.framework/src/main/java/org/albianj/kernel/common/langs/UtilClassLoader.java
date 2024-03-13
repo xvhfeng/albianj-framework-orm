@@ -12,7 +12,7 @@
 
 package org.albianj.kernel.common.langs;
 
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.common.utils.SetUtil;
 
 import java.io.*;

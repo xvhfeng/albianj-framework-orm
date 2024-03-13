@@ -37,13 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.IWriterTask;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.impl.db.IPersistenceUpdateCommand;
 import org.albianj.orm.impl.db.localize.MysqlClientSection;
@@ -158,9 +158,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     protected String parserRoutingStorage(String jobId, IAlbianObject obj,
                                           IDataRouterAttribute routing, IAlbianObjectDataRouter hashMapping,
-                                          IAlbianObjectAttribute albianObject) throws AlbianDataServiceException {
+                                          IAlbianObjectAttribute albianObject)   {
         if (null == routing) {
-            throw new AlbianDataServiceException("the writer data router of object:"+albianObject.getType()+" is null.");
+            throw new AblThrowable("the writer data router of object:"+albianObject.getType()+" is null.");
         }
         if (null == hashMapping) {
             String name = routing.getStorageName();
@@ -184,9 +184,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     protected String parserRoutingDatabase(String jobId, IAlbianObject obj,
                                            IStorageAttribute storage, IAlbianObjectDataRouter hashMapping,
-                                           IAlbianObjectAttribute albianObject) throws AlbianDataServiceException {
+                                           IAlbianObjectAttribute albianObject)   {
         if (null == storage) {
-            throw new AlbianDataServiceException(
+            throw new AblThrowable(
                 "the writer data router of object:" + albianObject.getType() + " is null.");
         }
         if (null == hashMapping) {
@@ -219,7 +219,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
         Map<String, IAlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
         if (SetUtil.isNullOrEmpty(fieldsAttr)) {
-            throw new AlbianDataServiceException("albian-object:" + className + " PropertyDescriptor is not found.");
+            throw new AblThrowable("albian-object:" + className + " PropertyDescriptor is not found.");
         }
         Map<String, Object> sqlParaVals = buildSqlParameter(job.getId(), entity,
                 objAttr, fieldsAttr);

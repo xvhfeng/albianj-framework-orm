@@ -37,10 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.values.RefArg;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.common.utils.StringsUtil;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.db.SqlParameter;
 import org.albianj.orm.impl.toolkit.Convert;
@@ -101,7 +101,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         for (String key : objAttr.getFields().keySet()) {
             IAlbianEntityFieldAttribute member = objAttr.getFields().get(key);
             if (null == member) {
-                throw new AlbianDataServiceException(
+                throw new AblThrowable(
                     "albian-object:" + objAttr.getType() + " member:" + key + " is not found.");
             }
             if (!member.getIsSave())
@@ -144,7 +144,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
             for (IOrderByCondition orderby : orderbys) {
                 IMemberAttribute member = objAttr.getFields().get(orderby.getFieldName().toLowerCase());
                 if (null == member) {
-                    throw new AlbianDataServiceException(
+                    throw new AblThrowable(
                         "albian-object:" + objAttr.getType() + " member:" + orderby.getFieldName() + " is not found.");
                 }
 
@@ -199,7 +199,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                 IMemberAttribute member = objAttr.getFields().get(where.getFieldName().toLowerCase());
 
                 if (null == member) {
-                    throw new AlbianDataServiceException(
+                    throw new AblThrowable(
                         "albian-object:" + implType + " member:" + where.getFieldName() + " is not found.");
                 }
 

@@ -1,4 +1,4 @@
-package org.albianj.kernel;
+package org.albianj;
 
 public class AblThrowable extends RuntimeException{
 

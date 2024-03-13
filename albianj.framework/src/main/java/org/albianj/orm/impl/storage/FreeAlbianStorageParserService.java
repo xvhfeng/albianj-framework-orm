@@ -37,14 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.storage;
 
+import org.albianj.AblThrowable;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
-import org.albianj.kernel.service.parser.AlbianParserException;
+import org.albianj.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
 import org.albianj.orm.object.PersistenceDatabaseStyle;
@@ -145,7 +144,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     "loading the storage.xml is error.");
         }
         if (null == doc) {
-            throw new AlbianDataServiceException("loading the storage.xml is error.");
+            throw new AblThrowable("loading the storage.xml is error.");
         }
 
         @SuppressWarnings("rawtypes")
@@ -162,7 +161,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         @SuppressWarnings("rawtypes")
         List objNodes = XmlUtil.selectNodes(doc, tagName);
         if (SetUtil.isNullOrEmpty(objNodes)) {
-            throw new AlbianDataServiceException("parser the node tags:" + tagName
+            throw new AblThrowable("parser the node tags:" + tagName
                 + " in the storage.xml is error. the node of the tags is null or empty.");
         }
         parserStorages(objNodes);
@@ -170,8 +169,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     }
 
     protected abstract void parserStorages(
-            @SuppressWarnings("rawtypes") List nodes)
-            throws AlbianParserException;
+            @SuppressWarnings("rawtypes") List nodes);
 
     protected abstract IStorageAttribute parserStorage(Element node);
 

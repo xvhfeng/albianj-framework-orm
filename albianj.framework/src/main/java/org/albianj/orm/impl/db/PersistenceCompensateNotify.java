@@ -39,11 +39,10 @@ package org.albianj.orm.impl.db;
 
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.IWriterTask;
-import org.albianj.orm.db.AlbianDataServiceException;
 
 import java.util.Map;
 
@@ -65,7 +64,7 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
 
         try {
             sb = writerJobCommandToString(job);
-        } catch (AlbianDataServiceException e) {
+        } catch (Throwable e) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "jon {} send persistence notify is fail.",job.getId());
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
@@ -73,7 +72,7 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
         }
     }
 
-    public StringBuilder writerJobCommandToString(IWriterJob writerJob) throws AlbianDataServiceException {
+    public StringBuilder writerJobCommandToString(IWriterJob writerJob)   {
         StringBuilder sb = new StringBuilder();
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {

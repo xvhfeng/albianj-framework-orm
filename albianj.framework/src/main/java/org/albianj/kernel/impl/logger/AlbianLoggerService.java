@@ -1,9 +1,9 @@
 package org.albianj.kernel.impl.logger;
 
-import org.albianj.kernel.ServRouter;
+import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.kernel.common.comment.Comments;
 import org.albianj.kernel.common.utils.StringsUtil;
-import org.albianj.kernel.core.AlbianRuntimeException;
 import org.albianj.kernel.core.StackFrame;
 import org.albianj.kernel.logger.IAlbianLoggerService;
 import org.albianj.kernel.logger.LogLevel;
@@ -49,7 +49,7 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
         String stackInfo =  new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(logName,level,msg,null);
-        throw new AlbianRuntimeException(msg);
+        throw new AblThrowable(msg);
     }
 
 
@@ -58,7 +58,7 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(logName,level,msg,t);
-        throw  new AlbianRuntimeException(t);
+        throw  new AblThrowable(t);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(logName,level,msg,null);
-        throw  new AlbianRuntimeException(newThrow);
+        throw  new AblThrowable(newThrow);
     }
 
     @Override
@@ -74,14 +74,14 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
         flushToFile(logName,level,msg,t);
-        throw  new AlbianRuntimeException(newThrow);
+        throw  new AblThrowable(newThrow);
     }
 
     @Override
     public void throwNew(Object sessionId,String logName, String format, Object... paras)  {
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId, stackInfo, format, paras);
-        AlbianRuntimeException newThrow = new AlbianRuntimeException(msg);
+        AblThrowable newThrow = new AblThrowable(msg);
         flushToFile(logName, LogLevel.Error, msg, null);
         throw newThrow;
     }

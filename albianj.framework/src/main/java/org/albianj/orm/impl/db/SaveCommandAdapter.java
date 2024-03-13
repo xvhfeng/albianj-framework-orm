@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.AblThrowable;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.object.*;
 
@@ -61,7 +61,7 @@ public class SaveCommandAdapter implements IPersistenceUpdateCommand {
     }
 
     public IPersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnErr) throws AlbianDataServiceException {
+                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnErr)   {
         if (object.getIsAlbianNew()) {
             return create.buildPstCmd(sessionId, dbStyle, tableName, object, objAttr, mapValue, rbkOnErr);
         } else {
@@ -70,8 +70,8 @@ public class SaveCommandAdapter implements IPersistenceUpdateCommand {
     }
 
     public IPersistenceCommand buildPstCmd(String sessionId, IAlbianObject object, IDataRoutersAttribute routings, IAlbianObjectAttribute albianObject,
-                                           Map<String, Object> mapValue, IDataRouterAttribute routing, IStorageAttribute storage, String[] members) throws AlbianDataServiceException {
-        throw new AlbianDataServiceException();
+                                           Map<String, Object> mapValue, IDataRouterAttribute routing, IStorageAttribute storage, String[] members)   {
+        throw new AblThrowable();
     }
 
 
