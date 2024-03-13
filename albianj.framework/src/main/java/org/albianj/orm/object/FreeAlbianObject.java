@@ -42,7 +42,7 @@ import org.albianj.kernel.common.comment.SpecialWarning;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.ServRouter;
-import org.albianj.orm.context.dactx.IAlbianObjectWarp;
+import org.albianj.orm.context.dactx.AlbianObjectWarp;
 import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
 import org.albianj.orm.service.AlbianEntityMetadata;
 
@@ -58,7 +58,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
     protected transient HashMap<String, Object> dic = null;
 
     @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
-    protected transient Map<String, IAlbianObjectWarp> chainEntity = null;
+    protected transient Map<String, AlbianObjectWarp> chainEntity = null;
 
     @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
     private transient boolean isAlbianNew = true;

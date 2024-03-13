@@ -9,9 +9,9 @@ import org.albianj.kernel.service.AlbianServiceFieldRant;
 import org.albianj.kernel.service.AlbianServiceFieldType;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
+import org.albianj.orm.context.dactx.QueryOpt;
 import org.albianj.orm.object.LogicalOperation;
 import org.albianj.orm.object.filter.FilterExpression;
 import org.albianj.orm.object.filter.IChainExpression;
@@ -67,7 +67,7 @@ public class UserService extends FreeAlbianService implements IUserService {
 
         // 创建保存数据的上下文，不推荐使用save或者是create等诸如此类的原来的方法及其重载
         IDataAccessContext dctx = da.newDataAccessContext();
-        return dctx.add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
+        return dctx.add(QueryOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
     }
 
     @Override
@@ -81,7 +81,7 @@ public class UserService extends FreeAlbianService implements IUserService {
         if (user.getPassword().equals(orgPwd)) {
             user.setPassword(newPwd);
             IDataAccessContext dctx = da.newDataAccessContext();
-            return dctx.add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
+            return dctx.add(QueryOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
         }
         return false;
     }
@@ -106,8 +106,8 @@ public class UserService extends FreeAlbianService implements IUserService {
 //        user.setPassword("batcher");
 //        user.setUserName("batcher");
         //同时使用数据路由与单数据库保存
-        return dctx.add(AlbianDataAccessOpt.Save, mu1)
-                .add(AlbianDataAccessOpt.Save, mu2)
+        return dctx.add(QueryOpt.Save, mu1)
+                .add(QueryOpt.Save, mu2)
 //                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
 

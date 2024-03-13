@@ -39,7 +39,7 @@ package org.albianj.orm.impl.context;
 
 
 import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.context.dactx.IAlbianObjectWarp;
+import org.albianj.orm.context.dactx.AlbianObjectWarp;
 import org.albianj.orm.object.IAlbianObject;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public interface IWriterJobAdapter {
     public IWriterJob buildSaving(String sessionId, List<? extends IAlbianObject> objects)
            ;
 
-    IWriterJob buildWriterJob(String sessionId, List<IAlbianObjectWarp> entities, boolean rollbackOnError)
+    IWriterJob buildWriterJob(String sessionId, List<AlbianObjectWarp> entities, boolean rollbackOnError)
            ;
 
 }

@@ -38,8 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.impl.context;
 
 import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.context.dactx.AlbianDataAccessOpt;
-import org.albianj.orm.context.dactx.IAlbianObjectWarp;
+import org.albianj.orm.context.dactx.AlbianObjectWarp;
 import org.albianj.orm.impl.db.CreateCommandAdapter;
 import org.albianj.orm.impl.db.IPersistenceUpdateCommand;
 import org.albianj.orm.impl.db.ModifyCommandAdapter;
@@ -126,28 +125,28 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
         return job;
     }
 
-    public IWriterJob buildWriterJob(String sessionId, List<IAlbianObjectWarp> entities, boolean rollbackOnError)
+    public IWriterJob buildWriterJob(String sessionId, List<AlbianObjectWarp> entities, boolean rollbackOnError)
             {
         IWriterJob job = new WriterJob(sessionId);
         job.setRollbackOnError(rollbackOnError);
         IPersistenceUpdateCommand crtCmd = new CreateCommandAdapter();
         IPersistenceUpdateCommand mdfCmd = new ModifyCommandAdapter();
         IPersistenceUpdateCommand dltCmd = new RemoveCommandAdapter();
-        for (IAlbianObjectWarp entity : entities) {
-            switch (entity.getPersistenceOpt()) {
-                case (AlbianDataAccessOpt.Create): {
+        for (AlbianObjectWarp entity : entities) {
+            switch (entity.getQueryOpt()) {
+                case Create: {
                     buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), crtCmd);
                     break;
                 }
-                case AlbianDataAccessOpt.Update: {
+                case Update: {
                     buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), mdfCmd);
                     break;
                 }
-                case AlbianDataAccessOpt.Delete: {
+                case Delete: {
                     buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), dltCmd);
                     break;
                 }
-                case AlbianDataAccessOpt.Save:
+                case Save:
                 default: {
                     if (entity.getEntry().getIsAlbianNew()) {
                         buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), crtCmd);

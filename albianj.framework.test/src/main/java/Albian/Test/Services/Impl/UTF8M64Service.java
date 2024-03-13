@@ -8,9 +8,9 @@ import org.albianj.kernel.service.AlbianServiceFieldRant;
 import org.albianj.kernel.service.AlbianServiceFieldType;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
+import org.albianj.orm.context.dactx.QueryOpt;
 import org.albianj.orm.object.LogicalOperation;
 import org.albianj.orm.object.filter.FilterExpression;
 import org.albianj.orm.object.filter.IChainExpression;
@@ -30,7 +30,7 @@ public class UTF8M64Service extends FreeAlbianService implements IUTF8M64Service
         IDataAccessContext dctx = da.newDataAccessContext();
         utf8m64.setId(id);
         utf8m64.setV(v);
-        return dctx.add(AlbianDataAccessOpt.Save, utf8m64, StorageInfo.UTF8Mb64TestStorageName, "tb_test_emoji_1").commit("Sessionid");
+        return dctx.add(QueryOpt.Save, utf8m64, StorageInfo.UTF8Mb64TestStorageName, "tb_test_emoji_1").commit("Sessionid");
     }
 
     @Override

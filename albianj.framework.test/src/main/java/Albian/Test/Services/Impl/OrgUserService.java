@@ -6,9 +6,9 @@ import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
 import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
+import org.albianj.orm.context.dactx.QueryOpt;
 import org.albianj.orm.object.LogicalOperation;
 import org.albianj.orm.object.filter.FilterExpression;
 import org.albianj.orm.object.filter.IChainExpression;
@@ -50,7 +50,7 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
 
         // 创建保存数据的上下文，不推荐使用save或者是create等诸如此类的原来的方法及其重载
         IDataAccessContext dctx = da.newDataAccessContext();
-        return dctx.add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName, "SingleUser").commit("Sessionid");
+        return dctx.add(QueryOpt.Save, user, StorageInfo.SingleUserStorageName, "SingleUser").commit("Sessionid");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
         if (user.getPassword().equals(orgPwd)) {
             user.setPassword(newPwd);
             IDataAccessContext dctx = da.newDataAccessContext();
-            return dctx.add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName, "SingleUser").commit("Sessionid");
+            return dctx.add(QueryOpt.Save, user, StorageInfo.SingleUserStorageName, "SingleUser").commit("Sessionid");
         }
         return false;
     }
@@ -89,9 +89,9 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
         user.setPassword("batcher_by_org");
         user.setUserName("batcher_by_org");
         //同时使用数据路由与单数据库保存
-        dctx.add(AlbianDataAccessOpt.Save, mu1)
-                .add(AlbianDataAccessOpt.Save, mu2)
-                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
+        dctx.add(QueryOpt.Save, mu1)
+                .add(QueryOpt.Save, mu2)
+                .add(QueryOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
 
 

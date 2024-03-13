@@ -17,17 +17,17 @@ statement.setArray(1, array);
 
 public interface IDataAccessContext {
 
-    IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity);
+    IDataAccessContext addList(QueryOpt opt, List<? extends IAlbianObject> entity);
 
-    IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias);
+    IDataAccessContext addList(QueryOpt opt, List<? extends IAlbianObject> entity, String storageAlias);
 
-    IDataAccessContext addList(int opt, List<? extends IAlbianObject> entity, String storageAlias, String tableAlias);
+    IDataAccessContext addList(QueryOpt opt, List<? extends IAlbianObject> entity, String storageAlias, String tableAlias);
 
-    IDataAccessContext add(int opt, IAlbianObject entiry);
+    IDataAccessContext add(QueryOpt opt, IAlbianObject entiry);
 
-    IDataAccessContext add(int opt, IAlbianObject entiry, String storageAliasName);
+    IDataAccessContext add(QueryOpt opt, IAlbianObject entiry, String storageAliasName);
 
-    IDataAccessContext add(int opt, IAlbianObject entiry, String storageAliasName, String tableAliasName);
+    IDataAccessContext add(QueryOpt opt, IAlbianObject entiry, String storageAliasName, String tableAliasName);
 
     IDataAccessContext withQueryGenKey();
 
