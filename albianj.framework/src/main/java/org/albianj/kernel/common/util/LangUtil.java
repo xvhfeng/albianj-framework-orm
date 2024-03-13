@@ -946,6 +946,33 @@ public class LangUtil {
 		return StringsUtil.EMPTY;
 	}
 
+	public static StackTraceElement findCalledStack(int stackIdx) {
+		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+		int realIdx = stackIdx + 1; //add self stack
+		if(realIdx >= stackTrace.length) {
+			return null;
+		}
+
+		return stackTrace[realIdx];
+	}
+
+	public static StackTraceElement findCalledStackFilter(int stackIdx,Set<String> filterClzz) {
+		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+		int realIdx = stackIdx + 1; //add self stack
+		if(realIdx >= stackTrace.length) {
+			return null;
+		}
+
+		for(int i = realIdx; i< stackTrace.length;i++) {
+			StackTraceElement stack = stackTrace[i];
+			if(filterClzz.contains(stack.getClassName())) {
+				continue;
+			}
+			return  stack;
+		}
+		return null;
+	}
+
 
 //	public static Class<?> findCalledClass(int stackIdx) {
 //		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();

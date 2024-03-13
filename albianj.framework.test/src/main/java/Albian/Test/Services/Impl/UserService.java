@@ -4,6 +4,7 @@ import Albian.Test.Model.IMultiUser;
 import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
+import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.AlbianServiceFieldRant;
 import org.albianj.kernel.service.AlbianServiceFieldType;
 import org.albianj.kernel.service.AlbianServiceRant;
@@ -107,36 +108,37 @@ public class UserService extends FreeAlbianService implements IUserService {
 //        user.setPassword("batcher");
 //        user.setUserName("batcher");
         //同时使用数据路由与单数据库保存
-        dctx.add(AlbianDataAccessOpt.Save, mu1)
+        return dctx.add(AlbianDataAccessOpt.Save, mu1)
                 .add(AlbianDataAccessOpt.Save, mu2)
 //                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
 
 
-        return false;
     }
 
     @Override
     public void queryMulitUserById()  {
         // where条件推荐使用表达式这种写法
-        IChainExpression whrs1 = new FilterExpression("Id", LogicalOperation.Equal, "1539240117605_1_1_1");
+        IChainExpression whrs1 = new FilterExpression("Id", LogicalOperation.Equal, "1710318557305_1_1_1");
 
-        IFilterGroupExpression st = new FilterGroupExpression();
-        st.add("userName",LogicalOperation.Equal,1).or("userName","st",LogicalOperation.Equal,3);
-        whrs1.and(st);
+//        IFilterGroupExpression st = new FilterGroupExpression();
+//        st.add("userName",LogicalOperation.Equal,1).or("userName","st",LogicalOperation.Equal,3);
+//        whrs1.and(st);
 
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         IQueryContext qctx = da.newQueryContext();
         IMultiUser mu1 = qctx.loadObject("sessionId", IMultiUser.class, LoadType.quickly, whrs1);
-        System.out.println(String.format("MU1:id->%s uname->%s pwd->%s",
-                mu1.getId(), mu1.getUserName(), mu1.getPassword()));
+        AlbianServiceHub.log("batchid", LogLevel.Debug,"MUser_1: id->{} name->{} pwd->{}",mu1.getId(),mu1.getUserName(),mu1.getPassword());
+//        System.out.println(String.format("MU1:id->%s uname->%s pwd->%s",
+//                mu1.getId(), mu1.getUserName(), mu1.getPassword()));
         qctx.reset();
 
-        IChainExpression whrs2 = new FilterExpression("Id", LogicalOperation.Equal, "1539240117606_2_2_2");
+        IChainExpression whrs2 = new FilterExpression("Id", LogicalOperation.Equal, "1710318557305_2_2_2");
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         IMultiUser mu2 = qctx.loadObject("sessionId", IMultiUser.class, LoadType.quickly, whrs2);
-        System.out.println(String.format("MU2:id->%s uname->%s pwd->%s",
-                mu2.getId(), mu2.getUserName(), mu2.getPassword()));
+        AlbianServiceHub.log("batchid", LogLevel.Debug,"MUser_2: id->{} name->{} pwd->{}",mu2.getId(),mu2.getUserName(),mu2.getPassword());
+//        System.out.println(String.format("MU2:id->%s uname->%s pwd->%s",
+//                mu2.getId(), mu2.getUserName(), mu2.getPassword()));
 
 
     }

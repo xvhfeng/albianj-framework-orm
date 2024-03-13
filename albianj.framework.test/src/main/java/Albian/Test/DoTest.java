@@ -3,7 +3,9 @@ package Albian.Test;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.kernel.ServRouter;
+import org.albianj.kernel.logger.LogLevel;
 import org.albianj.loader.AlbianBootService;
+import org.albianj.orm.service.AlbianServiceHub;
 
 public class DoTest {
     public static void main(String[] argv) {
@@ -125,11 +127,12 @@ public class DoTest {
 //            System.out.println("modify password fail.");
 
             if(us.batchAddUser()){
-                System.out.println("batch add use success");
+                AlbianServiceHub.log("Test Application", LogLevel.Debug, "batch add users success");
             } else {
-                System.out.println("batch add user fail.");
+                AlbianServiceHub.log("Test Application", LogLevel.Debug, "batch add users  fail");
             }
         us.queryMulitUserById();
+        AlbianServiceHub.log("Test Application", LogLevel.Debug, "done query mulit users.");
     }
 
     private static void test2()  {

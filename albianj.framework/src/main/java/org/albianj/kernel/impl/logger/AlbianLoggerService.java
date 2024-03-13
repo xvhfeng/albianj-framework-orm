@@ -96,11 +96,11 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
 
     private String makeLogInfo(Object sessionId,String stackInfo, String format, Object... values) {
         StringBuilder sb = new StringBuilder();
+        sb.append("Ticket: [");
         if (null != sessionId) {
-            sb.append("SessionId: [").append(sessionId).append("], ");
+            sb.append(sessionId).append(" | ");
         }
-        sb.append(stackInfo).append(", ");
-        sb.append("==>> ");
+        sb.append(stackInfo).append("] ").append(" ==>> ");
         StringBuilder msg = new StringBuilder();
         Formatter f = new Formatter(msg);
         f.format(format, values);
