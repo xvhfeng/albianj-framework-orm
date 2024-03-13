@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.rant;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.ReflectUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
@@ -72,7 +72,7 @@ public class AlbianEntityRantScaner {
                         objAttr.setImplClzz(clzz);
 
                         Map<String, IAlbianEntityFieldAttribute> fields = scanFields(clzz);
-                        if (!CheckUtil.isNullOrEmpty(fields)) {
+                        if (!SetUtil.isNullOrEmpty(fields)) {
                             objAttr.setFields(fields);
                         }
 
@@ -157,10 +157,10 @@ public class AlbianEntityRantScaner {
                 dra.setName(odrr.Name());
                 dra.setStorageName(odrr.StorageName());
 
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(odrr.TableOwner())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(odrr.TableOwner())) {
                     dra.setOwner(odrr.TableOwner());
                 }
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(odrr.TableName())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(odrr.TableName())) {
                     dra.setTableName(odrr.TableName());
                 } else {
                     dra.setTableName(clzz.getSimpleName());
@@ -195,7 +195,7 @@ public class AlbianEntityRantScaner {
                 f.setAccessible(true);
                 fAttr.setEntityField(f);
                 String propertyName = null;
-                if (CheckUtil.isNullOrEmptyOrAllSpace(fr.PropertyName())) {
+                if (StringsUtil.isNullOrEmptyOrAllSpace(fr.PropertyName())) {
                     propertyName = FieldConvert.fieldName2PropertyName(f.getName());
                     fAttr.setPropertyName(propertyName);
                 } else {
@@ -204,7 +204,7 @@ public class AlbianEntityRantScaner {
                 }
 
 
-                if (CheckUtil.isNullOrEmptyOrAllSpace(fr.FieldName())) {
+                if (StringsUtil.isNullOrEmptyOrAllSpace(fr.FieldName())) {
                     fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
                 } else {
                     fAttr.setSqlFieldName(fr.FieldName());

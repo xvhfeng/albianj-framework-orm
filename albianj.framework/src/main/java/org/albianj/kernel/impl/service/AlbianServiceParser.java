@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.service;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
@@ -66,7 +67,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     @Override
     protected void parserServices(Map<String, IAlbianServiceAttribute> map,
                                   String tagName, @SuppressWarnings("rawtypes") List nodes)  {
-        if (CheckUtil.isNullOrEmpty(nodes)) {
+        if (SetUtil.isNullOrEmpty(nodes)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "parser the nodes named {} for service is null or empty.",tagName);
         }
@@ -93,14 +94,14 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         }
         IAlbianServiceAttribute serviceAttr = new AlbianServiceAttribute();
         String id = XmlUtil.getAttributeValue(elt, ID_ATTRBUITE_NAME);
-        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(id)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "parser service node id is null or empty ,the node next id:{}", name);
             return null;
         }
         serviceAttr.setId(id);
         String type = XmlUtil.getAttributeValue(elt, TYPE_ATTRBUITE_NAME);
-        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The type for service :{} is null or empty .", serviceAttr.getId());
             return null;
@@ -119,28 +120,28 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         serviceAttr.setServiceClass(clzz);
 
         String sitf = XmlUtil.getAttributeValue(elt, "Interface");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sitf)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sitf)) {
             serviceAttr.setInterface(sitf);
         }
 
         String enable = XmlUtil.getAttributeValue(elt, "Enable");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(enable)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
             serviceAttr.setEnable(Boolean.parseBoolean(enable));
         }
 
         List nodes = elt.selectNodes("Properties/Property");
-        if (!CheckUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isNullOrEmpty(nodes)) {
             Map<String, IAlbianServiceFieldAttribute> ps = parserAlbianServiceFieldsAttribute(clzz, id, nodes);
-            if (!CheckUtil.isNullOrEmpty(ps)) {
+            if (!SetUtil.isNullOrEmpty(ps)) {
                 serviceAttr.setServiceFields(ps);
             }
 
         }
 
         List aopNodes = elt.selectNodes("Aop/Aspect");
-        if (!CheckUtil.isNullOrEmpty(aopNodes)) {
+        if (!SetUtil.isNullOrEmpty(aopNodes)) {
             Map<String, IAlbianServiceAopAttribute> aas = parserAlbianServiceAopAttribute(id, aopNodes);
-            if (!CheckUtil.isNullOrEmpty(aas)) {
+            if (!SetUtil.isNullOrEmpty(aas)) {
                 serviceAttr.setAopAttributes(aas);
             }
 
@@ -161,25 +162,25 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     protected IAlbianServiceFieldAttribute parserAlbianServiceFieldAttribute(Class<?> clzz, String id, Element e)  {
         String name = XmlUtil.getAttributeValue(e, "Name");
         IAlbianServiceFieldAttribute pa = new AlbianServiceFieldAttribute();
-        if (CheckUtil.isNullOrEmptyOrAllSpace(name)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(name)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,
                     " name of service {} is null or empty.",id);
 
         }
         pa.setName(name);
         String type = XmlUtil.getAttributeValue(e, "Type");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,
                     " type of service {} is null or empty.",id);
         }
         pa.setType(type);
         String value = XmlUtil.getAttributeValue(e, "Value");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(name)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(name)) {
             pa.setValue(value);
         }
 
         String allowNull = XmlUtil.getAttributeValue(e, "AllowNull");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(allowNull)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(allowNull)) {
             pa.setAllowNull(Boolean.parseBoolean(allowNull));
         }
 
@@ -210,47 +211,47 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         IAlbianServiceAopAttribute aa = new AlbianServiceAopAttribute();
         String beginWith = XmlUtil.getAttributeValue(e, "BeginWith");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(beginWith)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(beginWith)) {
             aa.setBeginWith(beginWith);
         }
 
         String notBeginWith = XmlUtil.getAttributeValue(e, "NotBeginWith");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(notBeginWith)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(notBeginWith)) {
             aa.setNotBeginWith(notBeginWith);
         }
 
         String endWith = XmlUtil.getAttributeValue(e, "EndWith");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(endWith)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(endWith)) {
             aa.setEndWith(endWith);
         }
 
         String notEndWith = XmlUtil.getAttributeValue(e, "NotEndWith");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(notEndWith)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(notEndWith)) {
             aa.setNotEndWith(notEndWith);
         }
 
         String contain = XmlUtil.getAttributeValue(e, "Contain");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(contain)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(contain)) {
             aa.setContain(contain);
         }
 
         String notContain = XmlUtil.getAttributeValue(e, "NotContain");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(notContain)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(notContain)) {
             aa.setNotContain(notContain);
         }
 
         String fullname = XmlUtil.getAttributeValue(e, "FullName");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(fullname)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(fullname)) {
             aa.setFullName(fullname);
         }
 
         String sIsAll = XmlUtil.getAttributeValue(e, "IsAll");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sIsAll)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sIsAll)) {
             aa.setIsAll(Boolean.parseBoolean(sIsAll));
         }
 
         String proxy = XmlUtil.getAttributeValue(e, "Proxy");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(proxy)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(proxy)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,
                     " Aop proxy of  service {} is null or empty.",id);
         }
@@ -258,7 +259,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
 
         String proxyName = XmlUtil.getAttributeValue(e, "ProxyName");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(proxyName)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(proxyName)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,
                     " Aop proxyName of  service {} is null or empty.",id);
         }

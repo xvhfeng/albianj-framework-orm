@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
-import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.common.utils.PropUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.core.AlbianLevel;
 import org.albianj.kernel.core.AlbianStartupMode;
 import org.albianj.kernel.core.KernelSetting;
@@ -76,26 +76,26 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
 
     public void parser(Properties props) {
         String id = PropUtil.getValue(props, "Id");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(id)) {
             KernelSetting.setKernelId("001");
         } else {
             KernelSetting.setKernelId(id);
         }
 
         String appName = PropUtil.getValue(props, "AppName");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(appName)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(appName)) {
             KernelSetting.setAppName(appName);
         }
 
         String coreSize = PropUtil
                 .getValue(props, "ThreadPoolCoreSize");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(coreSize)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(coreSize)) {
             KernelSetting.setThreadPoolCoreSize(5);
         } else {
             KernelSetting.setThreadPoolCoreSize(Integer.parseInt(coreSize));
         }
         String maxSize = PropUtil.getValue(props, "ThreadPoolMaxSize");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(maxSize)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(maxSize)) {
             KernelSetting.setThreadPoolMaxSize(Runtime.getRuntime()
                     .availableProcessors() * 2 + 1);
         } else {
@@ -103,7 +103,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
         }
 
         String sLevel = PropUtil.getValue(props, "Level");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(sLevel)
+        if (StringsUtil.isNullOrEmptyOrAllSpace(sLevel)
                 || sLevel.equalsIgnoreCase("debug")) {
             KernelSetting.setAlbianLevel(AlbianLevel.Debug);
         } else {
@@ -111,7 +111,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
         }
 
         String sMode = PropUtil.getValue(props, "StartupMode");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(sMode)
+        if (StringsUtil.isNullOrEmptyOrAllSpace(sMode)
                 || sMode.equalsIgnoreCase("normal")) {
             KernelSetting.setAlbianStartupMode(AlbianStartupMode.Normal);
         } else {
@@ -119,7 +119,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
         }
 
         String sMachineKey = PropUtil.getValue(props, "MachineKey");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sMachineKey)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sMachineKey)) {
             KernelSetting.setMachineKey(sMachineKey);
         }
     }

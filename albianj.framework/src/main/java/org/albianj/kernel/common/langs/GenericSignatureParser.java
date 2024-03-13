@@ -7,7 +7,7 @@
  * https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt
  *
  * ******************************************************************/
-package org.albianj.kernel.common.util;
+package org.albianj.kernel.common.langs;
 
 import java.util.ArrayList;
 import java.util.List;

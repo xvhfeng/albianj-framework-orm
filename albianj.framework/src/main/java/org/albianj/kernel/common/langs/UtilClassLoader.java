@@ -10,9 +10,10 @@
  *     Isberg        initial implementation
  * ******************************************************************/
 
-package org.albianj.kernel.common.util;
+package org.albianj.kernel.common.langs;
 
 import org.albianj.kernel.ServRouter;
+import org.albianj.kernel.common.utils.SetUtil;
 
 import java.io.*;
 import java.net.URL;
@@ -39,7 +40,7 @@ public class UtilClassLoader extends URLClassLoader {
         this.urlsForDebugString = urls;
         List<File> dcopy = new ArrayList<>();
 
-        if (!LangUtil.isEmpty(dirs)) {
+        if (!SetUtil.isNullOrEmpty(dirs)) {
             dcopy.addAll(Arrays.asList(dirs));
         }
         this.dirs = Collections.unmodifiableList(dcopy);

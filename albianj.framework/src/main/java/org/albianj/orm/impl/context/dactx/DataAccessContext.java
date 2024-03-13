@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.context.dactx;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
 import org.albianj.orm.context.IWriterJob;
@@ -146,7 +146,7 @@ public class DataAccessContext implements IDataAccessContext {
         this.notifyCallbackObject = null;
         this.notifyCallback = null;
         this.notifyCallbackObject = null;
-        if (!CheckUtil.isNullOrEmpty(entitis)) {
+        if (!SetUtil.isNullOrEmpty(entitis)) {
             entitis.clear();
         }
     }

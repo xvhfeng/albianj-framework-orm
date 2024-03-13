@@ -10,7 +10,7 @@
  * Contributors:
  *     Xerox/PARC     initial implementation
  * ******************************************************************/
-package org.albianj.kernel.common.util;
+package org.albianj.kernel.common.langs;
 
 /**
  * This class implements boolean that include a "maybe"

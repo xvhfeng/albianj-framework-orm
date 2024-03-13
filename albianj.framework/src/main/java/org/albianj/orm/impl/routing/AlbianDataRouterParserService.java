@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.routing;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.AlbianServiceRant;
@@ -63,14 +64,14 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
 
     private static IDataRoutersAttribute getRoutingsAttribute(Element elt)  {
         String inter = XmlUtil.getAttributeValue(elt, "Interface");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(inter)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(inter)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "The albianObject's interface is empty or null.");
             return null;
         }
         String type = XmlUtil.getAttributeValue(elt, "Type");
 
-        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "The albianObject's type is empty or null.");
             return null;
@@ -113,7 +114,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         }
 
         String hashMapping = XmlUtil.getAttributeValue(elt, "Router");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(hashMapping)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(hashMapping)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The albianObject's datarouter is null or empty,then use default router:org.albianj.persistence.impl.object.AlbianObjectDataRouter."
                     + "org.albianj.persistence.impl.object.AlbianObjectDataRouter");
@@ -148,20 +149,20 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         Node writer = elt.selectSingleNode("WriterRouters");
         if (null != writer) {
             String hash = XmlUtil.getAttributeValue(writer, "Enable");
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(hash)) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(hash)) {
                 routing.setWriterRouterEnable(Boolean.parseBoolean(hash));
             }
         }
         Node reader = elt.selectSingleNode("ReaderRouters");
         if (null != reader) {
             String hash = XmlUtil.getAttributeValue(reader, "Enable");
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(hash)) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(hash)) {
                 routing.setReaderRouterEnable(Boolean.parseBoolean(hash));
             }
         }
 
         List<?> writers = elt.selectNodes("WriterRouters/WriterRouter");
-        if (!CheckUtil.isNullOrEmpty(writers)) {
+        if (!SetUtil.isNullOrEmpty(writers)) {
             Map<String, IDataRouterAttribute> cfgWRouters = parserRouting(writers);
             if (null != cfgWRouters) {
                 if (null == routing.getWriterRouters()) {
@@ -176,7 +177,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         }
 
         List<?> readers = elt.selectNodes("ReaderRouters/ReaderRouter");
-        if (!CheckUtil.isNullOrEmpty(readers)) {
+        if (!SetUtil.isNullOrEmpty(readers)) {
             Map<String, IDataRouterAttribute> cfgRRouters = parserRouting(readers);
             if (null != cfgRRouters) {
                 if (null == routing.getReaderRouters()) {
@@ -205,14 +206,14 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
 
     private static IDataRouterAttribute getroutingAttribute(Element elt) {
         String name = XmlUtil.getAttributeValue(elt, "Name");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(name)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(name)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "this routing attribute is null or empty.");
             return null;
         }
 
         String storageName = XmlUtil.getAttributeValue(elt, "StorageName");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(storageName)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(storageName)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "this storage name for the :{} routing attribute is null or empty.", name);
             return null;
@@ -221,15 +222,15 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         routing.setName(name);
         routing.setStorageName(storageName);
         String tableName = XmlUtil.getAttributeValue(elt, "TableName");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(tableName)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(tableName)) {
             routing.setTableName(tableName);
         }
         String enable = XmlUtil.getAttributeValue(elt, "Enable");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(enable)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
             routing.setEnable(Boolean.parseBoolean(enable));
         }
         String owner = XmlUtil.getAttributeValue(elt, "Owner");
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(owner)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(owner)) {
             routing.setOwner(owner);
         }
 

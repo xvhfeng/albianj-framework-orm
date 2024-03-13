@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
@@ -85,7 +86,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     "get the statement is fail." );
         }
         Map<Integer, String> map = cmd.getParameterMapper();
-        if (!CheckUtil.isNullOrEmpty(map)) {
+        if (!SetUtil.isNullOrEmpty(map)) {
             for (int i = 1; i <= map.size(); i++) {
                 String paraName = map.get(i);
                 ISqlParameter para = cmd.getParameters().get(paraName);
@@ -121,7 +122,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             long begin1 = System.currentTimeMillis();
             result = ((PreparedStatement)job.getStatement()).executeQuery();
 
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
                 long end1 = System.currentTimeMillis();
                 ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                         "SpxLog job:{} execute query use times:{}.", job.getId(),end1 - begin1);
@@ -147,7 +148,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         long begin1 = System.currentTimeMillis();
         String sessionId = job.getId();
         List<T> list = executed(cls, job.getId(), job.getResult());
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
             long end1 = System.currentTimeMillis();
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "SpxLog executed query and make data result use times:{}.",
@@ -159,7 +160,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
-            CheckUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
+            SetUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
         return list;
     }
 

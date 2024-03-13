@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.routing;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
@@ -99,18 +100,18 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
 
         @SuppressWarnings("rawtypes")
         List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-        if (!CheckUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isNullOrEmpty(nodes)) {
             for (Object node : nodes) {
                 Element elt = XmlUtil.toElement(node);
                 String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (CheckUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
                 parserFile(path);
             }
         }
 
         @SuppressWarnings("rawtypes")
         List objNodes = XmlUtil.selectNodes(doc, tagName);
-        if (CheckUtil.isNullOrEmpty(objNodes)) {
+        if (SetUtil.isNullOrEmpty(objNodes)) {
             ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Warn,
                     "parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
                 tagName);

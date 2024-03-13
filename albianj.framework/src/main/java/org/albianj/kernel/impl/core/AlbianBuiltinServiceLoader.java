@@ -1,7 +1,7 @@
 package org.albianj.kernel.impl.core;
 
-import org.albianj.kernel.common.argument.KeyValuePair;
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.values.KeyValuePair;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.core.AlbianRuntimeException;
 import org.albianj.kernel.impl.service.AlbianServiceRantParser;
@@ -183,7 +183,7 @@ public class AlbianBuiltinServiceLoader {
                 }
             }
         }
-        if(CheckUtil.isNullOrEmpty(bltSrvAttrs))  return null;
+        if(SetUtil.isNullOrEmpty(bltSrvAttrs))  return null;
         return bltSrvAttrs;
     }
 

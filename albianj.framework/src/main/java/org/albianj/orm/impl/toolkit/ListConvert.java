@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.toolkit;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.object.ICondition;
 
@@ -58,7 +58,7 @@ public class ListConvert {
         }
         Map<String, T> map = new LinkedHashMap<String, T>(len);
         for (T filter : filters) {
-            map.put(CheckUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
+            map.put(StringsUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
         }
         return map;
     }
@@ -74,7 +74,7 @@ public class ListConvert {
         }
         Map<String, T> map = new LinkedHashMap<String, T>(size);
         for (T filter : filters) {
-            map.put(CheckUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
+            map.put(StringsUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
         }
         return map;
     }

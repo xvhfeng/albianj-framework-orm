@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.core;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 
 import java.io.File;
 
@@ -109,7 +109,7 @@ public class KernelSetting {
     }
 
     public static void setAlbianConfigFilePath(String fpath) {
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(fpath)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(fpath)) {
             if (KernelSetting.Windows == KernelSetting.getSystem()) {
                 if(fpath.endsWith("/")){
                     KernelSetting.fpath = fpath;
@@ -133,7 +133,7 @@ public class KernelSetting {
     }
 
     public static void setAlbianKernelConfigFilePath(String fpath) {
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(fpath)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(fpath)) {
             if (KernelSetting.Windows == KernelSetting.getSystem()) {
                 if (fpath.endsWith(KernelSetting.getPathSep()))
                     KernelSetting.kernelpath = fpath;

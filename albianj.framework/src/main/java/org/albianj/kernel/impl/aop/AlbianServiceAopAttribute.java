@@ -1,7 +1,7 @@
 package org.albianj.kernel.impl.aop;
 
-import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
+import org.albianj.kernel.common.utils.StringsUtil;
 
 /**
  * Created by xuhaifeng on 16/5/31.
@@ -101,14 +101,14 @@ public class AlbianServiceAopAttribute implements IAlbianServiceAopAttribute {
 
     public boolean matches(String name) {
         if (isAll) return true;
-        return CheckUtil.isNullOrEmptyOrAllSpace(this.fullname)
+        return StringsUtil.isNullOrEmptyOrAllSpace(this.fullname)
                 ?
-                CheckUtil.isNullOrEmptyOrAllSpace(this.beginWith) ? true : name.startsWith(this.beginWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notBeginWith) ? true : !name.startsWith(this.notBeginWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.endWith) ? true : name.endsWith(this.endWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notEndWith) ? true : !name.endsWith(this.notEndWith)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.contain) ? true : name.contains(this.contain)
-                        && CheckUtil.isNullOrEmptyOrAllSpace(this.notContain) ? true : !name.contains(this.notContain)
+                StringsUtil.isNullOrEmptyOrAllSpace(this.beginWith) ? true : name.startsWith(this.beginWith)
+                        && StringsUtil.isNullOrEmptyOrAllSpace(this.notBeginWith) ? true : !name.startsWith(this.notBeginWith)
+                        && StringsUtil.isNullOrEmptyOrAllSpace(this.endWith) ? true : name.endsWith(this.endWith)
+                        && StringsUtil.isNullOrEmptyOrAllSpace(this.notEndWith) ? true : !name.endsWith(this.notEndWith)
+                        && StringsUtil.isNullOrEmptyOrAllSpace(this.contain) ? true : name.contains(this.contain)
+                        && StringsUtil.isNullOrEmptyOrAllSpace(this.notContain) ? true : !name.contains(this.notContain)
                 : name.equals(this.fullname);
 
     }

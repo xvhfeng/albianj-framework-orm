@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.storage;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
@@ -107,7 +108,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append("&connectTimeout=").append(timeout * 1000).append("&socketTimeout=").append(timeout * 1000);
                 }
                 sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&maxReconnect=3&autoReconnectForPools=true&rewriteBatchedStatements=true&useSSL=true&serverTimezone=CTT");
-                if(!CheckUtil.isNullOrEmptyOrAllSpace(rsa.getStorageAttribute().getUrlParaments())){
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStorageAttribute().getUrlParaments())){
                     sb.append("&").append(rsa.getStorageAttribute().getUrlParaments());
                 }
 //                sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull");
@@ -149,18 +150,18 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
 
         @SuppressWarnings("rawtypes")
         List nodes = XmlUtil.selectNodes(doc, "Storages/IncludeSet/Include");
-        if (!CheckUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isNullOrEmpty(nodes)) {
             for (Object node : nodes) {
                 Element elt = XmlUtil.toElement(node);
                 String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (CheckUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
                 parserFile(path);
             }
         }
 
         @SuppressWarnings("rawtypes")
         List objNodes = XmlUtil.selectNodes(doc, tagName);
-        if (CheckUtil.isNullOrEmpty(objNodes)) {
+        if (SetUtil.isNullOrEmpty(objNodes)) {
             throw new AlbianDataServiceException("parser the node tags:" + tagName
                 + " in the storage.xml is error. the node of the tags is null or empty.");
         }

@@ -1,6 +1,7 @@
 package org.albianj.orm.impl.db;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.IInternalManualCommand;
@@ -34,7 +35,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
         List<IInternalManualCommand> imcs = mctx.getInternalCommands();
         IAlbianStorageParserService asps = ServRouter.getService(mctx.getSessionId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         IStorageAttribute storage = asps.getStorageAttribute(mctx.getStorageName());
-        if (CheckUtil.isNullOrEmptyOrAllSpace(mctx.getDatabaseName())) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(mctx.getDatabaseName())) {
             mctx.setDatabaseName(storage.getDatabase());
         }
         IRunningStorageAttribute rsa = new RunningStorageAttribute(storage, mctx.getDatabaseName());
@@ -48,7 +49,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 PreparedStatement prepareStatement =
                         conn.prepareStatement(imc.getSqlText());
                 Map<Integer, String> map = imc.getParameterMapper();
-                if (CheckUtil.isNullOrEmpty(map)) {
+                if (SetUtil.isNullOrEmpty(map)) {
                     continue;
                 } else {
                     for (int i = 1; i <= map.size(); i++) {

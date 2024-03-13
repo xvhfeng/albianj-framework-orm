@@ -37,10 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.common.utils;
 
-import java.util.Collection;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
-public class CheckUtil extends org.apache.commons.lang3.Validate {
+public class SetUtil {
 
     public static boolean isNullOrEmpty(Collection<?> collection) {
         return null == collection || collection.isEmpty();
@@ -54,12 +54,82 @@ public class CheckUtil extends org.apache.commons.lang3.Validate {
         return null == map;
     }
 
-    public static boolean isNullOrEmpty(String value) {
-        return null == value || value.isEmpty();
+    /** @return ((null == ra) || (0 == ra.length)) */
+    public static boolean isNullOrEmpty(Object[] ra) {
+        return ((null == ra) || (0 == ra.length));
     }
 
-    public static boolean isNullOrEmptyOrAllSpace(String value) {
-        return null == value || value.trim().isEmpty();
+    /** @return ((null == ra) || (0 == ra.length)) */
+    public static boolean isNullOrEmpty(byte[] ra) {
+        return ((null == ra) || (0 == ra.length));
     }
 
+    /** @return a non-null unmodifiable List */
+    public static <T> List<T> safeList(List<T> list) {
+        return (null == list ? Collections.<T>emptyList() : Collections.unmodifiableList(list));
+    }
+
+    /**
+     * Replacement for Arrays.asList(..) which gacks on null and returns a List in which remove is an unsupported operation.
+     *
+     * @param array the Object[] to convert (may be null)
+     * @return the List corresponding to array (never null)
+     */
+    public static <T> List<T> arrayAsList(T[] array) {
+        if ((null == array) || (1 > array.length)) {
+            return Collections.emptyList();
+        }
+        List<T> list = new ArrayList<>(Arrays.asList(array));
+        return list;
+    }
+
+    /**
+     * Convert arrays safely. The number of elements in the result will be 1 smaller for each element that is null or not
+     * assignable. This will use sink if it has exactly the right size. The result will always have the same component type as sink.
+     *
+     * @return an array with the same component type as sink containing any assignable elements in source (in the same order).
+     * @throws IllegalArgumentException if either is null
+     */
+    public static Object[] safeCopy(Object[] source, Object[] sink) {
+        final Class<?> sinkType = (null == sink ? Object.class : sink.getClass().getComponentType());
+        final int sourceLength = (null == source ? 0 : source.length);
+        final int sinkLength = (null == sink ? 0 : sink.length);
+
+        final int resultSize;
+        List<Object> result = null;
+        if (0 == sourceLength) {
+            resultSize = 0;
+        } else {
+            result = new ArrayList<>(sourceLength);
+            for (int i = 0; i < sourceLength; i++) {
+                if ((null != source[i]) && (sinkType.isAssignableFrom(source[i].getClass()))) {
+                    result.add(source[i]);
+                }
+            }
+            resultSize = result.size();
+        }
+        if (resultSize != sinkLength) {
+            sink = (Object[]) Array.newInstance(sinkType, result.size());
+        }
+        if (0 < resultSize) {
+            sink = result.toArray(sink);
+        }
+        return sink;
+    }
+
+    /**
+    * Make a copy of the array.
+    * @return an array with the same component type as source
+    * containing same elements, even if null.
+    * @throws IllegalArgumentException if source is null
+    */
+    public static final Object[] copy(Object[] source) {
+    if(SetUtil.isNullOrEmpty(source)) {
+        throw new IllegalArgumentException("source");
+    }
+    final Class c = source.getClass().getComponentType();
+    Object[] result = (Object[]) Array.newInstance(c, source.length);
+    System.arraycopy(source, 0, result, 0, result.length);
+    return result;
+    }
 }

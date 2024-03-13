@@ -3,7 +3,7 @@ package org.albianj.kernel.impl.aop;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.aop.*;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
@@ -62,7 +62,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
             return rc;
         }
 
-        if (CheckUtil.isNullOrEmpty(_aopAttributes)) {
+        if (SetUtil.isNullOrEmpty(_aopAttributes)) {
             Object rc = methodProxy.invokeSuper(proxy, args);
             return rc;
         }

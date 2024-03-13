@@ -37,7 +37,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.security;
 
-import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
@@ -71,7 +70,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     public void init()  {
         super.init();
         String mkey = KernelSetting.getMachineKey();
-        if (CheckUtil.isNullOrEmptyOrAllSpace(mkey)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(mkey)) {
             return;
         }
         if (40 <= mkey.length()) {

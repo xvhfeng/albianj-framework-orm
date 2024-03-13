@@ -37,8 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel;
 
-import org.albianj.kernel.common.util.LangUtil;
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.LangUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.IAlbianLoggerService;
 import org.albianj.kernel.logger.LogLevel;
@@ -59,10 +58,10 @@ import java.util.*;
  */
 public class ServRouter extends ServiceContainer {
 
-    public static Set<String> _filterStackFrameClasses = new HashSet<>();
+    public static Set<String> _FilterStackFrameClasses = new HashSet<>();
 
     static {
-        _filterStackFrameClasses.add(ServRouter.class.getName());
+        _FilterStackFrameClasses.add(ServRouter.class.getName());
     }
 
 
@@ -81,7 +80,7 @@ public class ServRouter extends ServiceContainer {
      */
     public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, String id, boolean isThrowIfException) {
         String servId = id;
-        if(CheckUtil.isNullOrEmptyOrAllSpace(servId)) {
+        if(StringsUtil.isNullOrEmptyOrAllSpace(servId)) {
             if(null == cla) {
                 ServRouter.throwIfTrue(isThrowIfException,"Service Id is nullOrEmpty and interface is Null.");
                 return null;
@@ -129,7 +128,7 @@ public class ServRouter extends ServiceContainer {
     public static void log(Object sessionId,  LogLevel level, String format, Object... paras)  {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
-            String target = LangUtil.findCalledClassNameFilter(1,_filterStackFrameClasses);
+            String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
             ls.log(sessionId,target,level,format,paras);
         }
     }
@@ -137,7 +136,7 @@ public class ServRouter extends ServiceContainer {
     public static void log(Object sessionId,  LogLevel level, Throwable t, String format, Object... paras)  {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
-            String target = LangUtil.findCalledClassNameFilter(1,_filterStackFrameClasses);
+            String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
             ls.log(sessionId,target,level,t,format,paras);
         }
     }
@@ -145,7 +144,7 @@ public class ServRouter extends ServiceContainer {
     public static void logAndThrowNew(Object sessionId, LogLevel level, String format, Object... paras)  {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
-            String target = LangUtil.findCalledClassNameFilter(1,_filterStackFrameClasses);
+            String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
             ls.logAndThrowNew(sessionId,target,level,format,paras);
         }
     }
@@ -153,7 +152,7 @@ public class ServRouter extends ServiceContainer {
     public static void logAndThrowAgain(Object sessionId, LogLevel level, Throwable t, String format, Object... paras) {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
-            String target = LangUtil.findCalledClassNameFilter(1,_filterStackFrameClasses);
+            String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
             ls.logAndThrowAgain(sessionId,target,level,t,format,paras);
         }
     }
@@ -161,7 +160,7 @@ public class ServRouter extends ServiceContainer {
     public static void logAndThrowNew(Object sessionId, LogLevel level, Throwable newThrow, String format, Object... paras) {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
-            String target = LangUtil.findCalledClassNameFilter(1,_filterStackFrameClasses);
+            String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
             ls.logAndThrowNew(sessionId,target,level,newThrow,format,paras);
         }
     }
@@ -169,7 +168,7 @@ public class ServRouter extends ServiceContainer {
     public static void logAndThrowNew(Object sessionId,  LogLevel level, Throwable t, Throwable newThrow, String format, Object... paras) {
         IAlbianLoggerService ls = getService(sessionId,IAlbianLoggerService.class, IAlbianLoggerService.Name);
         if(null != ls) {
-            String target = LangUtil.findCalledClassNameFilter(1,_filterStackFrameClasses);
+            String target = LangUtil.findCalledClassNameFilter(1, _FilterStackFrameClasses);
             ls.logAndThrowNew(sessionId,target,level, newThrow, t, format,paras);
         }
     }
@@ -306,7 +305,7 @@ public class ServRouter extends ServiceContainer {
      * Renders exception <code>t</code> after unwrapping and eliding any test packages.
      *
      * @param t <code>Throwable</code> to print.
-     * @see LangUtil.StringChecker#TEST_PACKAGES
+     * @see StringsUtil.StringChecker#TEST_PACKAGES
      */
     public static String renderException(Throwable t) {
         return renderException(t, true);
@@ -317,7 +316,7 @@ public class ServRouter extends ServiceContainer {
      *
      * @param t <code>Throwable</code> to print.
      * @param elide true to limit to 100 lines and elide test packages
-     * @see LangUtil.StringChecker#TEST_PACKAGES
+     * @see StringsUtil.StringChecker#TEST_PACKAGES
      */
     public static String renderException(Throwable t, boolean elide) {
         if (null == t) {
@@ -326,7 +325,7 @@ public class ServRouter extends ServiceContainer {
         t = unwrapException(t);
         StringBuffer stack = stackToString(t, false);
         if (elide) {
-            LangUtil.elideEndingLines(LangUtil.StringChecker.TEST_PACKAGES, stack, 100);
+            StringsUtil.elideEndingLines(StringsUtil.StringChecker.TEST_PACKAGES, stack, 100);
         }
         return stack.toString();
     }
@@ -383,6 +382,22 @@ public class ServRouter extends ServiceContainer {
             }
         }
         return current;
+    }
+
+    /**
+     * Shorthand for
+     "if any not null or not assignable, throw IllegalArgumentException"
+     * @throws IllegalArgumentException "{name} is not assignable to {c}"
+     */
+    public static final void throwIaxIfNotAllAssignable(final Collection
+                                                                collection,
+                                                        final Class c, final String name) {
+        throwIaxIfNull(collection, name);
+        if (null != c) {
+            for (Iterator iter = collection.iterator(); iter.hasNext();) {
+                throwIaxIfNotAssignable(iter.next(), c, name);
+            }
+        }
     }
 }
 

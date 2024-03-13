@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
@@ -76,7 +76,7 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
     public StringBuilder writerJobCommandToString(IWriterJob writerJob) throws AlbianDataServiceException {
         StringBuilder sb = new StringBuilder();
         Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
-        if (CheckUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
 

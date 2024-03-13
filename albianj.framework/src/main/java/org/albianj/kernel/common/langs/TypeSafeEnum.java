@@ -10,7 +10,7 @@
  *     Xerox/PARC     initial implementation
  * ******************************************************************/
 
-package org.albianj.kernel.common.util;
+package org.albianj.kernel.common.langs;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

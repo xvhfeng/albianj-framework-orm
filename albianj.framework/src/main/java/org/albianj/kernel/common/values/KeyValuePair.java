@@ -1,4 +1,4 @@
-package org.albianj.kernel.common.argument;
+package org.albianj.kernel.common.values;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

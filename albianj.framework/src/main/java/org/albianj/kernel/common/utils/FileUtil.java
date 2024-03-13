@@ -11,7 +11,7 @@
  *     Xerox/PARC     initial implementation
  * ******************************************************************/
 
-package org.albianj.kernel.common.util;
+package org.albianj.kernel.common.utils;
 
 import org.albianj.kernel.ServRouter;
 
@@ -126,7 +126,7 @@ public class FileUtil {
 
 	/** @return 0 if no source suffix or the length of the suffix otherwise */
 	public static int sourceSuffixLength(String path) {
-		if (LangUtil.isEmpty(path)) {
+		if (StringsUtil.isEmpty(path)) {
 			return 0;
 		}
 
@@ -299,7 +299,7 @@ public class FileUtil {
 	 * @return String with absolute paths to entries in order, delimited with infix
 	 */
 	public static String flatten(File[] files, String infix) {
-		if (LangUtil.isEmpty(files)) {
+		if (SetUtil.isNullOrEmpty(files)) {
 			return "";
 		}
 		return flatten(getPaths(files), infix);
@@ -732,7 +732,7 @@ public class FileUtil {
 		ServRouter.throwIaxIfNull(basedir, "basedir");
 		ServRouter.throwIaxIfNull(paths, "paths");
 		File[] result = null;
-		if (!LangUtil.isEmpty(suffixes)) {
+		if (!SetUtil.isNullOrEmpty(suffixes)) {
 			ArrayList<File> list = new ArrayList<>();
             for (String path : paths) {
                 for (String suffix : suffixes) {
@@ -1252,7 +1252,7 @@ public class FileUtil {
 	 */
 	// OPTIMIZE only used by tests? move it out
 	public static List<String> lineSeek(String sought, List<String> sources, boolean listAll, PrintStream errorSink) {
-		if (LangUtil.isEmpty(sought) || LangUtil.isEmpty(sources)) {
+		if (StringsUtil.isEmpty(sought) || SetUtil.isNullOrEmpty(sources)) {
 			return Collections.emptyList();
 		}
 		ArrayList<String> result = new ArrayList<>();
@@ -1277,10 +1277,10 @@ public class FileUtil {
 	 * @return String error if any, or add String entries to sink
 	 */
 	public static String lineSeek(String sought, String sourcePath, boolean listAll, List<String> sink) {
-		if (LangUtil.isEmpty(sought) || LangUtil.isEmpty(sourcePath)) {
+		if (StringsUtil.isEmpty(sought) || StringsUtil.isEmpty(sourcePath)) {
 			return "nothing sought";
 		}
-		if (LangUtil.isEmpty(sourcePath)) {
+		if (StringsUtil.isEmpty(sourcePath)) {
 			return "no sourcePath";
 		}
 		final File file = new File(sourcePath);
@@ -1429,6 +1429,30 @@ public class FileUtil {
 			return url.getPath();
 		}
 	}
+
+	/**
+	 * Select from input String[] if readable directories
+	 * @param inputs String[] of input - null ignored
+	 * @param baseDir the base directory of the input
+	 * @return String[] of input that end with any input
+	 */
+	 public static String[] selectDirectories(String[] inputs, File baseDir) {
+	 if (SetUtil.isNullOrEmpty(inputs)) {
+	 return new String[0];
+	 }
+	 ArrayList result = new ArrayList();
+	 for (int i = 0; i < inputs.length; i++) {
+	 String input = inputs[i];
+	 if (null == input) {
+	 continue;
+	 }
+	 File inputFile = new File(baseDir, input);
+	 if (inputFile.canRead() && inputFile.isDirectory()) {
+	 result.add(input);
+	 }
+	 }
+	 return (String[]) result.toArray(new String[0]);
+	 }
 
 	/**
 	 * A pipe when run reads from an input stream to an output stream, optionally sleeping between reads.

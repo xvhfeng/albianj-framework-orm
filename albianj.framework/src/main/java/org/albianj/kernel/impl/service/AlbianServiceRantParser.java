@@ -1,9 +1,10 @@
 package org.albianj.kernel.impl.service;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.aop.AlbianServiceProxyRant;
 import org.albianj.kernel.aop.AlbianServiceProxyRants;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.impl.aop.AlbianServiceAopAttribute;
 import org.albianj.kernel.service.*;
 import org.albianj.loader.AlbianClassLoader;
@@ -45,7 +46,7 @@ public class AlbianServiceRantParser {
         IAlbianServiceAttribute asa = new AlbianServiceAttribute();
         AlbianServiceRant rant = implClzz.getAnnotation(AlbianServiceRant.class);
         asa.setId(rant.Id());
-        if (CheckUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
             asa.setInterface(IAlbianService.class.getName());
         } else {
             asa.setInterface(null != rant.Interface() ? rant.Interface().getName() : rant.sInterface());
@@ -62,27 +63,27 @@ public class AlbianServiceRantParser {
                 aspa.setServiceName(prant.ServiceName());
                 aspa.setProxyName(prant.ProxyName());
 
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.BeginWith())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.BeginWith())) {
                     aspa.setBeginWith(prant.BeginWith());
                 }
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.NotBeginWith())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.NotBeginWith())) {
                     aspa.setNotBeginWith(prant.NotBeginWith());
                 }
 
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.EndWith())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.EndWith())) {
                     aspa.setEndWith(prant.EndWith());
                 }
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.NotEndWith())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.NotEndWith())) {
                     aspa.setNotEndWith(prant.NotEndWith());
                 }
 
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.Contain())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.Contain())) {
                     aspa.setContain(prant.Contain());
                 }
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.NotContain())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.NotContain())) {
                     aspa.setNotContain(prant.NotContain());
                 }
-                if (!CheckUtil.isNullOrEmptyOrAllSpace(prant.FullName())) {
+                if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.FullName())) {
                     aspa.setFullName(prant.FullName());
                 }
                 aspa.setIsAll(prant.IsAll());
@@ -93,7 +94,7 @@ public class AlbianServiceRantParser {
         }
 
         Map<String, IAlbianServiceFieldAttribute> fields = scanFields(implClzz);
-        if (!CheckUtil.isNullOrEmpty(fields)) {
+        if (!SetUtil.isNullOrEmpty(fields)) {
             asa.setServiceFields(fields);
         }
 

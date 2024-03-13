@@ -1,9 +1,10 @@
 package org.albianj.kernel.impl.core;
 
 import ognl.Ognl;
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.ReflectUtil;
 import org.albianj.kernel.ServRouter;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.impl.aop.AlbianServiceAopProxy;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.*;
@@ -35,7 +36,7 @@ public class AlbianServiceLoader {
             }
 
             Class<?> itf = null;
-            if (!CheckUtil.isNullOrEmptyOrAllSpace(sInterface)) {
+            if (!StringsUtil.isNullOrEmptyOrAllSpace(sInterface)) {
                 itf = AlbianClassLoader.getInstance().loadClass(sInterface);
                 if (!itf.isAssignableFrom(cla)) {
                     ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
@@ -57,7 +58,7 @@ public class AlbianServiceLoader {
             service.loading();
             setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterLoading, servAttrs);
             service.afterLoading();
-            if (CheckUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
+            if (SetUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
                 rtnService = service;
             } else {
                 AlbianServiceAopProxy proxy = new AlbianServiceAopProxy();
@@ -76,7 +77,7 @@ public class AlbianServiceLoader {
     }
 
     public static void setServiceFields(IAlbianService serv, IAlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, IAlbianServiceAttribute> servAttrs)  {
-        if(CheckUtil.isNullOrEmpty(servAttr.getServiceFields())) {
+        if(SetUtil.isNullOrEmpty(servAttr.getServiceFields())) {
             return;
         }
         for (IAlbianServiceFieldAttribute fAttr : servAttr.getServiceFields().values()) {

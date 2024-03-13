@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.mapping;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.ReflectUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
@@ -93,7 +93,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     private static void parserEntityField(String type, Element elt, Map<String, IAlbianEntityFieldAttribute> map)
             throws AlbianParserException {
         String name = XmlUtil.getAttributeValue(elt, "Name");
-        if (CheckUtil.isNullOrEmpty(name)) {
+        if (StringsUtil.isNullOrEmpty(name)) {
             throw new AlbianDataServiceException(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML());
         }
@@ -110,22 +110,22 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         String dbType = XmlUtil.getAttributeValue(elt, "DbType");
         String isSave = XmlUtil.getAttributeValue(elt, "IsSave");
 
-        if (!CheckUtil.isNullOrEmpty(fieldName)) {
+        if (!StringsUtil.isNullOrEmpty(fieldName)) {
             fieldAttr.setSqlFieldName(fieldName);
         }
-        if (!CheckUtil.isNullOrEmpty(allowNull)) {
+        if (!StringsUtil.isNullOrEmpty(allowNull)) {
             fieldAttr.setAllowNull( Boolean.parseBoolean(allowNull));
         }
-        if (!CheckUtil.isNullOrEmpty(length)) {
+        if (!StringsUtil.isNullOrEmpty(length)) {
             fieldAttr.setLength( Integer.parseInt(length));
         }
-        if (!CheckUtil.isNullOrEmpty(primaryKey)) {
+        if (!StringsUtil.isNullOrEmpty(primaryKey)) {
             fieldAttr.setPrimaryKey( Boolean.parseBoolean(primaryKey));
         }
-        if (!CheckUtil.isNullOrEmpty(dbType)) {
+        if (!StringsUtil.isNullOrEmpty(dbType)) {
             fieldAttr.setDatabaseType(Convert.toSqlType(dbType));
         }
-        if (!CheckUtil.isNullOrEmpty(isSave)) {
+        if (!StringsUtil.isNullOrEmpty(isSave)) {
             fieldAttr.setIsSave( Boolean.parseBoolean(isSave));
         }
 //        if(Validate.isNullOrEmptyOrAllSpace(varField)){
@@ -145,7 +145,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
     private static void parserAlbianObjectMember(String type, Element elt, Map<String, IMemberAttribute> map)
             throws AlbianParserException {
         String name = XmlUtil.getAttributeValue(elt, "Name");
-        if (CheckUtil.isNullOrEmpty(name)) {
+        if (StringsUtil.isNullOrEmpty(name)) {
             throw new AlbianDataServiceException(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML() + ".");
         }
@@ -162,30 +162,30 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         String isSave = XmlUtil.getAttributeValue(elt, "IsSave");
         String varField = XmlUtil.getAttributeValue(elt, "VarField");
         String autoGenKey = XmlUtil.getAttributeValue(elt, "AutoGenKey");
-        if (!CheckUtil.isNullOrEmpty(fieldName)) {
+        if (!StringsUtil.isNullOrEmpty(fieldName)) {
             member.setSqlFieldName(fieldName);
         }
-        if (!CheckUtil.isNullOrEmpty(allowNull)) {
+        if (!StringsUtil.isNullOrEmpty(allowNull)) {
             member.setAllowNull(Boolean.parseBoolean(allowNull));
         }
-        if (!CheckUtil.isNullOrEmpty(length)) {
+        if (!StringsUtil.isNullOrEmpty(length)) {
             member.setLength( Integer.parseInt(length));
         }
-        if (!CheckUtil.isNullOrEmpty(primaryKey)) {
+        if (!StringsUtil.isNullOrEmpty(primaryKey)) {
             member.setPrimaryKey( Boolean.parseBoolean(primaryKey));
         }
-        if (!CheckUtil.isNullOrEmpty(dbType)) {
+        if (!StringsUtil.isNullOrEmpty(dbType)) {
             member.setDatabaseType(Convert.toSqlType(dbType));
         }
-        if (!CheckUtil.isNullOrEmpty(isSave)) {
+        if (!StringsUtil.isNullOrEmpty(isSave)) {
             member.setIsSave( Boolean.parseBoolean(isSave));
         }
-        if (CheckUtil.isNullOrEmptyOrAllSpace(varField)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(varField)) {
             member.setVarField(StringsUtil.lowercasingFirstLetter(name));
         } else {
             member.setVarField(varField);
         }
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(autoGenKey)) {
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(autoGenKey)) {
             member.setAutoGenKey( Boolean.parseBoolean(autoGenKey));
         }
     }
@@ -213,7 +213,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         if (null != attr) {
             member.setName(propertyDescriptor.getName());
 
-            if (CheckUtil.isNullOrEmptyOrAllSpace(attr.FieldName())) {
+            if (StringsUtil.isNullOrEmptyOrAllSpace(attr.FieldName())) {
                 member.setSqlFieldName(propertyDescriptor.getName());
             } else {
                 member.setSqlFieldName(attr.FieldName());
@@ -254,7 +254,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     @Override
     protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes)  {
-        if (CheckUtil.isNullOrEmpty(nodes)) {
+        if (SetUtil.isNullOrEmpty(nodes)) {
             throw new IllegalArgumentException("nodes");
         }
         String inter = null;
@@ -282,13 +282,13 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     protected void parserAlbianObject(Element node)  {
         String type = XmlUtil.getAttributeValue(node, "Type");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
             throw new AlbianDataServiceException("The AlbianObject's type is empty in persistence.xml");
             //return;
         }
 
         String inter = XmlUtil.getAttributeValue(node, "Interface");
-        if (CheckUtil.isNullOrEmptyOrAllSpace(inter)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(inter)) {
             throw new AlbianDataServiceException("The AlbianObject's type->:" + type + " is empty in persistence.xml");
             //return;
         }
@@ -369,7 +369,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 //        }
 
         Map<String, IAlbianEntityFieldAttribute> entityFieldAttr = null;
-        if (CheckUtil.isNullOrEmpty(pkgEntityAttr.getFields())) {
+        if (SetUtil.isNullOrEmpty(pkgEntityAttr.getFields())) {
             entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz);
             pkgEntityAttr.setFields(entityFieldAttr);
         } else {
@@ -377,7 +377,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
         @SuppressWarnings("rawtypes")
         List nodes = node.selectNodes(memberTagName);
-        if (!CheckUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isNullOrEmpty(nodes)) {
 //            parserAlbianObjectMembers(type, nodes, map);
             parserEntityFields(type, nodes, entityFieldAttr);
         }

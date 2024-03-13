@@ -1,6 +1,6 @@
 package org.albianj.orm.service;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
@@ -19,7 +19,7 @@ public class AlbianObjectCreator {
                     "can not found interface:{} attribute,please lookup persistence config.",itf);
         }
         String className = attr.getType();
-        if (CheckUtil.isNullOrEmptyOrAllSpace(className)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(className)) {
             ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     " can not found impl-class for interface:{},please lookup persistence config.", itf);
         }

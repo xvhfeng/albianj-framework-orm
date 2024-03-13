@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.object;
 
 import org.albianj.kernel.common.comment.SpecialWarning;
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.dactx.IAlbianObjectWarp;
@@ -120,7 +120,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
         }
 
         Map<String, IAlbianEntityFieldAttribute> fields = entiryAttr.getFields();
-        if (CheckUtil.isNullOrEmpty(fields)) {
+        if (SetUtil.isNullOrEmpty(fields)) {
             throw new AlbianDataServiceException(
                 "PersistenceService is error. albian-object:" + className + " PropertyDescriptor is not found.");
         }

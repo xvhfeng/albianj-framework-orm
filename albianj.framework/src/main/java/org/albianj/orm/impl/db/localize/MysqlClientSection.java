@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.db.localize;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.orm.db.localize.IDBClientSection;
 
 import java.nio.ByteBuffer;
@@ -84,7 +84,7 @@ public class MysqlClientSection implements IDBClientSection {
                 case '\u20a9':
                     Charset charset = null;
                     try {
-                        if(!CheckUtil.isNullOrEmptyOrAllSpace(charsetName)) {
+                        if(!StringsUtil.isNullOrEmptyOrAllSpace(charsetName)) {
                             charset = Charset.forName(charsetName);
                         }
                     }catch (Exception e){

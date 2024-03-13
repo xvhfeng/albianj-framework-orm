@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.service;
 
-import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.kernel.service.IAlbianServiceAttribute;
 import org.albianj.kernel.service.IAlbianServiceFieldAttribute;
@@ -60,7 +60,7 @@ public class AlbianServiceAttribute implements IAlbianServiceAttribute {
     }
 
     public void setId(String id) throws IllegalArgumentException {
-        if (CheckUtil.isNullOrEmptyOrAllSpace(id)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(id)) {
             throw new IllegalArgumentException("id");
         }
         this.id = id;
@@ -71,7 +71,7 @@ public class AlbianServiceAttribute implements IAlbianServiceAttribute {
     }
 
     public void setType(String type) throws IllegalArgumentException {
-        if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
+        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
             throw new IllegalArgumentException("type");
         }
         this.type = type;

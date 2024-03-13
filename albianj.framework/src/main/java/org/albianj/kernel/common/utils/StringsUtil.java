@@ -40,7 +40,7 @@ package org.albianj.kernel.common.utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,7 +128,7 @@ public class StringsUtil extends StringUtils {
     }
 
     public static String censoredZero(String s) {
-        if (CheckUtil.isNullOrEmptyOrAllSpace(s)) {
+        if (isNullOrEmptyOrAllSpace(s)) {
             return null;
         }
         int idx = s.lastIndexOf("0");
@@ -237,4 +237,295 @@ public class StringsUtil extends StringUtils {
         return sb.toString();
     }
 
+    public static boolean isNullOrEmpty(String value) {
+        return null == value || value.isEmpty();
+    }
+
+    public static boolean isNullOrEmptyOrAllSpace(String value) {
+        return null == value || value.trim().isEmpty();
+    }
+
+    /** @return ((null == s) || (0 == s.trim().length())); */
+    public static boolean isNullOrEmptyTrimmed(String s) {
+    return ((null == s) || (0 == s.length())
+    || (0 == s.trim().length()));
+    }
+
+    /** @return ((null == s) || (0 == s.length())); */
+   public static boolean isEmpty(String s) {
+       return ((null == s) || (0 == s.length()));
+   }
+
+    /**
+     * Splits <code>text</code> at whitespace.
+     *
+     * @param text <code>String</code> to split.
+     */
+    public static String[] split(String text) {
+        return strings(text).toArray(new String[0]);
+    }
+
+    /**
+     * Splits <code>input</code> at commas, trimming any white space.
+     *
+     * @param input <code>String</code> to split.
+     * @return List of String of elements.
+     */
+    public static List<String> commaSplit(String input) {
+        return anySplit(input, ",");
+    }
+
+    /**
+     * Splits <code>input</code>, removing delimiter and trimming any white space. Returns an empty collection if the input is null.
+     * If delimiter is null or empty or if the input contains no delimiters, the input itself is returned after trimming white
+     * space.
+     *
+     * @param input <code>String</code> to split.
+     * @param delim <code>String</code> separators for input.
+     * @return List of String of elements.
+     */
+    public static List<String> anySplit(String input, String delim) {
+        if (null == input) {
+            return Collections.emptyList();
+        }
+        List<String> result = new ArrayList<>();
+
+        if (isEmpty(delim) || (!input.contains(delim))) {
+            result.add(input.trim());
+        } else {
+            StringTokenizer st = new StringTokenizer(input, delim);
+            while (st.hasMoreTokens()) {
+                result.add(st.nextToken().trim());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Splits strings into a <code>List</code> using a <code>StringTokenizer</code>.
+     *
+     * @param text <code>String</code> to split.
+     */
+    public static List<String> strings(String text) {
+        if (isEmpty(text)) {
+            return Collections.emptyList();
+        }
+        List<String> strings = new ArrayList<>();
+        StringTokenizer tok = new StringTokenizer(text);
+        while (tok.hasMoreTokens()) {
+            strings.add(tok.nextToken());
+        }
+        return strings;
+    }
+
+    /** inefficient way to replace all instances of sought with replace */
+    public static String replace(String in, String sought, String replace) {
+        if (isEmpty(in) || isEmpty(sought)) {
+            return in;
+        }
+        StringBuilder result = new StringBuilder();
+        final int len = sought.length();
+        int start = 0;
+        int loc;
+        while (-1 != (loc = in.indexOf(sought, start))) {
+            result.append(in.substring(start, loc));
+            if (!isEmpty(replace)) {
+                result.append(replace);
+            }
+            start = loc + len;
+        }
+        result.append(in.substring(start));
+        return result.toString();
+    }
+
+    /** render i right-justified with a given width less than about 40 */
+    public static String toSizedString(long i, int width) {
+        String result = "" + i;
+        int size = result.length();
+        if (width > size) {
+            final String pad = "                                              ";
+            final int padLength = pad.length();
+            if (width > padLength) {
+                width = padLength;
+            }
+            int topad = width - size;
+            result = pad.substring(0, topad) + result;
+        }
+        return result;
+    }
+
+    /**
+     * Trim ending lines from a StringBuffer, clipping to maxLines and further removing any number of trailing lines accepted by
+     * checker.
+     *
+     * @param checker returns true if trailing line should be elided.
+     * @param stack StringBuffer with lines to elide
+     * @param maxLines int for maximum number of resulting lines
+     */
+    public static void elideEndingLines(StringChecker checker, StringBuffer stack, int maxLines) {
+        if (null == checker || (null == stack) || (0 == stack.length())) {
+            return;
+        }
+        final LinkedList<String> lines = new LinkedList<>();
+        StringTokenizer st = new StringTokenizer(stack.toString(), "\n\r");
+        while (st.hasMoreTokens() && (0 < --maxLines)) {
+            lines.add(st.nextToken());
+        }
+        st = null;
+
+        String line;
+        int elided = 0;
+        while (!lines.isEmpty()) {
+            line = lines.getLast();
+            if (!checker.acceptString(line)) {
+                break;
+            } else {
+                elided++;
+                lines.removeLast();
+            }
+        }
+        if ((elided > 0) || (maxLines < 1)) {
+            final int EOL_LEN = LangUtil.EOL.length();
+            int totalLength = 0;
+            while (!lines.isEmpty()) {
+                totalLength += EOL_LEN + lines.getFirst().length();
+                lines.removeFirst();
+            }
+            if (stack.length() > totalLength) {
+                stack.setLength(totalLength);
+                if (elided > 0) {
+                    stack.append("    (... " + elided + " lines...)");
+                }
+            }
+        }
+    }
+
+    /**
+    * Select from input String[] based on suffix-matching
+    * @param inputs String[] of input - null ignored
+    * @param suffixes String[] of suffix selectors - null ignored
+    * @param ignoreCase if true, ignore case
+    * @return String[] of input that end with any input
+    */
+    public static String[] endsWith(String[] inputs, String[] suffixes,
+    boolean ignoreCase) {
+    if (SetUtil.isNullOrEmpty(inputs) || SetUtil.isNullOrEmpty(suffixes)) {
+    return new String[0];
+    }
+    if (ignoreCase) {
+    String[] temp = new String[suffixes.length];
+    for (int i = 0; i < temp.length; i++) {
+    String suff = suffixes[i];
+    temp[i] = (null == suff ? null : suff.toLowerCase());
+    }
+    suffixes = temp;
+    }
+    ArrayList result = new ArrayList();
+    for (int i = 0; i < inputs.length; i++) {
+    String input = inputs[i];
+    if (null == input) {
+    continue;
+    }
+    if (!ignoreCase) {
+    input = input.toLowerCase();
+    }
+    for (int j = 0; j < suffixes.length; j++) {
+    String suffix = suffixes[j];
+    if (null == suffix) {
+    continue;
+    }
+    if (input.endsWith(suffix)) {
+    result.add(input);
+    break;
+    }
+    }
+    }
+    return (String[]) result.toArray(new String[0]);
+    }
+
+    /**
+     * copy non-null two-dimensional String[][]
+     *
+     */
+    public static String[][] copyStrings(String[][] in) {
+        String[][] out = new String[in.length][];
+        for (int i = 0; i < out.length; i++) {
+            out[i] = new String[in[i].length];
+            System.arraycopy(in[i], 0, out[i], 0, out[i].length);
+        }
+        return out;
+    }
+
+    /**
+     * @param input ignored if null
+     * @param sink the StringBuffer to add input to - return false if null
+     * @param delimiter the String to append to input when added - ignored if empty
+     * @return true if input + delimiter added to sink
+     */
+    static boolean addIfNotEmpty(String input, StringBuffer sink, String delimiter) {
+        if (isEmpty(input) || (null == sink)) {
+            return false;
+        }
+        sink.append(input);
+        if (!isEmpty(delimiter)) {
+            sink.append(delimiter);
+        }
+        return true;
+    }
+
+    /** clip StringBuffer to maximum number of lines */
+    public  static String clipBuffer(StringBuffer buffer, int maxLines) {
+    if ((null == buffer) || (1 > buffer.length())) return "";
+    StringBuffer result = new StringBuffer();
+    int j = 0;
+    final int MAX = maxLines;
+    final int N = buffer.length();
+    for (int i = 0, srcBegin = 0; i < MAX; srcBegin += j) {
+    // todo: replace with String variant if/since getting char?
+    char[] chars = new char[128];
+    int srcEnd = srcBegin+chars.length;
+    if (srcEnd >= N) {
+    srcEnd = N-1;
+    }
+    if (srcBegin == srcEnd) break;
+    //log("srcBegin:" + srcBegin + ":srcEnd:" + srcEnd);
+    buffer.getChars(srcBegin, srcEnd, chars, 0);
+    for (j = 0; j < srcEnd-srcBegin/*chars.length*/; j++) {
+    char c = chars[j];
+    if (c == '\n') {
+    i++;
+    j++;
+    break;
+    }
+    }
+    try { result.append(chars, 0, j); }
+    catch (Throwable t) { }
+    }
+    return result.toString();
+    }
+
+    /** check if input contains any packages to elide. */
+    public static class StringChecker {
+        public static StringChecker TEST_PACKAGES = new StringChecker(new String[] { "org.aspectj.testing",
+                "org.eclipse.jdt.internal.junit", "junit.framework.",
+        "org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner" });
+
+        String[] infixes;
+
+        /** @param infixes adopted */
+        StringChecker(String[] infixes) {
+            this.infixes = infixes;
+        }
+
+        /** @return true if input contains infixes */
+        public boolean acceptString(String input) {
+            boolean result = false;
+            if (!isEmpty(input)) {
+                for (int i = 0; !result && (i < infixes.length); i++) {
+                    result = (input.contains(infixes[i]));
+                }
+            }
+            return result;
+        }
+    }
 }

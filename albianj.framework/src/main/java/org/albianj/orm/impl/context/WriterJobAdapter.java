@@ -37,7 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.IWriterJob;
@@ -101,7 +102,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                 albianObject.getType(), dra.getName());
             useRoutings.add(dra);
         } else {
-            if (CheckUtil.isNullOrEmpty(routings.getWriterRouters())) {
+            if (SetUtil.isNullOrEmpty(routings.getWriterRouters())) {
                 IDataRouterAttribute dra = albianObject.getDefaultRouting();
                 ServRouter.log(sessionId,  LogLevel.Warn,
                         "albian-object:{} writer-data-routers are null then use default storage:{}.",
@@ -128,7 +129,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                         List<IDataRouterAttribute> writerRoutings = hashMapping
                                 .mappingWriterRouting(
                                         routings.getWriterRouters(), object);
-                        if (CheckUtil.isNullOrEmpty(writerRoutings)) {
+                        if (SetUtil.isNullOrEmpty(writerRoutings)) {
                             IDataRouterAttribute dra = albianObject.getDefaultRouting();
                             ServRouter.log(sessionId,  LogLevel.Warn,
                                 "albian-object:{} writer-data-router arithmetic is null then use default storage:{}.",
@@ -140,7 +141,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                                     useRoutings.add(writerRouting);
                                 }
                             }
-                            if (CheckUtil.isNullOrEmpty(useRoutings)) {
+                            if (SetUtil.isNullOrEmpty(useRoutings)) {
                                 IDataRouterAttribute dra = albianObject.getDefaultRouting();
                                 ServRouter.log(sessionId,  LogLevel.Warn,
                                     "albian-object:{} writer-data-router arithmetic is disable then use default storage:{}.",
@@ -169,7 +170,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
             return name;
         } else {
             String name = hashMapping.mappingWriterRoutingStorage(routing, obj);
-            if (CheckUtil.isNullOrEmpty(name)) {
+            if (StringsUtil.isNullOrEmpty(name)) {
                 String dname = routing.getStorageName();
                 ServRouter.log(jobId,  LogLevel.Warn,
                         "albian-object:{} writer-data-router is not found by arithmetic and use default storage:{}.",
@@ -196,7 +197,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
             return name;
         } else {
             String name = hashMapping.mappingWriterRoutingDatabase(storage, obj);
-            if (CheckUtil.isNullOrEmpty(name)) {
+            if (StringsUtil.isNullOrEmpty(name)) {
                 String dname = storage.getDatabase();
                 ServRouter.log(jobId,  LogLevel.Warn,
                         "albian-object:{} writer-data-router is not found by arithmetic and use default database:{}.",
@@ -217,15 +218,15 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
         IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadataByType(cls);
 
         Map<String, IAlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
-        if (CheckUtil.isNullOrEmpty(fieldsAttr)) {
+        if (SetUtil.isNullOrEmpty(fieldsAttr)) {
             throw new AlbianDataServiceException("albian-object:" + className + " PropertyDescriptor is not found.");
         }
         Map<String, Object> sqlParaVals = buildSqlParameter(job.getId(), entity,
                 objAttr, fieldsAttr);
 
         IAlbianStorageParserService asps = ServRouter.getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        if (!CheckUtil.isNullOrEmptyOrAllSpace(storageAlias)) {
-            String tableName = CheckUtil.isNullOrEmptyOrAllSpace(tableAlias)
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(storageAlias)) {
+            String tableName = StringsUtil.isNullOrEmptyOrAllSpace(tableAlias)
                     ? objAttr.getImplClzz().getSimpleName()
                     : tableAlias;
             IStorageAttribute stgAttr = asps.getStorageAttribute(storageAlias);
@@ -258,7 +259,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     private void addWrtTsk(IWriterJob job, IStorageAttribute storage, String database, IPersistenceCommand pstCmd) {
         String key = storage.getName() + database;
-        if (CheckUtil.isNull(job.getWriterTasks())) {
+        if (SetUtil.isNull(job.getWriterTasks())) {
             Map<String, IWriterTask> tasks = new LinkedHashMap<>();
             IWriterTask task = new WriterTask();
             List<IPersistenceCommand> cmds = new Vector<>();

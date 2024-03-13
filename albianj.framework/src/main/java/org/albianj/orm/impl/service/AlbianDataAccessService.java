@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.service;
 
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
@@ -143,7 +143,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
             {
 
         List<T> list = doLoadObjects(sessionId, cls, LoadType.exact == loadType, rountingName, 0, 0, wheres, null, null);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list.get(0);
 
@@ -207,7 +207,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
             {
         List<T> list = doLoadObjects(sessionId, cls, LoadType.exact == loadType, rountingName, start, step, wheres, orderbys, null);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list;
 
@@ -332,7 +332,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
                                                   Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list.get(0);
     }
@@ -340,7 +340,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
                                                          Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list;
     }
@@ -358,7 +358,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
                                                        PersistenceCommandType cmdType, Statement statement)
             {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list.get(0);
     }
@@ -368,7 +368,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
                                                        String routingName, IChainExpression wheres)
             {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, null);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list.get(0);
     }
@@ -428,7 +428,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
                                                   LoadType loadType, String rountingName, IChainExpression wheres, String idxName)
             {
         List<T> list = doLoadObjects(sessionId, cls, LoadType.exact == loadType, rountingName, 0, 0, wheres, null, idxName);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list.get(0);
 
@@ -492,7 +492,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
                                                          int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
             {
         List<T> list = doLoadObjects(sessionId, cls, LoadType.exact == loadType, rountingName, start, step, wheres, orderbys, idxName);
-        if (CheckUtil.isNullOrEmpty(list))
+        if (SetUtil.isNullOrEmpty(list))
             return null;
         return list;
 //        if (LoadType.exact == loadType) {

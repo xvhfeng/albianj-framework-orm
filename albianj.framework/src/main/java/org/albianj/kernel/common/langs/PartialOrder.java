@@ -11,7 +11,7 @@
  *     Xerox/PARC     initial implementation
  * ******************************************************************/
 
-package org.albianj.kernel.common.util;
+package org.albianj.kernel.common.langs;
 
 import java.util.ArrayList;
 import java.util.Iterator;

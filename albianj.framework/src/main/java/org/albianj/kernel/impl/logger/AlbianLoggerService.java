@@ -23,7 +23,7 @@ import java.util.Formatter;
 public class AlbianLoggerService extends FreeAlbianService implements IAlbianLoggerService {
 
     static {
-        ServRouter._filterStackFrameClasses.add(AlbianLoggerService.class.getName());
+        ServRouter._FilterStackFrameClasses.add(AlbianLoggerService.class.getName());
     }
     public String getServiceName() {
         return Name;
