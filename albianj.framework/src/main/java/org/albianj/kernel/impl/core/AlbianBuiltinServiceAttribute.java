@@ -1,5 +1,8 @@
 package org.albianj.kernel.impl.core;
 
+import lombok.Data;
+
+@Data
 public class AlbianBuiltinServiceAttribute {
     private String id;
     private String implClzz;
@@ -12,24 +15,4 @@ public class AlbianBuiltinServiceAttribute {
         this.required = required;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getImplClzz() {
-        return implClzz;
-    }
-
-    public boolean isRequired() {
-        return required;
-    }
-
-
-    public boolean isLoadOK() {
-        return loadOK;
-    }
-
-    public void setLoadOK(boolean loadOK) {
-        this.loadOK = loadOK;
-    }
 }

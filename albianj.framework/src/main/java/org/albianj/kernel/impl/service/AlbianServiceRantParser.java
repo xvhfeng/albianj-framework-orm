@@ -42,14 +42,14 @@ public class AlbianServiceRantParser {
                 });
     }
 
-    public static IAlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
-        IAlbianServiceAttribute asa = new AlbianServiceAttribute();
+    public static AlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
+        AlbianServiceAttribute asa = new AlbianServiceAttribute();
         AlbianServiceRant rant = implClzz.getAnnotation(AlbianServiceRant.class);
         asa.setId(rant.Id());
         if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
-            asa.setInterface(IAlbianService.class.getName());
+            asa.setItf(IAlbianService.class.getName());
         } else {
-            asa.setInterface(null != rant.Interface() ? rant.Interface().getName() : rant.sInterface());
+            asa.setItf(null != rant.Interface() ? rant.Interface().getName() : rant.sInterface());
         }
         asa.setEnable(rant.Enable());
         asa.setType(implClzz.getName());
@@ -93,7 +93,7 @@ public class AlbianServiceRantParser {
             asa.setAopAttributes(asaas);
         }
 
-        Map<String, IAlbianServiceFieldAttribute> fields = scanFields(implClzz);
+        Map<String, AlbianServiceFieldAttribute> fields = scanFields(implClzz);
         if (!SetUtil.isNullOrEmpty(fields)) {
             asa.setServiceFields(fields);
         }
@@ -101,18 +101,18 @@ public class AlbianServiceRantParser {
         return asa;
     }
 
-    private static Map<String, IAlbianServiceFieldAttribute> scanFields(Class<?> clzz) {
+    private static Map<String, AlbianServiceFieldAttribute> scanFields(Class<?> clzz) {
         Class tempClass = clzz;
         List<Field> fields = new ArrayList<>() ;
         while (tempClass !=null && !tempClass.getName().toLowerCase().equals("java.lang.object") ) {//当父类为null的时候说明到达了最上层的父类(Object类).
             fields.addAll(Arrays.asList(tempClass .getDeclaredFields()));
             tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
         }
-        Map<String, IAlbianServiceFieldAttribute> fieldsAttr = new HashMap<>();
+        Map<String, AlbianServiceFieldAttribute> fieldsAttr = new HashMap<>();
         for (Field f : fields) {
             if (f.isAnnotationPresent(AlbianServiceFieldRant.class)) {
                 f.setAccessible(true);
-                IAlbianServiceFieldAttribute aspa = new AlbianServiceFieldAttribute();
+                AlbianServiceFieldAttribute aspa = new AlbianServiceFieldAttribute();
                 AlbianServiceFieldRant frant = f.getAnnotation(AlbianServiceFieldRant.class);
                 aspa.setName(f.getName());
                 aspa.setType(frant.Type().name());

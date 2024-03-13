@@ -40,6 +40,7 @@ package org.albianj.kernel.impl.core;
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.kernel.core.*;
+import org.albianj.kernel.impl.service.AlbianServiceAttribute;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.*;
@@ -115,13 +116,13 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
 
         // do load builtin service
         bltSevLoader.loadServices(ServRouter.__StartupSessionId);
-        Map<String, IAlbianServiceAttribute> bltSrvAttrs = bltSevLoader.getBltSrvAttrs();
+        Map<String, AlbianServiceAttribute> bltSrvAttrs = bltSevLoader.getBltSrvAttrs();
 
         //do load bussiness service
-        Map<String, IAlbianServiceAttribute> bnsSrvAttrs =
-            (Map<String, IAlbianServiceAttribute>) ServiceAttributeMap.get(FreeAlbianServiceParser.ALBIANJSERVICEKEY);
+        Map<String, AlbianServiceAttribute> bnsSrvAttrs =
+            (Map<String, AlbianServiceAttribute>) ServiceAttributeMap.get(FreeAlbianServiceParser.ALBIANJSERVICEKEY);
 
-        Map<String, IAlbianServiceAttribute> mapAttr = new HashMap<>();
+        Map<String, AlbianServiceAttribute> mapAttr = new HashMap<>();
         if (bnsSrvAttrs != null) {
             mapAttr.putAll(bnsSrvAttrs); // copy it for field setter
         }
@@ -131,7 +132,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             }
         }
 
-        Map<String, IAlbianServiceAttribute> failMap = new LinkedHashMap<String, IAlbianServiceAttribute>();
+        Map<String, AlbianServiceAttribute> failMap = new LinkedHashMap<String, AlbianServiceAttribute>();
         int lastFailSize = 0;
         int currentFailSize = 0;
         Exception e = null;
@@ -141,9 +142,9 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             String sType = null;
             String id = null;
             String sInterface = null;
-            for (Map.Entry<String, IAlbianServiceAttribute> entry : mapAttr.entrySet())
+            for (Map.Entry<String, AlbianServiceAttribute> entry : mapAttr.entrySet())
                 try {
-                    IAlbianServiceAttribute serviceAttr = entry.getValue();
+                    AlbianServiceAttribute serviceAttr = entry.getValue();
                     IAlbianService service = AlbianServiceLoader.makeupService(serviceAttr, mapAttr);
                     ServiceContainer.addService(serviceAttr.getId(), service);
                 } catch (Exception exc) {
@@ -169,7 +170,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                         "startup slbianJ engine is fail ,maybe cross refernce");
                 if (null != e) {
                     StringBuilder errBuilder = new StringBuilder();
-                    for (Map.Entry<String, IAlbianServiceAttribute> entry : failMap.entrySet()) {
+                    for (Map.Entry<String, AlbianServiceAttribute> entry : failMap.entrySet()) {
                         errBuilder.append(entry.getKey()).append(",");
                     }
 

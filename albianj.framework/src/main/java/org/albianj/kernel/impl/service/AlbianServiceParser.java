@@ -65,7 +65,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     }
 
     @Override
-    protected void parserServices(Map<String, IAlbianServiceAttribute> map,
+    protected void parserServices(Map<String, AlbianServiceAttribute> map,
                                   String tagName, @SuppressWarnings("rawtypes") List nodes)  {
         if (SetUtil.isNullOrEmpty(nodes)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,  LogLevel.Error,
@@ -75,7 +75,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         for (Object node : nodes) {
             Element elt = XmlUtil.toElement(node);
             name = null == name ? "tagName" : name;
-            IAlbianServiceAttribute serviceAttr = parserService(name, elt);
+            AlbianServiceAttribute serviceAttr = parserService(name, elt);
             if (null == serviceAttr) {
                 ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,
                         "Tags {} as xml {} not lookup service.",tagName,elt.asXML());
@@ -87,12 +87,12 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     }
 
     @Override
-    protected IAlbianServiceAttribute parserService(String name, Element elt)  {
+    protected AlbianServiceAttribute parserService(String name, Element elt)  {
         if (null == elt) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,
                     "Parser service {} fail.",name);
         }
-        IAlbianServiceAttribute serviceAttr = new AlbianServiceAttribute();
+        AlbianServiceAttribute serviceAttr = new AlbianServiceAttribute();
         String id = XmlUtil.getAttributeValue(elt, ID_ATTRBUITE_NAME);
         if (StringsUtil.isNullOrEmptyOrAllSpace(id)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
@@ -121,7 +121,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         String sitf = XmlUtil.getAttributeValue(elt, "Interface");
         if (!StringsUtil.isNullOrEmptyOrAllSpace(sitf)) {
-            serviceAttr.setInterface(sitf);
+            serviceAttr.setItf(sitf);
         }
 
         String enable = XmlUtil.getAttributeValue(elt, "Enable");
@@ -131,7 +131,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         List nodes = elt.selectNodes("Properties/Property");
         if (!SetUtil.isNullOrEmpty(nodes)) {
-            Map<String, IAlbianServiceFieldAttribute> ps = parserAlbianServiceFieldsAttribute(clzz, id, nodes);
+            Map<String, AlbianServiceFieldAttribute> ps = parserAlbianServiceFieldsAttribute(clzz, id, nodes);
             if (!SetUtil.isNullOrEmpty(ps)) {
                 serviceAttr.setServiceFields(ps);
             }
@@ -150,18 +150,18 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         return serviceAttr;
     }
 
-    protected Map<String, IAlbianServiceFieldAttribute> parserAlbianServiceFieldsAttribute(Class<?> clzz, String id, List nodes)  {
-        Map<String, IAlbianServiceFieldAttribute> pas = new HashMap<>();
+    protected Map<String, AlbianServiceFieldAttribute> parserAlbianServiceFieldsAttribute(Class<?> clzz, String id, List nodes)  {
+        Map<String, AlbianServiceFieldAttribute> pas = new HashMap<>();
         for (Object node : nodes) {
-            IAlbianServiceFieldAttribute pa = parserAlbianServiceFieldAttribute(clzz, id, (Element) node);
+            AlbianServiceFieldAttribute pa = parserAlbianServiceFieldAttribute(clzz, id, (Element) node);
             pas.put(pa.getName(), pa);
         }
         return pas;
     }
 
-    protected IAlbianServiceFieldAttribute parserAlbianServiceFieldAttribute(Class<?> clzz, String id, Element e)  {
+    protected AlbianServiceFieldAttribute parserAlbianServiceFieldAttribute(Class<?> clzz, String id, Element e)  {
         String name = XmlUtil.getAttributeValue(e, "Name");
-        IAlbianServiceFieldAttribute pa = new AlbianServiceFieldAttribute();
+        AlbianServiceFieldAttribute pa = new AlbianServiceFieldAttribute();
         if (StringsUtil.isNullOrEmptyOrAllSpace(name)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,LogLevel.Error,
                     " name of service {} is null or empty.",id);
