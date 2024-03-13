@@ -37,16 +37,15 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.security;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.StringsUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.kernel.security.MACStyle;
 import org.albianj.kernel.security.StyleMapping;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.apache.commons.codec.binary.Base64;
 
@@ -106,7 +105,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
             byte[] retByte = cipher.doFinal(bytesrc);
             return new String(retByte);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "DES decrypt is fail.");
         }
         return null;
@@ -128,7 +127,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
 
             return encryptBASE64(sessionId,cipher.doFinal(message.getBytes("UTF-8")));
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "DES encrypt is fail.");
         }
         return null;
@@ -164,7 +163,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
         try {
             keyGenerator = KeyGenerator.getInstance(key);
         } catch (NoSuchAlgorithmException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "init mackey is fail.");
         }
         SecretKey secretKey = keyGenerator.generateKey();
@@ -179,7 +178,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
             mac.init(secretKey);
             return encryptBASE64(sessionId,mac.doFinal(data));
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "encrypt HMAC is fail.");
         }
         return null;
@@ -193,7 +192,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
             mac.init(secretKey);
             return encryptBASE64(sessionId,mac.doFinal(decryptBASE64(sessionId,data)));
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "encrypt HMAC is fail.");
         }
         return null;

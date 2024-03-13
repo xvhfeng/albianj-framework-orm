@@ -1,6 +1,6 @@
 package org.albianj.kernel.logger;
 
-import org.albianj.common.comment.Comments;
+import org.albianj.kernel.common.comment.Comments;
 import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
 import org.albianj.kernel.service.IAlbianService;
 
@@ -13,32 +13,32 @@ public interface IAlbianLoggerService extends IAlbianService {
     @Comments("Albianj Logger Service2在server.xml中的标识")
     String Name = AlbianBuiltinServiceNamePair.AlbianLoggerServiceName;
 
-//    void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras);
+    void log(Object sessionId, String logName, LogLevel level, String format, Object... paras);
+
+    void log(Object sessionId, String logName, LogLevel level, Throwable t, String format, Object... paras);
+
+    void logAndThrowAgain(Object sessionId, String logName, LogLevel level, Throwable t, String format, Object... paras);
+
+    void logAndThrowNew(Object sessionId, String logName, LogLevel level, String format, Object... paras) ;
+
+    void logAndThrowNew(Object sessionId, String logName, LogLevel level, Throwable newThrow, String format, Object... paras);
+
+    void logAndThrowNew(Object sessionId, String logName, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras);
+
+    void throwNew(Object sessionId, String logName,String format, Object... paras);
+
+
+//    void log(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, String format, Object... paras);
 //
-//    void log(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras);
+//    void log(Object sessionId,Class<?> clzz,  LogTarget target, LogLevel level, Throwable t, String format, Object... paras);
 //
-//    void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras);
+//    void logAndThrowAgain(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, Throwable t, String format, Object... paras);
 //
-//    void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) ;
+//    void logAndThrowNew(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, String format, Object... paras) ;
 //
-//    void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras);
+//    void logAndThrowNew(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras);
 //
-//    void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras);
-//
-//    void throwNew(Object sessionId, String format, Object... paras);
-
-
-    void log(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, String format, Object... paras);
-
-    void log(Object sessionId,Class<?> clzz,  LogTarget target, LogLevel level, Throwable t, String format, Object... paras);
-
-    void logAndThrowAgain(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, Throwable t, String format, Object... paras);
-
-    void logAndThrowNew(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, String format, Object... paras) ;
-
-    void logAndThrowNew(Object sessionId,Class<?> clzz, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras);
-
-    void logAndThrowNew(Object sessionId, Class<?> clzz,LogTarget target, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras);
+//    void logAndThrowNew(Object sessionId, Class<?> clzz,LogTarget target, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras);
 
 
 //    AlbServRouter.trace(session,clzz,LogLevel.DEBUG).log("","").throw().done();

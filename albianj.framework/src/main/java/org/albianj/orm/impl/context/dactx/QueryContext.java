@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.context.dactx;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.context.dactx.IQueryContext;
 import org.albianj.orm.db.AlbianDataServiceException;

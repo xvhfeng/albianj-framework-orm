@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.db.SqlParameter;

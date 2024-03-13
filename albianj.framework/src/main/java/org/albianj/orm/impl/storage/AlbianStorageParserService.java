@@ -37,12 +37,11 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.storage;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.parser.AlbianParserException;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.IDataBasePool;
@@ -101,7 +100,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     @Override
     protected void parserStorages(@SuppressWarnings("rawtypes") List nodes) throws AlbianParserException {
         if (CheckUtil.isNullOrEmpty(nodes)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "Storage node is null or size is 0.");
             return;
         }
@@ -122,26 +121,26 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     protected IStorageAttribute parserStorage(Element node) {
         String name = XmlUtil.getSingleChildNodeValue(node, "Name");
         if (null == name) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                     "There is no name attribute in the storage node.");
             return null;
         }
         String databaseStyle = XmlUtil.getSingleChildNodeValue(node, "DatabaseStyle");
         String server = XmlUtil.getSingleChildNodeValue(node, "Server");
         if (null == server) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                     "There is no server attribute in the storage node.");
             return null;
         }
         String database = XmlUtil.getSingleChildNodeValue(node, "Database");
         if (null == database) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                     "There is no database attribute in the storage node.");
             return null;
         }
         String user = XmlUtil.getSingleChildNodeValue(node, "User");
         if (null == user) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                     "There is no uid attribute in the storage node.");
             return null;
         }
@@ -283,7 +282,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
                         break;
                     }
                 }
-                IAlbianConnectionMonitorService connectionMonitorService = AlbianServiceRouter
+                IAlbianConnectionMonitorService connectionMonitorService = ServRouter
                     .getService(sessionId,IAlbianConnectionMonitorService.class, IAlbianConnectionMonitorService.Name,
                         false);
                 if (connectionMonitorService != null) {
@@ -294,7 +293,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
             return dbp;
         } catch (Exception e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "Get the database connection pool with storage::{} and database::{}  is error.",
                     sa.getName(), rsa.getDatabase());
             return null;
@@ -312,7 +311,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
             IDataBasePool dbp = getDatabasePool(sessionId, rsa);
             if (null == dbp) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+                ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                         "Get the database connection pool with storage::{} and database::{}  is error.",
                     sa.getName(), rsa.getDatabase());
                 return null;
@@ -320,7 +319,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
             return dbp.getConnection(sessionId, rsa, isAutoCommit);
 
         } catch (Exception e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "Get the connection with storage::{} and database::{} form connection pool is error.",
                 sa.getName(), rsa.getDatabase());
             return null;
@@ -333,7 +332,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         IStorageAttribute sa = rsa.getStorageAttribute();
         try {
             if (null == pool) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,
+                ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                         "Get the database connection pool with storage::{} and database::{}  is error.",
                     sa.getName(), rsa.getDatabase());
                 return null;
@@ -341,7 +340,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
             return pool.getConnection(sessionId, rsa, isAutoCommit);
 
         } catch (Exception e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "Get the connection with storage::{} and database::{} form connection pool is error.",
                 sa.getName(), rsa.getDatabase());
             return null;

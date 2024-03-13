@@ -1,6 +1,6 @@
 package org.albianj.kernel.impl.service;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.aop.AlbianServiceProxyRant;
 import org.albianj.kernel.aop.AlbianServiceProxyRants;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;

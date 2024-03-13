@@ -37,9 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
-import org.albianj.common.argument.RefArg;
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.common.argument.RefArg;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.impl.db.SqlParameter;
@@ -57,7 +57,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                                                        String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
                                                        Map<String, IOrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
         IStorageAttribute stgAttr = null;
-        IAlbianStorageParserService asps = AlbianServiceRouter
+        IAlbianStorageParserService asps = ServRouter
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         if (CheckUtil.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
             if (CheckUtil.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback

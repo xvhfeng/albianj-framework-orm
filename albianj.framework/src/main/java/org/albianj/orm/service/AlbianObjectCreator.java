@@ -1,9 +1,8 @@
 package org.albianj.orm.service;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IAlbianObjectAttribute;
@@ -16,43 +15,43 @@ public class AlbianObjectCreator {
     public static IAlbianObject newInstance(Object sessionId, String itf)  {
         IAlbianObjectAttribute attr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == attr) {
-            AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     "can not found interface:{} attribute,please lookup persistence config.",itf);
         }
         String className = attr.getType();
         if (CheckUtil.isNullOrEmptyOrAllSpace(className)) {
-            AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     " can not found impl-class for interface:{},please lookup persistence config.", itf);
         }
         Class<?> cls = null;
         try {
             Class<?> itfs = AlbianClassLoader.getInstance().loadClass(itf);
             if (!itfs.isInterface()) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                         "{} in not a interface.", itf);
             }
             if (!IAlbianObject.class.isAssignableFrom(itfs)) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                         "{} in not a interface.", itf);
             }
             cls = AlbianClassLoader.getInstance().loadClass(className);
             if (null == cls) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                         "class:{} is not found.", className);
 
             }
             if (!IAlbianObject.class.isAssignableFrom(cls)) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                         "class:{} is not extends from IAlbianObject.", className);
             }
             if (!itfs.isAssignableFrom(cls)) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                         "class:{} is not extends from interface:{}.", className, itf);
             }
             IAlbianObject obj = (IAlbianObject)cls.newInstance();
             return obj;
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
             "class: {] is not fount.",className);
         }
 

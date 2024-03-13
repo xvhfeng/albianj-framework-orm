@@ -37,11 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.storage;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.parser.AlbianParserException;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.orm.db.AlbianDataServiceException;
@@ -65,7 +64,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     public static String generateConnectionUrl(
             IRunningStorageAttribute rsa) {
         if (null == rsa) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The argument storageAttribute is null.");
             return null;
         }
@@ -128,7 +127,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         try {
             parserFile(file);
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "loading the storage.xml is error." );
         }
         return;
@@ -141,7 +140,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
             String fname = findConfigFile(filename);
             doc = XmlUtil.load(fname);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "loading the storage.xml is error.");
         }
         if (null == doc) {

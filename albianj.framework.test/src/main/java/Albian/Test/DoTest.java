@@ -2,7 +2,7 @@ package Albian.Test;
 
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.loader.AlbianBootService;
 
 public class DoTest {
@@ -112,7 +112,7 @@ public class DoTest {
     }
 
     private static void test1()  {
-        IUserService us = AlbianServiceRouter.getService("",IUserService.class, IUserService.Name);
+        IUserService us = ServRouter.getService("",IUserService.class, IUserService.Name);
 
 //        us.addUser("uname","pwd");
 //            if(us.login("uname","pwd")) {
@@ -133,7 +133,7 @@ public class DoTest {
     }
 
     private static void test2()  {
-        IOrgUserService us = AlbianServiceRouter.getService("",IOrgUserService.class, IOrgUserService.Name);
+        IOrgUserService us = ServRouter.getService("",IOrgUserService.class, IOrgUserService.Name);
 //                   if( us.addUser("uname-org","pwd-org")){
 //                       System.out.println("add org user success.");
 //                   } else {

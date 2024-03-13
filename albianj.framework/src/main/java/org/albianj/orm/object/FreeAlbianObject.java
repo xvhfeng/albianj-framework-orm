@@ -37,11 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.object;
 
-import org.albianj.common.comment.SpecialWarning;
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.comment.SpecialWarning;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.dactx.IAlbianObjectWarp;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
@@ -145,7 +144,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
                 return true;
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "PersistenceService is error. invoke bean read method is error.the property is:{} ",
                     entiryAttr.getType());
         }

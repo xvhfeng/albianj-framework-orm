@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.service;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;

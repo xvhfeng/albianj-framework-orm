@@ -37,16 +37,15 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.service;
 
-import org.albianj.common.io.Path;
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.common.io.Path;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.aop.AlbianAopAttribute;
 import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
 import org.albianj.kernel.core.AlbianRuntimeException;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.IAlbianServiceAttribute;
 import org.albianj.kernel.service.IAlbianServiceFieldAttribute;
 import org.albianj.kernel.service.ServiceAttributeMap;
@@ -83,13 +82,13 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
 
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "loading the service.xml is error." );
         }
 
         if (0 == map.size()) {
 //            logger.error("The albian services is empty.");
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The albian services is empty." );
             return;
         }
@@ -108,7 +107,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
             }
             doc = XmlUtil.load(realFilename);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "loading the service.xml is error." );
         }
         if (null == doc) {
@@ -139,7 +138,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                     if (!b) {
 //                        logger.warn("Path:{} in the Package enable is false,so not load it.",
 //                            Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
-                        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                                 "Path:{} in the Package enable is false,so not load it.",
                                 CheckUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
 
@@ -159,7 +158,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                             pkgMetedataMap.putAll(pkgMap);//merger the metedata
                         }
                     } catch (Throwable e) {
-                        AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                        ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                                 "loading the service.xml is error. Path :{}s in Package is fail.",pkg );
                     }
                 }

@@ -5,9 +5,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.albianj.kernel.core.AlbianLevel;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.security.IAlbianSecurityService;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
@@ -25,7 +24,7 @@ public class HikariCPWapper extends FreeDataBasePool {
     public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
     public HikariCPWapper() {
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                 "use Hikari connection pool.");
     }
 
@@ -34,7 +33,7 @@ public class HikariCPWapper extends FreeDataBasePool {
         IStorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                 "Get the connection from storage::{} and database::{} by connection pool.", sa.getName(),
             rsa.getDatabase());
         try {
@@ -46,7 +45,7 @@ public class HikariCPWapper extends FreeDataBasePool {
             conn.setAutoCommit(isAutoCommit);
             return conn;
         } catch (SQLException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "Get the connection with storage::{} and database::{} form connection pool is error.",
                 sa.getName(), rsa.getDatabase());
             return null;
@@ -66,7 +65,7 @@ public class HikariCPWapper extends FreeDataBasePool {
                 config.setUsername(storageAttribute.getUser());
                 config.setPassword(storageAttribute.getPassword());
             } else {
-                IAlbianSecurityService ass = AlbianServiceRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
+                IAlbianSecurityService ass = ServRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
                 if (null != ass) {
                     config.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
                     config.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
@@ -103,7 +102,7 @@ public class HikariCPWapper extends FreeDataBasePool {
             config.setValidationTimeout(1000);
 
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionid,LogLevel.Error,e,
                     "startup database connection pools is fail.");
             // return null;
         }
@@ -112,7 +111,7 @@ public class HikariCPWapper extends FreeDataBasePool {
         try {
             ds = new HikariDataSource(config);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionid,LogLevel.Error,e,
                     "create dabasepool for storage:{} is fail.", key);
         }
 

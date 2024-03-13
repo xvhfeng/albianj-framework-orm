@@ -37,11 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.core.*;
 import org.albianj.kernel.impl.service.FreeAlbianServiceParser;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.*;
 import org.albianj.loader.IAlbianTransmitterService;
 
@@ -118,11 +117,11 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
         AlbianBuiltinServiceLoader bltSevLoader = new AlbianBuiltinServiceLoader();
         bltSevLoader.loadLoggerService();
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Info,"Logger Service startup normal.");
+        ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Info,"Logger Service startup normal.");
         // 从这里以后，就可以正常使用log了，前面的logger自行处理，但是一般不需要任何的处理
 
         // do load builtin service
-        bltSevLoader.loadServices(AlbianServiceRouter.__StartupSessionId);
+        bltSevLoader.loadServices(ServRouter.__StartupSessionId);
         Map<String, IAlbianServiceAttribute> bltSrvAttrs = bltSevLoader.getBltSrvAttrs();
 
         //do load bussiness service
@@ -158,14 +157,14 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                     e = exc;
                     currentFailSize++;
                     failMap.put(entry.getKey(), entry.getValue());
-                    AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,exc,
+                    ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,exc,
                             "Kernel is error.load and init service:{} with class:{} is fail.",
                             id,sType);
                 }
             if (0 == currentFailSize) {
                 // if open the distributed mode,
                 // please contact to manager machine to logout the system.
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                         "load service is success,then set field in the services!");
                 break;// load service successen
             }
@@ -174,7 +173,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                 // startup the service fail in this times,
                 // so throw the exception and stop the albianj engine
                 state = AlbianState.Unloading;
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                         "startup slbianJ engine is fail ,maybe cross refernce");
                 if (null != e) {
                     StringBuilder errBuilder = new StringBuilder();
@@ -182,7 +181,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                         errBuilder.append(entry.getKey()).append(",");
                     }
 
-                    AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                    ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                             "startup the service :{} is fail .", errBuilder.toString());
                 }
                 ServiceContainer.clear();
@@ -211,7 +210,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         //
         //        }
         state = AlbianState.Running;
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                 "set fieds in the service over .Startup albianJ is success!");
     }
 
@@ -239,7 +238,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                 service.unload();
                 service.afterUnload();
             } catch (Throwable e) {
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,e,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,e,
                         "ubload albianj framework is fail!");
             }
         }

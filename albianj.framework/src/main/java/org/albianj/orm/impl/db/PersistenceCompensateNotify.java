@@ -37,10 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.IWriterTask;
@@ -67,9 +66,9 @@ public class PersistenceCompensateNotify implements IPersistenceCompensateNotify
         try {
             sb = writerJobCommandToString(job);
         } catch (AlbianDataServiceException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "jon {} send persistence notify is fail.",job.getId());
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "the job {} is not compensate then the all sql is:{}",job.getId(), sb.toString());
         }
     }

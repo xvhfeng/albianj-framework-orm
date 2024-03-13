@@ -37,16 +37,15 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.core;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.PropUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.PropUtil;
 import org.albianj.kernel.core.AlbianLevel;
 import org.albianj.kernel.core.AlbianStartupMode;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 
@@ -70,7 +69,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
             Properties props = PropUtil.load(decideConfigFile(file));
             parser(props);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "load the kernel properties is fail.pls look at the file:{} ", file);
         }
     }

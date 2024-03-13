@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.toolkit;
 
-import org.albianj.common.utils.DateTimeUtil;
+import org.albianj.kernel.common.utils.DateTimeUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -39,8 +39,7 @@ package org.albianj.orm.impl.db;
 
 
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.db.PersistenceCommandType;
@@ -61,7 +60,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
             List<T> list = executed(cls, job);
             return list;
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(job.getId(),  LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
             unloadExecute(job);
@@ -77,7 +76,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
             Object o = executed(job.getId(), job);
             return o;
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(job.getId(), LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(job.getId(),  LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
             unloadExecute(job);
@@ -91,16 +90,16 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
         List<T> list = null;
         try {
             result = executing(sessionId, cmdType, statement);
-            list = executed(cls, AlbianServiceRouter.make32UUID(), result);
+            list = executed(cls, ServRouter.make32UUID(), result);
         } catch (AlbianDataServiceException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "execute data query is fail.");
         } finally {
             if (null != result)
                 try {
                     result.close();
                 } catch (SQLException e) {
-                    AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    ServRouter.log(sessionId,  LogLevel.Error,e,
                             "close the ResultSet from database is error.");
                 }
         }

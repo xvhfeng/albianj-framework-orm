@@ -37,10 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.IWriterTask;
 import org.albianj.orm.context.PersistenceStatement;
@@ -80,12 +79,12 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 throw new AlbianDataServiceException("The storage for task is null.");
             }
             try {
-                IAlbianStorageParserService asps = AlbianServiceRouter.getService(writerJob.getId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
+                IAlbianStorageParserService asps = ServRouter.getService(writerJob.getId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
                 IDataBasePool dbp = asps.getDatabasePool(writerJob.getId(), rsa);
                 t.setDatabasePool(dbp);
                 t.setConnection(asps.getConnection(writerJob.getId(), dbp, rsa,false));
             } catch (Exception e) {
-                AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Error,e,
                         "get the connect to storage:{} is error.",
                         storage.getName());
             }
@@ -151,7 +150,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
                 t.setStatements(psMap);
             } catch (SQLException e) {
-                AlbianServiceRouter.logAndThrowAgain(writerJob.getId(),LogTarget.Running,LogLevel.Error,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),LogLevel.Error,e,
                         "make sql command for task is empty or null");
             }
 
@@ -251,11 +250,11 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             writerJob.setCurrentStorage(task.getKey());
 
             List<IPersistenceCommand> cmds = t.getCommands();
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "then execute sql command but may be use batchupdate when commands(size >= 2) are the same.");
             for (int i = 0; i < cmds.size(); i++) {
                 IPersistenceCommand cmd = cmds.get(i);
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                         "executeHandler storage:{},sqltext:{},parars:{}.",
                         task.getKey(), cmd.getCommandText(), ListConvert.toString(cmd.getParameters()));
             }
@@ -271,7 +270,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     }
                 }  catch (SQLException e) {
                 IRunningStorageAttribute rsa = t.getStorage();
-                    AlbianServiceRouter.logAndThrowAgain(writerJob.getId(),LogTarget.Running,LogLevel.Error,e,
+                    ServRouter.logAndThrowAgain(writerJob.getId(),LogLevel.Error,e,
                             "commit to storage:{}  database: {} is fail.",
                             rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
                 }
@@ -331,7 +330,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 writerJob.setNeedManualRollbackIfException(true);
             } catch (SQLException e) {
                 IRunningStorageAttribute rsa = t.getStorage();
-                AlbianServiceRouter.logAndThrowAgain(writerJob.getId(),LogTarget.Running,LogLevel.Error,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),LogLevel.Error,e,
                     "commit to storage:{}  database: {} is fail.",
                         rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
             }
@@ -352,7 +351,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 }
             } catch (Exception e) {
                 IRunningStorageAttribute rsa = t.getStorage();
-                AlbianServiceRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,
+                ServRouter.log(writerJob.getId(),  LogLevel.Error,e,
                         "rollback to storage:{} database:{} is error.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());
                 isThrow = true;
@@ -369,7 +368,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             manualRollbackCommit(writerJob);
             return true;
         } catch (Exception e) {
-            AlbianServiceRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(writerJob.getId(),  LogLevel.Error,e,
                     "manual rollback is fail.");
             return false;
         }
@@ -398,7 +397,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             }catch (Exception e){
                 isThrow = true;
                 IRunningStorageAttribute rsa = t.getStorage();
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                         "close the connect to storage:{} database:{} is fail.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());
             } finally {
@@ -448,7 +447,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     rbkCmds.add(cmd);
                 }
             } catch (SQLException e) {
-                AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Info,e,
                     "make sql command for task is empty or null when maunal rollbacking.");
             }
             if (!CheckUtil.isNullOrEmpty(statements)) {
@@ -477,13 +476,13 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             for (int i = 0; i < statements.size(); i++) {
                 try {
                     IPersistenceCommand cmd = cmds.get(i);
-                    AlbianServiceRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Info,
+                    ServRouter.log(writerJob.getId(),  LogLevel.Info,
                             "manual-rollback job,storage:{},sqltext:{},parars:{}.", task.getKey(),
                         cmd.getRollbackCommandText(), ListConvert.toString(cmd.getRollbackParameters()));
                     ((PreparedStatement)statements.get(i)).executeUpdate();
                 } catch (SQLException e) {
                     IRunningStorageAttribute rsa = t.getStorage();
-                    AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
+                    ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Info,e,
                         "execute to storage:{} database:{} is error when manual rollbacking.",
                             rsa.getStorageAttribute().getName(), rsa.getDatabase());
                 }
@@ -505,7 +504,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 }
             } catch (SQLException e) {
                 IRunningStorageAttribute rsa = t.getStorage();
-                AlbianServiceRouter.logAndThrowAgain(writerJob.getId(), LogTarget.Running, LogLevel.Info,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Info,e,
                         "commit to storage:{} database:{} is error when manual rollbacking.",
                         rsa.getStorageAttribute().getName(), rsa.getDatabase());
             }

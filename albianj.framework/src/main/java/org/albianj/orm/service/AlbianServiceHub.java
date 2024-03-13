@@ -1,6 +1,6 @@
 package org.albianj.orm.service;
 
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
 import org.albianj.orm.object.IAlbianObject;
@@ -11,7 +11,14 @@ import org.albianj.orm.object.filter.FilterGroupExpression;
 import org.albianj.orm.object.filter.IChainExpression;
 import org.albianj.orm.object.filter.IFilterGroupExpression;
 
-public final class AlbianServiceHub extends AlbianServiceRouter {
+import java.util.ArrayList;
+import java.util.List;
+
+public final class AlbianServiceHub extends ServRouter {
+
+    static {
+        _filterStackFrameClasses.add(AlbianServiceHub.class.getName());
+    }
 
     public static IAlbianObject newInstance(Object sessionId, String itf)  {
         return AlbianObjectCreator.newInstance(sessionId, itf);

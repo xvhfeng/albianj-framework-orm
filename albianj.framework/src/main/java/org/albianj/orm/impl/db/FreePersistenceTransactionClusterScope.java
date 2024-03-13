@@ -39,8 +39,7 @@ package org.albianj.orm.impl.db;
 
 
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.WriterJobLifeTime;
@@ -67,7 +66,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
             sbMsg.append("Execute job is error.Job lifetime is:").append(writerJob.getWriterJobLifeTime())
                 .append(",exception msg:").append(e.getMessage()).append(",Current task:")
                 .append(writerJob.getCurrentStorage()).append(",job id:").append(writerJob.getId());
-            AlbianServiceRouter.log(writerJob.getId(), LogTarget.Running, LogLevel.Error,e,sbMsg.toString());
+            ServRouter.log(writerJob.getId(),  LogLevel.Error,e,sbMsg.toString());
             try {
                 switch (writerJob.getWriterJobLifeTime()) {
                     case Opened:
@@ -85,7 +84,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                             this.exceptionHandler(writerJob);
                         } catch (Exception exc) {
                             isAutoRollbackSuccess = false;
-                            AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                            ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
                                     "auto rollback  the job {} is fail.",writerJob.getId());
                         }
                         if (writerJob.getNeedManualRollbackIfException()) {
@@ -94,7 +93,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                                 isManualRollbackSuccess = this.exceptionManualRollback(writerJob);
                             } catch (Exception exc) {
                                 isManualRollbackSuccess = false;
-                                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
                                         "manual rollback  the job {} is fail.",writerJob.getId());
                             }
                         }
@@ -107,7 +106,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                 }
 
             } catch (Exception exc) {
-                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
                         " rollback  the job {} is fail.",writerJob.getId());
             }
 
@@ -124,7 +123,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                     }
                 }
             } catch (Exception exc) {
-                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
                         " Execute the compensate callback of job {} is fail.",writerJob.getId());
 
             }
@@ -133,7 +132,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
             try {
                 unLoadExecute(writerJob);
             } catch (Exception exc) {
-                AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
                         " unload job {} is fail.",writerJob.getId());
             }
             if (null != writerJob.getNotifyCallback()) {
@@ -142,7 +141,7 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                     writerJob.getNotifyCallback().notice(isSuccess, sbMsg.toString(),
                             writerJob.getNotifyCallbackObject());
                 } catch (Exception exc) {
-                    AlbianServiceRouter.log(writerJob.getId(),LogTarget.Running,LogLevel.Error,exc,
+                    ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
                             " Execute the notice of job {} is fail.",writerJob.getId());
                 }
             }

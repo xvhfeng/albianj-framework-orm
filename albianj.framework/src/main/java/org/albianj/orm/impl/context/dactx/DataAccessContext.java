@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.context.dactx;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
 import org.albianj.orm.context.IWriterJob;

@@ -26,8 +26,8 @@
         <common.io.version>2.4</common.io.version>
         <common.codec.version>1.9</common.codec.version>
         <junit.version>4.12</junit.version>
-        <slf4j-api.version>2.0.9</slf4j-api.version>
-        <log4j.version>2.22.0</log4j.version>
+        <slf4j-api.version>2.0.12</slf4j-api.version>
+        <log4j.version>2.23.1</log4j.version>
         <lombok.version>1.18.30</lombok.version>
     </properties>
 
@@ -48,9 +48,17 @@
             <!-- 日志桥接包   桥接包的版本须对应log4j2的版本 -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j-impl</artifactId>
+                <artifactId>log4j-slf4j2-impl</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+<!--            <dependency>-->
+<!--                <groupId>org.slf4j</groupId>-->
+<!--                <artifactId>slf4j-simple</artifactId>-->
+<!--                <version>2.0.12</version>-->
+<!--                <scope>test</scope>-->
+<!--            </dependency>-->
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -112,18 +120,18 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>alimaven</id>
-            <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>alimaven</id>-->
+<!--            <name>aliyun maven</name>-->
+<!--            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>false</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
 </project>

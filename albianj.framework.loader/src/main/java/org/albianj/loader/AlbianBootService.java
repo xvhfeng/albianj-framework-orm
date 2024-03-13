@@ -54,32 +54,9 @@ import java.util.ArrayList;
 public class AlbianBootService {
     private static final Logger logger = LoggerFactory.getLogger(AlbianBootService.class);
     private static final String AlbianStarter = "org.albianj.kernel.impl.core.AlbianTransmitterService";
-    @SuppressWarnings("resource")
-//    private static ArrayList<byte[]> unpack(FileInputStream fis) {
-//        ArrayList<byte[]> list = null;
-//        try {
-//            list = new ArrayList<byte[]>();
-//            byte[] bsize = new byte[4];
-//            fis.read(bsize);
-//            long size = MemoryToIOStream.netStreamToInt(bsize, 0);
-//            for (int i = 0; i < size; i++) {
-//                byte[] blength = new byte[8];
-//                fis.read(blength);
-//                long length = MemoryToIOStream.netStreamToLong(blength, 0);
-//                byte[] ebytes = new byte[(int) length];
-//                fis.read(ebytes);
-//                Base64 b64 = new Base64();
-//                byte[] stream = b64.decode(ebytes);
-//                list.add(stream);
-//            }
-//            return list;
-//        } catch (Exception e) {
-//            logger.error("AlbianBootService ArrayList is error ",e);
-//        }
-//        return null;
-//    }
 
-    private static URI lookupLoggerConfigFile(String configPath){
+
+    private static String lookupLoggerConfigFile(String configPath){
         String[] filenames = {
                 "log4j2.xml",
                 "log4j2.properties",
@@ -100,7 +77,7 @@ public class AlbianBootService {
             }
             File f =  new File(logConfigFile);
             if(f.exists()){
-                return f.toURI();
+                return f.getAbsolutePath();
             }
         }
         return null;
@@ -113,48 +90,27 @@ public class AlbianBootService {
             cfPath = AlbianClassLoader.getResourcePath();
         }
 
-        URI cfFileName = lookupLoggerConfigFile(cfPath);
+        String cfFileName = lookupLoggerConfigFile(cfPath);
         if (null != cfFileName) {
-//            LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
-//            logContext.setConfigLocation(cfFileName);
-//            logContext.reconfigure();
             try {
-                File log4j2File = new File(cfFileName.toURL().getFile());
-                System.setProperty("log4j2.configurationFile", log4j2File.toURI().toString());
+                System.setProperty("log4j2.configurationFile", cfFileName);
+                Configurator.initialize(null, cfFileName);
             }catch (Throwable t){
+                logger.error("set configurationFile fail.",t);
                 throw new RuntimeException(t);
             }
-
-
-        /* 上面不行的话，换这个试试
-
-
-        -----
-
-           File log4j2File = new File("C:/path/to/log4j2.xml");
-        System.setProperty("log4j2.configurationFile", log4j2File.toURI().toString());
-
-         -----
-
-        Configurator.initialize(null, "/full_path/conf/logger.xml");
-
-         */
         }
 
+        logger.info(AlbianAsciiArt.Images);
+
+        logger.info("Albianj startup,configurtion path " + cfPath);
+        logger.info("Albianj found configuration file:" + null == cfFileName || cfFileName.isEmpty() ? "EMPTY": cfFileName);
+
         try {
+            logger.info("load albianj start class:{}",AlbianStarter);
             Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
             IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
             abs.start(cfPath);
-
-//            if (!Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
-//                abs.start(kernelPath, configPath);
-//            } else if (Validate.isNullOrEmptyOrAllSpace(kernelPath) && !Validate.isNullOrEmptyOrAllSpace(configPath)) {
-//            } else {
-//                abs.start();
-//            }
-//            if (AlbianState.Running != abs.getLifeState()) {
-//                return false;
-//            }
         } catch (Throwable e) {
             // TODO Auto-generated catch block
             logger.error("AlbianBootService start is error ",e);

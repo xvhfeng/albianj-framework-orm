@@ -37,13 +37,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.service;
 
-import org.albianj.common.io.Path;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.common.io.Path;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.aop.AlbianAopAttribute;
 import org.albianj.kernel.core.AlbianKernel;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 
 import java.io.File;
 
@@ -180,11 +179,11 @@ public abstract class FreeAlbianService implements IAlbianService {
                 return f.getAbsolutePath();
             }
 
-            AlbianServiceRouter.logAndThrowNew(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.logAndThrowNew(ServRouter.__StartupSessionId, LogLevel.Error,
                     "not found the config filename:{}", filename);
             return null;
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "not found the config filename:{}", filename);
         }
         return filename;

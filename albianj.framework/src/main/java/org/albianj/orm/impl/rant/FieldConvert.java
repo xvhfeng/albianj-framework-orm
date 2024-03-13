@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.rant;
 
-import org.albianj.common.utils.StringsUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 
 public class FieldConvert {
 

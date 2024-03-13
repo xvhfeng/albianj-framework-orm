@@ -1,8 +1,7 @@
 package org.albianj.orm.impl.object;
 
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.ServiceLoaderUtils;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.object.DatabasePoolMaker;
@@ -26,7 +25,7 @@ public class PluginDatabasePoolMarker implements DatabasePoolMaker {
                 supportMarkers.add(its.next());
             }
         } catch (Throwable t) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,t,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,t,
                     "load databasePoolMarker error");
         }
     }

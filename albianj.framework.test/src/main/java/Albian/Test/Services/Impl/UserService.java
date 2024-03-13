@@ -102,14 +102,14 @@ public class UserService extends FreeAlbianService implements IUserService {
         mu2.setUserName("mu2");
         mu2.setPassword("mu2pwd");
 
-        ISingleUser user = AlbianServiceHub.newInstance("SessionId", ISingleUser.class);
-        user.setId(BigInteger.valueOf(System.currentTimeMillis()));
-        user.setPassword("batcher");
-        user.setUserName("batcher");
+//        ISingleUser user = AlbianServiceHub.newInstance("SessionId", ISingleUser.class);
+//        user.setId(BigInteger.valueOf(System.currentTimeMillis()));
+//        user.setPassword("batcher");
+//        user.setUserName("batcher");
         //同时使用数据路由与单数据库保存
         dctx.add(AlbianDataAccessOpt.Save, mu1)
                 .add(AlbianDataAccessOpt.Save, mu2)
-                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
+//                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
 
 

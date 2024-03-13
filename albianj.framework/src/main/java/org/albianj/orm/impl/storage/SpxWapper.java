@@ -3,9 +3,8 @@ package org.albianj.orm.impl.storage;
 import org.albianj.kernel.core.AlbianLevel;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.security.IAlbianSecurityService;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.dbpool.ISpxDBPool;
 import org.albianj.orm.impl.dbpool.ISpxDBPoolConfig;
@@ -30,7 +29,7 @@ public class SpxWapper extends FreeDataBasePool {
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
         ISpxDBPool pool = (ISpxDBPool)ds;
-        AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Info,
+        ServRouter.log(sessionId,  LogLevel.Info,
                 "Get the connection from storage::{} and database::{} by connection pool.", sa.getName(),
             rsa.getDatabase());
         try {
@@ -43,7 +42,7 @@ public class SpxWapper extends FreeDataBasePool {
             conn.setAutoCommit(isAutoCommit);
             return conn;
         } catch (SQLException e) {
-            AlbianServiceRouter.log(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(sessionId,  LogLevel.Error,e,
                     "Get the connection with storage::{} and database::{} form connection pool is error.",
                 sa.getName(), rsa.getDatabase());
             return null;
@@ -56,7 +55,7 @@ public class SpxWapper extends FreeDataBasePool {
         try {
             cf = new SpxDBPoolConfig();
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionid,LogLevel.Error,e,
                     "create dabasepool for storage:{} is fail.",key);
         }
         try {
@@ -68,7 +67,7 @@ public class SpxWapper extends FreeDataBasePool {
                 cf.setUsername(stgAttr.getUser());
                 cf.setPassword(stgAttr.getPassword());
             } else {
-                IAlbianSecurityService ass = AlbianServiceRouter
+                IAlbianSecurityService ass = ServRouter
                         .getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
                 if (null != ass) {
                     cf.setUsername(ass.decryptDES(sessionid,stgAttr.getUser()));
@@ -92,7 +91,7 @@ public class SpxWapper extends FreeDataBasePool {
             cf.setPoolName(key);
             cf.setWaitTimeWhenGetMs(stgAttr.getWaitTimeWhenGetMs());
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionid,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionid,LogLevel.Error,e,
                     "startup database connection pools is fail.");
             //return null;
         }
@@ -130,7 +129,7 @@ public class SpxWapper extends FreeDataBasePool {
             String key = storageName + databaseName;
             DataSource ds = getDatasource(key);
             if (null == ds) {
-                AlbianServiceRouter.log(sessionId,LogTarget.Running,LogLevel.Info,
+                ServRouter.log(sessionId,LogLevel.Info,
                         "return the connection from storage::{} and database::{} by connection pool.",
                         storageName, databaseName);
                 conn.close();
@@ -138,7 +137,7 @@ public class SpxWapper extends FreeDataBasePool {
             ISpxDBPool pool = (ISpxDBPool) ds;
             pool.rtnConnection(conn);
         } catch (SQLException e) {
-            AlbianServiceRouter.log(sessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.log(sessionId,LogLevel.Error,e,
                     "fail in return the connection from storage::{} and database::{} by connection pool.",
                     storageName, databaseName);
         }

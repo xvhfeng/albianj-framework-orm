@@ -37,11 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.mapping;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.rant.AlbianEntityRantScaner;
@@ -75,7 +74,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         try {
             parserFile(file);
         } catch (Throwable e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
            "loading the persisten.xml is error.");
         }
         return;
@@ -87,7 +86,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
             String fname = findConfigFile(filename);
             doc = XmlUtil.load(fname);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "loading the persisten.xml is error.");
 
         }
@@ -118,7 +117,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                 if (!CheckUtil.isNullOrEmptyOrAllSpace(enable)) {
                     boolean b = Boolean.parseBoolean(enable);
                     if (!b) {
-                        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+                        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                                 "Path -> :{} in the Package enable is false,so not load it.",
                             CheckUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
                         continue;// not load pkg
@@ -135,7 +134,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                             AlbianEntityMetadata.putAll(pkgMap);//merger the metedata
                         }
                     } catch (Exception e) {
-                        AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+                        ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                                 "loading the persisten.xml is error.path:{} ",pkg);
                     }
                 }

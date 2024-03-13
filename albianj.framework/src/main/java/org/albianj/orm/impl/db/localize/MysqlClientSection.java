@@ -1,6 +1,6 @@
 package org.albianj.orm.impl.db.localize;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.orm.db.localize.IDBClientSection;
 
 import java.nio.ByteBuffer;

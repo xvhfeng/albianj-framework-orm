@@ -37,12 +37,11 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.routing;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.db.AlbianDataServiceException;
 import org.albianj.orm.impl.object.AlbianObjectAttribute;
@@ -65,14 +64,14 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
     private static IDataRoutersAttribute getRoutingsAttribute(Element elt)  {
         String inter = XmlUtil.getAttributeValue(elt, "Interface");
         if (CheckUtil.isNullOrEmptyOrAllSpace(inter)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "The albianObject's interface is empty or null.");
             return null;
         }
         String type = XmlUtil.getAttributeValue(elt, "Type");
 
         if (CheckUtil.isNullOrEmptyOrAllSpace(type)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "The albianObject's type is empty or null.");
             return null;
         }
@@ -109,13 +108,13 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
             }
 
         } catch (ClassNotFoundException e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "the type:{}  not found",type);
         }
 
         String hashMapping = XmlUtil.getAttributeValue(elt, "Router");
         if (CheckUtil.isNullOrEmptyOrAllSpace(hashMapping)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The albianObject's datarouter is null or empty,then use default router:org.albianj.persistence.impl.object.AlbianObjectDataRouter."
                     + "org.albianj.persistence.impl.object.AlbianObjectDataRouter");
         }
@@ -131,16 +130,16 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
                     .newInstance());
 
         } catch (ClassNotFoundException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "fail in find class for :{}.", type);
             return null;
 
         } catch (InstantiationException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "init the hash mapping for the :{} is error.", type);
             return null;
         } catch (IllegalAccessException e) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "There is no access for :{} with init the instance.", type);
             return null;
         }
@@ -207,14 +206,14 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
     private static IDataRouterAttribute getroutingAttribute(Element elt) {
         String name = XmlUtil.getAttributeValue(elt, "Name");
         if (CheckUtil.isNullOrEmptyOrAllSpace(name)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "this routing attribute is null or empty.");
             return null;
         }
 
         String storageName = XmlUtil.getAttributeValue(elt, "StorageName");
         if (CheckUtil.isNullOrEmptyOrAllSpace(storageName)) {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "this storage name for the :{} routing attribute is null or empty.", name);
             return null;
         }

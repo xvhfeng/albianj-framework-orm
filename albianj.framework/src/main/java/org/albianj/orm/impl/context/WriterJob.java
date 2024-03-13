@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.context;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.ServRouter;
 import org.albianj.orm.context.*;
 
 import java.util.Map;
@@ -58,7 +58,7 @@ public class WriterJob implements IWriterJob {
     public WriterJob(String sessionId) {
         // TODO Auto-generated constructor stub
         if (CheckUtil.isNullOrEmptyOrAllSpace(sessionId)) {
-            this.id = AlbianServiceRouter.make32UUID();
+            this.id = ServRouter.make32UUID();
         } else {
             this.id = sessionId;
         }

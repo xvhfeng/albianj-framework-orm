@@ -1,15 +1,17 @@
 package org.albianj.kernel.impl.logger;
 
-import org.albianj.common.comment.Comments;
+import org.albianj.kernel.ServRouter;
+import org.albianj.kernel.common.comment.Comments;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.core.AlbianRuntimeException;
 import org.albianj.kernel.core.StackFrame;
 import org.albianj.kernel.logger.IAlbianLoggerService;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import java.util.Formatter;
 
@@ -20,64 +22,67 @@ import java.util.Formatter;
 @AlbianServiceRant(Id = IAlbianLoggerService.Name, Interface = IAlbianLoggerService.class)
 public class AlbianLoggerService extends FreeAlbianService implements IAlbianLoggerService {
 
+    static {
+        ServRouter._filterStackFrameClasses.add(AlbianLoggerService.class.getName());
+    }
     public String getServiceName() {
         return Name;
     }
 
     @Override
-    public void log(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) {
+    public void log(Object sessionId, String logName, LogLevel level, String format, Object... paras) {
        String stackInfo =  new StackFrame().pickStackInfoWapper();
        String msg = makeLogInfo(sessionId,stackInfo,format,paras);
-        flushToFile(target,level,msg,null);
+        flushToFile(logName,level,msg,null);
     }
 
     @Override
-    public void log(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras) {
+    public void log(Object sessionId, String logName, LogLevel level, Throwable t, String format, Object... paras) {
         String stackInfo =  new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
-        flushToFile(target,level,msg,t);
+        flushToFile(logName,level,msg,t);
 
     }
 
     @Override
-    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, String format, Object... paras) {
+    public void logAndThrowNew(Object sessionId, String logName, LogLevel level, String format, Object... paras) {
         String stackInfo =  new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
-        flushToFile(target,level,msg,null);
+        flushToFile(logName,level,msg,null);
         throw new AlbianRuntimeException(msg);
     }
 
 
     @Override
-    public void logAndThrowAgain(Object sessionId, LogTarget target, LogLevel level, Throwable t, String format, Object... paras)  {
+    public void logAndThrowAgain(Object sessionId, String logName, LogLevel level, Throwable t, String format, Object... paras)  {
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
-        flushToFile(target,level,msg,t);
+        flushToFile(logName,level,msg,t);
         throw  new AlbianRuntimeException(t);
     }
 
     @Override
-    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, String format, Object... paras) {
+    public void logAndThrowNew(Object sessionId, String logName, LogLevel level, Throwable newThrow, String format, Object... paras) {
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
-        flushToFile(target,level,msg,null);
+        flushToFile(logName,level,msg,null);
         throw  new AlbianRuntimeException(newThrow);
     }
 
     @Override
-    public void logAndThrowNew(Object sessionId, LogTarget target, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras)  {
+    public void logAndThrowNew(Object sessionId, String logName, LogLevel level, Throwable newThrow, Throwable t, String format, Object... paras)  {
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId,stackInfo,format,paras);
-        flushToFile(target,level,msg,t);
+        flushToFile(logName,level,msg,t);
         throw  new AlbianRuntimeException(newThrow);
     }
 
     @Override
-    public void throwNew(Object sessionId, String format, Object... paras)  {
+    public void throwNew(Object sessionId,String logName, String format, Object... paras)  {
         String stackInfo = new StackFrame().pickStackInfoWapper();
         String msg = makeLogInfo(sessionId, stackInfo, format, paras);
         AlbianRuntimeException newThrow = new AlbianRuntimeException(msg);
-        flushToFile(LogTarget.Running, LogLevel.Error, msg, null);
+        flushToFile(logName, LogLevel.Error, msg, null);
         throw newThrow;
     }
 
@@ -95,16 +100,17 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
             sb.append("SessionId: [").append(sessionId).append("], ");
         }
         sb.append(stackInfo).append(", ");
-        sb.append("Message: ");
+        sb.append("==>> ");
         StringBuilder msg = new StringBuilder();
         Formatter f = new Formatter(msg);
         f.format(format, values);
         sb.append(msg);
-        return sb.toString();
+        String fmt = sb.toString();
+        return StringsUtil.nonIdxFmt(fmt,values);
     }
 
-    private void flushToFile(Class<?> clzz, LogLevel level, String ctx, Throwable e) {
-        Logger logger = LoggerFactory.getLogger(clzz);
+    private void flushToFile(String logName, LogLevel level, String ctx, Throwable e) {
+        Logger logger = LoggerFactory.getLogger(logName);
         switch (level) {
             case Debug:
                 if (logger.isDebugEnabled()) {
@@ -138,4 +144,6 @@ public class AlbianLoggerService extends FreeAlbianService implements IAlbianLog
                 }
         }
     }
+
+
 }

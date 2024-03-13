@@ -37,10 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.db;
 
-import org.albianj.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.*;
@@ -65,7 +64,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         String sessionId = job.getId();
         PersistenceNamedParameter.parseSql(job.getCommand());
         IRunningStorageAttribute rsa = job.getStorage();
-        IAlbianStorageParserService asps = AlbianServiceRouter
+        IAlbianStorageParserService asps = ServRouter
             .getService(job.getId(), IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         IDataBasePool dbp = asps.getDatabasePool(sessionId, rsa);
         Connection conn = dbp.getConnection(sessionId, rsa, true);
@@ -82,7 +81,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         try {
             statement = job.getConnection().prepareStatement(cmd.getCommandText());
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "get the statement is fail." );
         }
         Map<Integer, String> map = cmd.getParameterMapper();
@@ -98,7 +97,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                         statement.setObject(i, para.getValue(), para.getSqlType());
                     }
                 } catch (SQLException e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+                    ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                         "set the sql paras is error.para name: {} ,para value: {}" ,
                             para.getName() ,ResultConvert.sqlValueToString(para.getSqlType(), para.getValue()));
                 }
@@ -115,7 +114,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
         ResultSet result = null;
         try {
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                     "job:{} Storage:{},database:{},SqlText:{},paras:{}.",
                    job.getId(), st.getStorageAttribute().getName(),
                 st.getDatabase(), text, ListConvert.toString(map));
@@ -124,11 +123,11 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
             if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
                 long end1 = System.currentTimeMillis();
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Info,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                         "SpxLog job:{} execute query use times:{}.", job.getId(),end1 - begin1);
             }
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                     "execute the reader job:{} is fail." ,job.getId());
         } finally {
             try {
@@ -136,7 +135,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     job.getConnection().commit();
                 }
             } catch (Exception e) {
-                AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+                ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                         "commit the reader job:{} is fail." ,job.getId());
             }
         }
@@ -150,14 +149,14 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         List<T> list = executed(cls, job.getId(), job.getResult());
         if (!CheckUtil.isNullOrEmptyOrAllSpace(sessionId) && sessionId.endsWith("_SPX_LOG")) {
             long end1 = System.currentTimeMillis();
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "SpxLog executed query and make data result use times:{}.",
                     end1 - begin1);
         }
         String text = job.getCommand().getCommandText();
         Map<String, ISqlParameter> map = job.getCommand().getParameters();
         IRunningStorageAttribute st = job.getStorage();
-        AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
             CheckUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
@@ -180,7 +179,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             }
             return ((CallableStatement)statement).executeQuery();
         } catch (SQLException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                     "execute the reader job fail");
         }
 
@@ -199,7 +198,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         try {
             cls = AlbianClassLoader.getInstance().loadClass(className);
         } catch (ClassNotFoundException e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                     "class:{} is not found.",className);
         }
         List<T> list = new Vector<T>();
@@ -222,12 +221,12 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     obj.setIsAlbianNew(false);
                     list.add(obj);
                 } catch (Exception e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+                    ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                             "create object from class::{} is fail.",className);
                 }
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                     "loop the result from database for class:{} is error.",
                      className);
         }
@@ -245,13 +244,13 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                 String text = job.getCommand().getCommandText();
                 Map<String, ISqlParameter> map = job.getCommand().getParameters();
                 IRunningStorageAttribute st = job.getStorage();
-                AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                         "Storage:{},database:{},SqlText:{},paras:{}.return COUNT(1) :{}",
                     st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
                     String.valueOf(v));
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                     "get pagesize is null."
             );
         }

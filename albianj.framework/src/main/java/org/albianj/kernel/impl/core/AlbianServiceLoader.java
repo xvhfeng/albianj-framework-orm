@@ -1,12 +1,11 @@
 package org.albianj.kernel.impl.core;
 
 import ognl.Ognl;
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.ReflectUtil;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.ReflectUtil;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.impl.aop.AlbianServiceAopProxy;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.*;
 import org.albianj.loader.AlbianClassLoader;
 
@@ -26,12 +25,12 @@ public class AlbianServiceLoader {
         try {
             Class<?> cla = AlbianClassLoader.getInstance().loadClass(sImplClzz);
             if (null == cla) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                         "load impl class : {}  is null for service : {} " ,sImplClzz, id);
             }
 
             if (!IAlbianService.class.isAssignableFrom(cla)) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     "Service :{}  class:{}  is not extends IAlbianServise",id,sImplClzz);
             }
 
@@ -39,13 +38,13 @@ public class AlbianServiceLoader {
             if (!CheckUtil.isNullOrEmptyOrAllSpace(sInterface)) {
                 itf = AlbianClassLoader.getInstance().loadClass(sInterface);
                 if (!itf.isAssignableFrom(cla)) {
-                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                    ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                             "Service :{}  class: {}  is not extends is not impl from itf : {} ",
                             id,sImplClzz,sInterface);
                 }
 
                 if (!IAlbianService.class.isAssignableFrom(itf)) {
-                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                    ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                             "Service :{}  itf: {}  is not extends IAlbianSercvice ",
                             id,sInterface);
                 }
@@ -70,7 +69,7 @@ public class AlbianServiceLoader {
                 rtnService = serviceProxy;
             }
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                     "load and init service:{} with class:{} is fail.",id,sImplClzz);
         }
         return rtnService;
@@ -90,7 +89,7 @@ public class AlbianServiceLoader {
                     fAttr.getField().set(serv, o);
                     fAttr.setReady(true);
                 } catch (Exception e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                             "set field {}.{} = {} is fail.",servAttr.getId(),fAttr.getName(),fAttr.getValue());
                 }
                 continue;
@@ -100,9 +99,9 @@ public class AlbianServiceLoader {
             Object realObject = null;
             int indexof = value.indexOf(".");
             if (-1 == indexof) { // real ref service
-                realObject = AlbianServiceRouter.getService(sessionId,IAlbianService.class, value, false);
+                realObject = ServRouter.getService(sessionId,IAlbianService.class, value, false);
                 if (!fAttr.getAllowNull() && null == realObject) {
-                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                    ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     "not found ref service:{} to set field:{} in service:{}",
                     value,fAttr.getName(),servAttr.getId());
                     //continue;
@@ -113,7 +112,7 @@ public class AlbianServiceLoader {
                         fAttr.getField().set(serv, realObject);
                         fAttr.setReady(true);
                     } catch (Exception e) {
-                        AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                        ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                         "set field {}.{} = {} is fail.the field type is ref.",
                         servAttr.getId(),fAttr.getName(),fAttr.getValue());
                     }
@@ -124,10 +123,10 @@ public class AlbianServiceLoader {
             String refServiceId = value.substring(0, indexof);
             String exp = value.substring(indexof + 1);
             IAlbianService refService =
-                AlbianServiceRouter.getService(sessionId,IAlbianService.class, refServiceId, false);
+                ServRouter.getService(sessionId,IAlbianService.class, refServiceId, false);
 
             if (!fAttr.getAllowNull() && null == refService) {
-                AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                 "{}.{} = {}.{} is fail.not found ref srvice:{}",
                 servAttr.getId(),fAttr.getName(),refServiceId,exp,exp);
             }
@@ -138,12 +137,12 @@ public class AlbianServiceLoader {
                 try {
                     realObject = Ognl.getValue(exp, refRealObj);// get read value from full-sgin ref service
                 } catch (Exception e) {
-                    AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                    ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                             "{}.{} = {}.{} is fail.not found exp {} in ref srvice:{}",
                             servAttr.getId(),fAttr.getName(),refServiceId,exp,exp,refServiceId);
                 }
                 if (null == realObject && !fAttr.getAllowNull()) {
-                    AlbianServiceRouter.logAndThrowNew(sessionId, LogTarget.Running, LogLevel.Error,
+                    ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                             "{}.{} = {}.{} is fail.not found  ref srvice:{}",
                             servAttr.getId(),fAttr.getName(),refServiceId,exp,exp);
                 }
@@ -152,7 +151,7 @@ public class AlbianServiceLoader {
                         fAttr.getField().set(serv, realObject);
                         fAttr.setReady(true);
                     } catch (Exception e) {
-                        AlbianServiceRouter.logAndThrowAgain(sessionId, LogTarget.Running, LogLevel.Error,e,
+                        ServRouter.logAndThrowAgain(sessionId,  LogLevel.Error,e,
                                 "{}.{} = {}.{} is fail.",
                                 servAttr.getId(),fAttr.getName(),refServiceId,exp);
                     }

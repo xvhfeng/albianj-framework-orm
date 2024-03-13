@@ -1,11 +1,10 @@
 package org.albianj.orm.impl.rant;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.ReflectUtil;
-import org.albianj.common.utils.StringsUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.ReflectUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;
@@ -133,7 +132,7 @@ public class AlbianEntityRantScaner {
         try {
             dr = (IAlbianObjectDataRouter) clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-           AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Error,e,
+           ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                    "scanRouters is IllegalAccessException error ");
         }
         drsAttr.setDataRouter(dr);

@@ -37,14 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.impl.mapping;
 
-import org.albianj.common.utils.CheckUtil;
-import org.albianj.common.utils.ReflectUtil;
-import org.albianj.common.utils.StringsUtil;
-import org.albianj.common.utils.XmlUtil;
+import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.kernel.common.utils.ReflectUtil;
+import org.albianj.kernel.common.utils.StringsUtil;
+import org.albianj.kernel.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.logger.LogTarget;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.AlbianServiceRouter;
+import org.albianj.kernel.ServRouter;
 import org.albianj.kernel.service.parser.AlbianParserException;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.db.AlbianDataServiceException;
@@ -197,7 +196,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         if (null == mr || null == mw) {
 //            logger.error("property::{} of type::{} is not exist readerMethod or write Method.",
 //                propertyDescriptor.getName(), type);
-            AlbianServiceRouter.log(AlbianServiceRouter.__StartupSessionId, LogTarget.Running, LogLevel.Warn,"property::{} of type::{} is not exist readerMethod or write Method.",
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,"property::{} of type::{} is not exist readerMethod or write Method.",
                     propertyDescriptor.getName(), type
                     );
             return null;
@@ -265,7 +264,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             try {
                 parserAlbianObject(ele);
             } catch (Exception e) {
-                AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+                ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                 "parser persisten node is fail,xml:{}" ,ele.asXML());
             }
 //            if (null == albianObjectAttribute) {
@@ -326,7 +325,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
 
         } catch (ClassNotFoundException e1) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e1,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e1,
                     "the type:{} is not found",type);
         }
 
@@ -352,7 +351,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         try {
             csn = ReflectUtil.getClassSimpleName(AlbianClassLoader.getInstance(), type);
         } catch (ClassNotFoundException e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
 
                     "the type:{} is not found",type);
         }
@@ -395,7 +394,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         try {
             propertyDesc = ReflectUtil.getBeanPropertyDescriptor(AlbianClassLoader.getInstance(), type);
         } catch (Exception e) {
-            AlbianServiceRouter.logAndThrowAgain(AlbianServiceRouter.__StartupSessionId,LogTarget.Running,LogLevel.Error,e,
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
 
                     "the type:{} is not found",type);
         }
