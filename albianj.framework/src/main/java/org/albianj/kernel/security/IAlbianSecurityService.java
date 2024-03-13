@@ -37,12 +37,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.security;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.AblBltinServsNames;
 import org.albianj.kernel.service.IAlbianService;
 
 public interface IAlbianSecurityService extends IAlbianService {
 
-    final String Name = AlbianBuiltinServiceNamePair.AlbianSecurityServiceName;
+    final String Name = AblBltinServsNames.AlbianSecurityServiceName;
 
     public String decryptDES(Object sessionId,String message) ;
 

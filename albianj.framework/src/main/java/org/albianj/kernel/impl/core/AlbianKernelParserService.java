@@ -41,7 +41,7 @@ import org.albianj.kernel.common.utils.PropUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.AblBltinServsNames;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
@@ -49,12 +49,12 @@ import org.albianj.kernel.service.parser.IAlbianParserService;
 
 import java.util.Properties;
 
-@AlbianServiceRant(Id = AlbianBuiltinServiceNamePair.AlbianKernelServiceName, Interface = IAlbianParserService.class)
+@AlbianServiceRant(Id = AblBltinServsNames.AlbianKernelServiceName, Interface = IAlbianParserService.class)
 public class AlbianKernelParserService extends FreeAlbianParserService {
     private String file = "kernel.properties";
 
     public String getServiceName() {
-        return AlbianBuiltinServiceNamePair.AlbianKernelServiceName;
+        return AblBltinServsNames.AlbianKernelServiceName;
     }
 
 

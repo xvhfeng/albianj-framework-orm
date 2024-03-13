@@ -37,6 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.impl.service;
 
+import org.albianj.AblBltinServsNames;
 import org.albianj.kernel.common.utils.SetUtil;
 import org.albianj.kernel.common.utils.StringsUtil;
 import org.albianj.kernel.common.utils.XmlUtil;
@@ -54,14 +55,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AlbianServiceRant(Id = AlbianBuiltinServiceNamePair.AlbianServiceParserName, Interface = IAlbianParserService.class)
+@AlbianServiceRant(Id = AblBltinServsNames.AlbianServiceParserName, Interface = IAlbianParserService.class)
 public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     private final static String ID_ATTRBUITE_NAME = "Id";
     private final static String TYPE_ATTRBUITE_NAME = "Type";
 
     public String getServiceName() {
-        return AlbianBuiltinServiceNamePair.AlbianServiceParserName;
+        return AblBltinServsNames.AlbianServiceParserName;
     }
 
     @Override
