@@ -5,17 +5,19 @@
     <parent>
         <artifactId>albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>10009-dev</version>
+        <version>10010-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>albianj.framework</artifactId>
+    <version>10010-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locales>zh_CN</project.build.locales>
     </properties>
 
-    <artifactId>albianj.framework</artifactId>
-    <version>10009-dev</version>
+
 
     <dependencies>
         <dependency>
@@ -116,5 +118,8 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+
+
 
 </project>

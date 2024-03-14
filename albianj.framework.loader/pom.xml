@@ -5,12 +5,12 @@
     <parent>
         <artifactId>albianj</artifactId>
          <groupId>albianj-framework</groupId>
-        <version>10009-dev</version>
+        <version>10010-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework.loader</artifactId>
-    <version>10009-dev</version>
+    <version>10010-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -31,4 +31,7 @@
             <artifactId>log4j-slf4j2-impl</artifactId>
         </dependency>
     </dependencies>
+
+
+
 </project>
