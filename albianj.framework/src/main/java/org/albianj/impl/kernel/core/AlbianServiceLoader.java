@@ -6,10 +6,10 @@ import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.kernel.aop.AlbianServiceAopProxy;
-import org.albianj.impl.kernel.service.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceAttribute;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceFieldAttribute;
-import org.albianj.kernel.service.AlbianServiceFieldSetterLifetime;
+import org.albianj.kernel.attr.AlbianServiceFieldAttribute;
+import org.albianj.kernel.anno.serv.AlbianServiceFieldSetterLifetime;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.loader.AlbianClassLoader;
 

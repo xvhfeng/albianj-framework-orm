@@ -1,4 +1,4 @@
-package org.albianj.kernel.core;
+package org.albianj.common.langs;
 
 
 import lombok.AllArgsConstructor;

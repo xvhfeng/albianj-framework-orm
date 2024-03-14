@@ -37,6 +37,25 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.security;
 
-public enum MACStyle {
-    MD5, SHA1, SHA256, SHA384, SHA512
+public enum SecurityOpt {
+    MD5(1,"HmacMD5"),
+    SHA1(2,"HmacSHA1"),
+    SHA256(3,"HmacSHA256"),
+    SHA384(4,"HmacSHA384"),
+    SHA512(5,"HmacSHA512");
+
+    private int key;
+    private String value;
+    SecurityOpt(int key, String value){
+        this.key = key;
+        this.value = value;
+    }
+
+    public int getKey(){
+        return this.key;
+    }
+
+    public String getValue(){
+        return this.value;
+    }
 }

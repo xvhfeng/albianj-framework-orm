@@ -51,7 +51,7 @@ import org.albianj.impl.orm.routing.AlbianDataRouterParserService;
 import org.albianj.impl.orm.storage.AlbianStorageParserService;
 import org.albianj.impl.orm.toolkit.Convert;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.object.*;
 import org.albianj.orm.service.AlbianEntityMetadata;

@@ -4,7 +4,7 @@ import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.ServRouter;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.loader.AlbianApplication;
+import org.albianj.loader.AlbianjApplication;
 import org.albianj.AblServRouter;
 import org.albianj.loader.IAlbianCommandLineApplication;
 
@@ -12,7 +12,7 @@ public class DoTest implements IAlbianCommandLineApplication {
     public static void main(String[] argv) {
         try {
 
-            AlbianApplication.run(DoTest.class,argv[0]);
+            AlbianjApplication.run(DoTest.class,argv[0]);
             test1();
             return;
 

@@ -46,7 +46,7 @@ import org.albianj.impl.orm.db.IPersistenceQueryScope;
 import org.albianj.impl.orm.db.IPersistenceTransactionClusterScope;
 import org.albianj.impl.orm.db.PersistenceQueryScope;
 import org.albianj.impl.orm.db.PersistenceTransactionClusterScope;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;

@@ -42,7 +42,7 @@ import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.logger.IAlbianLoggerService;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.IAlbianService;
-import org.albianj.kernel.service.ServiceContainer;
+import org.albianj.kernel.attr.ServiceContainer;
 
 import java.io.IOException;
 import java.io.PrintWriter;

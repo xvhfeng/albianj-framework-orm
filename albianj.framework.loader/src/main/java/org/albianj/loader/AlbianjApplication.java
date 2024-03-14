@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class AlbianApplication {
-    private static final Logger logger = LoggerFactory.getLogger(AlbianApplication.class);
+public class AlbianjApplication {
+    private static final Logger logger = LoggerFactory.getLogger(AlbianjApplication.class);
     private static final String AlbianStarter = "org.albianj.impl.kernel.core.AlbianTransmitterService";
 
     private static String lookupLoggerConfigFile(String configPath){
@@ -74,10 +74,10 @@ public class AlbianApplication {
         return null;
     }
 
-    public static boolean run(Class<?> mainClass,String configPath) {
+    public static boolean run(Class<?> mainClass,String configurtionFolder) {
 
-        String cfPath = configPath;
-        if(null == configPath ||  configPath.trim().isEmpty()) {
+        String cfPath = configurtionFolder;
+        if(null == configurtionFolder ||  configurtionFolder.trim().isEmpty()) {
             cfPath = AlbianClassLoader.getResourcePath();
         }
 
@@ -93,14 +93,14 @@ public class AlbianApplication {
         }
 
         logger.info(AlbianAsciiArt.Images);
-        logger.info("Albianj startup,configurtion path " + cfPath);
-        logger.info("Albianj found configuration file:" + null == cfFileName || cfFileName.isEmpty() ? "EMPTY": cfFileName);
+        logger.info("Albianj startup,main class:" + mainClass.getName() + ",configurtion folder: " + cfPath);
+        logger.info("Albianj found log4j configuration file:" + null == cfFileName || cfFileName.isEmpty() ? "EMPTY": cfFileName);
 
         try {
             logger.info("load albianj start class:{}",AlbianStarter);
             Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
             IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
-            abs.start(cfPath);
+            abs.start(mainClass,configurtionFolder);
         } catch (Throwable e) {
             // TODO Auto-generated catch block
             logger.error("AlbianBootService start is error ",e);

@@ -2,14 +2,14 @@ package org.albianj.impl.kernel.service;
 
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.impl.kernel.aop.AlbianServiceAopAttribute;
-import org.albianj.kernel.aop.AlbianServiceProxyRant;
-import org.albianj.kernel.aop.AlbianServiceProxyRants;
-import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
-import org.albianj.kernel.service.AlbianServiceFieldAttribute;
-import org.albianj.kernel.service.AlbianServiceFieldRant;
-import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.kernel.service.IAlbianService;
+import org.albianj.kernel.anno.serv.AlbianServiceFieldRant;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.kernel.attr.AlbianServiceAopAttribute;
+import org.albianj.kernel.anno.proxy.AlbianServiceProxyRant;
+import org.albianj.kernel.anno.proxy.AlbianServiceProxyRants;
+import org.albianj.kernel.attr.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceFieldAttribute;
+import org.albianj.kernel.service.*;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;
@@ -60,9 +60,9 @@ public class AlbianServiceRantParser {
 
         if (implClzz.isAnnotationPresent(AlbianServiceProxyRants.class)) {
             AlbianServiceProxyRants prants = implClzz.getAnnotation(AlbianServiceProxyRants.class);
-            Map<String, IAlbianServiceAopAttribute> asaas = new HashMap<>();
+            Map<String, AlbianServiceAopAttribute> asaas = new HashMap<>();
             for (AlbianServiceProxyRant prant : prants.Rants()) {
-                IAlbianServiceAopAttribute aspa = new AlbianServiceAopAttribute();
+                AlbianServiceAopAttribute aspa = new AlbianServiceAopAttribute();
                 aspa.setServiceName(prant.ServiceName());
                 aspa.setProxyName(prant.ProxyName());
 
@@ -89,7 +89,7 @@ public class AlbianServiceRantParser {
                 if (!StringsUtil.isNullOrEmptyOrAllSpace(prant.FullName())) {
                     aspa.setFullName(prant.FullName());
                 }
-                aspa.setIsAll(prant.IsAll());
+                aspa.setAll(prant.IsAll());
                 asaas.put(aspa.getProxyName(), aspa);
             }
 

@@ -41,20 +41,7 @@ import java.util.Date;
 
 public interface IAlbianTransmitterService {
     static String Name = "AlbianKernelBootService";
-
-    Date getStartDateTime();
-
-    String getSerialId();
-
-    void start(String configUrl) ;
-
-    void start(String kernelpath, String configPath) ;
-
-    public void doStart() ;
-
-    void start() ;
-
+    void start(Class<?> mainClzz,String configUrl) ;
     void unload() ;
 
-    void makeEnvironment();
 }

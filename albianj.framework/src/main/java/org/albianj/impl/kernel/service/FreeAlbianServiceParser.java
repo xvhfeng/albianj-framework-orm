@@ -39,16 +39,15 @@ package org.albianj.impl.kernel.service;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
-import org.albianj.common.io.Path;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.aop.AlbianAopAttribute;
-import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
-import org.albianj.kernel.core.KernelSetting;
+import org.albianj.kernel.attr.AlbianServiceAopAttribute;
+import org.albianj.kernel.anno.proxy.AlbianProxyIgnoreRant;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceFieldAttribute;
-import org.albianj.kernel.service.ServiceAttributeMap;
+import org.albianj.kernel.attr.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceFieldAttribute;
+import org.albianj.kernel.attr.ServiceAttributeMap;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -66,28 +65,24 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
     private final static String pkgTagName = "Services/Packages/Package";
     private String file = "service.xml";
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public String getConfigFileName() {
         return file;
     }
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void init()  {
 
         Map<String, AlbianServiceAttribute> map = new LinkedHashMap<>();
         try {
-            parserFile(map,
-                    Path.getExtendResourcePath(KernelSetting.getAlbianConfigFilePath()
-                            + getConfigFileName()));
-
-
+            String filename = findConfigFile(file);
+            parserFile(map, filename);
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "loading the service.xml is error." );
         }
 
         if (0 == map.size()) {
-//            logger.error("The albian services is empty.");
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The albian services is empty." );
             return;
@@ -231,8 +226,8 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                 }
             }
 
-            Map<String, IAlbianServiceAopAttribute> asaAopAttr = asa.getAopAttributes();
-            Map<String, IAlbianServiceAopAttribute> pkgAopAttr = asaPkg.getAopAttributes();
+            Map<String, AlbianServiceAopAttribute> asaAopAttr = asa.getAopAttributes();
+            Map<String, AlbianServiceAopAttribute> pkgAopAttr = asaPkg.getAopAttributes();
             if (SetUtil.isNullOrEmpty(asaAopAttr)) {
                 asa.setAopAttributes(pkgAopAttr);
             } else {
@@ -240,7 +235,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                     // merger field attribute
                     // base on service.xml and merger field from pkg
                     // if exist in service.xml not merger field from pkg
-                    for (Map.Entry<String, IAlbianServiceAopAttribute> fe : pkgAopAttr.entrySet()) {
+                    for (Map.Entry<String, AlbianServiceAopAttribute> fe : pkgAopAttr.entrySet()) {
                         if (!asaAopAttr.containsKey(fe.getKey())) {
                             asaAopAttr.put(fe.getKey(), fe.getValue());
                         }

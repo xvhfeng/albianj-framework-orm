@@ -5,7 +5,7 @@ import org.albianj.impl.orm.db.IManualCommandAdapter;
 import org.albianj.impl.orm.db.IManualTransactionScope;
 import org.albianj.impl.orm.db.ManualCommandAdapter;
 import org.albianj.impl.orm.db.ManualTransactionScope;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.ManualCommand;
 import org.albianj.orm.service.IAlbianManualPersistenceService;

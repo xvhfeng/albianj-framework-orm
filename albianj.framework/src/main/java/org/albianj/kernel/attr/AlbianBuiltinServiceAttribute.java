@@ -1,4 +1,4 @@
-package org.albianj.impl.kernel.core;
+package org.albianj.kernel.attr;
 
 import lombok.Data;
 

@@ -35,30 +35,54 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.kernel.security;
+package org.albianj.kernel.attr;
 
-public class StyleMapping {
-    public static String toMACStyleString(MACStyle style) {
-        switch (style) {
-            case MD5: {
-                return "HmacMD5";
-            }
-            case SHA1: {
-                return "HmacSHA1";
-            }
-            case SHA256: {
-                return "HmacSHA256";
-            }
-            case SHA384: {
-                return "HmacSHA384";
-            }
-            case SHA512: {
-                return "HmacSHA512";
-            }
-            default: {
-                // Hmac
-                return "HmacMD5";
-            }
+
+import org.albianj.kernel.logger.IAlbianLoggerService;
+import org.albianj.kernel.service.IAlbianService;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+
+public class ServiceContainer {
+
+    private static ConcurrentHashMap<String, IAlbianService> _container = new ConcurrentHashMap<String, IAlbianService>();
+
+    public static boolean existService(String id)
+            throws IllegalArgumentException {
+        return _container.contains(id);
+    }
+
+    // no synchronized
+    public static IAlbianService getService(String id) throws IllegalArgumentException {
+        return _container.get(id);
+    }
+
+    public synchronized static void addService(String id, IAlbianService value)
+            throws IllegalArgumentException {
+        if (null == id || null == value)
+            throw new IllegalArgumentException("argument is null.");
+        if (_container.containsKey(id)) {
+            _container.replace(id, value);
+        } else {
+            _container.put(id, value);
         }
+    }
+
+    public static void removeService(String id)
+            throws IllegalArgumentException {
+        //can not remove logger
+        if (IAlbianLoggerService.Name.equals(id))
+            return;
+        _container.remove(id);
+    }
+
+    public static void clear() {
+        _container.clear();
+    }
+
+    public static Set<String> getAllServiceNames() {
+        return _container.keySet();
     }
 }

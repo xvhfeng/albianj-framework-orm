@@ -42,12 +42,10 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.impl.orm.object.PluginDatabasePoolMarker;
 import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.object.DatabasePoolMaker;
 import org.albianj.orm.object.PersistenceDatabaseStyle;
 import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianConnectionMonitorService;
@@ -67,7 +65,6 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     public final static String DEFAULT_STORAGE_NAME = "!@#$%Albianj_Default_Storage%$#@!";
     private ConcurrentMap<String, IDataBasePool> pools = null;
-    private DatabasePoolMaker databasePoolMaker = null;
 
     // <Storage>
     // <Name>1thStorage</Name>
@@ -93,7 +90,6 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     public void init()  {
         pools = new ConcurrentHashMap<>(64);
         super.init();
-        databasePoolMaker = new PluginDatabasePoolMarker();
     }
 
     @Override
@@ -255,26 +251,15 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
                     return dbp;
                 }
                 switch (sa.getDbps().toUpperCase()) {
-//                    case "C3P0": {
-//                        dbp = new C3P0Wapper();
-//                        break;
-//                    }
                     case "HIKARICP": {
                         dbp = new HikariCPWapper();
                         break;
                     }
-//                    case "DBCP": {
-//                        dbp = new DBCPWapper();
-//                        break;
-//                    }
                     case "SpxDBCP": {
                         dbp = new SpxWapper();
                         break;
                     }
                     default: {
-                        if (databasePoolMaker != null) {
-                            dbp = databasePoolMaker.support(sa.getDbps());
-                        }
                         if (dbp == null) {
                             dbp = new SpxWapper();
                         }

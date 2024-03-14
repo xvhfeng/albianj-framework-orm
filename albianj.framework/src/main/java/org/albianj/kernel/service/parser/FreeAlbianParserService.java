@@ -37,10 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.service.parser;
 
-import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.service.FreeAlbianService;
-
-import java.io.File;
 
 public abstract class FreeAlbianParserService extends FreeAlbianService implements IAlbianParserService {
 
@@ -51,11 +48,11 @@ public abstract class FreeAlbianParserService extends FreeAlbianService implemen
         super.loading();
     }
 
-    protected String decideConfigFile(String filename){
-        if(KernelSetting.getAlbianConfigFilePath().endsWith(File.separator)) {
-            return KernelSetting.getAlbianConfigFilePath() + filename;
-        } else {
-            return   KernelSetting.getAlbianConfigFilePath() + File.separator + filename;
-        }
-    }
+//    protected String decideConfigFile(String filename){
+//        if(KernelSetting.getAlbianConfigFilePath().endsWith(File.separator)) {
+//            return KernelSetting.getAlbianConfigFilePath() + filename;
+//        } else {
+//            return   KernelSetting.getAlbianConfigFilePath() + File.separator + filename;
+//        }
+//    }
 }

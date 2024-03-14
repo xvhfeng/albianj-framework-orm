@@ -39,13 +39,14 @@ package org.albianj.impl.kernel.core;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
-import org.albianj.impl.kernel.service.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceAttribute;
 import org.albianj.impl.kernel.service.FreeAlbianServiceParser;
-import org.albianj.kernel.core.KernelSetting;
+import org.albianj.kernel.attr.ApplicationSettings;
+import org.albianj.kernel.attr.GlobalSettings;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.IAlbianService;
-import org.albianj.kernel.service.ServiceAttributeMap;
-import org.albianj.kernel.service.ServiceContainer;
+import org.albianj.kernel.attr.ServiceAttributeMap;
+import org.albianj.kernel.attr.ServiceContainer;
 import org.albianj.loader.IAlbianTransmitterService;
 
 import java.util.*;
@@ -55,59 +56,15 @@ import java.util.*;
  */
 public class AlbianTransmitterService implements IAlbianTransmitterService {
 
-    private static Date startDateTime;
-    private static String serialId;
-
     public String getServiceName() {
         return Name;
     }
 
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#getStartDateTime()
-     */
     @Override
-    public Date getStartDateTime() {
-        return startDateTime;
-    }
+    public void start(Class<?> mainClzz,String configurtionFolder)  {
 
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#getSerialId()
-     */
-    @Override
-    public String getSerialId() {
-        return serialId;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String)
-     */
-    @Override
-    public void start(String configUrl)  {
-        makeEnvironment();
-        KernelSetting.setAlbianConfigFilePath(configUrl);
-        start();
-    }
-
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#start(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void start(String kernelpath, String configPath)  {
-        makeEnvironment();
-        KernelSetting.setAlbianConfigFilePath(configPath);
-        KernelSetting.setAlbianKernelConfigFilePath(kernelpath);
-        start();
-    }
-
-    @Override
-    public void start()  {
-        makeEnvironment();
-        startDateTime = new Date();
-        doStart();
-    }
-
-    public void doStart()  {
+        GlobalSettings globalSettings = new GlobalSettings(mainClzz,configurtionFolder);
+        ApplicationSettings.setGlobalSettings(globalSettings);
 
         // first load logger
         // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
@@ -194,15 +151,6 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             bltSrvAttrs.putAll(bnsSrvAttrs);
         }
         ServiceAttributeMap.insert(FreeAlbianServiceParser.ALBIANJSERVICEKEY, bltSrvAttrs);
-        //set field in service
-        //        if (!setServiceFields(bltSrvAttrs)) {
-        //            AlbianServiceRouter.getLogger2().log(IAlbianLoggerService.AlbianRunningLoggerName,
-        //                    IAlbianLoggerService2.InnerThreadName,
-        //                    AlbianLoggerLevel.Error,
-        //                    " set field in the services is fail!startup albianj is fail.");
-        //            throw new AlbianRuntimeException("startup albianj is fail.");
-        //
-        //        }
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                 "set fieds in the service over .Startup albianJ is success!");
     }
@@ -227,19 +175,4 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             }
         }
     }
-
-    /* (non-Javadoc)
-     * @see org.albianj.kernel.impl.IAlbianBootService#makeEnvironment()
-     */
-    @Override
-    public void makeEnvironment() {
-        String system = System.getProperty("os.name");
-        if (system.toLowerCase().contains("windows"))// start with '/'
-        {
-            KernelSetting.setSystem(KernelSetting.Windows);
-        } else {
-            KernelSetting.setSystem(KernelSetting.Linux);
-        }
-    }
-
 }

@@ -40,10 +40,9 @@ package org.albianj.impl.kernel.core;
 import org.albianj.AblBltinServsNames;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.PropUtil;
-import org.albianj.common.utils.StringsUtil;
-import org.albianj.kernel.core.KernelSetting;
+import org.albianj.kernel.attr.ApplicationSettings;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 
@@ -64,32 +63,12 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
 
     public void init()  {
         try {
-            Properties props = PropUtil.load(decideConfigFile(file));
-            parser(props);
+            Properties props = PropUtil.load(findConfigFile(file));
+            ApplicationSettings.getGlobalSettings().setKernelProps(props);
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "load the kernel properties is fail.pls look at the file:{} ", file);
         }
     }
-
-    public void parser(Properties props) {
-        String id = PropUtil.getValue(props, "Id");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(id)) {
-            KernelSetting.setKernelId("001");
-        } else {
-            KernelSetting.setKernelId(id);
-        }
-
-        String appName = PropUtil.getValue(props, "AppName");
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(appName)) {
-            KernelSetting.setAppName(appName);
-        }
-
-        String sMachineKey = PropUtil.getValue(props, "MachineKey");
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(sMachineKey)) {
-            KernelSetting.setMachineKey(sMachineKey);
-        }
-    }
-
 
 }

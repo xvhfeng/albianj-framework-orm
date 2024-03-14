@@ -1,4 +1,4 @@
-package org.albianj.kernel.service;
+package org.albianj.kernel.anno.serv;
 
 public enum AlbianServiceFieldSetterLifetime {
     AfterNew,

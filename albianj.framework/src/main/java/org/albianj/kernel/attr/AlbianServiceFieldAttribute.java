@@ -1,7 +1,8 @@
-package org.albianj.kernel.service;
+package org.albianj.kernel.attr;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.albianj.kernel.anno.serv.AlbianServiceFieldSetterLifetime;
 
 import java.lang.reflect.Field;
 

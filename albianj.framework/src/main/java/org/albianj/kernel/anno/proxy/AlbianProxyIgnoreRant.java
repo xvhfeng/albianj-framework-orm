@@ -1,4 +1,4 @@
-package org.albianj.kernel.aop;
+package org.albianj.kernel.anno.proxy;
 
 import java.lang.annotation.*;
 
@@ -10,12 +10,12 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Inherited
 @Documented
-public @interface AlbianAopAttribute {
+public @interface AlbianProxyIgnoreRant {
     /**
      * give up the aop when value is true
      * default is false then execute aop proxy
      *
      * @return
      */
-    boolean avoid() default false;
+    boolean ignore() default false;
 }

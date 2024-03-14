@@ -5,11 +5,12 @@ import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.values.KeyValuePair;
-import org.albianj.impl.kernel.service.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceAttribute;
 import org.albianj.impl.kernel.service.AlbianServiceRantParser;
+import org.albianj.kernel.attr.AlbianBuiltinServiceAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.IAlbianService;
-import org.albianj.kernel.service.ServiceContainer;
+import org.albianj.kernel.attr.ServiceContainer;
 import org.albianj.loader.AlbianClassLoader;
 
 import java.util.LinkedHashMap;
@@ -132,12 +133,7 @@ public class AlbianBuiltinServiceLoader {
     public Map<String,AlbianServiceAttribute> sacnService(String sessionId)  {
         bltSrvAttrs = new LinkedHashMap<>();
         for (AlbianBuiltinServiceAttribute bltSerAttr : this.bltServ.values()) {
-//            String id = bltSerAttr.getId();
-//            String sImplClzz = bltSerAttr.getImplClzz();
             try {
-//                Class<?> implClzz = AlbianClassLoader.getInstance().loadClass(sImplClzz);
-//                IAlbianServiceAttribute attr = AlbianServiceRantParser.scanAlbianService(implClzz);
-//                bltSrvAttrs.put(id,attr);
                 KeyValuePair<String,AlbianServiceAttribute> kvp = sacnService(bltSerAttr);
                 bltSrvAttrs.put(kvp.getKey(),kvp.getValue());
             }catch (Exception e){

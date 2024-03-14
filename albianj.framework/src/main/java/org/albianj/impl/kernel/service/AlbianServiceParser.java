@@ -42,11 +42,11 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.impl.kernel.aop.AlbianServiceAopAttribute;
-import org.albianj.kernel.aop.IAlbianServiceAopAttribute;
+import org.albianj.kernel.attr.AlbianServiceAopAttribute;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceFieldAttribute;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.attr.AlbianServiceAttribute;
+import org.albianj.kernel.attr.AlbianServiceFieldAttribute;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 import org.albianj.loader.AlbianClassLoader;
 import org.dom4j.Element;
@@ -142,7 +142,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         List aopNodes = elt.selectNodes("Aop/Aspect");
         if (!SetUtil.isNullOrEmpty(aopNodes)) {
-            Map<String, IAlbianServiceAopAttribute> aas = parserAlbianServiceAopAttribute(id, aopNodes);
+            Map<String, AlbianServiceAopAttribute> aas = parserAlbianServiceAopAttribute(id, aopNodes);
             if (!SetUtil.isNullOrEmpty(aas)) {
                 serviceAttr.setAopAttributes(aas);
             }
@@ -199,19 +199,19 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     }
 
-    protected Map<String, IAlbianServiceAopAttribute> parserAlbianServiceAopAttribute(String id, List nodes)  {
-        Map<String, IAlbianServiceAopAttribute> aas = new HashMap<>();
+    protected Map<String, AlbianServiceAopAttribute> parserAlbianServiceAopAttribute(String id, List nodes)  {
+        Map<String, AlbianServiceAopAttribute> aas = new HashMap<>();
         for (Object node : nodes) {
-            IAlbianServiceAopAttribute pa = parserAlbianServiceAopAttribute(id, (Element) node);
+            AlbianServiceAopAttribute pa = parserAlbianServiceAopAttribute(id, (Element) node);
             aas.put(pa.getProxyName(), pa);
         }
         return aas;
     }
 
-    protected IAlbianServiceAopAttribute parserAlbianServiceAopAttribute(String id, Element e)  {
+    protected AlbianServiceAopAttribute parserAlbianServiceAopAttribute(String id, Element e)  {
 
 
-        IAlbianServiceAopAttribute aa = new AlbianServiceAopAttribute();
+        AlbianServiceAopAttribute aa = new AlbianServiceAopAttribute();
         String beginWith = XmlUtil.getAttributeValue(e, "BeginWith");
         if (!StringsUtil.isNullOrEmptyOrAllSpace(beginWith)) {
             aa.setBeginWith(beginWith);
@@ -249,7 +249,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         String sIsAll = XmlUtil.getAttributeValue(e, "IsAll");
         if (!StringsUtil.isNullOrEmptyOrAllSpace(sIsAll)) {
-            aa.setIsAll(Boolean.parseBoolean(sIsAll));
+            aa.setAll(Boolean.parseBoolean(sIsAll));
         }
 
         String proxy = XmlUtil.getAttributeValue(e, "Proxy");

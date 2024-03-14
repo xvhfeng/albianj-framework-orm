@@ -48,5 +48,4 @@ public class DataRoutersAttribute  {
     private Map<String, DataRouterAttribute> writerRouters = null;
     private Map<String, DataRouterAttribute> readerRouters = null;
     private IAlbianObjectDataRouter dataRouter = null;
-
 }

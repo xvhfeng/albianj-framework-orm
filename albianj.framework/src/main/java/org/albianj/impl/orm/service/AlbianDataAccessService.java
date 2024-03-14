@@ -8,7 +8,7 @@ import org.albianj.impl.orm.context.WriterJobAdapter;
 import org.albianj.impl.orm.context.dactx.DataAccessContext;
 import org.albianj.impl.orm.context.dactx.QueryContext;
 import org.albianj.impl.orm.db.*;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
