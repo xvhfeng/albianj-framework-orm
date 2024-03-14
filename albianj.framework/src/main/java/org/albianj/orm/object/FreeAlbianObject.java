@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.object;
 
 import org.albianj.AblThrowable;
-import org.albianj.kernel.common.comment.SpecialWarning;
-import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.common.comment.SpecialWarning;
+import org.albianj.common.utils.SetUtil;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.ServRouter;
 import org.albianj.orm.context.dactx.AlbianObjectWarp;

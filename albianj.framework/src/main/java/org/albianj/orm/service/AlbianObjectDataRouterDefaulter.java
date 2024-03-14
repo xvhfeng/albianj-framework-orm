@@ -1,6 +1,6 @@
 package org.albianj.orm.service;
 
-import org.albianj.kernel.common.utils.SetUtil;
+import org.albianj.common.utils.SetUtil;
 import org.albianj.orm.object.*;
 
 import java.util.List;

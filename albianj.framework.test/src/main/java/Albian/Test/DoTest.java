@@ -4,7 +4,7 @@ import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.ServRouter;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.loader.AlbianBootService;
+import org.albianj.loader.AlbianApplication;
 import org.albianj.AblServRouter;
 
 public class DoTest {
@@ -22,7 +22,7 @@ public class DoTest {
 //            re.printStackTrace();
 
 
-            AlbianBootService.start(argv[0]);
+            AlbianApplication.run(argv[0]);
             test1();
 
 //            IAlbianLoggerService2 logServ = AlbianServiceRouter.getLogger2();

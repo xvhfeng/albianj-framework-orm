@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.albianj.ServRouter;
-import org.albianj.kernel.common.utils.LangUtil;
-import org.albianj.kernel.common.utils.StringsUtil;
+import org.albianj.common.utils.LangUtil;
+import org.albianj.common.utils.StringsUtil;
 
 @Data
 @AllArgsConstructor

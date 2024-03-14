@@ -1,6 +1,6 @@
 package org.albianj.kernel.logger;
 
-import org.albianj.kernel.common.comment.Comments;
+import org.albianj.common.comment.Comments;
 import org.albianj.AblBltinServsNames;
 import org.albianj.kernel.service.IAlbianService;
 
