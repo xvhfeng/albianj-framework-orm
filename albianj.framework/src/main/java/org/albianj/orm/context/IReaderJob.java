@@ -37,9 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.context;
 
+import org.albianj.impl.orm.db.PersistenceCommand;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.db.IPersistenceCommand;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -50,34 +50,44 @@ import java.sql.Statement;
  *
  * @author seapeak
  */
-public interface IReaderJob extends IPersistenceJob {
+public interface IReaderJob  {
+
+    /**
+     * 得到当前job的id，
+     * 如果执行job的时候传入sessionid，这个方法获取该sessionid
+     * 如果没有传入sessionid，那么albianj会自动生成一个
+     *
+     * @return
+     */
+    String getId();
+
     /**
      * 得到job操作的storage属性
      *
      * @return
      */
-    public IRunningStorageAttribute getStorage();
+    public RunningStorageAttribute getStorage();
 
     /**
      * 设置job操作的storage属性
      *
      * @param storage
      */
-    public void setStorage(IRunningStorageAttribute storage);
+    public void setStorage(RunningStorageAttribute storage);
 
     /**
      * 得到job的操作命令
      *
      * @return
      */
-    public IPersistenceCommand getCommand();
+    public PersistenceCommand getCommand();
 
     /**
      * 设置job操作的命令
      *
      * @param command
      */
-    public void setCommand(IPersistenceCommand command);
+    public void setCommand(PersistenceCommand command);
 
     /**
      * 得到执行job的连接

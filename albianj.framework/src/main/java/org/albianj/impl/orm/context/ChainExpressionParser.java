@@ -39,10 +39,10 @@ package org.albianj.impl.orm.context;
 
 import org.albianj.AblThrowable;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.impl.orm.db.SqlParameter;
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.Convert;
 import org.albianj.impl.orm.toolkit.EnumMapping;
-import org.albianj.orm.db.ISqlParameter;
-import org.albianj.impl.orm.db.SqlParameter;
 import org.albianj.orm.object.*;
 import org.albianj.orm.object.filter.IChainExpression;
 import org.albianj.orm.object.filter.IFilterExpression;
@@ -85,7 +85,7 @@ public class ChainExpressionParser {
     }
 
     public static void toConditionText(String sessionId, Class<?> cls, IAlbianObjectAttribute albianObject,
-                                       IStorageAttribute storage, IChainExpression f, StringBuilder sb, Map<String, ISqlParameter> paras)
+                                       StorageAttribute storage, IChainExpression f, StringBuilder sb, Map<String, SqlParameter> paras)
               {
         if (null == f) return;
         List<IChainExpression> ces = f.getChainExpression();
@@ -141,7 +141,7 @@ public class ChainExpressionParser {
                                 : fe.getAliasName())
                         .append("# ");
 
-                ISqlParameter para = new SqlParameter();
+                SqlParameter para = new SqlParameter();
                 para.setName(fieldAttr.getSqlFieldName());
                 para.setSqlFieldName(fieldAttr.getSqlFieldName());
                 if (null == fe.getFieldClass()) {

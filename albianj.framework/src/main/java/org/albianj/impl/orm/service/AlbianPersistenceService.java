@@ -38,7 +38,14 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.service;
 
 import org.albianj.common.utils.SetUtil;
+import org.albianj.impl.orm.context.IReaderJobAdapter;
+import org.albianj.impl.orm.context.IWriterJobAdapter;
+import org.albianj.impl.orm.context.ReaderJobAdapter;
 import org.albianj.impl.orm.context.WriterJobAdapter;
+import org.albianj.impl.orm.db.IPersistenceQueryScope;
+import org.albianj.impl.orm.db.IPersistenceTransactionClusterScope;
+import org.albianj.impl.orm.db.PersistenceQueryScope;
+import org.albianj.impl.orm.db.PersistenceTransactionClusterScope;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
@@ -46,13 +53,6 @@ import org.albianj.orm.context.IPersistenceNotify;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.impl.orm.context.IReaderJobAdapter;
-import org.albianj.impl.orm.context.IWriterJobAdapter;
-import org.albianj.impl.orm.context.ReaderJobAdapter;
-import org.albianj.impl.orm.db.IPersistenceQueryScope;
-import org.albianj.impl.orm.db.IPersistenceTransactionClusterScope;
-import org.albianj.impl.orm.db.PersistenceQueryScope;
-import org.albianj.impl.orm.db.PersistenceTransactionClusterScope;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IFilterCondition;
 import org.albianj.orm.object.IOrderByCondition;

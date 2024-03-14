@@ -38,13 +38,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.context;
 
 import org.albianj.AblThrowable;
-import org.albianj.common.values.RefArg;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.common.values.RefArg;
+import org.albianj.impl.orm.db.SqlParameter;
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.Convert;
 import org.albianj.impl.orm.toolkit.EnumMapping;
-import org.albianj.orm.db.ISqlParameter;
-import org.albianj.impl.orm.db.SqlParameter;
 import org.albianj.orm.object.*;
 import org.albianj.orm.service.IAlbianStorageParserService;
 
@@ -53,15 +53,15 @@ import java.util.Map;
 
 public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJobAdapter {
 
-    protected IStorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr, boolean isExact,
+    protected StorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr, boolean isExact,
                                                        String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
                                                        Map<String, IOrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
-        IStorageAttribute stgAttr = null;
+        StorageAttribute stgAttr = null;
         IAlbianStorageParserService asps = ServRouter
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         if (StringsUtil.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
             if (StringsUtil.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback
-                IDataRoutersAttribute drsAttr = objAttr.getDataRouters();
+                DataRoutersAttribute drsAttr = objAttr.getDataRouters();
                 IAlbianObjectDataRouter drouter = drsAttr.getDataRouter();
                 if (isExact) {
                     IDataRouterAttribute drAttr =
@@ -85,7 +85,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                     StringsUtil.isNullOrEmptyOrAllSpace(tableAlias) ? objAttr.getImplClzz().getSimpleName() : tableAlias);
             }
         } else { // do fix drouter
-            IDataRoutersAttribute drsAttr = objAttr.getDataRouters();
+            DataRoutersAttribute drsAttr = objAttr.getDataRouters();
             IAlbianObjectDataRouter drouter = drsAttr.getDataRouter();
             IDataRouterAttribute drAttr = drsAttr.getReaderRouters().get(drouterAlias);
             String storageName = drAttr.getStorageName();
@@ -190,7 +190,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
     }
 
     protected StringBuilder makeSltCmdWhrs(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle,
-        String implType, LinkedList<IFilterCondition> wheres, Map<String, ISqlParameter> paras) {
+        String implType, LinkedList<IFilterCondition> wheres, Map<String, SqlParameter> paras) {
         StringBuilder sbWhrs = new StringBuilder();
         if (null != wheres) {
             for (IFilterCondition where : wheres) {
@@ -215,7 +215,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                         where.getAliasName())
                     //	.append(member.getSqlFieldName())
                     .append("#").append(where.isCloseSub() ? ")" : "");
-                ISqlParameter para = new SqlParameter();
+                SqlParameter para = new SqlParameter();
                 para.setName(member.getSqlFieldName());
                 para.setSqlFieldName(member.getSqlFieldName());
                 if (null == where.getFieldClass()) {

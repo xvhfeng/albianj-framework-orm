@@ -38,19 +38,21 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.db;
 
 import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.impl.orm.toolkit.ResultConvert;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.*;
+import org.albianj.orm.db.IDataBasePool;
+
+import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianEntityFieldAttribute;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IAlbianObjectAttribute;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianStorageParserService;
 
@@ -65,7 +67,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     protected void perExecute(IReaderJob job)  {
         String sessionId = job.getId();
         PersistenceNamedParameter.parseSql(job.getCommand());
-        IRunningStorageAttribute rsa = job.getStorage();
+        RunningStorageAttribute rsa = job.getStorage();
         IAlbianStorageParserService asps = ServRouter
             .getService(job.getId(), IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         IDataBasePool dbp = asps.getDatabasePool(sessionId, rsa);
@@ -78,7 +80,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
         job.setConnection(conn);
         job.setDatabasePool(dbp);
-        IPersistenceCommand cmd = job.getCommand();
+        PersistenceCommand cmd = job.getCommand();
         PreparedStatement statement = null;
         try {
             statement = job.getConnection().prepareStatement(cmd.getCommandText());
@@ -90,7 +92,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         if (!SetUtil.isNullOrEmpty(map)) {
             for (int i = 1; i <= map.size(); i++) {
                 String paraName = map.get(i);
-                ISqlParameter para = cmd.getParameters().get(paraName);
+                SqlParameter para = cmd.getParameters().get(paraName);
                 try {
                     if (null == para.getValue()) {
 
@@ -110,8 +112,8 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
     protected void executing(IReaderJob job)  {
         String text = job.getCommand().getCommandText();
-        Map<String, ISqlParameter> map = job.getCommand().getParameters();
-        IRunningStorageAttribute st = job.getStorage();
+        Map<String, SqlParameter> map = job.getCommand().getParameters();
+        RunningStorageAttribute st = job.getStorage();
         String sessionId = job.getId();
 
         ResultSet result = null;
@@ -156,8 +158,8 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     end1 - begin1);
         }
         String text = job.getCommand().getCommandText();
-        Map<String, ISqlParameter> map = job.getCommand().getParameters();
-        IRunningStorageAttribute st = job.getStorage();
+        Map<String, SqlParameter> map = job.getCommand().getParameters();
+        RunningStorageAttribute st = job.getStorage();
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
@@ -167,7 +169,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
     protected void unloadExecute(IReaderJob job)   {
         String sessionId = job.getId();
-        IRunningStorageAttribute rsa = job.getStorage();
+        RunningStorageAttribute rsa = job.getStorage();
         IDataBasePool dbp = job.getDatabasePool();
         dbp.returnConnection(sessionId, rsa.getStorageAttribute().getName(), rsa.getDatabase(), job.getConnection(),
             job.getStatement(), job.getResult());
@@ -244,8 +246,8 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             if (result.next()) {
                 v = result.getObject("COUNT");
                 String text = job.getCommand().getCommandText();
-                Map<String, ISqlParameter> map = job.getCommand().getParameters();
-                IRunningStorageAttribute st = job.getStorage();
+                Map<String, SqlParameter> map = job.getCommand().getParameters();
+                RunningStorageAttribute st = job.getStorage();
                 ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                         "Storage:{},database:{},SqlText:{},paras:{}.return COUNT(1) :{}",
                     st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),

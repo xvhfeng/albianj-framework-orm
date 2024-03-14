@@ -2,11 +2,10 @@ package org.albianj.impl.orm.storage;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.albianj.kernel.logger.LogLevel;
 import org.albianj.ServRouter;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
-
+import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.kernel.logger.LogLevel;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -25,8 +24,8 @@ public class HikariCPWapper extends FreeDataBasePool {
     }
 
     @Override
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
-        IStorageAttribute sa = rsa.getStorageAttribute();
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa, boolean isAutoCommit)  {
+        StorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
@@ -49,10 +48,10 @@ public class HikariCPWapper extends FreeDataBasePool {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa)  {
+    public DataSource setupDataSource(String sessionid,String key, RunningStorageAttribute rsa)  {
         HikariConfig config = new HikariConfig();
         try {
-            IStorageAttribute storageAttribute = rsa.getStorageAttribute();
+            StorageAttribute storageAttribute = rsa.getStorageAttribute();
             String url = FreeAlbianStorageParserService
                     .generateConnectionUrl(rsa);
             config.setDriverClassName(DRIVER_CLASSNAME);
@@ -80,12 +79,12 @@ public class HikariCPWapper extends FreeDataBasePool {
             config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
             config.setConnectionTestQuery("SELECT 1");
 
-            if (storageAttribute.getPooling()) {
+            if (storageAttribute.isPooling()) {
                 //池中最小空闲链接数量
                 config.setMinimumIdle(storageAttribute.getMinSize());
                 //池中最大链接数量
                 config.setMaximumPoolSize(storageAttribute.getMaxSize());
-                config.setMaxLifetime(storageAttribute.getAliveTime() * 1000);
+                config.setMaxLifetime(storageAttribute.getIdelTime() * 1000);
                 config.setConnectionTimeout(2 * 1000);//wait get connection from pool
             } else {
                 //池中最小空闲链接数量

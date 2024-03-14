@@ -38,110 +38,113 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.db;
 
 
-import org.albianj.orm.db.IPersistenceCommand;
-import org.albianj.orm.db.ISqlParameter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.albianj.orm.db.PersistenceCommandType;
 
 import java.util.Map;
 
-public class PersistenceCommand implements IPersistenceCommand {
+@Data
+@NoArgsConstructor
+public class PersistenceCommand {
     private String commandText = null;
     private PersistenceCommandType commandType = PersistenceCommandType.Text;
-    private Map<String, ISqlParameter> paramsters = null;
+    private Map<String, SqlParameter> parameters = null;
     private Map<Integer, String> parameterMapper = null;
 
     private String rollbackCommandText = null;
     private PersistenceCommandType rollbackCommandType = PersistenceCommandType.Text;
-    private Map<String, ISqlParameter> rollbackParamsters = null;
+    private Map<String, SqlParameter> rollbackParameters = null;
     private Map<Integer, String> rollbackParameterMapper = null;
 
     //this default value must the same as AlbianObjectAttribute.compensating
     private boolean compensating = true;
 
-    public String getCommandText() {
-        // TODO Auto-generated method stub
-        return this.commandText;
-    }
-
-    public void setCommandText(String commandText) {
-        // TODO Auto-generated method stub
-        this.commandText = commandText;
-    }
-
-    public PersistenceCommandType getCommandType() {
-        // TODO Auto-generated method stub
-        return this.commandType;
-    }
-
-    public void setCommandType(PersistenceCommandType commandType) {
-        // TODO Auto-generated method stub
-        this.commandType = commandType;
-    }
-
-    public Map<Integer, String> getParameterMapper() {
-        return this.parameterMapper;
-    }
-
-    public void setParameterMapper(Map<Integer, String> parameterMapper) {
-        this.parameterMapper = parameterMapper;
-    }
-
-    public Map<String, ISqlParameter> getParameters() {
-        // TODO Auto-generated method stub
-        return this.paramsters;
-    }
-
-    public void setParameters(Map<String, ISqlParameter> parameters) {
-        // TODO Auto-generated method stub
-        this.paramsters = parameters;
-    }
-
-
-    public String getRollbackCommandText() {
-        // TODO Auto-generated method stub
-        return this.rollbackCommandText;
-    }
-
-    public void setRollbackCommandText(String commandText) {
-        // TODO Auto-generated method stub
-        this.rollbackCommandText = commandText;
-    }
-
-    public PersistenceCommandType getRollbackCommandType() {
-        // TODO Auto-generated method stub
-        return this.rollbackCommandType;
-    }
-
-    public void setRollbackCommandType(PersistenceCommandType commandType) {
-        // TODO Auto-generated method stub
-        this.rollbackCommandType = commandType;
-    }
-
-    public Map<Integer, String> getRollbackParameterMapper() {
-        return this.rollbackParameterMapper;
-    }
-
-    public void setRollbackParameterMapper(Map<Integer, String> parameterMapper) {
-        this.rollbackParameterMapper = parameterMapper;
-    }
-
-    public Map<String, ISqlParameter> getRollbackParameters() {
-        // TODO Auto-generated method stub
-        return this.rollbackParamsters;
-    }
-
-    public void setRollbackParameters(Map<String, ISqlParameter> parameters) {
-        // TODO Auto-generated method stub
-        this.rollbackParamsters = parameters;
-    }
-
-    public boolean getCompensating() {
-        return this.compensating;
-    }
-
-    public void setCompensating(boolean compensating) {
-        this.compensating = compensating;
-    }
-
+//    public String getCommandText() {
+//        // TODO Auto-generated method stub
+//        return this.commandText;
+//    }
+//
+//    public void setCommandText(String commandText) {
+//        // TODO Auto-generated method stub
+//        this.commandText = commandText;
+//    }
+//
+//    public PersistenceCommandType getCommandType() {
+//        // TODO Auto-generated method stub
+//        return this.commandType;
+//    }
+//
+//    public void setCommandType(PersistenceCommandType commandType) {
+//        // TODO Auto-generated method stub
+//        this.commandType = commandType;
+//    }
+//
+//    public Map<Integer, String> getParameterMapper() {
+//        return this.parameterMapper;
+//    }
+//
+//    public void setParameterMapper(Map<Integer, String> parameterMapper) {
+//        this.parameterMapper = parameterMapper;
+//    }
+//
+//    public Map<String, ISqlParameter> getParameters() {
+//        // TODO Auto-generated method stub
+//        return this.paramsters;
+//    }
+//
+//    public void setParameters(Map<String, ISqlParameter> parameters) {
+//        // TODO Auto-generated method stub
+//        this.paramsters = parameters;
+//    }
+//
+//
+//    public String getRollbackCommandText() {
+//        // TODO Auto-generated method stub
+//        return this.rollbackCommandText;
+//    }
+//
+//    public void setRollbackCommandText(String commandText) {
+//        // TODO Auto-generated method stub
+//        this.rollbackCommandText = commandText;
+//    }
+//
+//    public PersistenceCommandType getRollbackCommandType() {
+//        // TODO Auto-generated method stub
+//        return this.rollbackCommandType;
+//    }
+//
+//    public void setRollbackCommandType(PersistenceCommandType commandType) {
+//        // TODO Auto-generated method stub
+//        this.rollbackCommandType = commandType;
+//    }
+//
+//    public Map<Integer, String> getRollbackParameterMapper() {
+//        return this.rollbackParameterMapper;
+//    }
+//
+//    public void setRollbackParameterMapper(Map<Integer, String> parameterMapper) {
+//        this.rollbackParameterMapper = parameterMapper;
+//    }
+//
+//    public Map<String, ISqlParameter> getRollbackParameters() {
+//        // TODO Auto-generated method stub
+//        return this.rollbackParamsters;
+//    }
+//
+//    public void setRollbackParameters(Map<String, ISqlParameter> parameters) {
+//        // TODO Auto-generated method stub
+//        this.rollbackParamsters = parameters;
+//    }
+//
+//    public boolean getCompensating() {
+//        return this.compensating;
+//    }
+//
+//    public void setCompensating(boolean compensating) {
+//        this.compensating = compensating;
+//    }
+//
 
 }

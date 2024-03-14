@@ -1,7 +1,8 @@
 package org.albianj.impl.orm.rant;
 
-import org.albianj.common.utils.SetUtil;
+import org.albianj.ServRouter;
 import org.albianj.common.utils.ReflectUtil;
+import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.orm.object.AlbianEntityFieldAttribute;
 import org.albianj.impl.orm.object.AlbianObjectAttribute;
@@ -10,7 +11,6 @@ import org.albianj.impl.orm.routing.AlbianDataRouterParserService;
 import org.albianj.impl.orm.storage.AlbianStorageParserService;
 import org.albianj.impl.orm.toolkit.Convert;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.ServRouter;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;
@@ -81,10 +81,10 @@ public class AlbianEntityRantScaner {
 
 
                         AlbianObjectDataRoutersRant drr = or.DataRouters();
-                        IDataRoutersAttribute pkgDataRouterAttr = scanRouters(clzz, drr);
+                        DataRoutersAttribute pkgDataRouterAttr = scanRouters(clzz, drr);
                         //set data router
                         if (null != pkgDataRouterAttr) {
-                            IDataRoutersAttribute cfgDataRouterAttr = objAttr.getDataRouters();
+                            DataRoutersAttribute cfgDataRouterAttr = objAttr.getDataRouters();
                             if (null == cfgDataRouterAttr) { // not exist data router from drouter.xml
                                 objAttr.setDataRouters(pkgDataRouterAttr);
                             } else {
@@ -115,7 +115,7 @@ public class AlbianEntityRantScaner {
                 });
     }
 
-    private static IDataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
+    private static DataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
         if (null == drr.DataRouter()) {
             return null;
         }
@@ -127,7 +127,7 @@ public class AlbianEntityRantScaner {
             return null;
         }
 
-        IDataRoutersAttribute drsAttr = new DataRoutersAttribute();
+        DataRoutersAttribute drsAttr = new DataRoutersAttribute();
         IAlbianObjectDataRouter dr = null;
         try {
             dr = (IAlbianObjectDataRouter) clazz.newInstance();

@@ -39,18 +39,18 @@ package org.albianj.impl.orm.context;
 
 import org.albianj.ServRouter;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.impl.orm.db.PersistenceCommand;
 import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.db.IPersistenceCommand;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class ReaderJob implements IReaderJob {
-    private IRunningStorageAttribute storage = null;
-    private IPersistenceCommand command = null;
+    private RunningStorageAttribute storage = null;
+    private PersistenceCommand command = null;
     private Connection connection = null;
     private Statement statement = null;
     private ResultSet result = null;
@@ -65,19 +65,19 @@ public class ReaderJob implements IReaderJob {
         }
     }
 
-    public IRunningStorageAttribute getStorage() {
+    public RunningStorageAttribute getStorage() {
         return storage;
     }
 
-    public void setStorage(IRunningStorageAttribute storage) {
+    public void setStorage(RunningStorageAttribute storage) {
         this.storage = storage;
     }
 
-    public IPersistenceCommand getCommand() {
+    public PersistenceCommand getCommand() {
         return command;
     }
 
-    public void setCommand(IPersistenceCommand command) {
+    public void setCommand(PersistenceCommand command) {
         this.command = command;
     }
 

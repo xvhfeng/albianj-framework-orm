@@ -38,15 +38,15 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.storage;
 
 import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
 import org.albianj.orm.object.PersistenceDatabaseStyle;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianStorageParserService;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -59,17 +59,17 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
 
     private final static String tagName = "Storages/Storage";
     private String file = "storage.xml";
-    private HashMap<String, IStorageAttribute> cached = null;
+    private HashMap<String, StorageAttribute> cached = null;
 
     public static String generateConnectionUrl(
-            IRunningStorageAttribute rsa) {
+            RunningStorageAttribute rsa) {
         if (null == rsa) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The argument storageAttribute is null.");
             return null;
         }
 
-        IStorageAttribute storageAttribute = rsa.getStorageAttribute();
+        StorageAttribute storageAttribute = rsa.getStorageAttribute();
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:");
         // String url =
@@ -123,7 +123,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     @Override
     public void init()  {
         Document doc = null;
-        cached = new HashMap<String, IStorageAttribute>();
+        cached = new HashMap<String, StorageAttribute>();
         try {
             parserFile(file);
         } catch (Throwable e) {
@@ -135,7 +135,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
 
     private void parserFile(String filename)  {
         Document doc = null;
-        cached = new HashMap<String, IStorageAttribute>();
+        cached = new HashMap<String, StorageAttribute>();
         try {
             String fname = findConfigFile(filename);
             doc = XmlUtil.load(fname);
@@ -171,13 +171,13 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     protected abstract void parserStorages(
             @SuppressWarnings("rawtypes") List nodes);
 
-    protected abstract IStorageAttribute parserStorage(Element node);
+    protected abstract StorageAttribute parserStorage(Element node);
 
-    public void addStorageAttribute(String name, IStorageAttribute sa) {
+    public void addStorageAttribute(String name, StorageAttribute sa) {
         cached.put(name, sa);
     }
 
-    public IStorageAttribute getStorageAttribute(String name) {
+    public StorageAttribute getStorageAttribute(String name) {
         return cached.get(name);
     }
 }

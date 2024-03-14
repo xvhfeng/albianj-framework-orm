@@ -38,15 +38,16 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.context;
 
 import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.impl.orm.db.IPersistenceUpdateCommand;
+import org.albianj.impl.orm.db.PersistenceCommand;
 import org.albianj.impl.orm.db.localize.MysqlClientSection;
 import org.albianj.impl.orm.db.localize.SqlServerClientSection;
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.ServRouter;
 import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.db.IPersistenceCommand;
-import org.albianj.impl.orm.db.IPersistenceUpdateCommand;
 import org.albianj.orm.object.*;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianStorageParserService;
@@ -92,7 +93,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
     }
 
     protected List<IDataRouterAttribute> parserRoutings(String sessionId, IAlbianObject object,
-                                                        IDataRoutersAttribute routings, IAlbianObjectAttribute albianObject) {
+                                                        DataRoutersAttribute routings, IAlbianObjectAttribute albianObject) {
         List<IDataRouterAttribute> useRoutings = new Vector<IDataRouterAttribute>();
         if (null == routings) {
             IDataRouterAttribute dra = albianObject.getDefaultRouting();
@@ -108,7 +109,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                     albianObject.getType(), dra.getName());
                 useRoutings.add(dra);
             } else {
-                if (routings.getWriterRouterEnable()) {
+                if (routings.isWriterRouterEnable()) {
                     IAlbianObjectDataRouter hashMapping = routings
                             .getDataRouter();
                     if (null == hashMapping) {
@@ -182,7 +183,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
     }
 
     protected String parserRoutingDatabase(String jobId, IAlbianObject obj,
-                                           IStorageAttribute storage, IAlbianObjectDataRouter hashMapping,
+                                           StorageAttribute storage, IAlbianObjectDataRouter hashMapping,
                                            IAlbianObjectAttribute albianObject)   {
         if (null == storage) {
             throw new AblThrowable(
@@ -228,25 +229,25 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
             String tableName = StringsUtil.isNullOrEmptyOrAllSpace(tableAlias)
                     ? objAttr.getImplClzz().getSimpleName()
                     : tableAlias;
-            IStorageAttribute stgAttr = asps.getStorageAttribute(storageAlias);
-            IPersistenceCommand pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
+            StorageAttribute stgAttr = asps.getStorageAttribute(storageAlias);
+            PersistenceCommand pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
                     tableName, entity, objAttr, sqlParaVals, job.isRollbackOnError());
             addWrtTsk(job, stgAttr, stgAttr.getDatabase(), pstCmd);
         } else {
-            IDataRoutersAttribute drtsAttr = objAttr.getDataRouters();
+            DataRoutersAttribute drtsAttr = objAttr.getDataRouters();
             List<IDataRouterAttribute> sltDrtAttr = parserRoutings(job.getId(), entity,
                     drtsAttr, objAttr);
             for (IDataRouterAttribute drtAttr : sltDrtAttr) {
                 IAlbianObjectDataRouter drouter = null == drtsAttr ? null : drtsAttr.getDataRouter();
                 String storageName = parserRoutingStorage(job.getId(), entity, drtAttr,
                         drouter, objAttr);
-                IStorageAttribute stgAttr = asps.getStorageAttribute(storageName);
+                StorageAttribute stgAttr = asps.getStorageAttribute(storageName);
                 String database = parserRoutingDatabase(job.getId(), entity, stgAttr,
                         drouter, objAttr);
 
                 String tableName = drouter.mappingWriterTable(drtAttr, entity);
 
-                IPersistenceCommand pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
+                PersistenceCommand pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
                         tableName, entity, objAttr, sqlParaVals, job.isRollbackOnError());
                 if (null == cmd)
                     continue;// no the upload operator
@@ -256,12 +257,12 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
         }
     }
 
-    private void addWrtTsk(IWriterJob job, IStorageAttribute storage, String database, IPersistenceCommand pstCmd) {
+    private void addWrtTsk(IWriterJob job, StorageAttribute storage, String database, PersistenceCommand pstCmd) {
         String key = storage.getName() + database;
         if (SetUtil.isNull(job.getWriterTasks())) {
             Map<String, WriterTask> tasks = new LinkedHashMap<>();
             WriterTask task = new WriterTask();
-            List<IPersistenceCommand> cmds = new Vector<>();
+            List<PersistenceCommand> cmds = new Vector<>();
             cmds.add(pstCmd);
             task.setCommands(cmds);
             task.setStorage(new RunningStorageAttribute(storage, database));
@@ -277,7 +278,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                 job.getWriterTasks().get(key).getCommands().add(pstCmd);
             } else {
                 WriterTask task = new WriterTask();
-                List<IPersistenceCommand> cmds = new Vector<>();
+                List<PersistenceCommand> cmds = new Vector<>();
                 cmds.add(pstCmd);
                 task.setCommands(cmds);
                 task.setStorage(new RunningStorageAttribute(storage, database));

@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.toolkit;
 
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.orm.db.ISqlParameter;
+import org.albianj.impl.orm.db.SqlParameter;
 import org.albianj.orm.object.ICondition;
 
 import java.util.LinkedHashMap;
@@ -79,10 +79,10 @@ public class ListConvert {
         return map;
     }
 
-    public static String toString(Map<String, ISqlParameter> paras) {
+    public static String toString(Map<String, SqlParameter> paras) {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, ISqlParameter> para : paras.entrySet()) {
-            ISqlParameter sp = para.getValue();
+        for (Map.Entry<String, SqlParameter> para : paras.entrySet()) {
+            SqlParameter sp = para.getValue();
             sb.append(para.getKey()).append(" = ")
                     .append(ResultConvert.sqlValueToString(sp.getSqlType(), sp.getValue()))
                     .append(" ");

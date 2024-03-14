@@ -76,9 +76,9 @@ public interface IAlbianObjectAttribute {
 //
 //    public void setCompensating(boolean compensating);
 
-    IDataRoutersAttribute getDataRouters();
+    DataRoutersAttribute getDataRouters();
 
-    void setDataRouters(IDataRoutersAttribute dra);
+    void setDataRouters(DataRoutersAttribute dra);
 
     Map<String, IAlbianEntityFieldAttribute> getFields();
 

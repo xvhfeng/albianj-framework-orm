@@ -1,8 +1,5 @@
 package org.albianj.impl.orm.object;
 
-import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.object.DatabasePoolMaker;
-
 /**
  * project : com.yuewen.nrzx.albianj
  *

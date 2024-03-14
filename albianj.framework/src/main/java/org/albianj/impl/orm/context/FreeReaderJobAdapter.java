@@ -39,12 +39,13 @@ package org.albianj.impl.orm.context;
 
 import org.albianj.AblThrowable;
 import org.albianj.common.values.RefArg;
+import org.albianj.impl.orm.db.PersistenceCommand;
+import org.albianj.impl.orm.db.SqlParameter;
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.IPersistenceCommand;
-import org.albianj.orm.db.ISqlParameter;
+
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.impl.orm.db.PersistenceCommand;
 import org.albianj.orm.object.*;
 import org.albianj.orm.object.filter.IChainExpression;
 import org.albianj.orm.service.AlbianEntityMetadata;
@@ -64,21 +65,21 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
     protected abstract StringBuilder makeSltCmdCols(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle);
 
-    protected abstract IStorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr,
-                                                                boolean isExact,
-                                                                String storageAlias,
-                                                                String tableAlias,
-                                                                String drouterAlias,
-                                                                Map<String, IFilterCondition> hashWheres,
-                                                                Map<String, IOrderByCondition> hashOrderbys,
-                                                                RefArg<String> dbName,
-                                                                RefArg<String> tableName
+    protected abstract StorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr,
+                                                               boolean isExact,
+                                                               String storageAlias,
+                                                               String tableAlias,
+                                                               String drouterAlias,
+                                                               Map<String, IFilterCondition> hashWheres,
+                                                               Map<String, IOrderByCondition> hashOrderbys,
+                                                               RefArg<String> dbName,
+                                                               RefArg<String> tableName
     );
 
     protected abstract StringBuilder makeSltCmdWhrs(String sessionId, IAlbianObjectAttribute objAttr,
                                                     int dbStyle, String implType,
                                                     LinkedList<IFilterCondition> wheres,
-                                                    Map<String, ISqlParameter> paras);
+                                                    Map<String, SqlParameter> paras);
 
     protected abstract StringBuilder makeSltCmdCount(int dbStyle);
 
@@ -103,12 +104,12 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         StringBuilder sbCols = makeSltCmdCols(sessionId, objAttr, stgAttr.getDatabaseStyle());
 
-        Map<String, ISqlParameter> paras = new HashMap<>();
+        Map<String, SqlParameter> paras = new HashMap<>();
         StringBuilder sbWhrs = makeSltCmdWhrs(sessionId, objAttr, stgAttr.getDatabaseStyle(),
                 objAttr.getType(), wheres, paras);
 
@@ -117,7 +118,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhrs, sbOdrs, start, step, idxName);
 
-        IPersistenceCommand cmd = new PersistenceCommand();
+        PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
@@ -148,12 +149,12 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, null, null, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
         StringBuilder sbCols = makeSltCmdCount(stgAttr.getDatabaseStyle());
 
-        Map<String, ISqlParameter> paras = new HashMap<>();
+        Map<String, SqlParameter> paras = new HashMap<>();
         StringBuilder sbWhrs = makeSltCmdWhrs(sessionId, objAttr, stgAttr.getDatabaseStyle(),
                 objAttr.getType(), wheres, paras);
 
@@ -162,7 +163,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhrs, sbOdrs, -1, -1, idxName);
 
-        IPersistenceCommand cmd = new PersistenceCommand();
+        PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
@@ -193,10 +194,10 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
-        Map<String, ISqlParameter> paras = new HashMap<>();
+        Map<String, SqlParameter> paras = new HashMap<>();
 
         StringBuilder sbCols = makeSltCmdCols(sessionId, objAttr, stgAttr.getDatabaseStyle());
 
@@ -207,7 +208,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhere, sbOdrs, start, step, idxName);
 
-        IPersistenceCommand cmd = new PersistenceCommand();
+        PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
@@ -237,10 +238,10 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
 
-        IStorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
+        StorageAttribute stgAttr = makeReaderToStorageCtx(sessionId,objAttr, isExact, storageAlias, tableAlias, drouterAlias,
                 hashWheres, hashOrderbys, dbName, tableName);
 
-        Map<String, ISqlParameter> paras = new HashMap<>();
+        Map<String, SqlParameter> paras = new HashMap<>();
 
         StringBuilder sbCols = makeSltCmdCount(stgAttr.getDatabaseStyle());
 
@@ -251,7 +252,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
                 sbWhere, sbOdrs, -1, -1, idxName);
 
-        IPersistenceCommand cmd = new PersistenceCommand();
+        PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
         cmd.setCommandType(PersistenceCommandType.Text);
@@ -260,10 +261,10 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         return job;
     }
 
-    public IReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
-                                     PersistenceCommandType cmdType, String text, Map<String, ISqlParameter> paras)   {
+    public IReaderJob buildReaderJob(String sessionId, Class<?> cls, RunningStorageAttribute storage,
+                                     PersistenceCommandType cmdType, String text, Map<String, SqlParameter> paras)   {
         IReaderJob job = new ReaderJob(sessionId);
-        IPersistenceCommand cmd = new PersistenceCommand();
+        PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(text);
         cmd.setParameters(paras);
         cmd.setCommandType(cmdType);

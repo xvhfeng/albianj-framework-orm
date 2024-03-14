@@ -1,8 +1,13 @@
 package org.albianj.impl.orm.service;
 
 import org.albianj.common.utils.SetUtil;
+import org.albianj.impl.orm.context.IReaderJobAdapter;
+import org.albianj.impl.orm.context.IWriterJobAdapter;
+import org.albianj.impl.orm.context.ReaderJobAdapter;
 import org.albianj.impl.orm.context.WriterJobAdapter;
+import org.albianj.impl.orm.context.dactx.DataAccessContext;
 import org.albianj.impl.orm.context.dactx.QueryContext;
+import org.albianj.impl.orm.db.*;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
@@ -11,25 +16,15 @@ import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.impl.orm.context.IReaderJobAdapter;
-import org.albianj.impl.orm.context.IWriterJobAdapter;
-import org.albianj.impl.orm.context.ReaderJobAdapter;
-import org.albianj.impl.orm.context.dactx.DataAccessContext;
-import org.albianj.impl.orm.db.IPersistenceQueryScope;
-import org.albianj.impl.orm.db.IPersistenceTransactionClusterScope;
-import org.albianj.impl.orm.db.PersistenceQueryScope;
-import org.albianj.impl.orm.db.PersistenceTransactionClusterScope;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IOrderByCondition;
-import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.LogicalOperation;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.object.filter.FilterExpression;
 import org.albianj.orm.object.filter.IChainExpression;
 import org.albianj.orm.service.IAlbianDataAccessService;
 import org.albianj.orm.service.LoadType;
-
 
 import java.math.BigInteger;
 import java.sql.Statement;
@@ -401,8 +396,8 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, IRunningStorageAttribute storage, PersistenceCommandType cmdType,
-                                                         String text, Map<String, ISqlParameter> paras)  {
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, RunningStorageAttribute storage, PersistenceCommandType cmdType,
+                                                         String text, Map<String, SqlParameter> paras)  {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         IReaderJob job = ad.buildReaderJob(sessionId, cls, storage, cmdType,
                 text, paras);
@@ -411,8 +406,8 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
         return list;
     }
 
-    public <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, IRunningStorageAttribute storage, PersistenceCommandType cmdType,
-                                                        String text, Map<String, ISqlParameter> paras)  {
+    public <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, RunningStorageAttribute storage, PersistenceCommandType cmdType,
+                                                        String text, Map<String, SqlParameter> paras)  {
         return loadObjects(sessionId, cls, storage, cmdType, text, paras);
     }
 

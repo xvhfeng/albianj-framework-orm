@@ -37,6 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.impl.kernel.security;
 
+import org.albianj.ServRouter;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.core.KernelSetting;
 import org.albianj.kernel.logger.LogLevel;
@@ -44,7 +45,6 @@ import org.albianj.kernel.security.IAlbianSecurityService;
 import org.albianj.kernel.security.MACStyle;
 import org.albianj.kernel.security.StyleMapping;
 import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.ServRouter;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.apache.commons.codec.binary.Base64;
 

@@ -37,6 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.object;
 
+import org.albianj.impl.orm.object.StorageAttribute;
+
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,7 @@ public interface IAlbianObjectDataRouter {
     String mappingWriterRoutingStorage(IDataRouterAttribute routing,
                                        IAlbianObject obj);
 
-    String mappingWriterRoutingDatabase(IStorageAttribute storage,
+    String mappingWriterRoutingDatabase(StorageAttribute storage,
                                         IAlbianObject obj);
 
     String mappingWriterTable(IDataRouterAttribute routing,
@@ -67,7 +69,7 @@ public interface IAlbianObjectDataRouter {
                                        Map<String, IFilterCondition> wheres,
                                        Map<String, IOrderByCondition> orderbys);
 
-    String mappingReaderRoutingDatabase(IStorageAttribute storage,
+    String mappingReaderRoutingDatabase(StorageAttribute storage,
                                         Map<String, IFilterCondition> wheres,
                                         Map<String, IOrderByCondition> orderbys);
 
@@ -85,7 +87,7 @@ public interface IAlbianObjectDataRouter {
                                             Map<String, IFilterCondition> wheres,
                                             Map<String, IOrderByCondition> orderbys);
 
-    String mappingExactReaderRoutingDatabase(IStorageAttribute storage,
+    String mappingExactReaderRoutingDatabase(StorageAttribute storage,
                                              Map<String, IFilterCondition> wheres,
                                              Map<String, IOrderByCondition> orderbys);
 

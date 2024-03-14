@@ -1,6 +1,7 @@
 package org.albianj.orm.db;
 
-import org.albianj.orm.object.IRunningStorageAttribute;
+
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ public interface IDataBasePool {
     /**
      * 从链接池中得到一个连接
      */
-    public Connection getConnection(String sessionid, IRunningStorageAttribute rsa,boolean isAutoCommit) ;
+    public Connection getConnection(String sessionid, RunningStorageAttribute rsa, boolean isAutoCommit) ;
 
 
         /**

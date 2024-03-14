@@ -5,13 +5,11 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.orm.context.ManualContext;
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.orm.context.InternalManualCommand;
 import org.albianj.orm.context.ManualCommand;
-import org.albianj.orm.db.ISqlParameter;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
 import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianStorageParserService;
 
@@ -33,11 +31,11 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
         List<ManualCommand> mcs = mctx.getCommands();
         List<InternalManualCommand> imcs = mctx.getInternalCommands();
         IAlbianStorageParserService asps = ServRouter.getService(mctx.getSessionId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        IStorageAttribute storage = asps.getStorageAttribute(mctx.getStorageName());
+        StorageAttribute storage = asps.getStorageAttribute(mctx.getStorageName());
         if (StringsUtil.isNullOrEmptyOrAllSpace(mctx.getDatabaseName())) {
             mctx.setDatabaseName(storage.getDatabase());
         }
-        IRunningStorageAttribute rsa = new RunningStorageAttribute(storage, mctx.getDatabaseName());
+        RunningStorageAttribute rsa = new RunningStorageAttribute(storage, mctx.getDatabaseName());
         mctx.setRunningStorageAttribute(rsa);
         Connection conn = asps.getConnection(mctx.getSessionId(), rsa,false);
         mctx.setConnection(conn);
@@ -53,7 +51,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 } else {
                     for (int i = 1; i <= map.size(); i++) {
                         String paraName = map.get(i);
-                        ISqlParameter para = imc.getCommandParameters().get(paraName);
+                        SqlParameter para = imc.getCommandParameters().get(paraName);
                         if (null == para.getValue()) {
                             prepareStatement.setNull(i, para.getSqlType());
                         } else {

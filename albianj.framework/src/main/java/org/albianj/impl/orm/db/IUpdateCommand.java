@@ -38,16 +38,17 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.db;
 
 
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.orm.object.*;
 
 import java.util.Map;
 
 public interface IUpdateCommand {
-    public ICommand builder(IAlbianObject object, IDataRoutersAttribute routings,
+    public ICommand builder(IAlbianObject object, DataRoutersAttribute routings,
                             IAlbianObjectAttribute albianObject, Map<String, Object> mapValue,
-                            IDataRouterAttribute routing, IStorageAttribute storage);
+                            IDataRouterAttribute routing, StorageAttribute storage);
 
-    public ICommand builder(IAlbianObject object, IDataRoutersAttribute routings, IAlbianObjectAttribute albianObject,
-                            Map<String, Object> mapValue, IDataRouterAttribute routing, IStorageAttribute storage, String[] members)
+    public ICommand builder(IAlbianObject object, DataRoutersAttribute routings, IAlbianObjectAttribute albianObject,
+                            Map<String, Object> mapValue, IDataRouterAttribute routing, StorageAttribute storage, String[] members)
             throws NoSuchMethodException;
 }

@@ -40,11 +40,11 @@ package org.albianj.impl.orm.context;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.albianj.impl.orm.db.PersistenceCommand;
 import org.albianj.orm.context.PersistenceStatement;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.orm.db.localize.IDBClientSection;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -54,10 +54,10 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class WriterTask  {
-    List<IPersistenceCommand> rollbackCommands = null;
+    List<PersistenceCommand> rollbackCommands = null;
     boolean compensating = true;
-    private IRunningStorageAttribute storage = null;
-    private List<IPersistenceCommand> commands = null;
+    private RunningStorageAttribute storage = null;
+    private List<PersistenceCommand> commands = null;
     private Connection connection = null;
     private Map<String, PersistenceStatement> statements = null;
     private List<Statement> rollbackStatements = null;
@@ -67,7 +67,4 @@ public class WriterTask  {
     private Statement batchStmt = null;
     private IDBClientSection clientSection =null;
     private List<String> batchSqlText;
-
-
-
 }

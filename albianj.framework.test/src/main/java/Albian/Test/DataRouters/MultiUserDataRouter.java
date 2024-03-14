@@ -1,6 +1,7 @@
 package Albian.Test.DataRouters;
 
 import Albian.Test.Model.IMultiUser;
+import org.albianj.impl.orm.object.StorageAttribute;
 import org.albianj.orm.object.*;
 
 
@@ -37,7 +38,7 @@ public class MultiUserDataRouter extends FreeAlbianObjectDataRouter {
     }
 
     @Override
-    public String mappingWriterRoutingDatabase(IStorageAttribute storage,
+    public String mappingWriterRoutingDatabase(StorageAttribute storage,
                                                IAlbianObject obj) {
         return storage.getDatabase(); // 因为使用了一个storage对应一个db模式，故直接访问即可
         // 若使用了一个storage对应多个数据库模式（注意，这里的数据库用户名，密码，ip地址必须一样），这选择数据库

@@ -37,12 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.impl.orm.context;
 
+import org.albianj.impl.orm.db.SqlParameter;
 import org.albianj.orm.context.IReaderJob;
-import org.albianj.orm.db.ISqlParameter;
+
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IFilterCondition;
 import org.albianj.orm.object.IOrderByCondition;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.object.filter.IChainExpression;
 
 import java.util.LinkedList;
@@ -68,8 +69,8 @@ public interface IReaderJobAdapter {
         String tableAlias, String drouterAlias, IChainExpression f, LinkedList<IOrderByCondition> orderbys,
         String idxName)  ;
 
-    public IReaderJob buildReaderJob(String sessionId, Class<?> cls, IRunningStorageAttribute storage,
-                                     PersistenceCommandType cmdType, String text, Map<String, ISqlParameter> paras)
+    public IReaderJob buildReaderJob(String sessionId, Class<?> cls, RunningStorageAttribute storage,
+                                     PersistenceCommandType cmdType, String text, Map<String, SqlParameter> paras)
          ;
 
 }

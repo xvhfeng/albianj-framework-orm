@@ -38,11 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.db;
 
 
-import org.albianj.orm.db.ISqlParameter;
 
 import java.sql.Types;
 
-public class SqlParameter implements ISqlParameter {
+public class SqlParameter  {
     private int sqlType = Types.NVARCHAR;
     private String name = null;
     private Object value = null;

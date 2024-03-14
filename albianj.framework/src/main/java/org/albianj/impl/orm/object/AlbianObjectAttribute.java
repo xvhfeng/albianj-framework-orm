@@ -38,10 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.object;
 
 
+import org.albianj.orm.object.DataRoutersAttribute;
 import org.albianj.orm.object.IAlbianEntityFieldAttribute;
 import org.albianj.orm.object.IAlbianObjectAttribute;
 import org.albianj.orm.object.IDataRouterAttribute;
-import org.albianj.orm.object.IDataRoutersAttribute;
 
 import java.util.Map;
 
@@ -53,7 +53,7 @@ public class AlbianObjectAttribute implements IAlbianObjectAttribute {
     private String type = null;
     private String inter = null;
     //    private boolean compensating = true;
-    private IDataRoutersAttribute dra = null;
+    private DataRoutersAttribute dra = null;
     private Map<String, IAlbianEntityFieldAttribute> fields = null;
     private Class<?> implClzz = null;
 
@@ -120,11 +120,11 @@ public class AlbianObjectAttribute implements IAlbianObjectAttribute {
 //    }
 
 
-    public IDataRoutersAttribute getDataRouters() {
+    public DataRoutersAttribute getDataRouters() {
         return this.dra;
     }
 
-    public void setDataRouters(IDataRoutersAttribute dra) {
+    public void setDataRouters(DataRoutersAttribute dra) {
         this.dra = dra;
     }
 

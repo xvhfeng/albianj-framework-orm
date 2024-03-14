@@ -38,14 +38,14 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.routing;
 
 import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.ServRouter;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
+import org.albianj.orm.object.DataRoutersAttribute;
 import org.albianj.orm.object.IDataRouterAttribute;
-import org.albianj.orm.object.IDataRoutersAttribute;
 import org.albianj.orm.service.IAlbianDataRouterParserService;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -60,7 +60,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
 
     private final static String tagName = "AlbianObjects/AlbianObject";
     private String file = "drouter.xml";
-    private HashMap<String, IDataRoutersAttribute> _cached = null;
+    private HashMap<String, DataRoutersAttribute> _cached = null;
 
     public void setConfigFileName(String fileName) {
         this.file = fileName;

@@ -1,13 +1,13 @@
 package org.albianj.impl.orm.storage;
 
-import org.albianj.impl.orm.dbpool.impl.SpxDBPool;
-import org.albianj.impl.orm.dbpool.impl.SpxDBPoolConfig;
-import org.albianj.kernel.logger.LogLevel;
 import org.albianj.ServRouter;
 import org.albianj.impl.orm.dbpool.ISpxDBPool;
 import org.albianj.impl.orm.dbpool.ISpxDBPoolConfig;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
+import org.albianj.impl.orm.dbpool.impl.SpxDBPool;
+import org.albianj.impl.orm.dbpool.impl.SpxDBPoolConfig;
+import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.kernel.logger.LogLevel;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -20,8 +20,8 @@ public class SpxWapper extends FreeDataBasePool {
 
     public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa, boolean isAutoCommit)  {
-        IStorageAttribute sa = rsa.getStorageAttribute();
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa, boolean isAutoCommit)  {
+        StorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
         ISpxDBPool pool = (ISpxDBPool)ds;
@@ -46,7 +46,7 @@ public class SpxWapper extends FreeDataBasePool {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, IRunningStorageAttribute rsa)  {
+    public DataSource setupDataSource(String sessionid,String key, RunningStorageAttribute rsa)  {
         ISpxDBPoolConfig cf = null;
         try {
             cf = new SpxDBPoolConfig();
@@ -55,7 +55,7 @@ public class SpxWapper extends FreeDataBasePool {
                     "create dabasepool for storage:{} is fail.",key);
         }
         try {
-            IStorageAttribute stgAttr = rsa.getStorageAttribute();
+            StorageAttribute stgAttr = rsa.getStorageAttribute();
             String url = FreeAlbianStorageParserService.generateConnectionUrl(rsa);
             cf.setDriverName(DRIVER_CLASSNAME);
             cf.setUrl(url);

@@ -38,7 +38,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.db;
 
 
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
 
 import java.util.Map;
@@ -57,7 +56,7 @@ public interface ICommand {
 
     public void setParameterMapper(Map<Integer, String> parameterMapper);
 
-    public Map<String, ISqlParameter> getParameters();
+    public Map<String, SqlParameter> getParameters();
 
-    public void setParameters(Map<String, ISqlParameter> parameters);
+    public void setParameters(Map<String, SqlParameter> parameters);
 }

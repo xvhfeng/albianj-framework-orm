@@ -38,15 +38,15 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.routing;
 
 import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceRant;
-import org.albianj.ServRouter;
-import org.albianj.loader.AlbianClassLoader;
 import org.albianj.impl.orm.object.AlbianObjectAttribute;
 import org.albianj.impl.orm.object.DataRouterAttribute;
+import org.albianj.kernel.logger.LogLevel;
+import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.loader.AlbianClassLoader;
 import org.albianj.orm.object.*;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianDataRouterParserService;
@@ -62,7 +62,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
 
     public static final String DEFAULT_ROUTING_NAME = "!@#$%Albianj_Default_DataRouter%$#@!";
 
-    private static IDataRoutersAttribute getRoutingsAttribute(Element elt)  {
+    private static DataRoutersAttribute getRoutingsAttribute(Element elt)  {
         String inter = XmlUtil.getAttributeValue(elt, "Interface");
         if (StringsUtil.isNullOrEmptyOrAllSpace(inter)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
@@ -84,7 +84,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
             objAttr.setInterface(inter);
             AlbianEntityMetadata.put(inter, objAttr);
         }
-        IDataRoutersAttribute routing = objAttr.getDataRouters();
+        DataRoutersAttribute routing = objAttr.getDataRouters();
         if (null == routing) {
             routing = new DataRoutersAttribute();
             objAttr.setDataRouters(routing);
@@ -245,7 +245,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
     protected Map<String, IDataRouterAttribute> parserRoutings(
             @SuppressWarnings("rawtypes") List nodes)  {
         for (Object node : nodes) {
-            IDataRoutersAttribute routingsAttribute = getRoutingsAttribute((Element) node);
+            DataRoutersAttribute routingsAttribute = getRoutingsAttribute((Element) node);
             if (null == routingsAttribute)
                 return null;
         }
