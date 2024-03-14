@@ -38,15 +38,16 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.db;
 
 
+import org.albianj.orm.object.AlbianObjectAttribute;
 import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.IAlbianObjectAttribute;
+
 
 import java.util.Map;
 
 public interface IPersistenceUpdateCommand {
 
     public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  ;
+                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)  ;
 
 
 }

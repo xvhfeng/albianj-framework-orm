@@ -41,7 +41,8 @@ import org.albianj.AblThrowable;
 import org.albianj.common.values.RefArg;
 import org.albianj.impl.orm.db.PersistenceCommand;
 import org.albianj.impl.orm.db.SqlParameter;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.AlbianObjectAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.orm.context.IReaderJob;
 
@@ -60,12 +61,12 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                                    StringBuilder sbWhere, StringBuilder sbOrderby,
                                                    int start, int step, String idxName);
 
-    protected abstract StringBuilder makeSltCmdOdrs(String sessionId, IAlbianObjectAttribute objAttr,
+    protected abstract StringBuilder makeSltCmdOdrs(String sessionId, AlbianObjectAttribute objAttr,
                                                     LinkedList<IOrderByCondition> orderbys, int dbStyle);
 
-    protected abstract StringBuilder makeSltCmdCols(String sessionId, IAlbianObjectAttribute objAttr, int dbStyle);
+    protected abstract StringBuilder makeSltCmdCols(String sessionId, AlbianObjectAttribute objAttr, int dbStyle);
 
-    protected abstract StorageAttribute makeReaderToStorageCtx(String sessionId, IAlbianObjectAttribute objAttr,
+    protected abstract StorageAttribute makeReaderToStorageCtx(String sessionId, AlbianObjectAttribute objAttr,
                                                                boolean isExact,
                                                                String storageAlias,
                                                                String tableAlias,
@@ -76,7 +77,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                                                RefArg<String> tableName
     );
 
-    protected abstract StringBuilder makeSltCmdWhrs(String sessionId, IAlbianObjectAttribute objAttr,
+    protected abstract StringBuilder makeSltCmdWhrs(String sessionId, AlbianObjectAttribute objAttr,
                                                     int dbStyle, String implType,
                                                     LinkedList<IFilterCondition> wheres,
                                                     Map<String, SqlParameter> paras);
@@ -88,7 +89,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      int start, int step, LinkedList<IFilterCondition> wheres,
                                      LinkedList<IOrderByCondition> orderbys, String idxName)   {
         IReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AblThrowable(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
@@ -133,7 +134,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      String idxName)   {
 
         IReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AblThrowable(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
@@ -178,7 +179,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      LinkedList<IOrderByCondition> orderbys, String idxName)   {
 
         IReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AblThrowable(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");
@@ -222,7 +223,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                      IChainExpression f,
                                      LinkedList<IOrderByCondition> orderbys, String idxName)   {
         IReaderJob job = new ReaderJob(sessionId);
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
             throw new AblThrowable(
                 "albian-object:" + itf.getName() + " attribute is not found.maybe not exist mapping.");

@@ -41,6 +41,8 @@ import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.orm.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.object.AlbianObjectAttribute;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.impl.orm.toolkit.ResultConvert;
 import org.albianj.kernel.logger.LogLevel;
@@ -49,9 +51,7 @@ import org.albianj.orm.context.IReaderJob;
 import org.albianj.orm.db.IDataBasePool;
 
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.orm.object.IAlbianEntityFieldAttribute;
 import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.IAlbianObjectAttribute;
 import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.AlbianEntityMetadata;
 import org.albianj.orm.service.IAlbianStorageParserService;
@@ -194,9 +194,9 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             {
         String inter = cli.getName();
 
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
+                AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
         String className = objAttr.getType();
-        Map<String, IAlbianEntityFieldAttribute> member = objAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> member = objAttr.getFields();
 
         Class<?> cls = null;
         try {
@@ -210,8 +210,8 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             while (result.next()) {
                 try {
                     @SuppressWarnings("unchecked") T obj = (T)cls.newInstance();
-                    for (IAlbianEntityFieldAttribute fAttr : member.values()) {
-                        if (!fAttr.getIsSave()) {
+                    for (AlbianEntityFieldAttribute fAttr : member.values()) {
+                        if (!fAttr.isSave()) {
                             continue;
                         }
 

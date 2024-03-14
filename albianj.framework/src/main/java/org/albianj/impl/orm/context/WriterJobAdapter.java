@@ -45,7 +45,10 @@ import org.albianj.impl.orm.db.IPersistenceUpdateCommand;
 import org.albianj.impl.orm.db.PersistenceCommand;
 import org.albianj.impl.orm.db.localize.MysqlClientSection;
 import org.albianj.impl.orm.db.localize.SqlServerClientSection;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.object.AlbianObjectAttribute;
+import org.albianj.orm.object.DataRouterAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.orm.context.IWriterJob;
 import org.albianj.orm.object.*;
@@ -57,11 +60,11 @@ import java.util.*;
 public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     protected Map<String, Object> buildSqlParameter(String sessioId, IAlbianObject object,
-                                                    IAlbianObjectAttribute albianObject,
-                                                    Map<String, IAlbianEntityFieldAttribute> fieldsAttr)  {
+                                                    AlbianObjectAttribute albianObject,
+                                                    Map<String, AlbianEntityFieldAttribute> fieldsAttr)  {
         Map<String, Object> mapValue = new HashMap<String, Object>();
         String name = "";
-        for (IAlbianEntityFieldAttribute fAttr : fieldsAttr.values()) {
+        for (AlbianEntityFieldAttribute fAttr : fieldsAttr.values()) {
             name = fAttr.getPropertyName();
             try {
                 if ("string".equalsIgnoreCase(fAttr.getEntityField().getType()
@@ -92,18 +95,18 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
         return mapValue;
     }
 
-    protected List<IDataRouterAttribute> parserRoutings(String sessionId, IAlbianObject object,
-                                                        DataRoutersAttribute routings, IAlbianObjectAttribute albianObject) {
-        List<IDataRouterAttribute> useRoutings = new Vector<IDataRouterAttribute>();
+    protected List<DataRouterAttribute> parserRoutings(String sessionId, IAlbianObject object,
+                                                        DataRoutersAttribute routings, AlbianObjectAttribute albianObject) {
+        List<DataRouterAttribute> useRoutings = new Vector<DataRouterAttribute>();
         if (null == routings) {
-            IDataRouterAttribute dra = albianObject.getDefaultRouting();
+            DataRouterAttribute dra = albianObject.getDefaultRouting();
             ServRouter.log(sessionId,  LogLevel.Warn,
                     "albian-object:{} writer-data-routers are null then use default storage:{}.",
                 albianObject.getType(), dra.getName());
             useRoutings.add(dra);
         } else {
             if (SetUtil.isNullOrEmpty(routings.getWriterRouters())) {
-                IDataRouterAttribute dra = albianObject.getDefaultRouting();
+                DataRouterAttribute dra = albianObject.getDefaultRouting();
                 ServRouter.log(sessionId,  LogLevel.Warn,
                         "albian-object:{} writer-data-routers are null then use default storage:{}.",
                     albianObject.getType(), dra.getName());
@@ -113,11 +116,11 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                     IAlbianObjectDataRouter hashMapping = routings
                             .getDataRouter();
                     if (null == hashMapping) {
-                        Map<String, IDataRouterAttribute> wrs = routings.getWriterRouters();
-                        List<IDataRouterAttribute> ras = new Vector<IDataRouterAttribute>();
-                        for (IDataRouterAttribute dra : wrs.values()) {
-                            if (dra.getEnable()) {
-                                ras = new Vector<IDataRouterAttribute>();
+                        Map<String, DataRouterAttribute> wrs = routings.getWriterRouters();
+                        List<DataRouterAttribute> ras = new Vector<DataRouterAttribute>();
+                        for (DataRouterAttribute dra : wrs.values()) {
+                            if (dra.isEnable()) {
+                                ras = new Vector<DataRouterAttribute>();
                                 useRoutings.add(dra);
                                 ServRouter.log(sessionId,  LogLevel.Warn,
                                     "albian-object:{} writer-data-router arithmetic is null then use default storage:{}.",
@@ -126,23 +129,23 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                             }
                         }
                     } else {
-                        List<IDataRouterAttribute> writerRoutings = hashMapping
+                        List<DataRouterAttribute> writerRoutings = hashMapping
                                 .mappingWriterRouting(
                                         routings.getWriterRouters(), object);
                         if (SetUtil.isNullOrEmpty(writerRoutings)) {
-                            IDataRouterAttribute dra = albianObject.getDefaultRouting();
+                            DataRouterAttribute dra = albianObject.getDefaultRouting();
                             ServRouter.log(sessionId,  LogLevel.Warn,
                                 "albian-object:{} writer-data-router arithmetic is null then use default storage:{}.",
                                 albianObject.getType(), dra.getName());
                             useRoutings.add(dra);
                         } else {
-                            for (IDataRouterAttribute writerRouting : writerRoutings) {
-                                if (writerRouting.getEnable()) {
+                            for (DataRouterAttribute writerRouting : writerRoutings) {
+                                if (writerRouting.isEnable()) {
                                     useRoutings.add(writerRouting);
                                 }
                             }
                             if (SetUtil.isNullOrEmpty(useRoutings)) {
-                                IDataRouterAttribute dra = albianObject.getDefaultRouting();
+                                DataRouterAttribute dra = albianObject.getDefaultRouting();
                                 ServRouter.log(sessionId,  LogLevel.Warn,
                                     "albian-object:{} writer-data-router arithmetic is disable then use default storage:{}.",
                                     albianObject.getType(), dra.getName());
@@ -157,8 +160,8 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
     }
 
     protected String parserRoutingStorage(String jobId, IAlbianObject obj,
-                                          IDataRouterAttribute routing, IAlbianObjectDataRouter hashMapping,
-                                          IAlbianObjectAttribute albianObject)   {
+                                          DataRouterAttribute routing, IAlbianObjectDataRouter hashMapping,
+                                          AlbianObjectAttribute albianObject)   {
         if (null == routing) {
             throw new AblThrowable("the writer data router of object:"+albianObject.getType()+" is null.");
         }
@@ -184,7 +187,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     protected String parserRoutingDatabase(String jobId, IAlbianObject obj,
                                            StorageAttribute storage, IAlbianObjectDataRouter hashMapping,
-                                           IAlbianObjectAttribute albianObject)   {
+                                           AlbianObjectAttribute albianObject)   {
         if (null == storage) {
             throw new AblThrowable(
                 "the writer data router of object:" + albianObject.getType() + " is null.");
@@ -215,9 +218,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                                   IPersistenceUpdateCommand cmd)  {
         Class<?> cls = entity.getClass();
         String className = cls.getName();
-        IAlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadataByType(cls);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadataByType(cls);
 
-        Map<String, IAlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
         if (SetUtil.isNullOrEmpty(fieldsAttr)) {
             throw new AblThrowable("albian-object:" + className + " PropertyDescriptor is not found.");
         }
@@ -235,9 +238,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
             addWrtTsk(job, stgAttr, stgAttr.getDatabase(), pstCmd);
         } else {
             DataRoutersAttribute drtsAttr = objAttr.getDataRouters();
-            List<IDataRouterAttribute> sltDrtAttr = parserRoutings(job.getId(), entity,
+            List<DataRouterAttribute> sltDrtAttr = parserRoutings(job.getId(), entity,
                     drtsAttr, objAttr);
-            for (IDataRouterAttribute drtAttr : sltDrtAttr) {
+            for (DataRouterAttribute drtAttr : sltDrtAttr) {
                 IAlbianObjectDataRouter drouter = null == drtsAttr ? null : drtsAttr.getDataRouter();
                 String storageName = parserRoutingStorage(job.getId(), entity, drtAttr,
                         drouter, objAttr);

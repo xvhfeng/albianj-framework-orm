@@ -40,7 +40,9 @@ package org.albianj.impl.orm.context;
 import org.albianj.AblThrowable;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.orm.db.SqlParameter;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.object.AlbianObjectAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.Convert;
 import org.albianj.impl.orm.toolkit.EnumMapping;
 import org.albianj.orm.object.*;
@@ -84,7 +86,7 @@ public class ChainExpressionParser {
         }
     }
 
-    public static void toConditionText(String sessionId, Class<?> cls, IAlbianObjectAttribute albianObject,
+    public static void toConditionText(String sessionId, Class<?> cls, AlbianObjectAttribute albianObject,
                                        StorageAttribute storage, IChainExpression f, StringBuilder sb, Map<String, SqlParameter> paras)
               {
         if (null == f) return;
@@ -118,7 +120,7 @@ public class ChainExpressionParser {
                 }
 
                 String className = cls.getName();
-                IAlbianEntityFieldAttribute fieldAttr = albianObject.getFields().get(AlbianEntityMetadata.makeFieldsKey(fe.getFieldName().toLowerCase()));
+                AlbianEntityFieldAttribute fieldAttr = albianObject.getFields().get(AlbianEntityMetadata.makeFieldsKey(fe.getFieldName().toLowerCase()));
 
                 if (null == fieldAttr) {
                     throw new AblThrowable(

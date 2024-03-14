@@ -5,7 +5,7 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.orm.context.ManualContext;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.orm.context.InternalManualCommand;

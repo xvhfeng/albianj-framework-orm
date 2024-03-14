@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.service;
 
 import org.albianj.AblBltinServsNames;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.object.RunningStorageAttribute;

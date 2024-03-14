@@ -5,7 +5,7 @@ import org.albianj.impl.orm.dbpool.ISpxDBPool;
 import org.albianj.impl.orm.dbpool.ISpxDBPoolConfig;
 import org.albianj.impl.orm.dbpool.impl.SpxDBPool;
 import org.albianj.impl.orm.dbpool.impl.SpxDBPoolConfig;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.orm.object.RunningStorageAttribute;
 

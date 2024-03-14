@@ -35,107 +35,42 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.impl.orm.object;
+package org.albianj.orm.object;
 
 
-import org.albianj.orm.object.DataRoutersAttribute;
-import org.albianj.orm.object.IAlbianEntityFieldAttribute;
-import org.albianj.orm.object.IAlbianObjectAttribute;
-import org.albianj.orm.object.IDataRouterAttribute;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.albianj.orm.object.DatabasePoolStyle;
+import org.albianj.orm.object.PersistenceDatabaseStyle;
 
-import java.util.Map;
+@Data
+@NoArgsConstructor
+public class StorageAttribute  {
 
-public class AlbianObjectAttribute implements IAlbianObjectAttribute {
+    private String name = null;
+    private int databaseStyle = PersistenceDatabaseStyle.MySql;
+    private String database = null;
+    private String user = null;
+    private String password = null;
+    private boolean pooling = true;
+    private int minSize = 5;
+    private int maxSize = 10;
+    private int timeout = 30;
+    private String charset = null;
+    private boolean transactional = true;
+    private String server = null;
+    private int port = 0;
+    private int transactionLevel = 0;
+    private String options = null;
+    private int idelTime = 180;
+    private String dbps = DatabasePoolStyle.SpxDBCP.name();
+    private int waitTimeWhenGetMs = 2;
+    private int lifeCycleTime = 3600000;
+    private int waitInFreePoolMs = 120000;
+    private int maxRemedyConnectionCount = 50;
+    private int cleanupTimestampMs = 30000;
+    private int maxRequestTimeMs = 60000;
 
-    //    private ICacheAttribute cache = null;
-    private IDataRouterAttribute defaultRouting = null;
-    //    private Map<String, IMemberAttribute> members = null;
-    private String type = null;
-    private String inter = null;
-    //    private boolean compensating = true;
-    private DataRoutersAttribute dra = null;
-    private Map<String, IAlbianEntityFieldAttribute> fields = null;
-    private Class<?> implClzz = null;
-
-    public String getInterface() {
-        return inter;
-    }
-
-    public void setInterface(String inter) {
-        this.inter = inter;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public Class<?> getImplClzz() {
-        return this.implClzz;
-    }
-
-    @Override
-    public void setImplClzz(Class<?> implClzz) {
-        this.implClzz = implClzz;
-    }
-
-//    public ICacheAttribute getCache() {
-//        // TODO Auto-generated method stub
-//        return this.cache;
-//    }
-//
-//    public void setCache(ICacheAttribute cache) {
-//        // TODO Auto-generated method stub
-//        this.cache = cache;
-//    }
-
-    public IDataRouterAttribute getDefaultRouting() {
-        return this.defaultRouting;
-    }
-
-    public void setDefaultRouting(IDataRouterAttribute defaultRouting) {
-        this.defaultRouting = defaultRouting;
-    }
-
-//    public Map<String, IMemberAttribute> getMembers() {
-//        // TODO Auto-generated method stub
-//        return this.members;
-//    }
-//
-//    public void setMembers(Map<String, IMemberAttribute> members) {
-//        // TODO Auto-generated method stub
-//        this.members = members;
-//    }
-
-//    public boolean getCompensating() {
-//        return this.compensating;
-//    }
-//
-//    public void setCompensating(boolean compensating) {
-//        this.compensating = compensating;
-//    }
-
-
-    public DataRoutersAttribute getDataRouters() {
-        return this.dra;
-    }
-
-    public void setDataRouters(DataRoutersAttribute dra) {
-        this.dra = dra;
-    }
-
-    @Override
-    public Map<String, IAlbianEntityFieldAttribute> getFields() {
-        return fields;
-    }
-
-    @Override
-    public void setFields(Map<String, IAlbianEntityFieldAttribute> fields) {
-        this.fields = fields;
-    }
+    private String urlParaments;
 
 }

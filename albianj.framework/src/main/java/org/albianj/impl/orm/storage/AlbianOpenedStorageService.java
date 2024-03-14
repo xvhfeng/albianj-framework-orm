@@ -2,7 +2,7 @@ package org.albianj.impl.orm.storage;
 
 
 import org.albianj.AblServRouter;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.service.FreeAlbianService;
 import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianOpenedStorageService;

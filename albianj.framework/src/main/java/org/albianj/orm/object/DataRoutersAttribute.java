@@ -43,11 +43,10 @@ import java.util.Map;
 
 @Data
 public class DataRoutersAttribute  {
-
     private boolean writerRouterEnable = false;
     private boolean readerRouterEnable = false;
-    private Map<String, IDataRouterAttribute> writerRouters = null;
-    private Map<String, IDataRouterAttribute> readerRouters = null;
+    private Map<String, DataRouterAttribute> writerRouters = null;
+    private Map<String, DataRouterAttribute> readerRouters = null;
     private IAlbianObjectDataRouter dataRouter = null;
 
 }

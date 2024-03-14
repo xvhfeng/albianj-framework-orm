@@ -40,7 +40,6 @@ package org.albianj.orm.object;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.albianj.impl.orm.object.StorageAttribute;
 
 @Data
 @AllArgsConstructor

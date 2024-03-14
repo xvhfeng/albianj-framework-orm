@@ -38,10 +38,11 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.db;
 
 import org.albianj.AblThrowable;
+import org.albianj.orm.object.AlbianEntityFieldAttribute;
+import org.albianj.orm.object.AlbianObjectAttribute;
 import org.albianj.orm.db.PersistenceCommandType;
-import org.albianj.orm.object.IAlbianEntityFieldAttribute;
 import org.albianj.orm.object.IAlbianObject;
-import org.albianj.orm.object.IAlbianObjectAttribute;
+
 import org.albianj.orm.object.PersistenceDatabaseStyle;
 
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
 
 
     public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                           IAlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)
+                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)
               {
         if (object.getIsAlbianNew()) {
             throw new AblThrowable(
@@ -89,18 +90,18 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
             }
         }
 
-        Map<String, IAlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
         Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
         Map<String, SqlParameter> rollbackParas = new HashMap<String, SqlParameter>();
-        for (Map.Entry<String, IAlbianEntityFieldAttribute> entry : fieldsAttr.entrySet()) {
-            IAlbianEntityFieldAttribute member = entry.getValue();
-            if (!member.getIsSave())
+        for (Map.Entry<String, AlbianEntityFieldAttribute> entry : fieldsAttr.entrySet()) {
+            AlbianEntityFieldAttribute member = entry.getValue();
+            if (!member.isSave())
                 continue;
             String name = member.getPropertyName();
             Object newValue = mapValue.get(name);
             Object oldValue = null;
 
-            if (member.getPrimaryKey()) {
+            if (member.isPrimaryKey()) {
                 where.append(" AND ");
                 if (rbkOnError) {
                     rollbackWhere.append(" AND ");

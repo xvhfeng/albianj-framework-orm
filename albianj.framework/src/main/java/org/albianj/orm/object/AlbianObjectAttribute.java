@@ -35,112 +35,21 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.impl.orm.object;
+package org.albianj.orm.object;
 
 
-import org.albianj.orm.object.IMemberAttribute;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.sql.Types;
-
-public class MemberAttribute implements IMemberAttribute {
-    private String name = null;
-    private String sqlFieldName = null;
-    private boolean allowNull = true;
-    private int length = -1;
-    private boolean primaryKey = false;
-    private int databaseType = Types.NVARCHAR;
-    private boolean isSave = true;
-    private String varField = null;
-    private boolean autoGenKey = false;
-
-    public String getName() {
-        // TODO Auto-generated method stub
-        return this.name;
-    }
-
-    public void setName(String name) {
-        // TODO Auto-generated method stub
-        this.name = name;
-    }
-
-    public String getSqlFieldName() {
-        // TODO Auto-generated method stub
-        return this.sqlFieldName;
-    }
-
-    public void setSqlFieldName(String sqlFieldName) {
-        // TODO Auto-generated method stub
-        this.sqlFieldName = sqlFieldName;
-    }
-
-    public boolean getAllowNull() {
-        // TODO Auto-generated method stub
-        return this.allowNull;
-    }
-
-    public void setAllowNull(boolean allowNull) {
-        // TODO Auto-generated method stub
-        this.allowNull = allowNull;
-    }
-
-    public int getLength() {
-        // TODO Auto-generated method stub
-        return this.length;
-    }
-
-    public void setLength(int length) {
-        // TODO Auto-generated method stub
-        this.length = length;
-    }
-
-    public boolean getPrimaryKey() {
-        // TODO Auto-generated method stub
-        return this.primaryKey;
-    }
-
-    public void setPrimaryKey(boolean primaryKey) {
-        // TODO Auto-generated method stub
-        this.primaryKey = primaryKey;
-    }
-
-    public int getDatabaseType() {
-        // TODO Auto-generated method stub
-        return this.databaseType;
-    }
-
-    public void setDatabaseType(int databaseType) {
-        // TODO Auto-generated method stub
-        this.databaseType = databaseType;
-    }
-
-    public boolean getIsSave() {
-        // TODO Auto-generated method stub
-        return this.isSave;
-    }
-
-    public void setIsSave(boolean isSave) {
-        // TODO Auto-generated method stub
-        this.isSave = isSave;
-    }
-
-    @Override
-    public String getVarField() {
-        return this.varField;
-    }
-
-    @Override
-    public void setVarField(String varField) {
-        this.varField = varField;
-    }
-
-    @Override
-    public boolean isAutoGenKey() {
-        return this.autoGenKey;
-    }
-
-    @Override
-    public void setAutoGenKey(boolean autoGenKey) {
-        this.autoGenKey = autoGenKey;
-    }
+import java.util.Map;
+@Data
+@NoArgsConstructor
+public class AlbianObjectAttribute  {
+    private DataRouterAttribute defaultRouting = null;
+    private String type = null;
+    private String itf = null;
+    private DataRoutersAttribute dataRouters = null;
+    private Map<String, AlbianEntityFieldAttribute> fields = null;
+    private Class<?> implClzz = null;
 
 }

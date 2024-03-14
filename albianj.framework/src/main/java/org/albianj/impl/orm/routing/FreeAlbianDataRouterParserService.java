@@ -42,10 +42,10 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
+import org.albianj.orm.object.DataRouterAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.orm.object.DataRoutersAttribute;
-import org.albianj.orm.object.IDataRouterAttribute;
 import org.albianj.orm.service.IAlbianDataRouterParserService;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -120,7 +120,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         parserRoutings(objNodes);
     }
 
-    protected abstract Map<String, IDataRouterAttribute> parserRoutings(
+    protected abstract Map<String, DataRouterAttribute> parserRoutings(
             @SuppressWarnings("rawtypes") List nodes) ;
 
 }

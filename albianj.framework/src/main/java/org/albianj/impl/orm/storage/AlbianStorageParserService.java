@@ -43,7 +43,7 @@ import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.impl.orm.object.PluginDatabasePoolMarker;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.AlbianServiceRant;
 import org.albianj.orm.db.IDataBasePool;

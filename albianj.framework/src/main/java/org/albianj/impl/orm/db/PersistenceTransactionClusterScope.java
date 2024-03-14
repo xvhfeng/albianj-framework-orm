@@ -41,7 +41,7 @@ import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.impl.orm.context.WriterTask;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.orm.context.IWriterJob;

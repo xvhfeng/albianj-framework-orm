@@ -39,47 +39,16 @@ package org.albianj.impl.orm.db;
 
 
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Types;
 
+@Data
+@NoArgsConstructor
 public class SqlParameter  {
     private int sqlType = Types.NVARCHAR;
     private String name = null;
     private Object value = null;
     private String sqlFieldName = null;
-
-    // private Class valueClass;
-    // private int length = 200;
-
-    public int getSqlType() {
-        return sqlType;
-    }
-
-    public void setSqlType(int sqlType) {
-        this.sqlType = sqlType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
-    public String getSqlFieldName() {
-        return this.sqlFieldName;
-    }
-
-    public void setSqlFieldName(String sqlFieldName) {
-        this.sqlFieldName = sqlFieldName;
-    }
-
 }

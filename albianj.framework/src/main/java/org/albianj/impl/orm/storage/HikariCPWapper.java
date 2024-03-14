@@ -3,7 +3,7 @@ package org.albianj.impl.orm.storage;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.albianj.ServRouter;
-import org.albianj.impl.orm.object.StorageAttribute;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.orm.object.RunningStorageAttribute;
 
