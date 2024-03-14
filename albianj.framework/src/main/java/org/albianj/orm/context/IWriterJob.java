@@ -37,6 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.context;
 
+import org.albianj.impl.orm.context.WriterTask;
+
 import java.util.Map;
 
 /**
@@ -55,14 +57,14 @@ public interface IWriterJob extends IPersistenceJob {
      *
      * @return
      */
-    public Map<String, IWriterTask> getWriterTasks();
+    public Map<String, WriterTask> getWriterTasks();
 
     /**
      * 设置写操作所有的任务
      *
      * @param writerTasks 写操作事务所有的任务
      */
-    public void setWriterTasks(Map<String, IWriterTask> writerTasks);
+    public void setWriterTasks(Map<String, WriterTask> writerTasks);
 
     /**
      * 得到写操作的生命周期

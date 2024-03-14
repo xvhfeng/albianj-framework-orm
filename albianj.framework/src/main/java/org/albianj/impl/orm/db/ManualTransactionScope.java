@@ -1,20 +1,19 @@
 package org.albianj.impl.orm.db;
 
 import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.impl.orm.context.ManualContext;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.ServRouter;
-import org.albianj.orm.context.IInternalManualCommand;
-import org.albianj.orm.context.IManualCommand;
-import org.albianj.orm.context.IManualContext;
+import org.albianj.orm.context.InternalManualCommand;
+import org.albianj.orm.context.ManualCommand;
 import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.object.IRunningStorageAttribute;
 import org.albianj.orm.object.IStorageAttribute;
 import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.service.IAlbianStorageParserService;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,22 +29,22 @@ import java.util.Vector;
 public class ManualTransactionScope extends FreeManualTransactionScope {
 
 
-    protected void preExecute(IManualContext mctx)  {
-        List<IManualCommand> mcs = mctx.getCommands();
-        List<IInternalManualCommand> imcs = mctx.getInternalCommands();
+    protected void preExecute(ManualContext mctx)  {
+        List<ManualCommand> mcs = mctx.getCommands();
+        List<InternalManualCommand> imcs = mctx.getInternalCommands();
         IAlbianStorageParserService asps = ServRouter.getService(mctx.getSessionId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         IStorageAttribute storage = asps.getStorageAttribute(mctx.getStorageName());
         if (StringsUtil.isNullOrEmptyOrAllSpace(mctx.getDatabaseName())) {
             mctx.setDatabaseName(storage.getDatabase());
         }
         IRunningStorageAttribute rsa = new RunningStorageAttribute(storage, mctx.getDatabaseName());
-        mctx.setRunningStorage(rsa);
+        mctx.setRunningStorageAttribute(rsa);
         Connection conn = asps.getConnection(mctx.getSessionId(), rsa,false);
         mctx.setConnection(conn);
 
         List<Statement> statements = new Vector<Statement>();
         try {
-            for (IInternalManualCommand imc : imcs) {
+            for (InternalManualCommand imc : imcs) {
                 PreparedStatement prepareStatement =
                         conn.prepareStatement(imc.getSqlText());
                 Map<Integer, String> map = imc.getParameterMapper();
@@ -73,14 +72,14 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
     }
 
 
-    protected void executeHandler(IManualContext mctx)  {
+    protected void executeHandler(ManualContext mctx)  {
 
             List<Integer> rcs = new Vector<>();
             List<Statement> statements = mctx.getStatements();
-            List<IManualCommand> cmds = mctx.getCommands();
+            List<ManualCommand> cmds = mctx.getCommands();
             for (int i = 0; i < statements.size(); i++) {
                 try {
-                    IManualCommand cmd = cmds.get(i);
+                    ManualCommand cmd = cmds.get(i);
                     ServRouter.log(mctx.getSessionId(),  LogLevel.Info,
                             "storage:{},sqltext:{},parars:{}", mctx.getStorageName(), cmd.getCommandText(),
                         ListConvert.toString(cmd.getCommandParameters()));
@@ -98,7 +97,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
         return;
     }
 
-    protected void commit(IManualContext mctx)  {
+    protected void commit(ManualContext mctx)  {
         try {
             mctx.getConnection().commit();
         } catch (SQLException e) {
@@ -109,7 +108,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
     }
 
 
-    protected void exceptionHandler(IManualContext mctx)  {
+    protected void exceptionHandler(ManualContext mctx)  {
         try {
             mctx.getConnection().rollback();
         } catch (SQLException e) {
@@ -120,7 +119,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
     }
 
 
-    protected void unLoadExecute(IManualContext mctx)  {
+    protected void unLoadExecute(ManualContext mctx)  {
         boolean isThrow = false;
         try {
             List<Statement> statements = mctx.getStatements();

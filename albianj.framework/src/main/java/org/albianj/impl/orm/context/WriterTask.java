@@ -38,7 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.orm.context;
 
 
-import org.albianj.orm.context.IWriterTask;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.albianj.orm.context.PersistenceStatement;
 import org.albianj.orm.db.IDataBasePool;
 import org.albianj.orm.db.IPersistenceCommand;
@@ -50,141 +51,23 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
-public class WriterTask implements IWriterTask {
-    List<IPersistenceCommand> rbkCmds = null;
+@Data
+@NoArgsConstructor
+public class WriterTask  {
+    List<IPersistenceCommand> rollbackCommands = null;
     boolean compensating = true;
     private IRunningStorageAttribute storage = null;
     private List<IPersistenceCommand> commands = null;
     private Connection connection = null;
     private Map<String, PersistenceStatement> statements = null;
     private List<Statement> rollbackStatements = null;
-    private boolean iscommited = false;
-    private IDataBasePool pool = null;
-    private boolean isBatchSubmit = false;
+    private boolean commit= false;
+    private IDataBasePool dataBasePool = null;
+    private boolean batchSubmit = false;
     private Statement batchStmt = null;
-    private IDBClientSection dbClientSection =null;
-    private List<String> sqlTexts;
+    private IDBClientSection clientSection =null;
+    private List<String> batchSqlText;
 
-    public IRunningStorageAttribute getStorage() {
-        // TODO Auto-generated method stub
-        return this.storage;
-    }
 
-    public void setStorage(IRunningStorageAttribute storage) {
-        // TODO Auto-generated method stub
-        this.storage = storage;
-    }
-
-    public List<IPersistenceCommand> getCommands() {
-        // TODO Auto-generated method stub
-        return this.commands;
-    }
-
-    public void setCommands(List<IPersistenceCommand> commands) {
-        // TODO Auto-generated method stub
-        this.commands = commands;
-    }
-
-    public Connection getConnection() {
-        // TODO Auto-generated method stub
-        return this.connection;
-    }
-
-    public void setConnection(Connection connection) {
-        // TODO Auto-generated method stub
-        this.connection = connection;
-    }
-
-    public Map<String,PersistenceStatement> getStatements() {
-        // TODO Auto-generated method stub
-        return this.statements;
-    }
-
-    public void setStatements(Map<String,PersistenceStatement> statements) {
-        // TODO Auto-generated method stub
-        this.statements = statements;
-    }
-
-    @Override
-    public boolean getIsCommited() {
-        // TODO Auto-generated method stub
-        return this.iscommited;
-    }
-
-    @Override
-    public void setIsCommited(boolean iscommited) {
-        // TODO Auto-generated method stub
-        this.iscommited = iscommited;
-    }
-
-    @Override
-    public List<Statement> getRollbackStatements() {
-        // TODO Auto-generated method stub
-        return this.rollbackStatements;
-    }
-
-    @Override
-    public void setRollbackStatements(List<Statement> statements) {
-        // TODO Auto-generated method stub
-        this.rollbackStatements = statements;
-    }
-
-    public List<IPersistenceCommand> getRollbackCommands() {
-        return this.rbkCmds;
-    }
-
-    public void setRollbackCommands(List<IPersistenceCommand> rollbackCmds) {
-        this.rbkCmds = rollbackCmds;
-    }
-
-    public boolean getCompensating() {
-        return this.compensating;
-    }
-
-    public void setCompensating(boolean compensating) {
-        this.compensating = compensating;
-    }
-
-    public IDataBasePool getDatabasePool() {
-        return this.pool;
-    }
-
-    public void setDatabasePool(IDataBasePool pool) {
-        this.pool = pool;
-    }
-
-    @Override
-    public boolean isBatchSubmit() {
-        return this.isBatchSubmit;
-    }
-
-    @Override
-    public void setBatchSubmit(boolean isBatchSubmit) {
-        this.isBatchSubmit = isBatchSubmit;
-    }
-
-    @Override
-    public Statement getBatchStmt() {
-        return this.batchStmt;
-    }
-
-    @Override
-    public void setBatchStmt(Statement stmt) {
-        this.batchStmt = stmt;
-    }
-
-    public IDBClientSection getClientSection() {
-        return dbClientSection;
-    }
-    public void setClientSection(IDBClientSection dbClient){
-        this.dbClientSection = dbClient;
-    }
-
-    public List<String> getBatchSqlText(){
-        return this.sqlTexts;
-    }
-    public void setBatchSqlText(List<String> sqlTexts){
-        this.sqlTexts = sqlTexts;
-    }
 
 }

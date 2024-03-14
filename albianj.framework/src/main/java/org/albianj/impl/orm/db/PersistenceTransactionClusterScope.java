@@ -39,11 +39,11 @@ package org.albianj.impl.orm.db;
 
 import org.albianj.AblThrowable;
 import org.albianj.common.utils.SetUtil;
+import org.albianj.impl.orm.context.WriterTask;
 import org.albianj.impl.orm.toolkit.ListConvert;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.ServRouter;
 import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.context.IWriterTask;
 import org.albianj.orm.context.PersistenceStatement;
 import org.albianj.orm.context.WriterJobLifeTime;
 import org.albianj.orm.db.IDataBasePool;
@@ -64,14 +64,14 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     protected void preExecute(IWriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Opening);
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty.");
         }
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
             writerJob.setCurrentStorage(task.getKey());
-            IWriterTask t = task.getValue();
+            WriterTask t = task.getValue();
             IRunningStorageAttribute rsa = t.getStorage();
             IStorageAttribute storage = rsa.getStorageAttribute();
             IDBClientSection dbClientSection = t.getClientSection();
@@ -81,7 +81,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             try {
                 IAlbianStorageParserService asps = ServRouter.getService(writerJob.getId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
                 IDataBasePool dbp = asps.getDatabasePool(writerJob.getId(), rsa);
-                t.setDatabasePool(dbp);
+                t.setDataBasePool(dbp);
                 t.setConnection(asps.getConnection(writerJob.getId(), dbp, rsa,false));
             } catch (Exception e) {
                 ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Error,e,
@@ -239,14 +239,14 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     protected void executeHandler(IWriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Running);
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             writerJob.setCurrentStorage(task.getKey());
 
             List<IPersistenceCommand> cmds = t.getCommands();
@@ -317,16 +317,16 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     protected void commit(IWriterJob writerJob)  {
         writerJob.setWriterJobLifeTime(WriterJobLifeTime.Commiting);
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             try {
                 writerJob.setCurrentStorage(task.getKey());
                 t.getConnection().commit();
-                t.setIsCommited(true);
+                t.setCommit(true);
                 writerJob.setNeedManualRollbackIfException(true);
             } catch (SQLException e) {
                 IRunningStorageAttribute rsa = t.getStorage();
@@ -339,14 +339,14 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     protected void exceptionHandler(IWriterJob writerJob)   {
         boolean isThrow = false;
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             try {
-                if (!t.getIsCommited()) {
+                if (!t.isCommit()) {
                     t.getConnection().rollback();
                 }
             } catch (Exception e) {
@@ -377,12 +377,12 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     protected void unLoadExecute(IWriterJob writerJob)   {
         boolean isThrow = false;
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
-        IWriterTask t = null;
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
+        WriterTask t = null;
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
             try {
                 t = task.getValue();
                 Map<String,PersistenceStatement> psMap =  t.getStatements();
@@ -391,7 +391,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     sts.add(ps.getStatement());
                 }
                 IRunningStorageAttribute rsa = t.getStorage();
-                IDataBasePool dbp = t.getDatabasePool();
+                IDataBasePool dbp = t.getDataBasePool();
                 dbp.returnConnection(writerJob.getId(), rsa.getStorageAttribute().getName(), rsa.getDatabase(),
                         t.getConnection(), sts);
             }catch (Exception e){
@@ -408,14 +408,14 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
 
     private void manualRollbackPreExecute(IWriterJob writerJob)  {
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty when manual rollbacking.");
         }
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
-            if (!t.getIsCommited()) continue;// not commit then use auto rollback
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
+            if (!t.isCommit()) continue;// not commit then use auto rollback
 
             List<IPersistenceCommand> cmds = t.getCommands();
             if (SetUtil.isNullOrEmpty(cmds)) {
@@ -459,15 +459,15 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     }
 
     private void manualRollbackExecuteHandler(IWriterJob writerJob)  {
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
-            if (!t.getIsCommited()) continue;
-            if (!t.getCompensating()) continue;
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
+            if (!t.isCommit()) continue;
+            if (!t.isCompensating()) continue;
 
             List<Statement> statements = t.getRollbackStatements();
             List<IPersistenceCommand> cmds = t.getRollbackCommands();
@@ -491,15 +491,15 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     }
 
     private void manualRollbackCommit(IWriterJob writerJob)  {
-        Map<String, IWriterTask> tasks = writerJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
-        for (Map.Entry<String, IWriterTask> task : tasks.entrySet()) {
-            IWriterTask t = task.getValue();
-            if (!t.getIsCommited()) continue;
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
+            if (!t.isCommit()) continue;
             try {
-                if (t.getCompensating()) {
+                if (t.isCompensating()) {
                     t.getConnection().commit();
                 }
             } catch (SQLException e) {

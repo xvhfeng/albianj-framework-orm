@@ -47,7 +47,6 @@ public class AlbianApplication {
     private static final Logger logger = LoggerFactory.getLogger(AlbianApplication.class);
     private static final String AlbianStarter = "org.albianj.impl.kernel.core.AlbianTransmitterService";
 
-
     private static String lookupLoggerConfigFile(String configPath){
         String[] filenames = {
                 "log4j2.xml",
@@ -75,10 +74,10 @@ public class AlbianApplication {
         return null;
     }
 
-    public static boolean run(String configPath) {
+    public static boolean run(Class<?> mainClass,String configPath) {
 
         String cfPath = configPath;
-        if(null == configPath || 0 == configPath.length() || 0 ==  configPath.trim().length()) {
+        if(null == configPath ||  configPath.trim().isEmpty()) {
             cfPath = AlbianClassLoader.getResourcePath();
         }
 
@@ -94,7 +93,6 @@ public class AlbianApplication {
         }
 
         logger.info(AlbianAsciiArt.Images);
-
         logger.info("Albianj startup,configurtion path " + cfPath);
         logger.info("Albianj found configuration file:" + null == cfFileName || cfFileName.isEmpty() ? "EMPTY": cfFileName);
 
@@ -109,5 +107,23 @@ public class AlbianApplication {
             return false;
         }
         return true;
+    }
+
+    public static void runBlock(Class<?> mainClass,String configPath,String...paras) {
+        if(!IAlbianCommandLineApplication.class.isAssignableFrom(mainClass)) {
+            throw new RuntimeException(mainClass.getName() + " must assignable from IAlbianCommandLine ");
+        }
+        run(mainClass,configPath);
+        try {
+            IAlbianCommandLineApplication cmdFunc = (IAlbianCommandLineApplication) mainClass.getConstructor().newInstance();
+            cmdFunc.run(paras);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -44,7 +44,7 @@ import org.albianj.orm.context.*;
 import java.util.Map;
 
 public class WriterJob implements IWriterJob {
-    private Map<String, IWriterTask> writerTasks = null;
+    private Map<String, WriterTask> writerTasks = null;
     private WriterJobLifeTime writerJobLifeTime = WriterJobLifeTime.Normal;
     private IPersistenceCompensateNotify compensateCallback = null;
     private Object compensateCallbackObject = null;
@@ -76,12 +76,12 @@ public class WriterJob implements IWriterJob {
         this.notifyCallbackobject = notifyCallbackObject;
     }
 
-    public Map<String, IWriterTask> getWriterTasks() {
+    public Map<String, WriterTask> getWriterTasks() {
         // TODO Auto-generated method stub
         return this.writerTasks;
     }
 
-    public void setWriterTasks(Map<String, IWriterTask> writerTasks) {
+    public void setWriterTasks(Map<String, WriterTask> writerTasks) {
         // TODO Auto-generated method stub
         this.writerTasks = writerTasks;
     }

@@ -45,7 +45,6 @@ import org.albianj.impl.orm.db.localize.SqlServerClientSection;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.ServRouter;
 import org.albianj.orm.context.IWriterJob;
-import org.albianj.orm.context.IWriterTask;
 import org.albianj.orm.db.IPersistenceCommand;
 import org.albianj.impl.orm.db.IPersistenceUpdateCommand;
 import org.albianj.orm.object.*;
@@ -260,8 +259,8 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
     private void addWrtTsk(IWriterJob job, IStorageAttribute storage, String database, IPersistenceCommand pstCmd) {
         String key = storage.getName() + database;
         if (SetUtil.isNull(job.getWriterTasks())) {
-            Map<String, IWriterTask> tasks = new LinkedHashMap<>();
-            IWriterTask task = new WriterTask();
+            Map<String, WriterTask> tasks = new LinkedHashMap<>();
+            WriterTask task = new WriterTask();
             List<IPersistenceCommand> cmds = new Vector<>();
             cmds.add(pstCmd);
             task.setCommands(cmds);
@@ -277,7 +276,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
             if (job.getWriterTasks().containsKey(key)) {
                 job.getWriterTasks().get(key).getCommands().add(pstCmd);
             } else {
-                IWriterTask task = new WriterTask();
+                WriterTask task = new WriterTask();
                 List<IPersistenceCommand> cmds = new Vector<>();
                 cmds.add(pstCmd);
                 task.setCommands(cmds);
