@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.orm.service;
 
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.AblBltinServsNames;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 
 /**
@@ -64,7 +64,7 @@ public interface IAlbianDataRouterParserService extends IAlbianParserService {
     /**
      * 此service在service.xml中的id
      */
-    static String Name = AlbianBuiltinServiceNamePair.AlbianDataRouterServiceName;
+    static String Name = AblBltinServsNames.AlbianDataRouterServiceName;
 
     /**
      * 增加一条路由信息

@@ -37,9 +37,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.service;
 
-import org.albianj.kernel.common.comment.Comments;
-import org.albianj.kernel.aop.AlbianAopAttribute;
-import org.albianj.kernel.core.AlbianKernel;
+import org.albianj.common.comment.Comments;
+import org.albianj.kernel.anno.proxy.AlbianProxyIgnoreRant;
+import org.albianj.kernel.attr.AlbianServiceLifetime;
+//import org.albianj.kernel.core.AlbianKernel;
 
 /**
  * ??????albianj???service??????????????????????????????FreeAlbianService???????
@@ -47,42 +48,41 @@ import org.albianj.kernel.core.AlbianKernel;
  *
  * @author Seapeak
  */
-@AlbianKernel
 public interface IAlbianService {
 
     String FullName = "org.albianj.service.IAlbianService";
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public AlbianServiceLifetime getAlbianServiceState();
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void beforeLoad() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void loading() ;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void afterLoading() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void beforeUnload() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void unload() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void afterUnload() throws RuntimeException;
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public boolean enableProxy();
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public IAlbianService getRealService();
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     public void setRealService(IAlbianService service);
 
-    @AlbianAopAttribute(avoid = true)
+    @AlbianProxyIgnoreRant(ignore = true)
     @Comments("得到当前service的名字，service的子类必须实现该方法，并且值必须和service.xml中配置的Id一致。默认为当前类的名称。")
     public String getServiceName();
 }

@@ -1,6 +1,6 @@
 package org.albianj.orm.service;
 
-import org.albianj.orm.object.IAlbianObjectAttribute;
+import org.albianj.orm.object.AlbianObjectAttribute;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,12 +9,12 @@ public final class AlbianEntityMetadata {
     private static Map<String, Object> entityMetadata = new HashMap<>();
     private static Map<String, String> type2itf = new HashMap<>();
 
-    public static IAlbianObjectAttribute getEntityMetadata(String itf) {
-        return (IAlbianObjectAttribute) entityMetadata.get(itf);
+    public static AlbianObjectAttribute getEntityMetadata(String itf) {
+        return (AlbianObjectAttribute) entityMetadata.get(itf);
     }
 
-    public static IAlbianObjectAttribute getEntityMetadata(Class<?> itfClzz) {
-        return (IAlbianObjectAttribute) entityMetadata.get(itfClzz.getName());
+    public static AlbianObjectAttribute getEntityMetadata(Class<?> itfClzz) {
+        return (AlbianObjectAttribute) entityMetadata.get(itfClzz.getName());
     }
 
     public static boolean exist(String itf) {
@@ -25,28 +25,28 @@ public final class AlbianEntityMetadata {
         return entityMetadata.containsKey(itfClzz.getName());
     }
 
-    public static void put(String itf, IAlbianObjectAttribute attr) {
+    public static void put(String itf, AlbianObjectAttribute attr) {
         type2itf.put(attr.getType(), itf);
         entityMetadata.put(itf, attr);
     }
 
-    public static void put(Class<?> itf, IAlbianObjectAttribute attr) {
+    public static void put(Class<?> itf, AlbianObjectAttribute attr) {
         put(itf.getName(), attr);
     }
 
     public static void putAll(Map<String, Object> map) {
         //can not use putAll
         for (Object entry : map.values()) {
-            IAlbianObjectAttribute objAttr = (IAlbianObjectAttribute) entry;
-            put(objAttr.getInterface(), objAttr);
+            AlbianObjectAttribute objAttr = (AlbianObjectAttribute) entry;
+            put(objAttr.getItf(), objAttr);
         }
     }
 
-    public static IAlbianObjectAttribute getEntityMetadataByType(String type) {
-        return (IAlbianObjectAttribute) entityMetadata.get(type2Interface(type));
+    public static AlbianObjectAttribute getEntityMetadataByType(String type) {
+        return (AlbianObjectAttribute) entityMetadata.get(type2Interface(type));
     }
 
-    public static IAlbianObjectAttribute getEntityMetadataByType(Class<?> implClzz) {
+    public static AlbianObjectAttribute getEntityMetadataByType(Class<?> implClzz) {
         return getEntityMetadataByType(implClzz.getName());
     }
 

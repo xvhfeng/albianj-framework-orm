@@ -37,6 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.context;
 
+import org.albianj.impl.orm.context.WriterTask;
+
 import java.util.Map;
 
 /**
@@ -48,21 +50,30 @@ import java.util.Map;
 /**
  * @author seapeak
  */
-public interface IWriterJob extends IPersistenceJob {
+public interface IWriterJob  {
+
+    /**
+     * 得到当前job的id，
+     * 如果执行job的时候传入sessionid，这个方法获取该sessionid
+     * 如果没有传入sessionid，那么albianj会自动生成一个
+     *
+     * @return
+     */
+    String getId();
 
     /**
      * 得到 写操作所有的任务
      *
      * @return
      */
-    public Map<String, IWriterTask> getWriterTasks();
+    public Map<String, WriterTask> getWriterTasks();
 
     /**
      * 设置写操作所有的任务
      *
      * @param writerTasks 写操作事务所有的任务
      */
-    public void setWriterTasks(Map<String, IWriterTask> writerTasks);
+    public void setWriterTasks(Map<String, WriterTask> writerTasks);
 
     /**
      * 得到写操作的生命周期

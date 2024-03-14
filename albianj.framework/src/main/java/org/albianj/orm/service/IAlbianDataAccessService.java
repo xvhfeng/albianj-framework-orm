@@ -1,17 +1,16 @@
 package org.albianj.orm.service;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.AblBltinServsNames;
+import org.albianj.impl.orm.db.SqlParameter;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.orm.context.IPersistenceCompensateNotify;
 import org.albianj.orm.context.IPersistenceNotify;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
-import org.albianj.orm.db.AlbianDataServiceException;
-import org.albianj.orm.db.ISqlParameter;
 import org.albianj.orm.db.PersistenceCommandType;
 import org.albianj.orm.object.IAlbianObject;
 import org.albianj.orm.object.IOrderByCondition;
-import org.albianj.orm.object.IRunningStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 import org.albianj.orm.object.filter.IChainExpression;
 
 import java.math.BigInteger;
@@ -29,7 +28,7 @@ public interface IAlbianDataAccessService extends IAlbianService {
     /**
      * 此service在service.xml中的id
      */
-    String Name = AlbianBuiltinServiceNamePair.AlbianDataAccessServiceName;
+    String Name = AblBltinServsNames.AlbianDataAccessServiceName;
 
     /**
      * 从存储中删除指定的对象
@@ -345,8 +344,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @return
      * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, IRunningStorageAttribute storageName, PersistenceCommandType cmdType,
-                                                  String text, Map<String, ISqlParameter> paras) ;
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, RunningStorageAttribute storageName, PersistenceCommandType cmdType,
+                                                  String text, Map<String, SqlParameter> paras) ;
 
     /**
      * 执行自定义sql语句来获取结果，暂时不支持存储过程
@@ -361,8 +360,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @return
      * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, IRunningStorageAttribute storageName, PersistenceCommandType cmdType,
-                                                 String text, Map<String, ISqlParameter> paras) ;
+    <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, RunningStorageAttribute storageName, PersistenceCommandType cmdType,
+                                                 String text, Map<String, SqlParameter> paras) ;
 
 
     /**

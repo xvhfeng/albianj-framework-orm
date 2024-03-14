@@ -5,19 +5,17 @@ import Albian.Test.Model.ISingleUser;
 import Albian.Test.Services.IUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.service.AlbianServiceFieldRant;
-import org.albianj.kernel.service.AlbianServiceFieldType;
-import org.albianj.kernel.service.AlbianServiceRant;
+import org.albianj.kernel.anno.serv.AlbianServiceFieldRant;
+import org.albianj.kernel.anno.serv.AlbianServiceFieldType;
+import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.dactx.AlbianDataAccessOpt;
 import org.albianj.orm.context.dactx.IDataAccessContext;
 import org.albianj.orm.context.dactx.IQueryContext;
+import org.albianj.orm.context.dactx.QueryOpt;
 import org.albianj.orm.object.LogicalOperation;
 import org.albianj.orm.object.filter.FilterExpression;
-import org.albianj.orm.object.filter.FilterGroupExpression;
 import org.albianj.orm.object.filter.IChainExpression;
-import org.albianj.orm.object.filter.IFilterGroupExpression;
-import org.albianj.orm.service.AlbianServiceHub;
+import org.albianj.AblServRouter;
 import org.albianj.orm.service.IAlbianDataAccessService;
 import org.albianj.orm.service.LoadType;
 
@@ -61,7 +59,7 @@ public class UserService extends FreeAlbianService implements IUserService {
 //                AlbianLoggerLevel.Info, exc, "i am %s", "log");
 
         //创建对象请使用此方法
-        ISingleUser user = AlbianServiceHub.newInstance("SessionId", ISingleUser.class);
+        ISingleUser user = AblServRouter.newInstance("SessionId", ISingleUser.class);
         user.setId(BigInteger.valueOf(System.currentTimeMillis()));
         user.setPassword(pwd);
         user.setUserName(uname);
@@ -69,7 +67,7 @@ public class UserService extends FreeAlbianService implements IUserService {
 
         // 创建保存数据的上下文，不推荐使用save或者是create等诸如此类的原来的方法及其重载
         IDataAccessContext dctx = da.newDataAccessContext();
-        return dctx.add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
+        return dctx.add(QueryOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
     }
 
     @Override
@@ -83,7 +81,7 @@ public class UserService extends FreeAlbianService implements IUserService {
         if (user.getPassword().equals(orgPwd)) {
             user.setPassword(newPwd);
             IDataAccessContext dctx = da.newDataAccessContext();
-            return dctx.add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
+            return dctx.add(QueryOpt.Save, user, StorageInfo.SingleUserStorageName).commit("Sessionid");
         }
         return false;
     }
@@ -91,13 +89,13 @@ public class UserService extends FreeAlbianService implements IUserService {
     @Override
     public boolean batchAddUser()  {
         IDataAccessContext dctx = da.newDataAccessContext();
-        IMultiUser mu1 = AlbianServiceHub.newInstance("sessionId", IMultiUser.class);
+        IMultiUser mu1 = AblServRouter.newInstance("sessionId", IMultiUser.class);
         String id1 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 1, 1);
         mu1.setId(id1);
         mu1.setUserName("mu1");
         mu1.setPassword("mu1pwd");
 
-        IMultiUser mu2 = AlbianServiceHub.newInstance("sessionId", IMultiUser.class);
+        IMultiUser mu2 = AblServRouter.newInstance("sessionId", IMultiUser.class);
         String id2 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 2, 2);
         mu2.setId(id2);
         mu2.setUserName("mu2");
@@ -108,8 +106,8 @@ public class UserService extends FreeAlbianService implements IUserService {
 //        user.setPassword("batcher");
 //        user.setUserName("batcher");
         //同时使用数据路由与单数据库保存
-        return dctx.add(AlbianDataAccessOpt.Save, mu1)
-                .add(AlbianDataAccessOpt.Save, mu2)
+        return dctx.add(QueryOpt.Save, mu1)
+                .add(QueryOpt.Save, mu2)
 //                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
 
@@ -128,7 +126,7 @@ public class UserService extends FreeAlbianService implements IUserService {
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         IQueryContext qctx = da.newQueryContext();
         IMultiUser mu1 = qctx.loadObject("sessionId", IMultiUser.class, LoadType.quickly, whrs1);
-        AlbianServiceHub.log("batchid", LogLevel.Debug,"MUser_1: id->{} name->{} pwd->{}",mu1.getId(),mu1.getUserName(),mu1.getPassword());
+        AblServRouter.log("batchid", LogLevel.Debug,"MUser_1: id->{} name->{} pwd->{}",mu1.getId(),mu1.getUserName(),mu1.getPassword());
 //        System.out.println(String.format("MU1:id->%s uname->%s pwd->%s",
 //                mu1.getId(), mu1.getUserName(), mu1.getPassword()));
         qctx.reset();
@@ -136,7 +134,7 @@ public class UserService extends FreeAlbianService implements IUserService {
         IChainExpression whrs2 = new FilterExpression("Id", LogicalOperation.Equal, "1710318557305_2_2_2");
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         IMultiUser mu2 = qctx.loadObject("sessionId", IMultiUser.class, LoadType.quickly, whrs2);
-        AlbianServiceHub.log("batchid", LogLevel.Debug,"MUser_2: id->{} name->{} pwd->{}",mu2.getId(),mu2.getUserName(),mu2.getPassword());
+        AblServRouter.log("batchid", LogLevel.Debug,"MUser_2: id->{} name->{} pwd->{}",mu2.getId(),mu2.getUserName(),mu2.getPassword());
 //        System.out.println(String.format("MU2:id->%s uname->%s pwd->%s",
 //                mu2.getId(), mu2.getUserName(), mu2.getPassword()));
 

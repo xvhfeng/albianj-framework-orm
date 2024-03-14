@@ -37,12 +37,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.object;
 
-import org.albianj.kernel.common.comment.SpecialWarning;
-import org.albianj.kernel.common.utils.CheckUtil;
+import org.albianj.AblThrowable;
+import org.albianj.ServRouter;
+import org.albianj.common.comment.SpecialWarning;
+import org.albianj.common.utils.SetUtil;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.ServRouter;
-import org.albianj.orm.context.dactx.IAlbianObjectWarp;
-import org.albianj.orm.db.AlbianDataServiceException;
+import org.albianj.orm.context.dactx.AlbianObjectWarp;
 import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
 import org.albianj.orm.service.AlbianEntityMetadata;
 
@@ -58,7 +58,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
     protected transient HashMap<String, Object> dic = null;
 
     @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
-    protected transient Map<String, IAlbianObjectWarp> chainEntity = null;
+    protected transient Map<String, AlbianObjectWarp> chainEntity = null;
 
     @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
     private transient boolean isAlbianNew = true;
@@ -113,21 +113,21 @@ public abstract class FreeAlbianObject implements IAlbianObject {
 
     private boolean needUpdate(Object sessionId, String itf)  {
         String className = this.getClass().getName();
-        IAlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(itf);
+        AlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == entiryAttr) {
-            throw new AlbianDataServiceException(
+            throw new AblThrowable(
                 "PersistenceService is error. albian-object:" + className + " attribute is not found.");
         }
 
-        Map<String, IAlbianEntityFieldAttribute> fields = entiryAttr.getFields();
-        if (CheckUtil.isNullOrEmpty(fields)) {
-            throw new AlbianDataServiceException(
+        Map<String, AlbianEntityFieldAttribute> fields = entiryAttr.getFields();
+        if (SetUtil.isNullOrEmpty(fields)) {
+            throw new AblThrowable(
                 "PersistenceService is error. albian-object:" + className + " PropertyDescriptor is not found.");
         }
         try {
 
-            for (IAlbianEntityFieldAttribute fieldAttr : fields.values()) {
-                if (!fieldAttr.getIsSave())
+            for (AlbianEntityFieldAttribute fieldAttr : fields.values()) {
+                if (!fieldAttr.isSave())
                     continue;
                 Object newVal = fieldAttr.getEntityField().get(this);
                 Object oldValue = getOldAlbianObject(fieldAttr.getPropertyName());

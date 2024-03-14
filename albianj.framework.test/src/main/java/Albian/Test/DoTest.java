@@ -2,45 +2,18 @@ package Albian.Test;
 
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
-import org.albianj.kernel.ServRouter;
+import org.albianj.ServRouter;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.loader.AlbianBootService;
-import org.albianj.orm.service.AlbianServiceHub;
+import org.albianj.loader.AlbianjApplication;
+import org.albianj.AblServRouter;
+import org.albianj.loader.IAlbianCommandLineApplication;
 
-public class DoTest {
+public class DoTest implements IAlbianCommandLineApplication {
     public static void main(String[] argv) {
         try {
 
-//            String[] l5ts = "L5:1121:322:0.3".split(":");
-
-//            int patid = Integer.valueOf(l5ts[1]);
-//            int cmdId = Integer.valueOf(l5ts[2]);
-//            float tst = Float.valueOf(l5ts[3]);
-
-//            Exception exc = new Exception("what is exception??");
-//            RuntimeException re = new RuntimeException(exc);
-//            re.printStackTrace();
-
-
-            AlbianBootService.start(argv[0]);
+            AlbianjApplication.run(DoTest.class,argv[0]);
             test1();
-
-//            IAlbianLoggerService2 logServ = AlbianServiceRouter.getLogger2();
-//            logServ.log("AlbianMonitorLogger","session", AlbianLoggerLevel.Debug,
-//                    "wolaile");
-//            Thread.sleep(65* 1000);
-//            logServ.log("AlbianMonitorLogger","session", AlbianLoggerLevel.Debug,
-//                    "wolaile2");
-
-//            IAlbianMonitorLoggerService mlogServ = AlbianServiceRouter.getSingletonService(IAlbianMonitorLoggerService.class,IAlbianMonitorLoggerService.Name);
-//            mlogServ.addMonitorLog("session",
-//                    AlbianMonitorData.build()
-//                            .setAppName("appname").setBizExtend("bizExtend")
-//                    .setBizId("bizid").setBizName("bizName").setDesIp("desip")
-//                    .setDesPort(8080).setDetail("detail")
-//                    .setLevel("debug").setSessionId("session")
-//                    .setStatus(200).setTasktime(60)
-//                    );
             return;
 
 
@@ -127,12 +100,12 @@ public class DoTest {
 //            System.out.println("modify password fail.");
 
             if(us.batchAddUser()){
-                AlbianServiceHub.log("Test Application", LogLevel.Debug, "batch add users success");
+                AblServRouter.log("Test Application", LogLevel.Debug, "batch add users success");
             } else {
-                AlbianServiceHub.log("Test Application", LogLevel.Debug, "batch add users  fail");
+                AblServRouter.log("Test Application", LogLevel.Debug, "batch add users  fail");
             }
         us.queryMulitUserById();
-        AlbianServiceHub.log("Test Application", LogLevel.Debug, "done query mulit users.");
+        AblServRouter.log("Test Application", LogLevel.Debug, "done query mulit users.");
     }
 
     private static void test2()  {
@@ -161,5 +134,11 @@ public class DoTest {
             System.out.println("batch add user fail.");
         }
         us.queryMulitUserById();
+    }
+
+    @Override
+    public void run(String... paras) {
+        System.out.println("run test");
+        test1();
     }
 }

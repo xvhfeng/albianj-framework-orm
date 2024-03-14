@@ -37,11 +37,11 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.orm.service;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.AblBltinServsNames;
+import org.albianj.orm.object.StorageAttribute;
 import org.albianj.kernel.service.parser.IAlbianParserService;
 import org.albianj.orm.db.IDataBasePool;
-import org.albianj.orm.object.IRunningStorageAttribute;
-import org.albianj.orm.object.IStorageAttribute;
+import org.albianj.orm.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 
@@ -68,7 +68,7 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
     /**
      * 此service在service.xml中的id
      */
-    static String Name = AlbianBuiltinServiceNamePair.AlbianStorageServiceName;
+    static String Name = AblBltinServsNames.AlbianStorageServiceName;
 
     /**
      * 增加storage的元信息
@@ -76,7 +76,7 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param name storage的名称
      * @param sa   storage的元信息
      */
-    public void addStorageAttribute(String name, IStorageAttribute sa);
+    public void addStorageAttribute(String name, StorageAttribute sa);
 
     /**
      * 根据storage的名称获取storage的元信息
@@ -84,9 +84,9 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param name storage的名称
      * @return storage的元信息
      */
-    public IStorageAttribute getStorageAttribute(String name);
+    public StorageAttribute getStorageAttribute(String name);
 
-    public IDataBasePool getDatabasePool(String sessionId, IRunningStorageAttribute rsa);
+    public IDataBasePool getDatabasePool(String sessionId, RunningStorageAttribute rsa);
 
     /**
      * 根据storage的元信息获取链接
@@ -94,11 +94,11 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param rsa
      * @return
      */
-    public Connection getConnection(String sessionId, IRunningStorageAttribute rsa,boolean isAutoCommit) ;
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa,boolean isAutoCommit) ;
 
 //    public Connection getConnection(IRunningStorageAttribute rsa,boolean isAutoCommit);
 
-    public Connection getConnection(String sessionId, IDataBasePool pool, IRunningStorageAttribute rsa,boolean isAutoCommit) ;
+    public Connection getConnection(String sessionId, IDataBasePool pool, RunningStorageAttribute rsa,boolean isAutoCommit) ;
 
     /**
      * 请自行关闭ResultSet和 Statement后再调用此方法返回链接
@@ -107,7 +107,7 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param rsa
      * @param conn
      */
-    public void returnConnection(String sessionId, IRunningStorageAttribute rsa, Connection conn);
+    public void returnConnection(String sessionId, RunningStorageAttribute rsa, Connection conn);
 
 
 }

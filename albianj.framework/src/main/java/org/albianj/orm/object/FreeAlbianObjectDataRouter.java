@@ -44,42 +44,42 @@ public abstract class FreeAlbianObjectDataRouter implements
         IAlbianObjectDataRouter {
 
     @Override
-    public List<IDataRouterAttribute> mappingWriterRouting(
-            Map<String, IDataRouterAttribute> routings, IAlbianObject obj) {
+    public List<DataRouterAttribute> mappingWriterRouting(
+            Map<String, DataRouterAttribute> routings, IAlbianObject obj) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public IDataRouterAttribute mappingReaderRouting(
-            Map<String, IDataRouterAttribute> routings,
+    public DataRouterAttribute mappingReaderRouting(
+            Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
             Map<String, IOrderByCondition> orderbys) {
         return null;
     }
 
     @Override
-    public String mappingWriterRoutingStorage(IDataRouterAttribute routing,
+    public String mappingWriterRoutingStorage(DataRouterAttribute routing,
                                               IAlbianObject obj) {
         // TODO Auto-generated method stub
         return routing.getStorageName();
     }
 
     @Override
-    public String mappingWriterRoutingDatabase(IStorageAttribute storage,
+    public String mappingWriterRoutingDatabase(StorageAttribute storage,
                                                IAlbianObject obj) {
         return storage.getDatabase();
     }
 
     @Override
-    public String mappingWriterTable(IDataRouterAttribute routing,
+    public String mappingWriterTable(DataRouterAttribute routing,
                                      IAlbianObject obj) {
         // TODO Auto-generated method stub
         return routing.getTableName();
     }
 
     @Override
-    public String mappingReaderRoutingStorage(IDataRouterAttribute routing,
+    public String mappingReaderRoutingStorage(DataRouterAttribute routing,
                                               Map<String, IFilterCondition> wheres,
                                               Map<String, IOrderByCondition> orderbys) {
         // TODO Auto-generated method stub
@@ -87,7 +87,7 @@ public abstract class FreeAlbianObjectDataRouter implements
     }
 
     @Override
-    public String mappingReaderRoutingDatabase(IStorageAttribute storage,
+    public String mappingReaderRoutingDatabase(StorageAttribute storage,
                                                Map<String, IFilterCondition> wheres,
                                                Map<String, IOrderByCondition> orderbys) {
         // TODO Auto-generated method stub
@@ -95,15 +95,15 @@ public abstract class FreeAlbianObjectDataRouter implements
     }
 
     @Override
-    public String mappingReaderTable(IDataRouterAttribute routing,
+    public String mappingReaderTable(DataRouterAttribute routing,
                                      Map<String, IFilterCondition> wheres,
                                      Map<String, IOrderByCondition> orderbys) {
         // TODO Auto-generated method stub
         return routing.getTableName();
     }
 
-    public IDataRouterAttribute mappingExactReaderRouting(
-            Map<String, IDataRouterAttribute> routings,
+    public DataRouterAttribute mappingExactReaderRouting(
+            Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
             Map<String, IOrderByCondition> orderbys) {
         return mappingReaderRouting(routings, wheres, orderbys);
@@ -115,13 +115,13 @@ public abstract class FreeAlbianObjectDataRouter implements
      * @param orderbys
      * @return
      */
-    public String mappingExactReaderRoutingStorage(IDataRouterAttribute routing,
+    public String mappingExactReaderRoutingStorage(DataRouterAttribute routing,
                                                    Map<String, IFilterCondition> wheres,
                                                    Map<String, IOrderByCondition> orderbys) {
         return mappingReaderRoutingStorage(routing, wheres, orderbys);
     }
 
-    public String mappingExactReaderRoutingDatabase(IStorageAttribute storage,
+    public String mappingExactReaderRoutingDatabase(StorageAttribute storage,
                                                     Map<String, IFilterCondition> wheres,
                                                     Map<String, IOrderByCondition> orderbys) {
         return mappingReaderRoutingDatabase(storage, wheres, orderbys);
@@ -133,7 +133,7 @@ public abstract class FreeAlbianObjectDataRouter implements
      * @param orderbys
      * @return
      */
-    public String mappingExactReaderTable(IDataRouterAttribute routing,
+    public String mappingExactReaderTable(DataRouterAttribute routing,
                                           Map<String, IFilterCondition> wheres,
                                           Map<String, IOrderByCondition> orderbys) {
         return mappingReaderTable(routing, wheres, orderbys);
