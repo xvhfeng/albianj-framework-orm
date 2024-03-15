@@ -9,15 +9,15 @@ import org.albianj.kernel.anno.serv.AlbianServiceFieldRant;
 import org.albianj.kernel.anno.serv.AlbianServiceFieldType;
 import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.dactx.IDataAccessContext;
-import org.albianj.orm.context.dactx.IQueryContext;
-import org.albianj.orm.context.dactx.QueryOpt;
-import org.albianj.orm.object.LogicalOperation;
-import org.albianj.orm.object.filter.FilterExpression;
-import org.albianj.orm.object.filter.IChainExpression;
+import org.albianj.dal.context.dactx.IDataAccessContext;
+import org.albianj.dal.context.dactx.IQueryContext;
+import org.albianj.dal.context.dactx.QueryOpt;
+import org.albianj.dal.object.LogicalOperation;
+import org.albianj.dal.object.filter.FilterExpression;
+import org.albianj.dal.object.filter.IChainExpression;
 import org.albianj.AblServRouter;
-import org.albianj.orm.service.IAlbianDataAccessService;
-import org.albianj.orm.service.LoadType;
+import org.albianj.dal.service.IAlbianDataAccessService;
+import org.albianj.dal.service.QueryToOpt;
 
 import java.math.BigInteger;
 
@@ -40,7 +40,7 @@ public class UserService extends FreeAlbianService implements IUserService {
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         IQueryContext qctx = da.newQueryContext();
         ISingleUser user = qctx.useStorage(StorageInfo.SingleUserStorageName) //指定到storage
-                .loadObject("sessionId", ISingleUser.class, LoadType.quickly, wheres);
+                .loadObject("sessionId", ISingleUser.class, QueryToOpt.ReaderRouter, wheres);
         if (user.getPassword().equals(pwd)) {
             return true;
         }
@@ -77,7 +77,7 @@ public class UserService extends FreeAlbianService implements IUserService {
         IQueryContext qctx = da.newQueryContext();
         ISingleUser user = qctx.useStorage(StorageInfo.SingleUserStorageName) //指定到storage
                 // 如果需要及其精确，使用LoadType.exact，并且指定主数据库或根据DataRouter走WriteRouters配置
-                .loadObject("sessionId", ISingleUser.class, LoadType.quickly, wheres);
+                .loadObject("sessionId", ISingleUser.class, QueryToOpt.ReaderRouter, wheres);
         if (user.getPassword().equals(orgPwd)) {
             user.setPassword(newPwd);
             IDataAccessContext dctx = da.newDataAccessContext();
@@ -125,7 +125,7 @@ public class UserService extends FreeAlbianService implements IUserService {
 
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         IQueryContext qctx = da.newQueryContext();
-        IMultiUser mu1 = qctx.loadObject("sessionId", IMultiUser.class, LoadType.quickly, whrs1);
+        IMultiUser mu1 = qctx.loadObject("sessionId", IMultiUser.class, QueryToOpt.ReaderRouter, whrs1);
         AblServRouter.log("batchid", LogLevel.Debug,"MUser_1: id->{} name->{} pwd->{}",mu1.getId(),mu1.getUserName(),mu1.getPassword());
 //        System.out.println(String.format("MU1:id->%s uname->%s pwd->%s",
 //                mu1.getId(), mu1.getUserName(), mu1.getPassword()));
@@ -133,7 +133,7 @@ public class UserService extends FreeAlbianService implements IUserService {
 
         IChainExpression whrs2 = new FilterExpression("Id", LogicalOperation.Equal, "1710318557305_2_2_2");
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
-        IMultiUser mu2 = qctx.loadObject("sessionId", IMultiUser.class, LoadType.quickly, whrs2);
+        IMultiUser mu2 = qctx.loadObject("sessionId", IMultiUser.class, QueryToOpt.ReaderRouter, whrs2);
         AblServRouter.log("batchid", LogLevel.Debug,"MUser_2: id->{} name->{} pwd->{}",mu2.getId(),mu2.getUserName(),mu2.getPassword());
 //        System.out.println(String.format("MU2:id->%s uname->%s pwd->%s",
 //                mu2.getId(), mu2.getUserName(), mu2.getPassword()));

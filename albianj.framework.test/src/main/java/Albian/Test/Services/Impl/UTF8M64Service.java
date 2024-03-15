@@ -8,14 +8,14 @@ import org.albianj.kernel.anno.serv.AlbianServiceFieldRant;
 import org.albianj.kernel.anno.serv.AlbianServiceFieldType;
 import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.orm.context.dactx.IDataAccessContext;
-import org.albianj.orm.context.dactx.IQueryContext;
-import org.albianj.orm.context.dactx.QueryOpt;
-import org.albianj.orm.object.LogicalOperation;
-import org.albianj.orm.object.filter.FilterExpression;
-import org.albianj.orm.object.filter.IChainExpression;
-import org.albianj.orm.service.IAlbianDataAccessService;
-import org.albianj.orm.service.LoadType;
+import org.albianj.dal.context.dactx.IDataAccessContext;
+import org.albianj.dal.context.dactx.IQueryContext;
+import org.albianj.dal.context.dactx.QueryOpt;
+import org.albianj.dal.object.LogicalOperation;
+import org.albianj.dal.object.filter.FilterExpression;
+import org.albianj.dal.object.filter.IChainExpression;
+import org.albianj.dal.service.IAlbianDataAccessService;
+import org.albianj.dal.service.QueryToOpt;
 
 
 @AlbianServiceRant(Id = "UTF8M64Service")
@@ -39,7 +39,7 @@ public class UTF8M64Service extends FreeAlbianService implements IUTF8M64Service
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         IQueryContext qctx = da.newQueryContext();
         IUTF8M64 utf8m64 = qctx.useStorage(StorageInfo.UTF8Mb64TestStorageName).fromTable("tb_test_emoji_1") //指定到storage
-                .loadObject("sessionId", IUTF8M64.class, LoadType.quickly, wheres);
+                .loadObject("sessionId", IUTF8M64.class, QueryToOpt.ReaderRouter, wheres);
         return utf8m64.getV();
     }
 }

@@ -1,8 +1,8 @@
 package Albian.Test.DataRouters;
 
 import Albian.Test.Model.IOrgMultiUser;
-import org.albianj.orm.object.DataRouterAttribute;
-import org.albianj.orm.object.*;
+import org.albianj.dal.object.DataRouterAttribute;
+import org.albianj.dal.object.*;
 
 import java.util.ArrayList;
 import java.util.List;
