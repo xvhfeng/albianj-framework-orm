@@ -6,18 +6,13 @@
 
     <artifactId>albianj</artifactId>
     <groupId>albianj-framework</groupId>
-    <version>10009-dev</version>
+    <version>10010-SNAPSHOT</version>
     <modules>
         <module>albianj.framework.loader</module>
         <module>albianj.framework</module>
         <module>albianj.framework.test</module>
     </modules>
     <packaging>pom</packaging>
-
-    <scm>
-        <developerConnection>scm:git:http://gitlab.inner.yuewen.local/albianj-framework/albianj-framework.git
-        </developerConnection>
-    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,13 +46,6 @@
                 <artifactId>log4j-slf4j2-impl</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-<!--            <dependency>-->
-<!--                <groupId>org.slf4j</groupId>-->
-<!--                <artifactId>slf4j-simple</artifactId>-->
-<!--                <version>2.0.12</version>-->
-<!--                <scope>test</scope>-->
-<!--            </dependency>-->
 
             <dependency>
                 <groupId>junit</groupId>
@@ -104,34 +92,54 @@
             <!-- 要将源码放上去，需要加入这个插件 -->
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.2.1</version> <!-- 使用适合你项目的版本 -->
                 <executions>
                     <execution>
-                        <phase>compile</phase>
+                        <id>attach-sources</id>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal> <!-- 打包源码，不fork生命周期 -->
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version> <!-- 使用合适的版本 -->
+                <configuration>
+                    <excludes>
+                        <!-- 排除特定文件夹下的所有文件 -->
+<!--                        <exclude>**/controller/*</exclude>-->
+<!--                        <exclude>**/idservice/App.*</exclude>-->
+                        <!-- 排除特定文件 -->
+<!--                        <exclude>**/data/RestResponse.*</exclude>-->
+                        <!-- 排除多个文件或路径，使用逗号分隔 -->
+                        <!--  <exclude>path1/**, path2/specific-file.*, path3/**/*.class</exclude> -->
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>alimaven</id>-->
-<!--            <name>aliyun maven</name>-->
-<!--            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--            </releases>-->
-<!--            <snapshots>-->
-<!--                <enabled>false</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <distributionManagement>
+        <repository>
+            <id>release</id>
+            <name>new-toy-company</name>
+            <url>http://nexusdev.canfengtech.com:8081/repository/maven-public/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshot</id>
+            <name>new-toy-company</name>
+            <url>http://nexusdev.canfengtech.com:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

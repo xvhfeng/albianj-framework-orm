@@ -37,12 +37,12 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.kernel.security;
 
-import org.albianj.kernel.service.AlbianBuiltinServiceNamePair;
+import org.albianj.AblBltinServsNames;
 import org.albianj.kernel.service.IAlbianService;
 
 public interface IAlbianSecurityService extends IAlbianService {
 
-    final String Name = AlbianBuiltinServiceNamePair.AlbianSecurityServiceName;
+    final String Name = AblBltinServsNames.AlbianSecurityServiceName;
 
     public String decryptDES(Object sessionId,String message) ;
 
@@ -64,12 +64,12 @@ public interface IAlbianSecurityService extends IAlbianService {
 
     public String initMacKey(Object sessionId) ;
 
-    public String initMacKey(Object sessionId,MACStyle style) ;
+    public String initMacKey(Object sessionId, SecurityOpt style) ;
 
-    public String encryptHMAC(Object sessionId,String key, MACStyle style, byte[] data)
+    public String encryptHMAC(Object sessionId, String key, SecurityOpt style, byte[] data)
             ;
 
-    public String encryptHMAC(Object sessionId,String key, MACStyle style, String data)
+    public String encryptHMAC(Object sessionId, String key, SecurityOpt style, String data)
             ;
 
     public String encryptHMAC(Object sessionId,String key, byte[] data) ;

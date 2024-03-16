@@ -2,11 +2,11 @@ package Albian.Test.Model.Impl;
 
 import Albian.Test.DataRouters.MultiUserDataRouter;
 import Albian.Test.Model.IMultiUser;
-import org.albianj.orm.object.FreeAlbianObject;
-import org.albianj.orm.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.orm.object.rants.AlbianObjectDataRouterRant;
-import org.albianj.orm.object.rants.AlbianObjectDataRoutersRant;
-import org.albianj.orm.object.rants.AlbianObjectRant;
+import org.albianj.dal.object.FreeAlbianObject;
+import org.albianj.dal.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.dal.object.rants.AlbianObjectDataRouterRant;
+import org.albianj.dal.object.rants.AlbianObjectDataRoutersRant;
+import org.albianj.dal.object.rants.AlbianObjectRant;
 
 
 @AlbianObjectRant(Interface = IMultiUser.class, // 配置当前实体继承的接口，一个接口对应一个实现类
