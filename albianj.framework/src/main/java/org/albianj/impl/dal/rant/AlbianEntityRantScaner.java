@@ -46,16 +46,11 @@ public class AlbianEntityRantScaner {
 
                 new IAlbianClassExcavator() {
                     @Override
-                    public Object finder(Class<?> clzz)  {
+                    public Object found(Class<?> clzz)  {
                         String implClzzName = clzz.getName();
                         AlbianObjectAttribute objAttr = null;
                         AlbianObjectRant or = clzz.getAnnotation(AlbianObjectRant.class);
-//                        if (null == or.Interface()) {
-//                            return null;
-//                        }
 
-//                        Class<?> itfClzz = or.Interface();
-//                        String sItf = itfClzz.getName();
 
                         if (AlbianEntityMetadata.exist(implClzzName)) {
                             objAttr = AlbianEntityMetadata.getEntityMetadata(implClzzName);
@@ -73,11 +68,14 @@ public class AlbianEntityRantScaner {
                             objAttr.setFields(fields);
                         }
 
+                        objAttr.setSqlFieldUseUnderline(or.SqlFieldUseUnderline());
+                        objAttr.setTableNameUseUnderline(or.TableNameUseUnderline());
+
                         DataRouterAttribute defaultRouting = makeDefaultDataRouter(clzz);
                         objAttr.setDefaultRouting(defaultRouting);
 
-
-                        AlbianObjectDataRoutersRant drr = or.DataRouters();
+//                        clzz.getAnnotation(AlbianObjectDataRoutersRant.class);
+                        AlbianObjectDataRoutersRant drr =  clzz.getAnnotation(AlbianObjectDataRoutersRant.class);
                         DataRoutersAttribute pkgDataRouterAttr = scanRouters(clzz, drr);
                         //set data router
                         if (null != pkgDataRouterAttr) {
@@ -113,13 +111,13 @@ public class AlbianEntityRantScaner {
     }
 
     private static DataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
-        if (null == drr.DataRouter()) {
+        if (null == drr) {
             return null;
         }
 
         Class<?> clazz = drr.DataRouter();
 
-        if (!IAlbianObjectDataRouter.class.isAssignableFrom(clazz)) {
+        if (clazz == null  || !IAlbianObjectDataRouter.class.isAssignableFrom(clazz)) {
             // datarouter not impl IAlbianObjectDataRouter
             return null;
         }

@@ -39,4 +39,7 @@ public class AlbianEntityFieldAttribute  {
     private String propertyName = null;
     private Method propertySetter = null;
     private Method propertyGetter = null;
+
+    private String desc;
+    private boolean ignoreUnderline = false;
 }

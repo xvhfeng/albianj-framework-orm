@@ -39,7 +39,7 @@ public class AlbianServiceRantParser {
 
                 new IAlbianClassExcavator() {
                     @Override
-                    public Object finder(Class<?> clzz) {
+                    public Object found(Class<?> clzz) {
                         return scanAlbianService(clzz);
                     }
                 });

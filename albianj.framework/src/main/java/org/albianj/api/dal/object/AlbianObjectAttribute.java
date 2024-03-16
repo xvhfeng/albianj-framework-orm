@@ -51,5 +51,8 @@ public class AlbianObjectAttribute  {
     private DataRoutersAttribute dataRouters = null;
     private Map<String, AlbianEntityFieldAttribute> fields = null;
     private Class<?> implClzz = null;
+    private boolean tableNameUseUnderline = false;
+    private boolean sqlFieldUseUnderline = false;
+
 
 }

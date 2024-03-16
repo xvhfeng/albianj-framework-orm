@@ -2,7 +2,6 @@ package org.albianj.loader;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -87,7 +86,7 @@ public class AlbianClassScanner {
         String fullClassName = packageName + '.' + className;
         Class<?> cls = classLoader.loadClass(fullClassName);
         if (filter.verify(cls)) {
-            Object info = excavator.finder(cls);
+            Object info = excavator.found(cls);
             classes.put(fullClassName, info);
         }
     }

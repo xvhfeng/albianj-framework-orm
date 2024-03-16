@@ -11,8 +11,6 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface AlbianObjectRant {
-
-//    Class<? extends IAlbianObject> Interface();
-
-    AlbianObjectDataRoutersRant DataRouters() default @AlbianObjectDataRoutersRant(DataRouter = AlbianObjectDataRouterDefaulter.class);
+    boolean SqlFieldUseUnderline() default false;
+    boolean TableNameUseUnderline() default false;
 }

@@ -1,6 +1,8 @@
 package org.albianj.api.dal.object.rants;
 
 
+import org.albianj.api.dal.service.AlbianObjectDataRouterDefaulter;
+
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -9,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface AlbianObjectDataRoutersRant {
 
-    Class<?> DataRouter();
+    Class<?> DataRouter()  default AlbianObjectDataRouterDefaulter.class;
 
     boolean ReaderRoutersEnable() default true;
 

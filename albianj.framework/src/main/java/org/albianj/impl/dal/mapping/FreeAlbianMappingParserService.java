@@ -60,10 +60,6 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
     private String file = "persistence.xml";
     private HashMap<String, PropertyDescriptor[]> _bpd = null;
 
-    public void setConfigFileName(String fileName) {
-        this.file = fileName;
-    }
-
     public void init()  {
         _bpd = new HashMap<>();
         try {

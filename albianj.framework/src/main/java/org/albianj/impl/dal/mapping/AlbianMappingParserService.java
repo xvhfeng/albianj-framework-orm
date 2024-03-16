@@ -111,13 +111,6 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
     }
 
-//    private static void parserAlbianObjectMembers(String type, @SuppressWarnings("rawtypes") List nodes,
-//                                                  Map<String, AlbianEntityFieldAttribute> map) {
-//        for (Object node : nodes) {
-//            parserAlbianObjectMember(type, (Element) node, map);
-//        }
-//    }
-
     private static void parserAlbianObjectMember(String type, Element elt, Map<String, AlbianEntityFieldAttribute> map) {
         String name = XmlUtil.getAttributeValue(elt, "Name");
         if (StringsUtil.isNullOrEmpty(name)) {
