@@ -61,35 +61,35 @@ public interface IAlbianObjectDataRouter {
     DataRouterAttribute mappingReaderRouting(
             Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
-            Map<String, IOrderByCondition> orderbys);
+            Map<String, OrderByCondition> orderbys);
 
     String mappingReaderRoutingStorage(DataRouterAttribute routing,
                                        Map<String, IFilterCondition> wheres,
-                                       Map<String, IOrderByCondition> orderbys);
+                                       Map<String, OrderByCondition> orderbys);
 
     String mappingReaderRoutingDatabase(StorageAttribute storage,
                                         Map<String, IFilterCondition> wheres,
-                                        Map<String, IOrderByCondition> orderbys);
+                                        Map<String, OrderByCondition> orderbys);
 
     String mappingReaderTable(DataRouterAttribute routing,
                               Map<String, IFilterCondition> wheres,
-                              Map<String, IOrderByCondition> orderbys);
+                              Map<String, OrderByCondition> orderbys);
 
     //exact reader routing
     DataRouterAttribute mappingExactReaderRouting(
             Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
-            Map<String, IOrderByCondition> orderbys);
+            Map<String, OrderByCondition> orderbys);
 
     String mappingExactReaderRoutingStorage(DataRouterAttribute routing,
                                             Map<String, IFilterCondition> wheres,
-                                            Map<String, IOrderByCondition> orderbys);
+                                            Map<String, OrderByCondition> orderbys);
 
     String mappingExactReaderRoutingDatabase(StorageAttribute storage,
                                              Map<String, IFilterCondition> wheres,
-                                             Map<String, IOrderByCondition> orderbys);
+                                             Map<String, OrderByCondition> orderbys);
 
     String mappingExactReaderTable(DataRouterAttribute routing,
                                    Map<String, IFilterCondition> wheres,
-                                   Map<String, IOrderByCondition> orderbys);
+                                   Map<String, OrderByCondition> orderbys);
 }

@@ -45,7 +45,7 @@ import org.albianj.common.utils.XmlUtil;
 import org.albianj.dal.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.dal.object.PersistenceDatabaseStyle;
+import org.albianj.dal.object.DatabaseOpt;
 import org.albianj.dal.object.RunningStorageAttribute;
 import org.albianj.dal.service.IAlbianStorageParserService;
 import org.dom4j.Document;
@@ -75,14 +75,14 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         // String url =
         // "jdbc:mysql://localhost/baseinfo?useUnicode=true&characterEncoding=8859_1";
         switch (storageAttribute.getDatabaseStyle()) {
-            case (PersistenceDatabaseStyle.Oracle): {
+            case (DatabaseOpt.Oracle): {
                 sb.append("oracle:thin:@").append(storageAttribute.getServer());
                 if (0 != storageAttribute.getPort()) {
                     sb.append(":").append(storageAttribute.getPort());
                 }
                 sb.append(":").append(rsa.getDatabase());
             }
-            case (PersistenceDatabaseStyle.SqlServer): {
+            case (DatabaseOpt.SqlServer): {
                 sb.append("microsoft:sqlserver://").append(
                         storageAttribute.getServer());
                 if (0 != storageAttribute.getPort()) {
@@ -90,7 +90,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                 }
                 sb.append(";").append(rsa.getDatabase());
             }
-            case (PersistenceDatabaseStyle.MySql):
+            case (DatabaseOpt.MySql):
             default: {
                 sb.append("mysql://").append(storageAttribute.getServer());
                 if (0 != storageAttribute.getPort()) {

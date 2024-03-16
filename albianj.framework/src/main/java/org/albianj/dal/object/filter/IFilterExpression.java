@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object.filter;
 
-import org.albianj.dal.object.LogicalOperation;
+import org.albianj.dal.object.OperatorOpt;
 
 /**
  * 链式表达式过滤项的接口定义，该类是IChainExpression的子接口
@@ -80,14 +80,14 @@ public interface IFilterExpression extends IChainExpression {
      *
      * @return
      */
-    public LogicalOperation getLogicalOperation();
+    public OperatorOpt getOperatorOpt();
 
     /**
      * 当前过滤的逻辑操作
      *
-     * @param logicalOperation
+     * @param operatorOpt
      */
-    public void setLogicalOperation(LogicalOperation logicalOperation);
+    public void setOperatorOpt(OperatorOpt operatorOpt);
 
     /**
      * 当前过滤表达式的值
@@ -139,8 +139,8 @@ public interface IFilterExpression extends IChainExpression {
      */
     public void setAliasName(String an);
 
-    public boolean isIdentical();
+    public boolean isAutoId();
 
-    public void setIdentical(boolean identical);
+    public void setAutoId(boolean identical);
 
 }

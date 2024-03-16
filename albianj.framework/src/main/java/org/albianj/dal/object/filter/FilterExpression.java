@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object.filter;
 
-import org.albianj.dal.object.LogicalOperation;
-import org.albianj.dal.object.RelationalOperator;
+import org.albianj.dal.object.OperatorOpt;
+import org.albianj.dal.object.BoolOpt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +51,12 @@ import java.util.List;
  */
 public class FilterExpression implements IFilterExpression {
 
-    private RelationalOperator _ro = RelationalOperator.Normal;
+    private BoolOpt _ro = BoolOpt.Normal;
     private int _style = STYLE_FILTER;
 
     private String _fieldName = null;
     private String _aliasName = null;
-    private LogicalOperation _lo = LogicalOperation.Equal;
+    private OperatorOpt _lo = OperatorOpt.eq;
     private Object _value = null;
     private Class<?> _cls = null;
     private boolean _isAddition = false;
@@ -68,7 +68,7 @@ public class FilterExpression implements IFilterExpression {
         // TODO Auto-generated constructor stub
     }
 
-    public FilterExpression(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public FilterExpression(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         this._fieldName = fieldName;
         this._aliasName = aliasName;
         this._lo = lo;
@@ -76,7 +76,7 @@ public class FilterExpression implements IFilterExpression {
         this._chains.add(this);
     }
 
-    public FilterExpression(String fieldName, LogicalOperation lo, Object value) {
+    public FilterExpression(String fieldName, OperatorOpt lo, Object value) {
         this._fieldName = fieldName;
         this._lo = lo;
         this._value = value;
@@ -85,15 +85,15 @@ public class FilterExpression implements IFilterExpression {
 
 
     @Override
-    public RelationalOperator getRelationalOperator() {
+    public BoolOpt getBoolOpt() {
         // TODO Auto-generated method stub
         return this._ro;
     }
 
     @Override
-    public void setRelationalOperator(RelationalOperator relationalOperator) {
+    public void setBoolOpt(BoolOpt boolOpt) {
         // TODO Auto-generated method stub
-        this._ro = relationalOperator;
+        this._ro = boolOpt;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class FilterExpression implements IFilterExpression {
 
     @Override
     public IFilterExpression and(IFilterExpression fe) {
-        fe.setRelationalOperator(RelationalOperator.And);
+        fe.setBoolOpt(BoolOpt.And);
         _chains.add(fe);
         return this;
         // TODO Auto-generated method stub
@@ -119,14 +119,14 @@ public class FilterExpression implements IFilterExpression {
     @Override
     public IFilterExpression or(IFilterExpression fe) {
         // TODO Auto-generated method stub
-        fe.setRelationalOperator(RelationalOperator.OR);
+        fe.setBoolOpt(BoolOpt.OR);
         _chains.add(fe);
         return this;
     }
 
     public IFilterExpression addAddition(IFilterExpression fe) {
         // TODO Auto-generated method stub
-        fe.setRelationalOperator(RelationalOperator.Normal);
+        fe.setBoolOpt(BoolOpt.Normal);
         fe.setAddition(true);
         _chains.add(fe);
         return this;
@@ -134,7 +134,7 @@ public class FilterExpression implements IFilterExpression {
 
 
     @Override
-    public IFilterExpression and(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterExpression and(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression ce = new FilterExpression(fieldName, lo, value);
         this.and(ce);
@@ -142,7 +142,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression and(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterExpression and(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression ce = new FilterExpression(fieldName, aliasName, lo, value);
         this.and(ce);
@@ -150,7 +150,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression or(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterExpression or(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression ce = new FilterExpression(fieldName, lo, value);
         this.or(ce);
@@ -158,7 +158,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression or(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterExpression or(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression ce = new FilterExpression(fieldName, aliasName, lo, value);
         this.or(ce);
@@ -166,7 +166,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression addAddition(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterExpression addAddition(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression ce = new FilterExpression(fieldName, lo, value);
         this.addAddition(ce);
@@ -174,7 +174,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression addAddition(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterExpression addAddition(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression ce = new FilterExpression(fieldName, aliasName, lo, value);
         this.addAddition(ce);
@@ -185,15 +185,15 @@ public class FilterExpression implements IFilterExpression {
     public IFilterExpression and(IFilterGroupExpression fge) {
         // TODO Auto-generated method stub
         fge.setStyle(STYLE_FILTER_GROUP);
-        fge.setRelationalOperator(RelationalOperator.And);
+        fge.setBoolOpt(BoolOpt.And);
         _chains.add(fge);
         return this;
     }
 
     @Override
-    public IChainExpression addIdenticalExpression() {
+    public IChainExpression addAutoIdExpr() {
         IFilterExpression fe = new FilterExpression();
-        fe.setIdentical(true);
+        fe.setAutoId(true);
         this.add(fe);
         return this;
     }
@@ -202,13 +202,13 @@ public class FilterExpression implements IFilterExpression {
     public IFilterExpression or(IFilterGroupExpression fge) {
         // TODO Auto-generated method stub
         fge.setStyle(STYLE_FILTER_GROUP);
-        fge.setRelationalOperator(RelationalOperator.OR);
+        fge.setBoolOpt(BoolOpt.OR);
         _chains.add(fge);
         return this;
     }
 
     @Override
-    public IFilterExpression add(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterExpression add(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, lo, value);
         this.add(fe);
@@ -216,7 +216,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression add(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterExpression add(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
         this.add(fe);
@@ -224,7 +224,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     public IFilterExpression add(IFilterExpression fe) {
-        fe.setRelationalOperator(RelationalOperator.Normal);
+        fe.setBoolOpt(BoolOpt.Normal);
         // TODO Auto-generated method stub
         this._chains.add(fe);
         return this;
@@ -256,15 +256,15 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public LogicalOperation getLogicalOperation() {
+    public OperatorOpt getOperatorOpt() {
         // TODO Auto-generated method stub
         return this._lo;
     }
 
     @Override
-    public void setLogicalOperation(LogicalOperation logicalOperation) {
+    public void setOperatorOpt(OperatorOpt operatorOpt) {
         // TODO Auto-generated method stub
-        this._lo = logicalOperation;
+        this._lo = operatorOpt;
     }
 
     @Override
@@ -307,11 +307,11 @@ public class FilterExpression implements IFilterExpression {
         return this._chains;
     }
 
-    public boolean isIdentical() {
+    public boolean isAutoId() {
         return this._isIdentical;
     }
 
-    public void setIdentical(boolean identical) {
+    public void setAutoId(boolean identical) {
         this._isIdentical = identical;
     }
 

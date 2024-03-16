@@ -3,23 +3,23 @@ package org.albianj.impl.dal.context.dactx;
 import org.albianj.AblThrowable;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.dal.object.OrderByCondition;
 import org.albianj.impl.dal.context.IReaderJobAdapter;
 import org.albianj.dal.context.ReaderJob;
 import org.albianj.impl.dal.context.ReaderJobAdapter;
 import org.albianj.impl.dal.db.IPersistenceQueryScope;
 import org.albianj.impl.dal.db.PersistenceQueryScope;
-import org.albianj.dal.context.dactx.IQueryContext;
+import org.albianj.dal.context.dactx.ISltCtx;
 import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.IOrderByCondition;
 import org.albianj.dal.object.filter.IChainExpression;
 import org.albianj.dal.service.QueryToOpt;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class QueryContext implements IQueryContext {
+public class SltCtx implements ISltCtx {
 
-    LinkedList<IOrderByCondition> orderbys = null;
+    LinkedList<OrderByCondition> orderbys = null;
     private int start = -1;
     private int pagesize = -1;
     private String idxName = null;
@@ -31,38 +31,38 @@ public class QueryContext implements IQueryContext {
     private IChainExpression wheres = null;
 
     @Override
-    public IQueryContext paging(int start, int pagesize) {
+    public ISltCtx paging(int start, int pagesize) {
         this.start = start;
         this.pagesize = pagesize;
         return this;
     }
 
     @Override
-    public IQueryContext forceIndex(String idxName) {
+    public ISltCtx forceIndex(String idxName) {
         this.idxName = idxName;
         return this;
     }
 
     @Override
-    public IQueryContext orderby(LinkedList<IOrderByCondition> orderbys) {
+    public ISltCtx orderby(LinkedList<OrderByCondition> orderbys) {
         this.orderbys = orderbys;
         return this;
     }
 
     @Override
-    public IQueryContext useStorage(String storageAlias) {
+    public ISltCtx useStorage(String storageAlias) {
         this.storageAlias = storageAlias;
         return this;
     }
 
     @Override
-    public IQueryContext fromTable(String tableAlias) {
+    public ISltCtx fromTable(String tableAlias) {
         this.tableAlias = tableAlias;
         return this;
     }
 
     @Override
-    public IQueryContext byRouter(String drouterAlias) {
+    public ISltCtx byRouter(String drouterAlias) {
         this.drouterAlias = drouterAlias;
         return this;
     }

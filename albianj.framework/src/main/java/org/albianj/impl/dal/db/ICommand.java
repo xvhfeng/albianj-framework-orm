@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.db.SqlParameter;
 
 import java.util.Map;
@@ -49,9 +49,9 @@ public interface ICommand {
 
     public void setCommandText(String commandText);
 
-    public PersistenceCommandType getCommandType();
+    public CommandOpt getCommandType();
 
-    public void setCommandType(PersistenceCommandType commandType);
+    public void setCommandType(CommandOpt commandType);
 
     public Map<Integer, String> getParameterMapper();
 

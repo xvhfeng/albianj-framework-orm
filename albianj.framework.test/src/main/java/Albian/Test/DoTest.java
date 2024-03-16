@@ -89,15 +89,10 @@ public class DoTest implements IAlbianCommandLineApplication {
     private static void test1()  {
         IUserService us = ServRouter.getService("",IUserService.class, IUserService.Name);
 
-//        us.addUser("uname","pwd");
-//            if(us.login("uname","pwd")) {
-//                System.out.println("login success.");
-//            }
-//            System.out.println("login fail.");
-//            if(us.modifyPwd("uname","pwd","newpwd")){
-//                System.out.println("modify password success.");
-//            }
-//            System.out.println("modify password fail.");
+        AblServRouter.log("Test app",LogLevel.Debug,"in expr load count:{}",us.testInExpr());
+        AblServRouter.log("Test app",LogLevel.Debug,"like expr load count:{}",us.testLikeExpr());
+
+
 
             if(us.batchAddUser()){
                 AblServRouter.log("Test Application", LogLevel.Debug, "batch add users success");
@@ -106,27 +101,11 @@ public class DoTest implements IAlbianCommandLineApplication {
             }
         us.queryMulitUserById();
         AblServRouter.log("Test Application", LogLevel.Debug, "done query mulit users.");
+
     }
 
     private static void test2()  {
         IOrgUserService us = ServRouter.getService("",IOrgUserService.class, IOrgUserService.Name);
-//                   if( us.addUser("uname-org","pwd-org")){
-//                       System.out.println("add org user success.");
-//                   } else {
-//                       System.out.println("add org user fail.");
-//
-//                   }
-//        if(us.login("uname-org","pwd-org")) {
-//            System.out.println("login success.");
-//        } else {
-//            System.out.println("login with org user is fail..");
-//
-//        }
-//            if(us.modifyPwd("uname-org","pwd-org","newpwd-org")){
-//                System.out.println("modify password success.");
-//            } else {
-//                System.out.println("modify password fail.");
-//            }
 
         if (us.batchAddUser()) {
             System.out.println("batch add use success");

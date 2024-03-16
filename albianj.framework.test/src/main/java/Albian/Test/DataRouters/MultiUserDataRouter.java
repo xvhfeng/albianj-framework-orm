@@ -61,7 +61,7 @@ public class MultiUserDataRouter extends FreeAlbianObjectDataRouter {
     public DataRouterAttribute mappingReaderRouting(
             Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
-            Map<String, IOrderByCondition> orderbys) {
+            Map<String, OrderByCondition> orderbys) {
         IFilterCondition fc = wheres.get("Id");
         String id = (String) fc.getValue();
         String drBasename = "MUserRead";
@@ -73,7 +73,7 @@ public class MultiUserDataRouter extends FreeAlbianObjectDataRouter {
     @Override
     public String mappingReaderTable(DataRouterAttribute routing,
                                      Map<String, IFilterCondition> wheres,
-                                     Map<String, IOrderByCondition> orderbys) {
+                                     Map<String, OrderByCondition> orderbys) {
         // TODO Auto-generated method stub
         IFilterCondition fc = wheres.get("Id");
         String id = (String) fc.getValue();

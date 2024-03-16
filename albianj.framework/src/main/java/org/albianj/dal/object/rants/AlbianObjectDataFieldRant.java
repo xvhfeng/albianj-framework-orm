@@ -31,4 +31,6 @@ public @interface AlbianObjectDataFieldRant {
 
     boolean IsAutoGenKey() default false;
 
+    String Desc() default "";
+
 }

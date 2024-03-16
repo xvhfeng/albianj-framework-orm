@@ -37,12 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object;
 
-public interface IOrderByCondition extends ICondition {
-    public String getFieldName();
-
-    public void setFieldName(String fieldName);
-
-    public SortStyle getSortStyle();
-
-    public void setSortStyle(SortStyle sortStyle);
+/**
+ * 存储层数据库类型
+ *
+ * @author seapeak
+ */
+public class DatabaseOpt {
+    public final static int MySql = 1;
+    public final static int Oracle = 2;
+    public final static int SqlServer = 3;
 }

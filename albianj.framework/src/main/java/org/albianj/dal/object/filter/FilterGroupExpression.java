@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object.filter;
 
-import org.albianj.dal.object.LogicalOperation;
-import org.albianj.dal.object.RelationalOperator;
+import org.albianj.dal.object.OperatorOpt;
+import org.albianj.dal.object.BoolOpt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ import java.util.List;
  */
 public class FilterGroupExpression implements IFilterGroupExpression {
 
-    private RelationalOperator _ro = RelationalOperator.Normal;
+    private BoolOpt _ro = BoolOpt.Normal;
     private int _style = STYLE_FILTER_GROUP;
 
     private List<IChainExpression> _chains = new ArrayList<>();
@@ -60,7 +60,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#getRelationalOperator()
      */
     @Override
-    public RelationalOperator getRelationalOperator() {
+    public BoolOpt getBoolOpt() {
         // TODO Auto-generated method stub
         return this._ro;
     }
@@ -69,9 +69,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#setRelationalOperator(org.albianj.persistence.object.RelationalOperator)
      */
     @Override
-    public void setRelationalOperator(RelationalOperator relationalOperator) {
+    public void setBoolOpt(BoolOpt boolOpt) {
         // TODO Auto-generated method stub
-        this._ro = relationalOperator;
+        this._ro = boolOpt;
     }
 
     /* (non-Javadoc)
@@ -98,7 +98,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
     @Override
     public IFilterGroupExpression and(IFilterExpression fe) {
         // TODO Auto-generated method stub
-        fe.setRelationalOperator(RelationalOperator.And);
+        fe.setBoolOpt(BoolOpt.And);
         this._chains.add(fe);
         return this;
 
@@ -110,7 +110,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
     @Override
     public IFilterGroupExpression or(IFilterExpression fe) {
         // TODO Auto-generated method stub
-        fe.setRelationalOperator(RelationalOperator.OR);
+        fe.setBoolOpt(BoolOpt.OR);
         this._chains.add(fe);
         return this;
     }
@@ -121,7 +121,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
     @Override
     public IFilterGroupExpression addAddition(IFilterExpression fe) {
         // TODO Auto-generated method stub
-        fe.setRelationalOperator(RelationalOperator.Normal);
+        fe.setBoolOpt(BoolOpt.Normal);
         this._chains.add(fe);
         return this;
     }
@@ -130,7 +130,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression and(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression and(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, lo, value);
         this.and(fe);
@@ -141,7 +141,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression and(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression and(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
         this.and(fe);
@@ -152,7 +152,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression or(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression or(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, lo, value);
         this.or(fe);
@@ -163,7 +163,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression or(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression or(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
         this.or(fe);
@@ -174,7 +174,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#addAddition(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression addAddition(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression addAddition(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, lo, value);
         this.addAddition(fe);
@@ -185,7 +185,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#addAddition(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression addAddition(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression addAddition(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
         this.addAddition(fe);
@@ -198,7 +198,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
     @Override
     public IFilterGroupExpression and(IFilterGroupExpression fge) {
         // TODO Auto-generated method stub
-        fge.setRelationalOperator(RelationalOperator.And);
+        fge.setBoolOpt(BoolOpt.And);
         this._chains.add(fge);
         return this;
     }
@@ -209,7 +209,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
     @Override
     public IFilterGroupExpression or(IFilterGroupExpression fge) {
         // TODO Auto-generated method stub
-        fge.setRelationalOperator(RelationalOperator.OR);
+        fge.setBoolOpt(BoolOpt.OR);
         this._chains.add(fge);
         return this;
     }
@@ -219,7 +219,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      */
     @Override
     public IFilterGroupExpression add(IFilterExpression fe) {
-        fe.setRelationalOperator(RelationalOperator.Normal);
+        fe.setBoolOpt(BoolOpt.Normal);
         // TODO Auto-generated method stub
         this._chains.add(fe);
         return this;
@@ -230,7 +230,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      */
     @Override
     public IFilterGroupExpression addFilterGroup(IFilterGroupExpression fge) {
-        fge.setRelationalOperator(RelationalOperator.Normal);
+        fge.setBoolOpt(BoolOpt.Normal);
         // TODO Auto-generated method stub
         this._chains.add(fge);
         return this;
@@ -240,7 +240,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#add(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression add(String fieldName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression add(String fieldName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, lo, value);
         this.add(fe);
@@ -251,7 +251,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#add(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression add(String fieldName, String aliasName, LogicalOperation lo, Object value) {
+    public IFilterGroupExpression add(String fieldName, String aliasName, OperatorOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
         this.add(fe);
@@ -265,9 +265,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
         return this._chains;
     }
 
-    public IChainExpression addIdenticalExpression() {
+    public IChainExpression addAutoIdExpr() {
         IFilterExpression fe = new FilterExpression();
-        fe.setIdentical(true);
+        fe.setAutoId(true);
         this.add(fe);
         return this;
     }

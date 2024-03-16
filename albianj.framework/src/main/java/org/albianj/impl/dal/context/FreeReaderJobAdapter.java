@@ -46,7 +46,7 @@ import org.albianj.dal.object.AlbianObjectAttribute;
 import org.albianj.dal.object.StorageAttribute;
 import org.albianj.impl.dal.toolkit.ListConvert;
 
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.*;
 import org.albianj.dal.object.filter.IChainExpression;
 import org.albianj.dal.service.AlbianEntityMetadata;
@@ -62,7 +62,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                                    int start, int step, String idxName);
 
     protected abstract StringBuilder makeSltCmdOdrs(String sessionId, AlbianObjectAttribute objAttr,
-                                                    LinkedList<IOrderByCondition> orderbys, int dbStyle);
+                                                    LinkedList<OrderByCondition> orderbys, int dbStyle);
 
     protected abstract StringBuilder makeSltCmdCols(String sessionId, AlbianObjectAttribute objAttr, int dbStyle);
 
@@ -72,7 +72,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                                                String tableAlias,
                                                                String drouterAlias,
                                                                Map<String, IFilterCondition> hashWheres,
-                                                               Map<String, IOrderByCondition> hashOrderbys,
+                                                               Map<String, OrderByCondition> hashOrderbys,
                                                                RefArg<String> dbName,
                                                                RefArg<String> tableName
     );
@@ -87,7 +87,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
     @Deprecated
     public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
                                     int start, int step, LinkedList<IFilterCondition> wheres,
-                                    LinkedList<IOrderByCondition> orderbys, String idxName)   {
+                                    LinkedList<OrderByCondition> orderbys, String idxName)   {
         ReaderJob job = new ReaderJob(sessionId);
         AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
@@ -96,7 +96,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         }
 
         Class<?> implClzz = objAttr.getImplClzz();
-        Map<String, IOrderByCondition> hashOrderbys = ListConvert
+        Map<String, OrderByCondition> hashOrderbys = ListConvert
                 .toLinkedHashMap(orderbys);
 
         Map<String, IFilterCondition> hashWheres = ListConvert
@@ -122,7 +122,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
-        cmd.setCommandType(PersistenceCommandType.Text);
+        cmd.setCommandType(CommandOpt.Text);
         job.setCommand(cmd);
         job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
@@ -130,7 +130,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
     @Deprecated
     public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
-                                     LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys,
+                                     LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys,
                                      String idxName)   {
 
         ReaderJob job = new ReaderJob(sessionId);
@@ -141,7 +141,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         }
 
         Class<?> implClzz = objAttr.getImplClzz();
-        Map<String, IOrderByCondition> hashOrderbys = ListConvert
+        Map<String, OrderByCondition> hashOrderbys = ListConvert
                 .toLinkedHashMap(orderbys);
 
         Map<String, IFilterCondition> hashWheres = ListConvert
@@ -167,7 +167,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
-        cmd.setCommandType(PersistenceCommandType.Text);
+        cmd.setCommandType(CommandOpt.Text);
         job.setCommand(cmd);
         job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
@@ -176,7 +176,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
     public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact,
                                      String storageAlias, String tableAlias, String drouterAlias,
                                      int start, int step, IChainExpression f,
-                                     LinkedList<IOrderByCondition> orderbys, String idxName)   {
+                                     LinkedList<OrderByCondition> orderbys, String idxName)   {
 
         ReaderJob job = new ReaderJob(sessionId);
         AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
@@ -186,7 +186,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         }
 
         Class<?> implClzz = objAttr.getImplClzz();
-        Map<String, IOrderByCondition> hashOrderbys = ListConvert
+        Map<String, OrderByCondition> hashOrderbys = ListConvert
                 .toLinkedHashMap(orderbys);
 
         Map<String, IFilterCondition> hashWheres = new HashMap<>();
@@ -212,7 +212,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
-        cmd.setCommandType(PersistenceCommandType.Text);
+        cmd.setCommandType(CommandOpt.Text);
         job.setCommand(cmd);
         job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
@@ -221,7 +221,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
     public ReaderJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String storageAlias, String tableAlias, String drouterAlias,
                                      IChainExpression f,
-                                     LinkedList<IOrderByCondition> orderbys, String idxName)   {
+                                     LinkedList<OrderByCondition> orderbys, String idxName)   {
         ReaderJob job = new ReaderJob(sessionId);
         AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
         if (null == objAttr) {
@@ -230,7 +230,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         }
 
         Class<?> implClzz = objAttr.getImplClzz();
-        Map<String, IOrderByCondition> hashOrderbys = ListConvert
+        Map<String, OrderByCondition> hashOrderbys = ListConvert
                 .toLinkedHashMap(orderbys);
 
         Map<String, IFilterCondition> hashWheres = new HashMap<>();
@@ -256,14 +256,14 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(sbCmdTxt.toString());
         cmd.setParameters(paras);
-        cmd.setCommandType(PersistenceCommandType.Text);
+        cmd.setCommandType(CommandOpt.Text);
         job.setCommand(cmd);
         job.setStorage(new RunningStorageAttribute(stgAttr, dbName.getValue()));
         return job;
     }
 
     public ReaderJob buildReaderJob(String sessionId, Class<?> cls, RunningStorageAttribute storage,
-                                     PersistenceCommandType cmdType, String text, Map<String, SqlParameter> paras)   {
+                                    CommandOpt cmdType, String text, Map<String, SqlParameter> paras)   {
         ReaderJob job = new ReaderJob(sessionId);
         PersistenceCommand cmd = new PersistenceCommand();
         cmd.setCommandText(text);

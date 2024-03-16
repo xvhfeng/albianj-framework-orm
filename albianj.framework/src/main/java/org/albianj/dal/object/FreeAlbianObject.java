@@ -68,17 +68,17 @@ public abstract class FreeAlbianObject implements IAlbianObject {
     }
 
 
-    @AlbianObjectMemberAttribute(IsSave = false, Ignore = true)
+    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public boolean getIsAlbianNew() {
         return this.isAlbianNew;
     }
 
-    @AlbianObjectMemberAttribute(IsSave = false, Ignore = true)
+    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public void setIsAlbianNew(boolean isAlbianNew) {
         this.isAlbianNew = isAlbianNew;
     }
 
-    @AlbianObjectMemberAttribute(IsSave = false, Ignore = true)
+    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public void setOldAlbianObject(String key, Object v) {
         if (null == dic) {
             dic = new HashMap<String, Object>();
@@ -86,7 +86,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
         dic.put(key, v);
     }
 
-    @AlbianObjectMemberAttribute(IsSave = false, Ignore = true)
+    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public Object getOldAlbianObject(String key) {
         if (null == dic) {
             return null;

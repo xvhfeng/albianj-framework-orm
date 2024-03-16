@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.dal.object;
 
 public interface IFilterCondition extends ICondition {
-    public RelationalOperator getRelationalOperator();
+    public BoolOpt getBoolOpt();
 
-    public void setRelationalOperator(RelationalOperator relationalOperator);
+    public void setBoolOpt(BoolOpt boolOpt);
 
     public String getFieldName();
 
@@ -50,9 +50,9 @@ public interface IFilterCondition extends ICondition {
 
     public void setFieldClass(Class<?> cls);
 
-    public LogicalOperation getLogicalOperation();
+    public OperatorOpt getOperatorOpt();
 
-    public void setLogicalOperation(LogicalOperation logicalOperation);
+    public void setOperatorOpt(OperatorOpt operatorOpt);
 
     public Object getValue();
 
@@ -71,9 +71,9 @@ public interface IFilterCondition extends ICondition {
     public void setAddition(boolean isAddition);
 
 
-    public void set(RelationalOperator ro, String fieldName, Class<?> cls,
-                    LogicalOperation lo, Object v);
+    public void set(BoolOpt ro, String fieldName, Class<?> cls,
+                    OperatorOpt lo, Object v);
 
-    public void set(String fieldName, Class<?> cls, LogicalOperation lo,
+    public void set(String fieldName, Class<?> cls, OperatorOpt lo,
                     Object v);
 }

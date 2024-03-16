@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object.filter;
 
-import org.albianj.dal.object.LogicalOperation;
-import org.albianj.dal.object.RelationalOperator;
+import org.albianj.dal.object.OperatorOpt;
+import org.albianj.dal.object.BoolOpt;
 
 import java.util.List;
 
@@ -96,16 +96,16 @@ public interface IChainExpression {
      *
      * @return
      */
-    RelationalOperator getRelationalOperator();
+    BoolOpt getBoolOpt();
 
     /**
      * 设置表达式项和前面的兄弟表达式项的逻辑关系。
      * 目前过滤表达式只支持and/or
      * 对于表达式组，支持and/or/normal 当关系为normal时，表示当前表达式项是前一个表达式项的子表达式项
      *
-     * @param relationalOperator RelationalOperator枚举值
+     * @param boolOpt RelationalOperator枚举值
      */
-    void setRelationalOperator(RelationalOperator relationalOperator);
+    void setBoolOpt(BoolOpt boolOpt);
 
     /**
      * 得到当前表达式项的类型。
@@ -141,7 +141,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression and(String fieldName, LogicalOperation lo, Object value);
+    IChainExpression and(String fieldName, OperatorOpt lo, Object value);
 
     /**
      * 前一个表达式项and上当前的表达式
@@ -153,7 +153,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression and(String fieldName, String aliasName, LogicalOperation lo, Object value);
+    IChainExpression and(String fieldName, String aliasName, OperatorOpt lo, Object value);
 
     /**
      * * 前一个表达式项or上当前的表达式fe
@@ -171,7 +171,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression or(String fieldName, LogicalOperation lo, Object value);
+    IChainExpression or(String fieldName, OperatorOpt lo, Object value);
 
     /**
      * 前一个表达式项or上当前的表达式
@@ -183,7 +183,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression or(String fieldName, String aliasName, LogicalOperation lo, Object value);
+    IChainExpression or(String fieldName, String aliasName, OperatorOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -201,7 +201,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression addAddition(String fieldName, LogicalOperation lo, Object value);
+    IChainExpression addAddition(String fieldName, OperatorOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -213,7 +213,7 @@ public interface IChainExpression {
      * @return 表达式项关系链的头对象
      * @ fieldName 当前表达式的属性名，这个fieldName是编程实体的属性，而不是数据库的值字段名。albianj会自动根据实体属性获取数据库的字段名
      */
-    IChainExpression addAddition(String fieldName, String aliasName, LogicalOperation lo, Object value);
+    IChainExpression addAddition(String fieldName, String aliasName, OperatorOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -235,7 +235,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression add(String fieldName, LogicalOperation lo, Object value);
+    IChainExpression add(String fieldName, OperatorOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -249,7 +249,7 @@ public interface IChainExpression {
      * @return 表达式项关系链的头对象
      * @ fieldName 当前表达式的属性名，这个fieldName是编程实体的属性，而不是数据库的值字段名。albianj会自动根据实体属性获取数据库的字段名
      */
-    IChainExpression add(String fieldName, String aliasName, LogicalOperation lo, Object value);
+    IChainExpression add(String fieldName, String aliasName, OperatorOpt lo, Object value);
 
     /**
      * and 当前的表达式组项。该表达式组项会被加入到sql语句的where条件中
@@ -259,7 +259,7 @@ public interface IChainExpression {
      */
     IChainExpression and(IFilterGroupExpression fge);
 
-    IChainExpression addIdenticalExpression();
+    IChainExpression addAutoIdExpr();
 
     /**
      * or 当前的表达式组项。该表达式组项会被加入到sql语句的where条件中

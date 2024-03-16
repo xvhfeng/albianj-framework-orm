@@ -37,21 +37,63 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object;
 
-
 /**
- * sql查询语句的结果排序
+ * sql语句查询的条件表达式逻辑操作
  *
  * @author seapeak
  */
-public enum SortStyle {
-
+public enum OperatorOpt {
     /**
-     * 对sql结果集进行升序排序
+     * 等于，相当于sql的=
      */
-    Asc,
-
+    eq(1," = "),
     /**
-     * 对sql结果集进行降序排序
+     * 不等于，相当于sql的 !=
      */
-    Desc,
+    neq(2," != "),
+    /**
+     * 大于，相当于sql的 >
+     */
+    gt(3," > "),
+    /**
+     * 小于，相当于sql语句的 <
+     */
+    lt(4," < "),
+    /**
+     * 大于等于，相当于sql语句的 >=
+     */
+    gte(5," >= "),
+    /**
+     * 小于等于，相当于sql语句的 <=
+     */
+    lte(6," <= "),
+    /**
+     * 是判断，同sql语句的 IS
+     */
+    is(7," IS "),
+
+    isn(8,"IS NOT "),
+
+    /*
+    对于单个数据库，单表，支持in
+    PreparedStatement statement = connection.prepareStatement("Select * from test where field in (?)");
+Array array = statement.getConnection().createArrayOf("VARCHAR", new Object[]{"A1", "B2","C3"});
+statement.setArray(1, array);
+    对于多数据库支持自增主键，但是每次ctx只有一个自增主键的获取
+    支持一个事务中，CUD操作
+ */
+    in(9," IN "),
+
+    like(10," LIKE ");
+
+    private int key;
+    private String word;
+
+    OperatorOpt(int key,String word){
+        this.key = key;
+        this.word = word;
+    }
+    public String getWord(){
+        return this.word;
+    }
 }

@@ -37,39 +37,33 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object;
 
+
 /**
- * sql语句查询的条件表达式逻辑操作
+ * sql查询语句的结果排序
  *
  * @author seapeak
  */
-public enum LogicalOperation {
+public enum SortOpt {
+
     /**
-     * 等于，相当于sql的=
+     * 对sql结果集进行升序排序
      */
-    Equal,
+    Asc(1," ASC "),
+
     /**
-     * 不等于，相当于sql的 !=
+     * 对sql结果集进行降序排序
      */
-    NotEqual,
-    /**
-     * 大于，相当于sql的 >
-     */
-    Greater,
-    /**
-     * 小于，相当于sql语句的 <
-     */
-    Less,
-    /**
-     * 大于等于，相当于sql语句的 >=
-     */
-    GreaterOrEqual,
-    /**
-     * 小于等于，相当于sql语句的 <=
-     */
-    LessOrEqual,
-    /**
-     * 是判断，同sql语句的 IS
-     */
-    Is,
-    IsNot,
+    Desc(2, " DESC ");
+
+    private int key;
+    private String word;
+
+    SortOpt(int key,String word){
+        this.key = key;
+        this.word = word;
+    }
+
+    public String getWord(){
+        return this.word;
+    }
 }

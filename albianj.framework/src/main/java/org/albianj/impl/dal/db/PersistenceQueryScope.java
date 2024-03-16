@@ -46,13 +46,14 @@ import org.albianj.dal.db.PersistenceCommand;
 import org.albianj.dal.db.SqlParameter;
 import org.albianj.dal.object.AlbianEntityFieldAttribute;
 import org.albianj.dal.object.AlbianObjectAttribute;
+import org.albianj.impl.dal.toolkit.Convert;
 import org.albianj.impl.dal.toolkit.ListConvert;
 import org.albianj.impl.dal.toolkit.ResultConvert;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.dal.db.IDataBasePool;
 
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IAlbianObject;
 import org.albianj.dal.object.RunningStorageAttribute;
 import org.albianj.dal.service.AlbianEntityMetadata;
@@ -177,10 +178,10 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             job.getStatement(), job.getResult());
     }
 
-    protected ResultSet executing(String sessionId, PersistenceCommandType cmdType, Statement statement)
+    protected ResultSet executing(String sessionId, CommandOpt cmdType, Statement statement)
             {
         try {
-            if (PersistenceCommandType.Text == cmdType) {
+            if (CommandOpt.Text == cmdType) {
                 return ((PreparedStatement)statement).executeQuery();
             }
             return ((CallableStatement)statement).executeQuery();

@@ -42,7 +42,7 @@ import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.dal.context.ReaderJob;
 import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IAlbianObject;
 
 import java.sql.ResultSet;
@@ -85,7 +85,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
     }
 
     public <T extends IAlbianObject> List<T> execute(String sessionId, Class<T> cls,
-                                                     PersistenceCommandType cmdType, Statement statement)  {
+                                                     CommandOpt cmdType, Statement statement)  {
         ResultSet result = null;
         List<T> list = null;
         try {
@@ -118,7 +118,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
 
     protected abstract void unloadExecute(ReaderJob job)  ;
 
-    protected abstract ResultSet executing(String sessionId, PersistenceCommandType cmdType,
+    protected abstract ResultSet executing(String sessionId, CommandOpt cmdType,
                                            Statement statement) ;
 
     protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls, String jobId,

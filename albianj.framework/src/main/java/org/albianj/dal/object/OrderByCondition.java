@@ -37,48 +37,24 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object;
 
-public class OrderByCondition implements IOrderByCondition {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderByCondition  {
     private String fieldName = null;
     private String aliasName = null;
-    private SortStyle sortStyle = SortStyle.Asc;
-
-    public OrderByCondition() {
-
-    }
+    private SortOpt sortOpt = SortOpt.Asc;
 
     public OrderByCondition(String fieldName) {
         this.fieldName = fieldName;
     }
 
-    public OrderByCondition(String fieldName, SortStyle sortStyle) {
+    public OrderByCondition(String fieldName, SortOpt sortOpt) {
         this.fieldName = fieldName;
-        this.sortStyle = sortStyle;
+        this.sortOpt = sortOpt;
     }
-
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
-    }
-
-    public SortStyle getSortStyle() {
-        return sortStyle;
-    }
-
-    public void setSortStyle(SortStyle sortStyle) {
-        this.sortStyle = sortStyle;
-    }
-
-    public String getAliasName() {
-        return aliasName;
-    }
-
-    public void setAliasName(String aliasName) {
-        this.aliasName = aliasName;
-    }
-
-
 }

@@ -39,7 +39,7 @@ package org.albianj.impl.dal.db;
 
 
 import org.albianj.dal.context.ReaderJob;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IAlbianObject;
 
 import java.sql.Statement;
@@ -50,5 +50,5 @@ public interface IQueryScope {
                                                      ReaderJob job)  ;
 
     public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     PersistenceCommandType cmdType, Statement statement)  ;
+                                                     CommandOpt cmdType, Statement statement)  ;
 }

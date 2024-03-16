@@ -1,14 +1,14 @@
 package org.albianj.dal.context.dactx;
 
 import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.IOrderByCondition;
+import org.albianj.dal.object.OrderByCondition;
 import org.albianj.dal.object.filter.IChainExpression;
 import org.albianj.dal.service.QueryToOpt;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public interface IQueryContext {
+public interface ISltCtx {
 
     /*
       别问我为啥叫这个结构，只因为再支持方法级别的功能，方法就要爆炸了
@@ -19,17 +19,17 @@ public interface IQueryContext {
          result object or list<object.
      */
 
-    IQueryContext paging(int start, int pagesize);
+    ISltCtx paging(int start, int pagesize);
 
-    IQueryContext forceIndex(String idxName);
+    ISltCtx forceIndex(String idxName);
 
-    IQueryContext orderby(LinkedList<IOrderByCondition> orderbys);
+    ISltCtx orderby(LinkedList<OrderByCondition> orderbys);
 
-    IQueryContext useStorage(String storageAlias);
+    ISltCtx useStorage(String storageAlias);
 
-    IQueryContext fromTable(String tableAlias);
+    ISltCtx fromTable(String tableAlias);
 
-    IQueryContext byRouter(String drouterAlias);
+    ISltCtx byRouter(String drouterAlias);
 
 
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> itfClzz, QueryToOpt loadType, IChainExpression where) ;

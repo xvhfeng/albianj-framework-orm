@@ -28,6 +28,8 @@ public class HikariCPWapper extends FreeDataBasePool {
         StorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
+        HikariDataSource dsWarp = ( HikariDataSource) ds;
+
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                 "Get the connection from storage::{} and database::{} by connection pool.", sa.getName(),
             rsa.getDatabase());
@@ -56,21 +58,9 @@ public class HikariCPWapper extends FreeDataBasePool {
                     .generateConnectionUrl(rsa);
             config.setDriverClassName(DRIVER_CLASSNAME);
             config.setJdbcUrl(url);
-//            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
-                config.setUsername(storageAttribute.getUser());
-                config.setPassword(storageAttribute.getPassword());
-//            } else {
-//                IAlbianSecurityService ass = ServRouter.getService(sessionid,IAlbianSecurityService.class, IAlbianSecurityService.Name, false);
-//                if (null != ass) {
-//                    config.setUsername(ass.decryptDES(sessionid,storageAttribute.getUser()));
-//                    config.setPassword(ass.decryptDES(sessionid,storageAttribute.getPassword()));
-//                } else {
-//                    config.setUsername(storageAttribute.getUser());
-//                    config.setPassword(storageAttribute.getPassword());
-//                    throw new AblThrowable(
-//                        "the run level is release in the kernel config but security is null,so not use security service.");
-//                }
-//            }
+            config.setUsername(storageAttribute.getUser());
+            config.setPassword(storageAttribute.getPassword());
+
             config.setAutoCommit(false);
             config.setReadOnly(false);
             //            config.setTransactionIsolation(storageAttribute.getTransactionLevel());

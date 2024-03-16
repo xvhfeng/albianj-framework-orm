@@ -51,4 +51,8 @@ public class SqlParameter  {
     private String name = null;
     private Object value = null;
     private String sqlFieldName = null;
+    /**
+     * 是否in的array形式参数
+     */
+    private boolean array = false;
 }

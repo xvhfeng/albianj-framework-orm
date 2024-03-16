@@ -38,6 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.service;
 
 import org.albianj.common.utils.SetUtil;
+import org.albianj.dal.object.OrderByCondition;
 import org.albianj.impl.dal.context.*;
 import org.albianj.impl.dal.db.IPersistenceQueryScope;
 import org.albianj.impl.dal.db.IPersistenceTransactionClusterScope;
@@ -49,10 +50,9 @@ import org.albianj.dal.context.IPersistenceCompensateNotify;
 import org.albianj.dal.context.IPersistenceNotify;
 import org.albianj.dal.context.ReaderJob;
 import org.albianj.dal.context.WriterJob;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IAlbianObject;
 import org.albianj.dal.object.IFilterCondition;
-import org.albianj.dal.object.IOrderByCondition;
 import org.albianj.dal.object.filter.IChainExpression;
 import org.albianj.dal.service.IAlbianPersistenceService;
 import org.albianj.dal.service.QueryToOpt;
@@ -79,7 +79,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     protected static <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
                                                                      Class<T> cls, boolean isExact, String routingName, int start, int step,
                                                                      LinkedList<IFilterCondition> wheres,
-                                                                     LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                                     LinkedList<OrderByCondition> orderbys, String idxName)
             {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
@@ -94,7 +94,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     protected static <T extends IAlbianObject> long doLoadPageingCount(String sessionId,
                                                                        Class<T> cls, boolean isExact, String routingName,
                                                                        LinkedList<IFilterCondition> wheres,
-                                                                       LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                                       LinkedList<OrderByCondition> orderbys, String idxName)
             {
         IReaderJobAdapter ad = new ReaderJobAdapter();
                 ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName,
@@ -331,13 +331,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys);
     }
@@ -349,13 +349,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         if (QueryToOpt.WriterRouter == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
@@ -451,7 +451,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return newObj;
     }
 
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, CommandOpt cmdType,
                                                   Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
@@ -467,19 +467,19 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, rountingName, 0, 0, wheres, orderbys);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, CommandOpt cmdType,
                                                          Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
@@ -496,14 +496,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             {
         if (QueryToOpt.WriterRouter == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
@@ -563,7 +563,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
 
     protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
-                                                              Class<T> cls, PersistenceCommandType cmdType, Statement statement)
+                                                              Class<T> cls, CommandOpt cmdType, Statement statement)
             {
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         List<T> list = null;
@@ -572,7 +572,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     protected <T extends IAlbianObject> T doLoadObject(String sessionId, Class<T> cls,
-                                                       PersistenceCommandType cmdType, Statement statement)
+                                                       CommandOpt cmdType, Statement statement)
             {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
@@ -593,7 +593,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
                                                               Class<T> cls, boolean isExact, String routingName, int start, int step,
                                                               IChainExpression wheres,
-                                                              LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                              LinkedList<OrderByCondition> orderbys, String idxName)
             {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
@@ -607,7 +607,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     protected <T extends IAlbianObject> long doLoadPageingCount(String sessionId,
                                                                 Class<T> cls, boolean isExact, String routingName,
                                                                 IChainExpression wheres,
-                                                                LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                                LinkedList<OrderByCondition> orderbys, String idxName)
             {
         IReaderJobAdapter ad = new ReaderJobAdapter();
                 ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
@@ -661,13 +661,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys, idxName);
     }
@@ -679,13 +679,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         if (QueryToOpt.WriterRouter == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);
@@ -789,14 +789,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, rountingName, 0, 0, wheres, orderbys, idxName);
     }
@@ -811,14 +811,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys, idxName);
     }
 
     @Deprecated
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         if (QueryToOpt.WriterRouter == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);

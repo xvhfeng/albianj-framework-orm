@@ -44,12 +44,13 @@ import org.albianj.dal.object.AlbianEntityFieldAttribute;
 import org.albianj.dal.object.AlbianObjectAttribute;
 import org.albianj.dal.object.StorageAttribute;
 import org.albianj.impl.dal.toolkit.Convert;
-import org.albianj.impl.dal.toolkit.EnumMapping;
 import org.albianj.dal.object.*;
 import org.albianj.dal.object.filter.IChainExpression;
 import org.albianj.dal.object.filter.IFilterExpression;
 import org.albianj.dal.service.AlbianEntityMetadata;
+import org.apache.bcel.generic.IADD;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -95,15 +96,12 @@ public class ChainExpressionParser {
             return;
         for (IChainExpression ce : ces) {
             if (IChainExpression.STYLE_FILTER_GROUP == ce.getStyle()) {
-                if (null == ce.getChainExpression() || 0 == ce.getChainExpression().size()) {
+                if (null == ce.getChainExpression() || ce.getChainExpression().isEmpty()) {
                     continue;
                 }
 
-                if (RelationalOperator.Normal != ce.getRelationalOperator()) {
-                    String slo = EnumMapping.toRelationalOperators(ce.getRelationalOperator());
-                    if (!StringsUtil.isNullOrEmptyOrAllSpace(slo)) {
-                        sb.append(" ").append(slo);
-                    }
+                if (BoolOpt.Normal != ce.getBoolOpt()) {
+                    sb.append(" ").append(ce.getBoolOpt().getWord());
                 }
                 sb.append(" (");
                 toConditionText(sessionId, cls, albianObject, storage, ce, sb, paras);
@@ -114,7 +112,7 @@ public class ChainExpressionParser {
                 if (fe.isAddition())
                     continue;
 
-                if (fe.isIdentical()) {
+                if (fe.isAutoId()) {
                     sb.append(" 1 = 1 ");
                     continue;
                 }
@@ -128,32 +126,63 @@ public class ChainExpressionParser {
                             + " is not found.");
                 }
 
-                String slo = EnumMapping.toRelationalOperators(fe.getRelationalOperator());
-                if (!StringsUtil.isNullOrEmptyOrAllSpace(slo)) {
-                    sb.append(" ").append(slo);
+                if (null != ce.getBoolOpt()) {
+                    sb.append(ce.getBoolOpt().getWord());
                 }
 
-                if (PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
+                if (DatabaseOpt.MySql == storage.getDatabaseStyle()) {
                     sb.append(" `").append(fieldAttr.getSqlFieldName()).append("`");
                 } else {
                     sb.append(" [").append(fieldAttr.getSqlFieldName()).append("]");
                 }
-                sb.append(EnumMapping.toLogicalOperation(fe.getLogicalOperation())).append("#")
-                        .append(StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fieldAttr.getSqlFieldName()
-                                : fe.getAliasName())
-                        .append("# ");
 
-                SqlParameter para = new SqlParameter();
-                para.setName(fieldAttr.getSqlFieldName());
-                para.setSqlFieldName(fieldAttr.getSqlFieldName());
-                if (null == fe.getFieldClass()) {
-                    para.setSqlType(fieldAttr.getDatabaseType());
+                if(fe.getOperatorOpt() == OperatorOpt.in) {
+                   Object[] inParas = (Object[]) fe.getValue();
+                    sb.append(fe.getOperatorOpt().getWord()).append(" ( ");
+                    for(int i = 0 ; i <  inParas.length;i++){
+                        String sqlFieldName =StringsUtil.nonIdxFmt("{}_{}",
+                        StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fieldAttr.getSqlFieldName() : fe.getAliasName() , i);
+                        sb.append(" #").append(sqlFieldName).append("#,");
+
+                        SqlParameter para = new SqlParameter();
+                        para.setName(fieldAttr.getSqlFieldName());
+                        para.setSqlFieldName(sqlFieldName);
+                        if (null == fe.getFieldClass()) {
+                            para.setSqlType(fieldAttr.getDatabaseType());
+                        } else {
+                            para.setSqlType(Convert.toSqlType(fe.getFieldClass()));
+                        }
+                        para.setValue(inParas[i]);
+                        paras.put(String.format("#%1$s#", sqlFieldName), para);
+
+                    }
+
+                    if(',' == sb.charAt(sb.length() - 1)) {
+                        sb.deleteCharAt(sb.length() - 1);
+                    }
+
+                    sb.append(" ) ");
                 } else {
-                    para.setSqlType(Convert.toSqlType(fe.getFieldClass()));
-                }
-                para.setValue(fe.getValue());
-                paras.put(String.format("#%1$s#", StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName())
-                        ? fieldAttr.getSqlFieldName() : fe.getAliasName()), para);
+                    sb.append(fe.getOperatorOpt().getWord()).append("#")
+                            .append(StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fieldAttr.getSqlFieldName()
+                                    : fe.getAliasName())
+                            .append("# ");
+
+                    SqlParameter para = new SqlParameter();
+                    para.setName(fieldAttr.getSqlFieldName());
+                    para.setSqlFieldName(fieldAttr.getSqlFieldName());
+                    if (null == fe.getFieldClass()) {
+                        para.setSqlType(fieldAttr.getDatabaseType());
+                    } else {
+                        para.setSqlType(Convert.toSqlType(fe.getFieldClass()));
+                    }
+                    if(fe.getOperatorOpt() == OperatorOpt.in) {
+                        para.setArray(true);
+                    }
+                    para.setValue(fe.getValue());
+                    paras.put(String.format("#%1$s#", StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName())
+                            ? fieldAttr.getSqlFieldName() : fe.getAliasName()), para);
+                    }
             }
         }
     }

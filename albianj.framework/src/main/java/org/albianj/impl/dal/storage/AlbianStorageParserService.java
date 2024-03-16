@@ -46,9 +46,8 @@ import org.albianj.dal.object.StorageAttribute;
 import org.albianj.kernel.logger.LogLevel;
 import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.dal.db.IDataBasePool;
-import org.albianj.dal.object.PersistenceDatabaseStyle;
+import org.albianj.dal.object.DatabaseOpt;
 import org.albianj.dal.object.RunningStorageAttribute;
-import org.albianj.dal.service.IAlbianConnectionMonitorService;
 import org.albianj.dal.service.IAlbianStorageParserService;
 import org.dom4j.Element;
 
@@ -57,7 +56,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static org.albianj.dal.object.DatabasePoolStyle.SpxDBCP;
+import static org.albianj.dal.object.DatabasePoolOpt.SpxDBCP;
 
 
 @AlbianServiceRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
@@ -159,11 +158,11 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         StorageAttribute storage = new StorageAttribute();
         storage.setName(name);
         if (null == databaseStyle) {
-            storage.setDatabaseStyle(PersistenceDatabaseStyle.MySql);
+            storage.setDatabaseStyle(DatabaseOpt.MySql);
         } else {
             String style = databaseStyle.trim().toLowerCase();
-            storage.setDatabaseStyle("sqlserver".equalsIgnoreCase(style) ? PersistenceDatabaseStyle.SqlServer :
-                "oracle".equalsIgnoreCase(style) ? PersistenceDatabaseStyle.Oracle : PersistenceDatabaseStyle.MySql);
+            storage.setDatabaseStyle("sqlserver".equalsIgnoreCase(style) ? DatabaseOpt.SqlServer :
+                "oracle".equalsIgnoreCase(style) ? DatabaseOpt.Oracle : DatabaseOpt.MySql);
         }
         storage.setServer(server);
         storage.setDatabase(database);
@@ -265,12 +264,6 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
                         }
                         break;
                     }
-                }
-                IAlbianConnectionMonitorService connectionMonitorService = ServRouter
-                    .getService(sessionId,IAlbianConnectionMonitorService.class, IAlbianConnectionMonitorService.Name,
-                        false);
-                if (connectionMonitorService != null) {
-                    dbp = new MonitorWrapper(dbp, connectionMonitorService);
                 }
                 pools.putIfAbsent(key, dbp);
             }

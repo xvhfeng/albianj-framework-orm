@@ -271,9 +271,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
             task.setCommands(cmds);
             task.setStorage(new RunningStorageAttribute(storage, database));
             tasks.put(key, task);
-            if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
+            if(DatabaseOpt.MySql == storage.getDatabaseStyle()) {
                 task.setClientSection(new MysqlClientSection());
-            } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
+            } else if(DatabaseOpt.SqlServer == storage.getDatabaseStyle()) {
                 task.setClientSection(new SqlServerClientSection());
             }
             job.setWriterTasks(tasks);
@@ -286,9 +286,9 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                 cmds.add(pstCmd);
                 task.setCommands(cmds);
                 task.setStorage(new RunningStorageAttribute(storage, database));
-                if(PersistenceDatabaseStyle.MySql == storage.getDatabaseStyle()) {
+                if(DatabaseOpt.MySql == storage.getDatabaseStyle()) {
                     task.setClientSection(new MysqlClientSection());
-                } else if(PersistenceDatabaseStyle.SqlServer == storage.getDatabaseStyle()) {
+                } else if(DatabaseOpt.SqlServer == storage.getDatabaseStyle()) {
                     task.setClientSection(new SqlServerClientSection());
                 }
                 job.getWriterTasks().put(key, task);

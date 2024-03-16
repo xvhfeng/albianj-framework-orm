@@ -1,9 +1,8 @@
 package org.albianj;
 
-import org.albianj.dal.context.dactx.IDataAccessContext;
-import org.albianj.dal.context.dactx.IQueryContext;
+import org.albianj.dal.context.dactx.IIduCtx;
+import org.albianj.dal.context.dactx.ISltCtx;
 import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.IOrderByCondition;
 import org.albianj.dal.object.OrderByCondition;
 import org.albianj.dal.object.filter.FilterExpression;
 import org.albianj.dal.object.filter.FilterGroupExpression;
@@ -31,7 +30,7 @@ public final class AblServRouter extends ServRouter {
         return  new FilterExpression();
     }
 
-    public static IOrderByCondition newOrderByCondition(){
+    public static OrderByCondition newOrderByCondition(){
         return new OrderByCondition();
     }
 
@@ -39,12 +38,12 @@ public final class AblServRouter extends ServRouter {
         return new FilterGroupExpression();
     }
 
-    public static IDataAccessContext newDataAccessContext(Object sessionId) {
+    public static IIduCtx newDataAccessContext(Object sessionId) {
         IAlbianDataAccessService das = getService(sessionId,IAlbianDataAccessService.class,IAlbianDataAccessService.Name);
         return das.newDataAccessContext();
     }
 
-    public static IQueryContext newQueryContext(Object sessionId) {
+    public static ISltCtx newQueryContext(Object sessionId) {
         IAlbianDataAccessService das = getService(sessionId,IAlbianDataAccessService.class,IAlbianDataAccessService.Name);
         return das.newQueryContext();
     }

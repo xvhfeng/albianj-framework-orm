@@ -35,16 +35,20 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.dal.object;
+package org.albianj.dal.db;
 
 /**
- * 存储层数据库类型
+ * 存储层命令的类型
  *
  * @author seapeak
  */
-public class PersistenceDatabaseStyle {
-    public final static int MySql = 1;
-    public final static int Oracle = 2;
-    public final static int SqlServer = 3;
-    public final static int MongoDB = 4;
+public enum CommandOpt {
+    /**
+     * sql语句类型
+     */
+    Text,
+    /**
+     * 存储过程
+     */
+    StoredProcedures
 }

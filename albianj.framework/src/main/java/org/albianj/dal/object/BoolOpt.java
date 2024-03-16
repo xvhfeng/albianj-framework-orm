@@ -37,30 +37,36 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.object;
 
-import java.lang.annotation.*;
 
-// Name="Id"
-// FieldName="BizOfferId" AllowNull="false"
-// Length="32" PrimaryKey="true"
-// DbType="string" IsSave="true"/>
+/**
+ * sql查询表达式逻辑操作
+ *
+ * @author seapeak
+ */
+public enum BoolOpt {
 
+    /**
+     * and，等同于sql语句的and
+     */
+    And(1," AND "),
+    /**
+     * or，等同于sql语句的or
+     */
+    OR(2," OR "),
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-@Inherited
-@Documented
-public @interface AlbianObjectMemberAttribute {
-    String FieldName() default "";
+    /*
+     * 没有任何的逻辑操作，仅仅表示把表达式进入表达式集合
+     */
+    Normal(3, " ");
 
-    boolean IsAllowNull() default true;
+    private int key;
+    private String word;
 
-    int Length() default -1;
-
-    boolean IsPrimaryKey() default false;
-
-    int DbType() default 0;
-
-    boolean IsSave() default true;
-
-    boolean Ignore() default false;
+    BoolOpt(int key,String word){
+        this.key = key;
+        this.word = word;
+    }
+    public String getWord(){
+        return this.word;
+    }
 }

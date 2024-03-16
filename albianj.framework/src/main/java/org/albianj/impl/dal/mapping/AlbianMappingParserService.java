@@ -197,11 +197,11 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
                     );
             return null;
         }
-        AlbianObjectMemberAttribute attr = null;
-        if (mr.isAnnotationPresent(AlbianObjectMemberAttribute.class))
-            attr = mr.getAnnotation(AlbianObjectMemberAttribute.class);
-        if (mw.isAnnotationPresent(AlbianObjectMemberAttribute.class))
-            attr = mw.getAnnotation(AlbianObjectMemberAttribute.class);
+        AlbianObjectMemberRant attr = null;
+        if (mr.isAnnotationPresent(AlbianObjectMemberRant.class))
+            attr = mr.getAnnotation(AlbianObjectMemberRant.class);
+        if (mw.isAnnotationPresent(AlbianObjectMemberRant.class))
+            attr = mw.getAnnotation(AlbianObjectMemberRant.class);
 
         if (attr.Ignore()) return null;
 

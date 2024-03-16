@@ -48,7 +48,6 @@ import java.io.Serializable;
  * <p>
  *
  * @author Seapeak
- * @see org.albianj.persistence.impl.object.FreeAlbianObject
  */
 public interface IAlbianObject extends Serializable {
 

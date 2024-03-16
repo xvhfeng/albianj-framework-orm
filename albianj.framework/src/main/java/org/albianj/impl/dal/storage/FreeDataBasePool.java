@@ -26,6 +26,7 @@ public abstract class FreeDataBasePool implements IDataBasePool {
             return ds;
         }
 
+
         synchronized (_dataSource) {
             ds = _dataSource.get(key);
             if (ds == null) {

@@ -43,10 +43,10 @@ import org.albianj.dal.db.PersistenceCommand;
 import org.albianj.dal.db.SqlParameter;
 import org.albianj.dal.object.AlbianEntityFieldAttribute;
 import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 
 import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.PersistenceDatabaseStyle;
+import org.albianj.dal.object.DatabaseOpt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
 
         sqlText.append("INSERT INTO ");
 
-        if (PersistenceDatabaseStyle.MySql == dbStyle) {
+        if (DatabaseOpt.MySql == dbStyle) {
             sqlText.append("`").append(tableName).append("`");
         } else {
             sqlText.append("[").append(tableName).append("]");
@@ -88,7 +88,7 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
             para.setValue(v);
             sqlParas.put(String.format("#%1$s#", member.getSqlFieldName()),
                     para);
-            if (PersistenceDatabaseStyle.MySql == dbStyle) {
+            if (DatabaseOpt.MySql == dbStyle) {
                 cols.append("`").append(member.getSqlFieldName()).append("`");
             } else {
                 cols.append("[").append(member.getSqlFieldName()).append("]");
@@ -122,7 +122,7 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
                 objAttr, mapValue, sqlText);
 
         cmd.setCommandText(sqlText.toString());
-        cmd.setCommandType(PersistenceCommandType.Text);
+        cmd.setCommandType(CommandOpt.Text);
         cmd.setParameters(sqlParas);
 
         if (rbkOnError) {
@@ -131,7 +131,7 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
             Map<String, SqlParameter> rollbackParas = RemoveCommandAdapter.makeRemoveCommand(sessionId,
                     dbStyle, tableName, objAttr, mapValue, rollbackText);
             cmd.setRollbackCommandText(rollbackText.toString());
-            cmd.setRollbackCommandType(PersistenceCommandType.Text);
+            cmd.setRollbackCommandType(CommandOpt.Text);
             cmd.setRollbackParameters(rollbackParas);
         }
 

@@ -2,14 +2,14 @@ package org.albianj.dal.service;
 
 import org.albianj.AblBltinServsNames;
 import org.albianj.dal.db.SqlParameter;
+import org.albianj.dal.object.OrderByCondition;
 import org.albianj.kernel.service.IAlbianService;
 import org.albianj.dal.context.IPersistenceCompensateNotify;
 import org.albianj.dal.context.IPersistenceNotify;
-import org.albianj.dal.context.dactx.IDataAccessContext;
-import org.albianj.dal.context.dactx.IQueryContext;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.context.dactx.IIduCtx;
+import org.albianj.dal.context.dactx.ISltCtx;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.IOrderByCondition;
 import org.albianj.dal.object.RunningStorageAttribute;
 import org.albianj.dal.object.filter.IChainExpression;
 
@@ -40,7 +40,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param sessionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param object    需要删除的对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
      */
     boolean remove(String sessionId, IAlbianObject object) ;
 
@@ -58,7 +57,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
      */
     boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
@@ -74,7 +72,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param sessionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param objects   需要删除的对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects) ;
 
@@ -92,7 +89,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
      */
     boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                    Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
@@ -111,7 +107,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param sessionId essionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param object    需要保存的对象
      * @return 是否保存成功
-     * @throws AlbianDataServiceException
      */
     boolean save(String sessionId, IAlbianObject object) ;
 
@@ -131,7 +126,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
      */
     boolean save(String sessionId, IAlbianObject object,
                  IPersistenceNotify notifyCallback, Object notifyCallbackObject,
@@ -150,7 +144,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param sessionId essionId 此次方法调用的sessionid，建议使用userid或者是任何可以方便排错的id，如果该id为null，albianj会自动生成一个sessionid
      * @param objects   需要保存的对象
      * @return 是否保存成功
-     * @throws AlbianDataServiceException
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects) ;
 
@@ -170,7 +163,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param compensateCallback       事务发生异常的时候触发的通知
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
-     * @throws AlbianDataServiceException
      */
     boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
                  Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
@@ -184,7 +176,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType  加载的方式
      * @param wheres    过滤条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
             ;
@@ -205,7 +196,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType)
             ;
@@ -218,9 +208,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IOrderByCondition> orderbys)
+    <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -231,9 +220,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, LinkedList<IOrderByCondition> orderbys)
+    <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, LinkedList<OrderByCondition> orderbys)
             ;
 
 
@@ -246,7 +234,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param rountingName 指定加载的数据路由
      * @param wheres       过滤条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, IChainExpression wheres)
             ;
@@ -264,9 +251,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param cmdType   执行命令的类型
      * @param statement 执行命令的语句
      * @return 加载的数据
-     * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
+    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, CommandOpt cmdType,
                                            Statement statement) ;
 
     /**
@@ -277,7 +263,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType  加载的方式
      * @param wheres    过滤条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
             ;
@@ -292,10 +277,9 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param f            过滤条件
      * @param orderbys     排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                  IChainExpression f, LinkedList<IOrderByCondition> orderbys)
+                                                  IChainExpression f, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -307,10 +291,9 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param f         过滤条件
      * @param orderbys  排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                  IChainExpression f, LinkedList<IOrderByCondition> orderbys)
+                                                  IChainExpression f, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -326,9 +309,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param cmdType   执行命令的类型
      * @param statement 执行命令的语句
      * @return 加载的数据
-     * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, CommandOpt cmdType,
                                                   Statement statement) ;
 
     /**
@@ -342,9 +324,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param paras
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, RunningStorageAttribute storageName, PersistenceCommandType cmdType,
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, RunningStorageAttribute storageName, CommandOpt cmdType,
                                                   String text, Map<String, SqlParameter> paras) ;
 
     /**
@@ -358,9 +339,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param paras
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
-    <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, RunningStorageAttribute storageName, PersistenceCommandType cmdType,
+    <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, RunningStorageAttribute storageName, CommandOpt cmdType,
                                                  String text, Map<String, SqlParameter> paras) ;
 
 
@@ -373,7 +353,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param start     开始加载的位置
      * @param step      加载的数量
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
                                                   int start, int step, IChainExpression f)
@@ -390,10 +369,9 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param wheres    过滤条件
      * @param orderbys  排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                  int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                  int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -408,10 +386,9 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param wheres       过滤条件
      * @param orderbys     排序的条件
      * @return 加载的对象
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                  int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                  int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -422,7 +399,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType  加载的方式
      * @param wheres    过滤条件
      * @return 满足条件的对象数量
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
             ;
@@ -436,7 +412,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param rountingName 指定的加载路由
      * @param wheres       过滤条件
      * @return 满足条件的对象数量
-     * @throws AlbianDataServiceException
      */
     <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, QueryToOpt loadType,
                                                     String rountingName, IChainExpression wheres)
@@ -456,11 +431,11 @@ public interface IAlbianDataAccessService extends IAlbianService {
             ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
@@ -468,11 +443,11 @@ public interface IAlbianDataAccessService extends IAlbianService {
             ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
 
@@ -484,7 +459,6 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
     public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String idxName)
             ;
@@ -497,9 +471,8 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
-    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IOrderByCondition> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
     /**
@@ -510,10 +483,9 @@ public interface IAlbianDataAccessService extends IAlbianService {
      * @param loadType
      * @param <T>
      * @return
-     * @throws AlbianDataServiceException
      */
     public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                            String rountingName, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                            String rountingName, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
     public <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, QueryToOpt loadType, BigInteger id, String idxName)
@@ -531,9 +503,9 @@ public interface IAlbianDataAccessService extends IAlbianService {
             ;
 
 
-    IDataAccessContext newDataAccessContext();
+    IIduCtx newDataAccessContext();
 
-    IQueryContext newQueryContext();
+    ISltCtx newQueryContext();
 
 
 }

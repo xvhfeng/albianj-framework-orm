@@ -46,7 +46,7 @@ import lombok.NoArgsConstructor;
 public class StorageAttribute  {
 
     private String name = null;
-    private int databaseStyle = PersistenceDatabaseStyle.MySql;
+    private int databaseStyle = DatabaseOpt.MySql;
     private String database = null;
     private String user = null;
     private String password = null;
@@ -61,7 +61,7 @@ public class StorageAttribute  {
     private int transactionLevel = 0;
     private String options = null;
     private int idelTime = 180;
-    private String dbps = DatabasePoolStyle.SpxDBCP.name();
+    private String dbps = DatabasePoolOpt.SpxDBCP.name();
     private int waitTimeWhenGetMs = 2;
     private int lifeCycleTime = 3600000;
     private int waitInFreePoolMs = 120000;

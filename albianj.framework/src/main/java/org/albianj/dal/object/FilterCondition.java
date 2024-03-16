@@ -40,11 +40,11 @@ package org.albianj.dal.object;
 import org.albianj.dal.object.filter.IFilterExpression;
 
 public class FilterCondition implements IFilterCondition {
-    private RelationalOperator relationalOperator = RelationalOperator.And;
+    private BoolOpt boolOpt = BoolOpt.And;
     private String fieldName = null;
     private String aliasName = null;
     private Class<?> fieldClass = null;
-    private LogicalOperation logicalOperation = LogicalOperation.Equal;
+    private OperatorOpt operatorOpt = OperatorOpt.eq;
     private Object value = null;
     private boolean beginSub = false;
     private boolean closeSub = false;
@@ -56,11 +56,11 @@ public class FilterCondition implements IFilterCondition {
 
 
     public FilterCondition(IFilterExpression f) {
-        this.relationalOperator = f.getRelationalOperator();
+        this.boolOpt = f.getBoolOpt();
         this.fieldName = f.getFieldName();
         this.aliasName = f.getAliasName();
         this.fieldClass = f.getFieldClass();
-        this.logicalOperation = f.getLogicalOperation();
+        this.operatorOpt = f.getOperatorOpt();
         this.value = f.getValue();
     }
 
@@ -89,29 +89,29 @@ public class FilterCondition implements IFilterCondition {
     }
 
 
-    public FilterCondition(RelationalOperator relationalOperator,
-                           String fieldName, LogicalOperation logicalOperation, Object value) {
+    public FilterCondition(BoolOpt boolOpt,
+                           String fieldName, OperatorOpt operatorOpt, Object value) {
         this.fieldName = fieldName;
         this.value = value;
-        this.relationalOperator = relationalOperator;
-        this.logicalOperation = logicalOperation;
+        this.boolOpt = boolOpt;
+        this.operatorOpt = operatorOpt;
     }
 
-    public FilterCondition(RelationalOperator relationalOperator, String aliasName,
-                           String fieldName, LogicalOperation logicalOperation, Object value) {
+    public FilterCondition(BoolOpt boolOpt, String aliasName,
+                           String fieldName, OperatorOpt operatorOpt, Object value) {
         this.aliasName = aliasName;
         this.fieldName = fieldName;
         this.value = value;
-        this.relationalOperator = relationalOperator;
-        this.logicalOperation = logicalOperation;
+        this.boolOpt = boolOpt;
+        this.operatorOpt = operatorOpt;
     }
 
-    public RelationalOperator getRelationalOperator() {
-        return relationalOperator;
+    public BoolOpt getBoolOpt() {
+        return boolOpt;
     }
 
-    public void setRelationalOperator(RelationalOperator relationalOperator) {
-        this.relationalOperator = relationalOperator;
+    public void setBoolOpt(BoolOpt boolOpt) {
+        this.boolOpt = boolOpt;
     }
 
     public String getAliasName() {
@@ -139,12 +139,12 @@ public class FilterCondition implements IFilterCondition {
         this.fieldClass = fieldClass;
     }
 
-    public LogicalOperation getLogicalOperation() {
-        return logicalOperation;
+    public OperatorOpt getOperatorOpt() {
+        return operatorOpt;
     }
 
-    public void setLogicalOperation(LogicalOperation logicalOperation) {
-        this.logicalOperation = logicalOperation;
+    public void setOperatorOpt(OperatorOpt operatorOpt) {
+        this.operatorOpt = operatorOpt;
     }
 
     public Object getValue() {
@@ -171,18 +171,18 @@ public class FilterCondition implements IFilterCondition {
         return this.closeSub;
     }
 
-    public void set(RelationalOperator ro, String fieldName, Class<?> cls,
-                    LogicalOperation lo, Object v) {
-        this.relationalOperator = ro;
+    public void set(BoolOpt ro, String fieldName, Class<?> cls,
+                    OperatorOpt lo, Object v) {
+        this.boolOpt = ro;
         this.fieldName = fieldName;
         this.fieldClass = cls;
-        this.logicalOperation = lo;
+        this.operatorOpt = lo;
         this.value = v;
     }
 
-    public void set(String fieldName, Class<?> cls, LogicalOperation lo,
+    public void set(String fieldName, Class<?> cls, OperatorOpt lo,
                     Object v) {
-        set(RelationalOperator.And, fieldName, cls, lo, v);
+        set(BoolOpt.And, fieldName, cls, lo, v);
     }
 
     @Override

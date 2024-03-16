@@ -47,12 +47,12 @@ import java.util.Map;
 @NoArgsConstructor
 public class PersistenceCommand {
     private String commandText = null;
-    private PersistenceCommandType commandType = PersistenceCommandType.Text;
+    private CommandOpt commandType = CommandOpt.Text;
     private Map<String, SqlParameter> parameters = null;
     private Map<Integer, String> parameterMapper = null;
 
     private String rollbackCommandText = null;
-    private PersistenceCommandType rollbackCommandType = PersistenceCommandType.Text;
+    private CommandOpt rollbackCommandType = CommandOpt.Text;
     private Map<String, SqlParameter> rollbackParameters = null;
     private Map<Integer, String> rollbackParameterMapper = null;
 

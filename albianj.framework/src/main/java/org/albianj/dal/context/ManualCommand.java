@@ -3,7 +3,7 @@ package org.albianj.dal.context;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.albianj.dal.db.SqlParameter;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 
 import java.util.Map;
 
@@ -14,6 +14,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class ManualCommand  {
     private String commandText;
-    private PersistenceCommandType cmdType = PersistenceCommandType.Text;
+    private CommandOpt cmdType = CommandOpt.Text;
     private Map<String, SqlParameter> commandParameters = null;
 }

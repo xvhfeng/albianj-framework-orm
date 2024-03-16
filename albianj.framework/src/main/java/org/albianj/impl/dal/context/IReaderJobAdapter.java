@@ -40,9 +40,9 @@ package org.albianj.impl.dal.context;
 import org.albianj.dal.db.SqlParameter;
 
 import org.albianj.dal.context.ReaderJob;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IFilterCondition;
-import org.albianj.dal.object.IOrderByCondition;
+import org.albianj.dal.object.OrderByCondition;
 import org.albianj.dal.object.RunningStorageAttribute;
 import org.albianj.dal.object.filter.IChainExpression;
 
@@ -53,24 +53,24 @@ public interface IReaderJobAdapter {
 
     @Deprecated
     public ReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String drouterAlias, int start,
-                                    int step, LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                    int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
          ;
 
     @Deprecated
     public ReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String drouterAlias,
-        LinkedList<IFilterCondition> wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+        LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
          ;
 
     public ReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String storageAlias,
         String tableAlias, String drouterAlias, int start, int step, IChainExpression f,
-        LinkedList<IOrderByCondition> orderbys, String idxName)  ;
+        LinkedList<OrderByCondition> orderbys, String idxName)  ;
 
     public ReaderJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String storageAlias,
-        String tableAlias, String drouterAlias, IChainExpression f, LinkedList<IOrderByCondition> orderbys,
+        String tableAlias, String drouterAlias, IChainExpression f, LinkedList<OrderByCondition> orderbys,
         String idxName)  ;
 
     public ReaderJob buildReaderJob(String sessionId, Class<?> cls, RunningStorageAttribute storage,
-                                     PersistenceCommandType cmdType, String text, Map<String, SqlParameter> paras)
+                                    CommandOpt cmdType, String text, Map<String, SqlParameter> paras)
          ;
 
 }

@@ -35,20 +35,32 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.dal.db;
+package org.albianj.dal.object;
 
-/**
- * 存储层命令的类型
- *
- * @author seapeak
- */
-public enum PersistenceCommandType {
-    /**
-     * sql语句类型
-     */
-    Text,
-    /**
-     * 存储过程
-     */
-    StoredProcedures
+import java.lang.annotation.*;
+
+// Name="Id"
+// FieldName="BizOfferId" AllowNull="false"
+// Length="32" PrimaryKey="true"
+// DbType="string" IsSave="true"/>
+
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Inherited
+@Documented
+public @interface AlbianObjectMemberRant {
+    String FieldName() default "";
+
+    boolean IsAllowNull() default true;
+
+    int Length() default -1;
+
+    boolean IsPrimaryKey() default false;
+
+    int DbType() default 0;
+
+    boolean IsSave() default true;
+
+    boolean Ignore() default false;
 }

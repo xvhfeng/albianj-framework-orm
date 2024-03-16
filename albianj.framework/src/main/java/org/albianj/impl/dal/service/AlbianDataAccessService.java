@@ -1,9 +1,10 @@
 package org.albianj.impl.dal.service;
 
 import org.albianj.common.utils.SetUtil;
+import org.albianj.dal.object.OrderByCondition;
 import org.albianj.impl.dal.context.*;
-import org.albianj.impl.dal.context.dactx.DataAccessContext;
-import org.albianj.impl.dal.context.dactx.QueryContext;
+import org.albianj.impl.dal.context.dactx.IduCtx;
+import org.albianj.impl.dal.context.dactx.SltCtx;
 import org.albianj.impl.dal.db.*;
 import org.albianj.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.kernel.service.FreeAlbianService;
@@ -11,13 +12,12 @@ import org.albianj.dal.context.IPersistenceCompensateNotify;
 import org.albianj.dal.context.IPersistenceNotify;
 import org.albianj.dal.context.ReaderJob;
 import org.albianj.dal.context.WriterJob;
-import org.albianj.dal.context.dactx.IDataAccessContext;
-import org.albianj.dal.context.dactx.IQueryContext;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.context.dactx.IIduCtx;
+import org.albianj.dal.context.dactx.ISltCtx;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.db.SqlParameter;
 import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.IOrderByCondition;
-import org.albianj.dal.object.LogicalOperation;
+import org.albianj.dal.object.OperatorOpt;
 import org.albianj.dal.object.RunningStorageAttribute;
 import org.albianj.dal.object.filter.FilterExpression;
 import org.albianj.dal.object.filter.IChainExpression;
@@ -173,13 +173,13 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys);
     }
@@ -191,13 +191,13 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             {
         List<T> list = doLoadObjects(sessionId, cls, QueryToOpt.WriterRouter == loadType, rountingName, start, step, wheres, orderbys, null);
         if (SetUtil.isNullOrEmpty(list))
@@ -254,7 +254,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
      * @param <T>
      * @return
      */
-    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IOrderByCondition> orderbys)
+    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<OrderByCondition> orderbys)
             {
         return this.loadObjects(sessionId, cls, loadType, new FilterExpression(), orderbys);
     }
@@ -268,7 +268,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
      * @param <T>
      * @return
      */
-    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, LinkedList<IOrderByCondition> orderbys)
+    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, LinkedList<OrderByCondition> orderbys)
             {
         return this.loadObjects(sessionId, cls, loadType, rountingName, new FilterExpression(), orderbys);
 
@@ -276,13 +276,13 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
 
     public <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, QueryToOpt loadType, BigInteger id)
             {
-        IChainExpression ce = new FilterExpression("id", LogicalOperation.Equal, id);
+        IChainExpression ce = new FilterExpression("id", OperatorOpt.eq, id);
         return loadObject(sessionId, cls, loadType, ce);
     }
 
     public <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, BigInteger id)
             {
-        IChainExpression ce = new FilterExpression("id", LogicalOperation.Equal, id);
+        IChainExpression ce = new FilterExpression("id", OperatorOpt.eq, id);
         return loadObject(sessionId, cls, loadType, rountingName, ce);
     }
 
@@ -319,7 +319,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
 //        return count;
     }
 
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, CommandOpt cmdType,
                                                   Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
@@ -327,7 +327,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
         return list.get(0);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, CommandOpt cmdType,
                                                          Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
@@ -336,7 +336,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
-                                                              Class<T> cls, PersistenceCommandType cmdType, Statement statement)
+                                                              Class<T> cls, CommandOpt cmdType, Statement statement)
             {
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         List<T> list = null;
@@ -345,7 +345,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     protected <T extends IAlbianObject> T doLoadObject(String sessionId, Class<T> cls,
-                                                       PersistenceCommandType cmdType, Statement statement)
+                                                       CommandOpt cmdType, Statement statement)
             {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
@@ -366,7 +366,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
                                                               Class<T> cls, boolean isExact, String routingName, int start, int step,
                                                               IChainExpression wheres,
-                                                              LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                              LinkedList<OrderByCondition> orderbys, String idxName)
             {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         List<T> list = null;
@@ -380,7 +380,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     protected <T extends IAlbianObject> long doLoadPageingCount(String sessionId,
                                                                 Class<T> cls, boolean isExact, String routingName,
                                                                 IChainExpression wheres,
-                                                                LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                                LinkedList<OrderByCondition> orderbys, String idxName)
             {
         IReaderJobAdapter ad = new ReaderJobAdapter();
                 ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
@@ -391,7 +391,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, RunningStorageAttribute storage, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, RunningStorageAttribute storage, CommandOpt cmdType,
                                                          String text, Map<String, SqlParameter> paras)  {
         IReaderJobAdapter ad = new ReaderJobAdapter();
         ReaderJob job = ad.buildReaderJob(sessionId, cls, storage, cmdType,
@@ -401,7 +401,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
         return list;
     }
 
-    public <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, RunningStorageAttribute storage, PersistenceCommandType cmdType,
+    public <T extends IAlbianObject> List<T> loadObject(String sessionId, Class<T> cls, RunningStorageAttribute storage, CommandOpt cmdType,
                                                         String text, Map<String, SqlParameter> paras)  {
         return loadObjects(sessionId, cls, storage, cmdType, text, paras);
     }
@@ -455,13 +455,13 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys, idxName);
     }
@@ -473,13 +473,13 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys, idxName);
     }
 
     public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, IChainExpression wheres, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         List<T> list = doLoadObjects(sessionId, cls, QueryToOpt.WriterRouter == loadType, rountingName, start, step, wheres, orderbys, idxName);
         if (SetUtil.isNullOrEmpty(list))
@@ -535,7 +535,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
      * @param <T>
      * @return
      */
-    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IOrderByCondition> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, new FilterExpression(), orderbys, idxName);
     }
@@ -550,7 +550,7 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
      * @return
      */
     public <T extends IAlbianObject> List<T> loadAllObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                            String rountingName, LinkedList<IOrderByCondition> orderbys, String idxName)
+                                                            String rountingName, LinkedList<OrderByCondition> orderbys, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, rountingName, new FilterExpression(), orderbys, idxName);
 
@@ -558,13 +558,13 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
 
     public <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, QueryToOpt loadType, BigInteger id, String idxName)
             {
-        IChainExpression ce = new FilterExpression("id", LogicalOperation.Equal, id);
+        IChainExpression ce = new FilterExpression("id", OperatorOpt.eq, id);
         return loadObject(sessionId, cls, loadType, ce, idxName);
     }
 
     public <T extends IAlbianObject> T loadObjectById(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, BigInteger id, String idxName)
             {
-        IChainExpression ce = new FilterExpression("id", LogicalOperation.Equal, id);
+        IChainExpression ce = new FilterExpression("id", OperatorOpt.eq, id);
         return loadObject(sessionId, cls, loadType, rountingName, ce, idxName);
     }
 
@@ -602,13 +602,13 @@ public class AlbianDataAccessService extends FreeAlbianService implements IAlbia
     }
 
     // save chain entity
-    public IDataAccessContext newDataAccessContext() {
+    public IIduCtx newDataAccessContext() {
 
-        return new DataAccessContext();
+        return new IduCtx();
     }
 
-    public IQueryContext newQueryContext() {
-        return new QueryContext();
+    public ISltCtx newQueryContext() {
+        return new SltCtx();
     }
 
 }

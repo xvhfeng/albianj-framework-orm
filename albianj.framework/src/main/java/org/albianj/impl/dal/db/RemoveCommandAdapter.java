@@ -42,9 +42,9 @@ import org.albianj.dal.db.PersistenceCommand;
 import org.albianj.dal.db.SqlParameter;
 import org.albianj.dal.object.AlbianEntityFieldAttribute;
 import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.PersistenceDatabaseStyle;
+import org.albianj.dal.object.DatabaseOpt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +56,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
                                                               StringBuilder sqlText)  {
         StringBuilder where = new StringBuilder();
         sqlText.append("DELETE FROM ");// .append(routing.getTableName());
-        if (PersistenceDatabaseStyle.MySql == dbStyle) {
+        if (DatabaseOpt.MySql == dbStyle) {
             sqlText.append("`").append(tableName).append("`");
         } else {
             sqlText.append("[").append(tableName).append("]");
@@ -79,7 +79,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
                     para);
 
             where.append(" AND ");
-            if (PersistenceDatabaseStyle.MySql == dbStyle) {
+            if (DatabaseOpt.MySql == dbStyle) {
                 where.append("`").append(member.getSqlFieldName()).append("`");
             } else {
                 where.append("[").append(member.getSqlFieldName()).append("]");
@@ -106,7 +106,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
                 objAttr, mapValue, sqlText);
 
         cmd.setCommandText(sqlText.toString());
-        cmd.setCommandType(PersistenceCommandType.Text);
+        cmd.setCommandType(CommandOpt.Text);
         cmd.setParameters(sqlParas);
 
         if (rbkOnError) {
@@ -114,7 +114,7 @@ public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
             Map<String, SqlParameter> rollbackParas = CreateCommandAdapter.makeCreateCommand(sessionId, dbStyle, tableName,
                     objAttr, mapValue, rollbackText);
             cmd.setRollbackCommandText(rollbackText.toString());
-            cmd.setRollbackCommandType(PersistenceCommandType.Text);
+            cmd.setRollbackCommandType(CommandOpt.Text);
             cmd.setRollbackParameters(rollbackParas);
         }
 

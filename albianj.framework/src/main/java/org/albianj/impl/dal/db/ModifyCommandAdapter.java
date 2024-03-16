@@ -42,10 +42,10 @@ import org.albianj.dal.db.PersistenceCommand;
 import org.albianj.dal.db.SqlParameter;
 import org.albianj.dal.object.AlbianEntityFieldAttribute;
 import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.db.PersistenceCommandType;
+import org.albianj.dal.db.CommandOpt;
 import org.albianj.dal.object.IAlbianObject;
 
-import org.albianj.dal.object.PersistenceDatabaseStyle;
+import org.albianj.dal.object.DatabaseOpt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +80,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
         if (rbkOnError) {
             rollbackText.append("UPDATE ");// .append(routing.getTableName());
         }
-        if (PersistenceDatabaseStyle.MySql == dbStyle) {
+        if (DatabaseOpt.MySql == dbStyle) {
             text.append("`").append(tableName).append("`");
             if (rbkOnError) {
                 rollbackText.append("`").append(tableName).append("`");
@@ -108,7 +108,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
                 if (rbkOnError) {
                     rollbackWhere.append(" AND ");
                 }
-                if (PersistenceDatabaseStyle.MySql == dbStyle) {
+                if (DatabaseOpt.MySql == dbStyle) {
                     where.append("`").append(member.getSqlFieldName()).append("`");
                     if (rbkOnError) {
                         rollbackWhere.append("`").append(member.getSqlFieldName()).append("`");
@@ -135,7 +135,7 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
                 if (null != oldValue && oldValue.equals(newValue)) {
                     continue;
                 }
-                if (PersistenceDatabaseStyle.MySql == dbStyle) {
+                if (DatabaseOpt.MySql == dbStyle) {
                     cols.append("`").append(member.getSqlFieldName()).append("`");
                     if (rbkOnError) {
                         rollbackCols.append("`").append(member.getSqlFieldName()).append("`");
@@ -189,12 +189,12 @@ public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
         }
 
         cmd.setCommandText(text.toString());
-        cmd.setCommandType(PersistenceCommandType.Text);
+        cmd.setCommandType(CommandOpt.Text);
         cmd.setParameters(sqlParas);
 
         if (rbkOnError) {
             cmd.setRollbackCommandText(rollbackText.toString());
-            cmd.setRollbackCommandType(PersistenceCommandType.Text);
+            cmd.setRollbackCommandType(CommandOpt.Text);
             cmd.setRollbackParameters(rollbackParas);
         }
 

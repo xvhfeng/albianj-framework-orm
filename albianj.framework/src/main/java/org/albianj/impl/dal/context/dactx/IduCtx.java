@@ -10,14 +10,14 @@ import org.albianj.impl.dal.db.PersistenceTransactionClusterScope;
 import org.albianj.dal.context.IPersistenceCompensateNotify;
 import org.albianj.dal.context.IPersistenceNotify;
 import org.albianj.dal.context.dactx.AlbianObjectWarp;
-import org.albianj.dal.context.dactx.IDataAccessContext;
+import org.albianj.dal.context.dactx.IIduCtx;
 import org.albianj.dal.context.dactx.QueryOpt;
 import org.albianj.dal.object.IAlbianObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataAccessContext implements IDataAccessContext {
+public class IduCtx implements IIduCtx {
     List<AlbianObjectWarp> entitis = null;
     private boolean isSetQueryIdentity = false;
     private IPersistenceNotify notifyCallback;
@@ -26,12 +26,12 @@ public class DataAccessContext implements IDataAccessContext {
     private Object compensateCallbackObject;
     private boolean rbkOnErr = false;
 
-    public DataAccessContext() {
+    public IduCtx() {
         entitis = new ArrayList<>();
     }
 
      @Override
-     public IDataAccessContext addList(QueryOpt opt, List<? extends IAlbianObject> entity) {
+     public IIduCtx addList(QueryOpt opt, List<? extends IAlbianObject> entity) {
         entity.forEach(e -> {
             AlbianObjectWarp warp = new AlbianObjectWarp();
             warp.setEntry(e);
@@ -43,7 +43,7 @@ public class DataAccessContext implements IDataAccessContext {
     }
 
     @Override
-    public IDataAccessContext addList(QueryOpt opt, List<? extends IAlbianObject> entity, String storageAlias) {
+    public IIduCtx addList(QueryOpt opt, List<? extends IAlbianObject> entity, String storageAlias) {
          entity.forEach(e -> {
              AlbianObjectWarp warp = new AlbianObjectWarp();
             warp.setEntry(e);
@@ -55,7 +55,7 @@ public class DataAccessContext implements IDataAccessContext {
     }
 
     @Override
-    public IDataAccessContext addList(QueryOpt opt, List<? extends IAlbianObject> entity, String storageAlias, String tableAlias) {
+    public IIduCtx addList(QueryOpt opt, List<? extends IAlbianObject> entity, String storageAlias, String tableAlias) {
         entity.forEach(e -> {
             AlbianObjectWarp warp = new AlbianObjectWarp();
             warp.setEntry(e);
@@ -68,7 +68,7 @@ public class DataAccessContext implements IDataAccessContext {
     }
 
     @Override
-    public IDataAccessContext add(QueryOpt opt, IAlbianObject entity) {
+    public IIduCtx add(QueryOpt opt, IAlbianObject entity) {
         AlbianObjectWarp warp = new AlbianObjectWarp();
         warp.setEntry(entity);
         warp.setQueryOpt(opt);
@@ -77,7 +77,7 @@ public class DataAccessContext implements IDataAccessContext {
     }
 
     @Override
-    public IDataAccessContext add(QueryOpt opt, IAlbianObject entity, String storageAlias) {
+    public IIduCtx add(QueryOpt opt, IAlbianObject entity, String storageAlias) {
         AlbianObjectWarp warp = new AlbianObjectWarp();
         warp.setEntry(entity);
         warp.setQueryOpt(opt);
@@ -88,7 +88,7 @@ public class DataAccessContext implements IDataAccessContext {
     }
 
     @Override
-    public IDataAccessContext add(QueryOpt opt, IAlbianObject entity, String storageAlias, String tableAlias) {
+    public IIduCtx add(QueryOpt opt, IAlbianObject entity, String storageAlias, String tableAlias) {
         AlbianObjectWarp warp = new AlbianObjectWarp();
         warp.setEntry(entity);
         warp.setQueryOpt(opt);
@@ -99,7 +99,7 @@ public class DataAccessContext implements IDataAccessContext {
 
     }
 
-    public IDataAccessContext withQueryGenKey() {
+    public IIduCtx withQueryGenKey() {
         if (this.isSetQueryIdentity) {
             throw new AblThrowable("da-ctx exist query auto genkey");
         }
@@ -108,20 +108,20 @@ public class DataAccessContext implements IDataAccessContext {
         return this;
     }
 
-    public IDataAccessContext setFinishNotify(IPersistenceNotify notifyCallback, Object notifyCallbackObject) {
+    public IIduCtx setFinishNotify(IPersistenceNotify notifyCallback, Object notifyCallbackObject) {
         this.notifyCallback = notifyCallback;
         this.notifyCallbackObject = notifyCallbackObject;
         return this;
     }
 
 
-    public IDataAccessContext setMakeupFor(IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject) {
+    public IIduCtx setMakeupFor(IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject) {
         this.compensateCallback = compensateCallback;
         this.compensateCallbackObject = compensateCallbackObject;
         return this;
     }
 
-    public IDataAccessContext setRollBackOnError() {
+    public IIduCtx setRollBackOnError() {
         this.rbkOnErr = true;
         return this;
     }

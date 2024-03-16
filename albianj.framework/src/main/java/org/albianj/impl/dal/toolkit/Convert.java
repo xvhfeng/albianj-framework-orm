@@ -132,4 +132,45 @@ public class Convert {
             return Types.VARCHAR;
         }
     }
+
+    public static String toSqlTypeName(int typeValue) {
+        switch (typeValue) {
+            case Types.CHAR :
+                return "CHAR";
+            case Types.VARCHAR :
+                return "VARCHAR";
+            case Types.LONGVARCHAR :
+                return "LONGVARCHAR";
+            case Types.NUMERIC :
+                return "NUMERIC";
+            case Types.DECIMAL :
+                return "DECIMAL";
+            case Types.BIT :
+                return "BIT";
+            case Types.TINYINT :
+                return "TINYINT";
+            case Types.SMALLINT :
+                return "SMALLINT";
+            case Types.INTEGER :
+                return "INTEGER";
+            case Types.BIGINT :
+                return "BIGINT";
+            case Types.REAL :
+                return "REAL";
+            case Types.FLOAT :
+                return "FLOAT";
+            case Types.DOUBLE :
+                return "DOUBLE";
+            case Types.DATE :
+                return "DATE";
+            case Types.TIME :
+                return "TIME";
+            case Types.TIMESTAMP :
+                return "TIMESTAMP";
+            case Types.ARRAY :
+                return "ARRAY";
+            default:
+                return "VARCHAR";
+        }
+    }
 }

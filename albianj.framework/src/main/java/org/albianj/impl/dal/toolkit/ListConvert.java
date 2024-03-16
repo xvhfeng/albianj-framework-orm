@@ -40,6 +40,7 @@ package org.albianj.impl.dal.toolkit;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.dal.db.SqlParameter;
 import org.albianj.dal.object.ICondition;
+import org.albianj.dal.object.OrderByCondition;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -47,7 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ListConvert {
-    public static <T extends ICondition> Map<String, T> toLinkedHashMap(
+    public static <T extends OrderByCondition> Map<String, T> toLinkedHashMap(
             LinkedList<T> filters) {
         if (null == filters) {
             return null;

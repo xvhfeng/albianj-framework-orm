@@ -16,5 +16,7 @@ public interface IOrgUserService extends IAlbianService {
 
     void queryMulitUserById() ;
 
+    int  testInExpr();
+
     boolean tranOptUser();
 }

@@ -47,7 +47,6 @@ import org.albianj.dal.object.AlbianObjectAttribute;
 import org.albianj.dal.object.DataRouterAttribute;
 import org.albianj.dal.object.StorageAttribute;
 import org.albianj.impl.dal.toolkit.Convert;
-import org.albianj.impl.dal.toolkit.EnumMapping;
 import org.albianj.dal.object.*;
 import org.albianj.dal.service.IAlbianStorageParserService;
 
@@ -58,7 +57,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
 
     protected StorageAttribute makeReaderToStorageCtx(String sessionId, AlbianObjectAttribute objAttr, boolean isExact,
                                                       String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
-                                                      Map<String, IOrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
+                                                      Map<String, OrderByCondition> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
         StorageAttribute stgAttr = null;
         IAlbianStorageParserService asps = ServRouter
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
@@ -110,13 +109,13 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
             if (!member.isSave())
                 continue;
             if (member.getSqlFieldName().equals(member.getPropertyName())) {
-                if (PersistenceDatabaseStyle.MySql == dbStyle) {
+                if (DatabaseOpt.MySql == dbStyle) {
                     sbCols.append("`").append(member.getSqlFieldName()).append("`").append(",");
                 } else {
                     sbCols.append("[").append(member.getSqlFieldName()).append("]").append(",");
                 }
             } else {
-                if (PersistenceDatabaseStyle.MySql == dbStyle) {
+                if (DatabaseOpt.MySql == dbStyle) {
                     sbCols.append("`").append(member.getSqlFieldName()).append("`").append(" AS ").append("`")
                         .append(member.getPropertyName()).append("`").append(",");
                 } else {
@@ -132,7 +131,7 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
 
     protected StringBuilder makeSltCmdCount(int dbStyle) {
         StringBuilder sbCols = new StringBuilder();
-        if (PersistenceDatabaseStyle.MySql == dbStyle) {
+        if (DatabaseOpt.MySql == dbStyle) {
             sbCols.append(" COUNT(1) ").append(" AS ").append(" `COUNT` ");
         } else {
             sbCols.append(" COUNT(1) ").append(" AS ").append(" [COUNT] ");
@@ -141,22 +140,22 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
     }
 
     protected StringBuilder makeSltCmdOdrs(String sessionId, AlbianObjectAttribute objAttr,
-        LinkedList<IOrderByCondition> orderbys, int dbStyle) {
+        LinkedList<OrderByCondition> orderbys, int dbStyle) {
         StringBuilder sbOrderby = new StringBuilder();
         if (null != orderbys) {
-            for (IOrderByCondition orderby : orderbys) {
+            for (OrderByCondition orderby : orderbys) {
                 AlbianEntityFieldAttribute member = objAttr.getFields().get(orderby.getFieldName().toLowerCase());
                 if (null == member) {
                     throw new AblThrowable(
                         "albian-object:" + objAttr.getType() + " member:" + orderby.getFieldName() + " is not found.");
                 }
 
-                if (PersistenceDatabaseStyle.MySql == dbStyle) {
+                if (DatabaseOpt.MySql == dbStyle) {
                     sbOrderby.append("`").append(member.getSqlFieldName()).append("`");
                 } else {
                     sbOrderby.append("[").append(member.getSqlFieldName()).append("]");
                 }
-                sbOrderby.append(" ").append(EnumMapping.toSortOperation(orderby.getSortStyle())).append(",");
+                sbOrderby.append(orderby.getSortOpt().getWord()).append(",");
             }
         }
         if (0 != sbOrderby.length())
@@ -168,12 +167,12 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
         StringBuilder sbOrderby, int start, int step, String idxName) {
         StringBuilder sbCmdTxt = new StringBuilder();
         sbCmdTxt.append("SELECT ").append(sbCols).append(" FROM ");
-        if (PersistenceDatabaseStyle.MySql == sbStyle) {
+        if (DatabaseOpt.MySql == sbStyle) {
             sbCmdTxt.append("`").append(tableName).append("`");
         } else {
             sbCmdTxt.append("[").append(tableName).append("]");
         }
-        if (PersistenceDatabaseStyle.MySql == sbStyle && !StringsUtil
+        if (DatabaseOpt.MySql == sbStyle && !StringsUtil
             .isNullOrEmptyOrAllSpace(idxName)) { //按照木木的要求，增加强行执行索引行为，只为mysql使用
             sbCmdTxt.append(" FORCE INDEX (").append(idxName).append(") ");
         }
@@ -206,18 +205,18 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
                         "albian-object:" + implType + " member:" + where.getFieldName() + " is not found.");
                 }
 
-                sbWhrs.append(" ").append(EnumMapping.toRelationalOperators(where.getRelationalOperator()))
-                    .append(where.isBeginSub() ? "(" : " ");
-                if (PersistenceDatabaseStyle.MySql == dbStyle) {
+                sbWhrs.append(where.getBoolOpt().getWord()).append(where.isBeginSub() ? "(" : " ");
+                if (DatabaseOpt.MySql == dbStyle) {
                     sbWhrs.append("`").append(member.getSqlFieldName()).append("`");
                 } else {
                     sbWhrs.append("[").append(member.getSqlFieldName()).append("]");
                 }
-                sbWhrs.append(EnumMapping.toLogicalOperation(where.getLogicalOperation())).append("#").append(
+                sbWhrs.append(where.getOperatorOpt().getWord()).append("#").append(
                     StringsUtil.isNullOrEmptyOrAllSpace(where.getAliasName()) ? member.getSqlFieldName() :
                         where.getAliasName())
-                    //	.append(member.getSqlFieldName())
-                    .append("#").append(where.isCloseSub() ? ")" : "");
+                        .append("#")
+                        .append(where.isCloseSub() ? ")" : "");
+
                 SqlParameter para = new SqlParameter();
                 para.setName(member.getSqlFieldName());
                 para.setSqlFieldName(member.getSqlFieldName());
