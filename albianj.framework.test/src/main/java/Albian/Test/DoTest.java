@@ -3,7 +3,7 @@ package Albian.Test;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.ServRouter;
-import org.albianj.kernel.logger.LogLevel;
+import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.loader.AlbianjApplication;
 import org.albianj.AblServRouter;
 import org.albianj.loader.IAlbianCommandLineApplication;

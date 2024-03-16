@@ -1,26 +1,23 @@
 package org.albianj.impl.dal.rant;
 
 import org.albianj.ServRouter;
+import org.albianj.api.dal.object.*;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.dal.object.AlbianEntityFieldAttribute;
-import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.object.DataRouterAttribute;
 import org.albianj.impl.dal.routing.AlbianDataRouterParserService;
 import org.albianj.impl.dal.storage.AlbianStorageParserService;
 import org.albianj.impl.dal.toolkit.Convert;
-import org.albianj.kernel.logger.LogLevel;
+import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;
 import org.albianj.loader.IAlbianClassFilter;
-import org.albianj.dal.object.*;
-import org.albianj.dal.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.dal.object.rants.AlbianObjectDataRouterRant;
-import org.albianj.dal.object.rants.AlbianObjectDataRoutersRant;
-import org.albianj.dal.object.rants.AlbianObjectRant;
-import org.albianj.dal.service.AlbianEntityMetadata;
+import org.albianj.api.dal.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.api.dal.object.rants.AlbianObjectDataRouterRant;
+import org.albianj.api.dal.object.rants.AlbianObjectDataRoutersRant;
+import org.albianj.api.dal.object.rants.AlbianObjectRant;
+import org.albianj.api.dal.service.AlbianEntityMetadata;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -50,22 +47,22 @@ public class AlbianEntityRantScaner {
                 new IAlbianClassExcavator() {
                     @Override
                     public Object finder(Class<?> clzz)  {
+                        String implClzzName = clzz.getName();
                         AlbianObjectAttribute objAttr = null;
                         AlbianObjectRant or = clzz.getAnnotation(AlbianObjectRant.class);
-                        if (null == or.Interface()) {
-                            return null;
-                        }
+//                        if (null == or.Interface()) {
+//                            return null;
+//                        }
 
-                        Class<?> itfClzz = or.Interface();
-                        String sItf = itfClzz.getName();
+//                        Class<?> itfClzz = or.Interface();
+//                        String sItf = itfClzz.getName();
 
-                        if (AlbianEntityMetadata.exist(sItf)) {
-                            objAttr = AlbianEntityMetadata.getEntityMetadata(sItf);
+                        if (AlbianEntityMetadata.exist(implClzzName)) {
+                            objAttr = AlbianEntityMetadata.getEntityMetadata(implClzzName);
                         } else {
                             objAttr = new AlbianObjectAttribute();
                             objAttr.setType(clzz.getName());
-                            objAttr.setItf(sItf);
-                            AlbianEntityMetadata.put(sItf, objAttr);
+                            AlbianEntityMetadata.put(implClzzName, objAttr);
 
                         }
 

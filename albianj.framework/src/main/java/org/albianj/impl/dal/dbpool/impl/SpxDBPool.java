@@ -4,7 +4,7 @@ import org.albianj.ServRouter;
 import org.albianj.impl.dal.dbpool.IPoolingConnection;
 import org.albianj.impl.dal.dbpool.ISpxDBPool;
 import org.albianj.impl.dal.dbpool.ISpxDBPoolConfig;
-import org.albianj.kernel.logger.LogLevel;
+import org.albianj.api.kernel.logger.LogLevel;
 
 import java.io.PrintWriter;
 import java.sql.Connection;

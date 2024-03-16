@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.dal.context.ReaderJob;
-import org.albianj.dal.db.CommandOpt;
-import org.albianj.dal.object.IAlbianObject;
+import org.albianj.api.dal.context.ReaderJob;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IAlbianObject;
 
 import java.sql.Statement;
 import java.util.List;

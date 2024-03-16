@@ -39,17 +39,15 @@ package org.albianj.impl.dal.routing;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
+import org.albianj.api.dal.object.*;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.object.DataRouterAttribute;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.dal.object.*;
-import org.albianj.dal.service.AlbianEntityMetadata;
-import org.albianj.dal.service.IAlbianDataRouterParserService;
+import org.albianj.api.dal.service.AlbianEntityMetadata;
+import org.albianj.api.dal.service.IAlbianDataRouterParserService;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
@@ -63,12 +61,12 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
     public static final String DEFAULT_ROUTING_NAME = "!@#$%Albianj_Default_DataRouter%$#@!";
 
     private static DataRoutersAttribute getRoutingsAttribute(Element elt)  {
-        String inter = XmlUtil.getAttributeValue(elt, "Interface");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(inter)) {
-            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
-                    "The albianObject's interface is empty or null.");
-            return null;
-        }
+//        String inter = XmlUtil.getAttributeValue(elt, "Interface");
+//        if (StringsUtil.isNullOrEmptyOrAllSpace(inter)) {
+//            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
+//                    "The albianObject's interface is empty or null.");
+//            return null;
+//        }
         String type = XmlUtil.getAttributeValue(elt, "Type");
 
         if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
@@ -77,12 +75,12 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
             return null;
         }
 
-        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(type);
         if (null == objAttr) {
             objAttr = new AlbianObjectAttribute();
             objAttr.setType(type);
-            objAttr.setItf(inter);
-            AlbianEntityMetadata.put(inter, objAttr);
+//            objAttr.setItf(inter);
+            AlbianEntityMetadata.put(type, objAttr);
         }
         DataRoutersAttribute routing = objAttr.getDataRouters();
         if (null == routing) {
@@ -92,21 +90,21 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
 
         try {
             Class<?> cls = AlbianClassLoader.getInstance().loadClass(type);
-            Class<?> itf = AlbianClassLoader.getInstance().loadClass(inter);
-            if (!itf.isAssignableFrom(cls)) {
-                throw new AblThrowable(
-                    "the albian-object class:" + type + " is not implements from interface:" + inter + ".");
-            }
+//            Class<?> itf = AlbianClassLoader.getInstance().loadClass(inter);
+//            if (!itf.isAssignableFrom(cls)) {
+//                throw new AblThrowable(
+//                    "the albian-object class:" + type + " is not implements from interface:" + inter + ".");
+//            }
 
             if (!IAlbianObject.class.isAssignableFrom(cls)) {
                 throw new AblThrowable(
                     "the albian-object class:" + type + " is not implements from interface: IAlbianObject.");
             }
 
-            if (!IAlbianObject.class.isAssignableFrom(itf)) {
-                throw new AblThrowable(
-                    "the albian-object interface:" + inter + " is not implements from interface: IAlbianObject.");
-            }
+//            if (!IAlbianObject.class.isAssignableFrom(itf)) {
+//                throw new AblThrowable(
+//                    "the albian-object interface:" + inter + " is not implements from interface: IAlbianObject.");
+//            }
 
         } catch (ClassNotFoundException e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,

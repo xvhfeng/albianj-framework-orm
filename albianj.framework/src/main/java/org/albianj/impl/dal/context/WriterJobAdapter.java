@@ -39,22 +39,18 @@ package org.albianj.impl.dal.context;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
+import org.albianj.api.dal.object.*;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.dal.db.IPersistenceUpdateCommand;
-import org.albianj.dal.db.PersistenceCommand;
+import org.albianj.api.dal.db.PersistenceCommand;
 import org.albianj.impl.dal.db.localize.MysqlClientSection;
 import org.albianj.impl.dal.db.localize.SqlServerClientSection;
-import org.albianj.dal.context.WriterJob;
-import org.albianj.dal.context.WriterTask;
-import org.albianj.dal.object.AlbianEntityFieldAttribute;
-import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.object.DataRouterAttribute;
-import org.albianj.dal.object.StorageAttribute;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.object.*;
-import org.albianj.dal.service.AlbianEntityMetadata;
-import org.albianj.dal.service.IAlbianStorageParserService;
+import org.albianj.api.dal.context.WriterJob;
+import org.albianj.api.dal.context.WriterTask;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.service.AlbianEntityMetadata;
+import org.albianj.api.dal.service.IAlbianStorageParserService;
 
 import java.util.*;
 
@@ -219,7 +215,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
                                   IPersistenceUpdateCommand cmd)  {
         Class<?> cls = entity.getClass();
         String className = cls.getName();
-        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadataByType(cls);
+        AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(cls);
 
         Map<String, AlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
         if (SetUtil.isNullOrEmpty(fieldsAttr)) {

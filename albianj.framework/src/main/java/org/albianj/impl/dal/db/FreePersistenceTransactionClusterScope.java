@@ -39,10 +39,10 @@ package org.albianj.impl.dal.db;
 
 
 import org.albianj.ServRouter;
-import org.albianj.dal.context.WriterJob;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.context.IPersistenceCompensateNotify;
-import org.albianj.dal.context.WriterJobLifeTime;
+import org.albianj.api.dal.context.WriterJob;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.context.IPersistenceCompensateNotify;
+import org.albianj.api.dal.context.WriterJobLifeTime;
 
 public abstract class FreePersistenceTransactionClusterScope implements IPersistenceTransactionClusterScope {
 

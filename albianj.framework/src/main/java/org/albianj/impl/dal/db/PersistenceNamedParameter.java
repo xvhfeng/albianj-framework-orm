@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.dal.context.InternalManualCommand;
-import org.albianj.dal.context.ManualCommand;
-import org.albianj.dal.db.PersistenceCommand;
+import org.albianj.api.dal.context.InternalManualCommand;
+import org.albianj.api.dal.context.ManualCommand;
+import org.albianj.api.dal.db.PersistenceCommand;
 
 import java.util.HashMap;
 import java.util.Map;

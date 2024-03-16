@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.toolkit;
 
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.dal.db.SqlParameter;
-import org.albianj.dal.object.ICondition;
-import org.albianj.dal.object.OrderByCondition;
+import org.albianj.api.dal.db.SqlParameter;
+import org.albianj.api.dal.object.ICondition;
+import org.albianj.api.dal.object.OrderByCondition;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

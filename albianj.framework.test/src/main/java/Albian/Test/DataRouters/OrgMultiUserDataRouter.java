@@ -1,8 +1,7 @@
 package Albian.Test.DataRouters;
 
-import Albian.Test.Model.IOrgMultiUser;
-import org.albianj.dal.object.DataRouterAttribute;
-import org.albianj.dal.object.*;
+import Albian.Test.Model.Impl.OrgMultiUser;
+import org.albianj.api.dal.object.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
     public List<DataRouterAttribute> mappingWriterRouting(
             Map<String, DataRouterAttribute> routings, IAlbianObject obj) {
         // TODO Auto-generated method stub
-        IOrgMultiUser u = (IOrgMultiUser) obj;
+        OrgMultiUser u = (OrgMultiUser) obj;
         String id = u.getId();
         String drBasename = "MUserWrite";
         String[] ids = id.split("_");
@@ -42,7 +41,7 @@ public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
     public String mappingWriterTable(DataRouterAttribute routing,
                                      IAlbianObject obj) {
         // TODO Auto-generated method stub
-        IOrgMultiUser u = (IOrgMultiUser) obj;
+        OrgMultiUser u = (OrgMultiUser) obj;
         String id = u.getId();
         String[] ids = id.split("_");
         String tablename = routing.getTableName() + "_" + ids[3]; //使用表标识

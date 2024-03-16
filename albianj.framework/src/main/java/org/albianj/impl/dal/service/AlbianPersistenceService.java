@@ -38,24 +38,24 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.service;
 
 import org.albianj.common.utils.SetUtil;
-import org.albianj.dal.object.OrderByCondition;
+import org.albianj.api.dal.object.OrderByCondition;
 import org.albianj.impl.dal.context.*;
 import org.albianj.impl.dal.db.IPersistenceQueryScope;
 import org.albianj.impl.dal.db.IPersistenceTransactionClusterScope;
 import org.albianj.impl.dal.db.PersistenceQueryScope;
 import org.albianj.impl.dal.db.PersistenceTransactionClusterScope;
-import org.albianj.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.dal.context.IPersistenceCompensateNotify;
-import org.albianj.dal.context.IPersistenceNotify;
-import org.albianj.dal.context.ReaderJob;
-import org.albianj.dal.context.WriterJob;
-import org.albianj.dal.db.CommandOpt;
-import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.IFilterCondition;
-import org.albianj.dal.object.filter.IChainExpression;
-import org.albianj.dal.service.IAlbianPersistenceService;
-import org.albianj.dal.service.QueryToOpt;
+import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.dal.context.IPersistenceCompensateNotify;
+import org.albianj.api.dal.context.IPersistenceNotify;
+import org.albianj.api.dal.context.ReaderJob;
+import org.albianj.api.dal.context.WriterJob;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IAlbianObject;
+import org.albianj.api.dal.object.IFilterCondition;
+import org.albianj.api.dal.object.filter.IChainExpression;
+import org.albianj.api.dal.service.IAlbianPersistenceService;
+import org.albianj.api.dal.service.QueryToOpt;
 
 import java.sql.Statement;
 import java.util.LinkedList;

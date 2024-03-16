@@ -2,9 +2,9 @@ package org.albianj.impl.dal.db;
 
 
 import org.albianj.ServRouter;
-import org.albianj.dal.context.ManualContext;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.context.WriterJobLifeTime;
+import org.albianj.api.dal.context.ManualContext;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.context.WriterJobLifeTime;
 
 /**
  * Created by xuhaifeng on 17/9/1.

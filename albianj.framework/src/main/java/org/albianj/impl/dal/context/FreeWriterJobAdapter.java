@@ -41,9 +41,9 @@ import org.albianj.impl.dal.db.CreateCommandAdapter;
 import org.albianj.impl.dal.db.IPersistenceUpdateCommand;
 import org.albianj.impl.dal.db.ModifyCommandAdapter;
 import org.albianj.impl.dal.db.RemoveCommandAdapter;
-import org.albianj.dal.context.WriterJob;
-import org.albianj.dal.context.dactx.AlbianObjectWarp;
-import org.albianj.dal.object.IAlbianObject;
+import org.albianj.api.dal.context.WriterJob;
+import org.albianj.api.dal.context.dactx.AlbianObjectWarp;
+import org.albianj.api.dal.object.IAlbianObject;
 
 import java.util.List;
 

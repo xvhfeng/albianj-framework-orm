@@ -1,8 +1,8 @@
 package org.albianj.impl.dal.db;
 
-import org.albianj.dal.context.ManualContext;
-import org.albianj.dal.context.InternalManualCommand;
-import org.albianj.dal.context.ManualCommand;
+import org.albianj.api.dal.context.ManualContext;
+import org.albianj.api.dal.context.InternalManualCommand;
+import org.albianj.api.dal.context.ManualCommand;
 
 import java.util.LinkedList;
 import java.util.List;

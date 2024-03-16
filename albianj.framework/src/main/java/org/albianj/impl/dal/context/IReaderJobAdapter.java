@@ -37,14 +37,14 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.impl.dal.context;
 
-import org.albianj.dal.db.SqlParameter;
+import org.albianj.api.dal.db.SqlParameter;
 
-import org.albianj.dal.context.ReaderJob;
-import org.albianj.dal.db.CommandOpt;
-import org.albianj.dal.object.IFilterCondition;
-import org.albianj.dal.object.OrderByCondition;
-import org.albianj.dal.object.RunningStorageAttribute;
-import org.albianj.dal.object.filter.IChainExpression;
+import org.albianj.api.dal.context.ReaderJob;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IFilterCondition;
+import org.albianj.api.dal.object.OrderByCondition;
+import org.albianj.api.dal.object.RunningStorageAttribute;
+import org.albianj.api.dal.object.filter.IChainExpression;
 
 import java.util.LinkedList;
 import java.util.Map;

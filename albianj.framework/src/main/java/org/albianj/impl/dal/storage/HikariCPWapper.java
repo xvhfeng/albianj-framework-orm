@@ -3,9 +3,9 @@ package org.albianj.impl.dal.storage;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.albianj.ServRouter;
-import org.albianj.dal.object.StorageAttribute;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.object.RunningStorageAttribute;
+import org.albianj.api.dal.object.StorageAttribute;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

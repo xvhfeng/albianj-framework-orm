@@ -1,20 +1,18 @@
 package Albian.Test.Services.Impl;
 
-import Albian.Test.Model.IOrgMultiUser;
-import Albian.Test.Model.IOrgSingleUser;
-import Albian.Test.Model.ISingleUser;
+import Albian.Test.Model.Impl.OrgSingleUser;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
-import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.dal.context.dactx.IIduCtx;
-import org.albianj.dal.context.dactx.ISltCtx;
-import org.albianj.dal.context.dactx.QueryOpt;
-import org.albianj.dal.object.OperatorOpt;
-import org.albianj.dal.object.filter.FilterExpression;
-import org.albianj.dal.object.filter.IChainExpression;
+import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.dal.context.dactx.IIduCtx;
+import org.albianj.api.dal.context.dactx.ISltCtx;
+import org.albianj.api.dal.context.dactx.QueryOpt;
+import org.albianj.api.dal.object.OperatorOpt;
+import org.albianj.api.dal.object.filter.FilterExpression;
+import org.albianj.api.dal.object.filter.IChainExpression;
 import org.albianj.AblServRouter;
-import org.albianj.dal.service.IAlbianDataAccessService;
-import org.albianj.dal.service.QueryToOpt;
+import org.albianj.api.dal.service.IAlbianDataAccessService;
+import org.albianj.api.dal.service.QueryToOpt;
 
 
 import java.math.BigInteger;
@@ -30,8 +28,8 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
         IChainExpression wheres = new FilterExpression("UserName", OperatorOpt.eq, uname);
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         ISltCtx qctx = da.newQueryContext();
-        IOrgSingleUser user = qctx.useStorage(StorageInfo.SingleUserStorageName).fromTable("SingleUser") //指定到storage
-                .loadObject("sessionId", IOrgSingleUser.class, QueryToOpt.ReaderRouter, wheres);
+        OrgSingleUser user = qctx.useStorage(StorageInfo.SingleUserStorageName).fromTable("SingleUser") //指定到storage
+                .loadObject("sessionId", OrgSingleUser.class, QueryToOpt.ReaderRouter, wheres);
         if (user.getPassword().equals(pwd)) {
             return true;
         }
@@ -43,8 +41,8 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
     @Override
     public boolean addUser(String uname, String pwd)  {
         //创建对象请使用此方法
-        IOrgSingleUser user = AblServRouter.newInstance("SessionId", IOrgSingleUser.class);
-        user.setId(BigInteger.valueOf(System.currentTimeMillis()));
+        OrgSingleUser user = AblServRouter.newInstance("SessionId", OrgSingleUser.class);
+        user.setId(String.valueOf(System.currentTimeMillis()));
         user.setPassword(pwd);
         user.setUserName(uname);
 
@@ -59,9 +57,9 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
         // 如果是更改数据库记录，必须先需要load一下数据库记录，
         IChainExpression wheres = new FilterExpression("UserName", OperatorOpt.eq, uname);
         ISltCtx qctx = da.newQueryContext();
-        IOrgSingleUser user = qctx.useStorage(StorageInfo.SingleUserStorageName).fromTable("SingleUser") //指定到storage
+        OrgSingleUser user = qctx.useStorage(StorageInfo.SingleUserStorageName).fromTable("SingleUser") //指定到storage
                 // 如果需要及其精确，使用LoadType.exact，并且指定主数据库或根据DataRouter走WriteRouters配置
-                .loadObject("sessionId", IOrgSingleUser.class, QueryToOpt.ReaderRouter, wheres);
+                .loadObject("sessionId", OrgSingleUser.class, QueryToOpt.ReaderRouter, wheres);
         if (user.getPassword().equals(orgPwd)) {
             user.setPassword(newPwd);
             IIduCtx dctx = da.newDataAccessContext();
@@ -73,20 +71,20 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
     @Override
     public boolean batchAddUser()  {
         IIduCtx dctx = da.newDataAccessContext();
-        IOrgMultiUser mu1 = AblServRouter.newInstance("sessionId", IOrgMultiUser.class);
+        OrgSingleUser mu1 = AblServRouter.newInstance("sessionId", OrgSingleUser.class);
         String id1 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 1, 1);
         mu1.setId(id1);
         mu1.setUserName("mu1_org");
         mu1.setPassword("mu1pwd_org");
 
-        IOrgMultiUser mu2 = AblServRouter.newInstance("sessionId", IOrgMultiUser.class);
+        OrgSingleUser mu2 = AblServRouter.newInstance("sessionId", OrgSingleUser.class);
         String id2 = String.format("%d_%d_%d_%d", System.currentTimeMillis(), ++idx, 2, 2);
         mu2.setId(id2);
         mu2.setUserName("mu2_org");
         mu2.setPassword("mu2pwd_org");
 
-        ISingleUser user = AblServRouter.newInstance("SessionId", ISingleUser.class);
-        user.setId(BigInteger.valueOf(System.currentTimeMillis()));
+        OrgSingleUser user = AblServRouter.newInstance("SessionId", OrgSingleUser.class);
+        user.setId(String.valueOf(System.currentTimeMillis()));
         user.setPassword("batcher_by_org");
         user.setUserName("batcher_by_org");
         //同时使用数据路由与单数据库保存
@@ -105,14 +103,14 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
         IChainExpression whrs1 = new FilterExpression("Id", OperatorOpt.eq, "1539240117605_1_1_1");
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
         ISltCtx qctx = da.newQueryContext();
-        IOrgMultiUser mu1 = qctx.loadObject("sessionId", IOrgMultiUser.class, QueryToOpt.ReaderRouter, whrs1);
+        OrgSingleUser mu1 = qctx.loadObject("sessionId", OrgSingleUser.class, QueryToOpt.ReaderRouter, whrs1);
         System.out.println(String.format("MU1:id->%s uname->%s pwd->%s",
                 mu1.getId(), mu1.getUserName(), mu1.getPassword()));
         qctx.reset();
 
         IChainExpression whrs2 = new FilterExpression("Id", OperatorOpt.eq, "1539240117606_2_2_2");
         //查询sql推荐使用query ctx，不推荐原来的具体方法，通过重载区分
-        IOrgMultiUser mu2 = qctx.loadObject("sessionId", IOrgMultiUser.class, QueryToOpt.ReaderRouter, whrs2);
+        OrgSingleUser mu2 = qctx.loadObject("sessionId", OrgSingleUser.class, QueryToOpt.ReaderRouter, whrs2);
         System.out.println(String.format("MU2:id->%s uname->%s pwd->%s",
                 mu2.getId(), mu2.getUserName(), mu2.getPassword()));
 
@@ -125,7 +123,7 @@ public class OrgUserService extends FreeAlbianService implements IOrgUserService
         IChainExpression whrs1 = new FilterExpression("Id", OperatorOpt.in, ids);
 
         ISltCtx qctx = da.newQueryContext();
-        List<IOrgMultiUser> mu1 = qctx.loadObjects("sessionId", IOrgMultiUser.class, QueryToOpt.ReaderRouter, whrs1);
+        List<OrgSingleUser> mu1 = qctx.loadObjects("sessionId", OrgSingleUser.class, QueryToOpt.ReaderRouter, whrs1);
         return mu1.size();
     }
 

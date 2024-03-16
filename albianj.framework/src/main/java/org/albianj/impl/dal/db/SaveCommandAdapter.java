@@ -38,11 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 import org.albianj.AblThrowable;
-import org.albianj.dal.db.PersistenceCommand;
-import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.object.DataRouterAttribute;
-import org.albianj.dal.object.StorageAttribute;
-import org.albianj.dal.object.*;
+import org.albianj.api.dal.db.PersistenceCommand;
+import org.albianj.api.dal.object.*;
 
 import java.util.Map;
 

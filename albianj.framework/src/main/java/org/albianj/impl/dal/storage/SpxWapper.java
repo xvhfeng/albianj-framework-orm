@@ -5,9 +5,9 @@ import org.albianj.impl.dal.dbpool.ISpxDBPool;
 import org.albianj.impl.dal.dbpool.ISpxDBPoolConfig;
 import org.albianj.impl.dal.dbpool.impl.SpxDBPool;
 import org.albianj.impl.dal.dbpool.impl.SpxDBPoolConfig;
-import org.albianj.dal.object.StorageAttribute;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.object.RunningStorageAttribute;
+import org.albianj.api.dal.object.StorageAttribute;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

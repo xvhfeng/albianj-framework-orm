@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.context;
 
 
-import org.albianj.dal.context.WriterJob;
-import org.albianj.dal.context.dactx.AlbianObjectWarp;
-import org.albianj.dal.object.IAlbianObject;
+import org.albianj.api.dal.context.WriterJob;
+import org.albianj.api.dal.context.dactx.AlbianObjectWarp;
+import org.albianj.api.dal.object.IAlbianObject;
 
 import java.util.List;
 

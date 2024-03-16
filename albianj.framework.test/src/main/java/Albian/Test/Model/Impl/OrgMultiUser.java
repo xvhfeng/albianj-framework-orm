@@ -1,42 +1,20 @@
 package Albian.Test.Model.Impl;
 
-import Albian.Test.Model.IOrgMultiUser;
-import org.albianj.dal.object.FreeAlbianObject;
+import lombok.*;
+import org.albianj.api.dal.object.FreeAlbianObject;
 
-public class OrgMultiUser extends FreeAlbianObject implements IOrgMultiUser {
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+public class OrgMultiUser extends FreeAlbianObject  {
 
     private String id;
     private String userName;
     private String password;
 
-    @Override
-    public String getId() {
-        return this.id;
-    }
 
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getUserName() {
-        return this.userName;
-    }
-
-    @Override
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
 }

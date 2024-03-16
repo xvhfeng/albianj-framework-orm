@@ -1,7 +1,7 @@
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.dal.context.ManualContext;
+import org.albianj.api.dal.context.ManualContext;
 
 /**
  * Created by xuhaifeng on 17/8/31.
