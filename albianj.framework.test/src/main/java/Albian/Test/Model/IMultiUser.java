@@ -1,7 +1,7 @@
 package Albian.Test.Model;
 
 
-import org.albianj.orm.object.IAlbianObject;
+import org.albianj.dal.object.IAlbianObject;
 
 /*
  分库分表使用

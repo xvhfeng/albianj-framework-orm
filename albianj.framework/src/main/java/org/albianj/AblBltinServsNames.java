@@ -4,11 +4,11 @@ import org.albianj.impl.kernel.core.AlbianKernelParserService;
 import org.albianj.impl.kernel.logger.AlbianLoggerService;
 import org.albianj.impl.kernel.security.AlbianSecurityService;
 import org.albianj.impl.kernel.service.AlbianServiceParser;
-import org.albianj.impl.orm.mapping.AlbianMappingParserService;
-import org.albianj.impl.orm.routing.AlbianDataRouterParserService;
-import org.albianj.impl.orm.service.AlbianDataAccessService;
-import org.albianj.impl.orm.service.AlbianPersistenceService;
-import org.albianj.impl.orm.storage.AlbianStorageParserService;
+import org.albianj.impl.dal.mapping.AlbianMappingParserService;
+import org.albianj.impl.dal.routing.AlbianDataRouterParserService;
+import org.albianj.impl.dal.service.AlbianDataAccessService;
+import org.albianj.impl.dal.service.AlbianPersistenceService;
+import org.albianj.impl.dal.storage.AlbianStorageParserService;
 
 public class AblBltinServsNames {
 

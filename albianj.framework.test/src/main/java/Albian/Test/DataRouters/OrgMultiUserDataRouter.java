@@ -1,8 +1,8 @@
 package Albian.Test.DataRouters;
 
 import Albian.Test.Model.IOrgMultiUser;
-import org.albianj.orm.object.DataRouterAttribute;
-import org.albianj.orm.object.*;
+import org.albianj.dal.object.DataRouterAttribute;
+import org.albianj.dal.object.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
     public DataRouterAttribute mappingReaderRouting(
             Map<String, DataRouterAttribute> routings,
             Map<String, IFilterCondition> wheres,
-            Map<String, IOrderByCondition> orderbys) {
+            Map<String, OrderByCondition> orderbys) {
         IFilterCondition fc = wheres.get("Id");
         String id = (String) fc.getValue();
         String drBasename = "MUserRead";
@@ -66,7 +66,7 @@ public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
     @Override
     public String mappingReaderTable(DataRouterAttribute routing,
                                      Map<String, IFilterCondition> wheres,
-                                     Map<String, IOrderByCondition> orderbys) {
+                                     Map<String, OrderByCondition> orderbys) {
         // TODO Auto-generated method stub
         IFilterCondition fc = wheres.get("Id");
         String id = (String) fc.getValue();
