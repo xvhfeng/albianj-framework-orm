@@ -38,10 +38,10 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.api.dal.service;
 
 import org.albianj.AblBltinServsNames;
-import org.albianj.api.dal.object.StgAttr;
+import org.albianj.api.dal.object.StorageAttribute;
 import org.albianj.api.kernel.service.parser.IAlbianParserService;
-import org.albianj.api.dal.db.IDBP;
-import org.albianj.api.dal.object.RStgAttr;
+import org.albianj.api.dal.db.IDataBasePool;
+import org.albianj.api.dal.object.RunningStorageAttribute;
 
 import java.sql.Connection;
 
@@ -76,7 +76,7 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param name storage的名称
      * @param sa   storage的元信息
      */
-    public void addStorageAttribute(String name, StgAttr sa);
+    public void addStorageAttribute(String name, StorageAttribute sa);
 
     /**
      * 根据storage的名称获取storage的元信息
@@ -84,9 +84,9 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param name storage的名称
      * @return storage的元信息
      */
-    public StgAttr getStorageAttribute(String name);
+    public StorageAttribute getStorageAttribute(String name);
 
-    public IDBP getDatabasePool(String sessionId, RStgAttr rsa);
+    public IDataBasePool getDatabasePool(String sessionId, RunningStorageAttribute rsa);
 
     /**
      * 根据storage的元信息获取链接
@@ -94,11 +94,11 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param rsa
      * @return
      */
-    public Connection getConnection(String sessionId, RStgAttr rsa, boolean isAutoCommit) ;
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa,boolean isAutoCommit) ;
 
 //    public Connection getConnection(IRunningStorageAttribute rsa,boolean isAutoCommit);
 
-    public Connection getConnection(String sessionId, IDBP pool, RStgAttr rsa, boolean isAutoCommit) ;
+    public Connection getConnection(String sessionId, IDataBasePool pool, RunningStorageAttribute rsa,boolean isAutoCommit) ;
 
     /**
      * 请自行关闭ResultSet和 Statement后再调用此方法返回链接
@@ -107,7 +107,7 @@ public interface IAlbianStorageParserService extends IAlbianParserService {
      * @param rsa
      * @param conn
      */
-    public void returnConnection(String sessionId, RStgAttr rsa, Connection conn);
+    public void returnConnection(String sessionId, RunningStorageAttribute rsa, Connection conn);
 
 
 }

@@ -5,9 +5,9 @@ import org.albianj.impl.dal.dbpool.ISpxDBPool;
 import org.albianj.impl.dal.dbpool.ISpxDBPoolConfig;
 import org.albianj.impl.dal.dbpool.impl.SpxDBPool;
 import org.albianj.impl.dal.dbpool.impl.SpxDBPoolConfig;
-import org.albianj.api.dal.object.StgAttr;
+import org.albianj.api.dal.object.StorageAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.dal.object.RStgAttr;
+import org.albianj.api.dal.object.RunningStorageAttribute;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,12 +16,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public class SpxWapper extends FreeDBP {
+public class SpxWapper extends FreeDataBasePool {
 
     public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
-    public Connection getConnection(String sessionId, RStgAttr rsa, boolean isAutoCommit)  {
-        StgAttr sa = rsa.getStgAttr();
+    public Connection getConnection(String sessionId, RunningStorageAttribute rsa, boolean isAutoCommit)  {
+        StorageAttribute sa = rsa.getStorageAttribute();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
         ISpxDBPool pool = (ISpxDBPool)ds;
@@ -46,7 +46,7 @@ public class SpxWapper extends FreeDBP {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, RStgAttr rsa)  {
+    public DataSource setupDataSource(String sessionid,String key, RunningStorageAttribute rsa)  {
         ISpxDBPoolConfig cf = null;
         try {
             cf = new SpxDBPoolConfig();
@@ -55,7 +55,7 @@ public class SpxWapper extends FreeDBP {
                     "create dabasepool for storage:{} is fail.",key);
         }
         try {
-            StgAttr stgAttr = rsa.getStgAttr();
+            StorageAttribute stgAttr = rsa.getStorageAttribute();
             String url = FreeAlbianStorageParserService.generateConnectionUrl(rsa);
             cf.setDriverName(DRIVER_CLASSNAME);
             cf.setUrl(url);

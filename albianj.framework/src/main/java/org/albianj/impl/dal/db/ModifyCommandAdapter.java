@@ -38,30 +38,30 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 import org.albianj.AblThrowable;
-import org.albianj.api.dal.db.PCmd;
-import org.albianj.api.dal.db.SqlPara;
-import org.albianj.api.dal.object.AblEntityFieldAttr;
-import org.albianj.api.dal.object.AblEntityAttr;
-import org.albianj.api.dal.db.CmdOpt;
-import org.albianj.api.dal.object.IAblObj;
+import org.albianj.api.dal.db.PersistenceCommand;
+import org.albianj.api.dal.db.SqlParameter;
+import org.albianj.api.dal.object.AlbianEntityFieldAttribute;
+import org.albianj.api.dal.object.AlbianObjectAttribute;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IAlbianObject;
 
-import org.albianj.api.dal.object.DBOpt;
+import org.albianj.api.dal.object.DatabaseOpt;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModifyCommandAdapter implements IDMLCmd {
+public class ModifyCommandAdapter implements IPersistenceUpdateCommand {
 
 
-    public PCmd buildPstCmd(String sessionId, int dbStyle, String tableName, IAblObj object,
-                            AblEntityAttr objAttr, Map<String, Object> mapValue, boolean rbkOnError)
+    public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
+                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)
               {
         if (object.getIsAlbianNew()) {
             throw new AblThrowable(
                 "the new albianj object can not be update.please load the object from database first.");
         }
 
-                  PCmd cmd = new PCmd();
+                  PersistenceCommand cmd = new PersistenceCommand();
         StringBuilder text = new StringBuilder();
         StringBuilder cols = new StringBuilder();
         StringBuilder where = new StringBuilder();
@@ -80,7 +80,7 @@ public class ModifyCommandAdapter implements IDMLCmd {
         if (rbkOnError) {
             rollbackText.append("UPDATE ");// .append(routing.getTableName());
         }
-        if (DBOpt.MySql == dbStyle) {
+        if (DatabaseOpt.MySql == dbStyle) {
             text.append("`").append(tableName).append("`");
             if (rbkOnError) {
                 rollbackText.append("`").append(tableName).append("`");
@@ -92,11 +92,11 @@ public class ModifyCommandAdapter implements IDMLCmd {
             }
         }
 
-        Map<String, AblEntityFieldAttr> fieldsAttr = objAttr.getFields();
-        Map<String, SqlPara> sqlParas = new HashMap<String, SqlPara>();
-        Map<String, SqlPara> rollbackParas = new HashMap<String, SqlPara>();
-        for (Map.Entry<String, AblEntityFieldAttr> entry : fieldsAttr.entrySet()) {
-            AblEntityFieldAttr member = entry.getValue();
+        Map<String, AlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
+        Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
+        Map<String, SqlParameter> rollbackParas = new HashMap<String, SqlParameter>();
+        for (Map.Entry<String, AlbianEntityFieldAttribute> entry : fieldsAttr.entrySet()) {
+            AlbianEntityFieldAttribute member = entry.getValue();
             if (!member.isSave())
                 continue;
             String name = member.getPropertyName();
@@ -108,7 +108,7 @@ public class ModifyCommandAdapter implements IDMLCmd {
                 if (rbkOnError) {
                     rollbackWhere.append(" AND ");
                 }
-                if (DBOpt.MySql == dbStyle) {
+                if (DatabaseOpt.MySql == dbStyle) {
                     where.append("`").append(member.getSqlFieldName()).append("`");
                     if (rbkOnError) {
                         rollbackWhere.append("`").append(member.getSqlFieldName()).append("`");
@@ -135,7 +135,7 @@ public class ModifyCommandAdapter implements IDMLCmd {
                 if (null != oldValue && oldValue.equals(newValue)) {
                     continue;
                 }
-                if (DBOpt.MySql == dbStyle) {
+                if (DatabaseOpt.MySql == dbStyle) {
                     cols.append("`").append(member.getSqlFieldName()).append("`");
                     if (rbkOnError) {
                         rollbackCols.append("`").append(member.getSqlFieldName()).append("`");
@@ -151,7 +151,7 @@ public class ModifyCommandAdapter implements IDMLCmd {
                     rollbackCols.append(" = ").append("#").append(member.getSqlFieldName()).append("# ,");
                 }
             }
-            SqlPara para = new SqlPara();
+            SqlParameter para = new SqlParameter();
             para.setName(name);
             para.setSqlFieldName(member.getSqlFieldName());
             para.setSqlType(member.getDatabaseType());
@@ -159,7 +159,7 @@ public class ModifyCommandAdapter implements IDMLCmd {
             sqlParas.put(String.format("#%1$s#", member.getSqlFieldName()), para);
 
             if (rbkOnError) {
-                SqlPara rollbackPara = new SqlPara();
+                SqlParameter rollbackPara = new SqlParameter();
                 rollbackPara.setName(name);
                 rollbackPara.setSqlFieldName(member.getSqlFieldName());
                 rollbackPara.setSqlType(member.getDatabaseType());
@@ -189,12 +189,12 @@ public class ModifyCommandAdapter implements IDMLCmd {
         }
 
         cmd.setCommandText(text.toString());
-        cmd.setCommandType(CmdOpt.Text);
+        cmd.setCommandType(CommandOpt.Text);
         cmd.setParameters(sqlParas);
 
         if (rbkOnError) {
             cmd.setRollbackCommandText(rollbackText.toString());
-            cmd.setRollbackCommandType(CmdOpt.Text);
+            cmd.setRollbackCommandType(CommandOpt.Text);
             cmd.setRollbackParameters(rollbackParas);
         }
 

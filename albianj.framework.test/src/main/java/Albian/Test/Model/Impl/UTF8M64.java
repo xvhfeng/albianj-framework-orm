@@ -1,22 +1,22 @@
 package Albian.Test.Model.Impl;
 
 import lombok.*;
-import org.albianj.api.dal.object.FreeAblObj;
-import org.albianj.api.dal.object.rants.AblEntityFieldRant;
-import org.albianj.api.dal.object.rants.AblObjRant;
+import org.albianj.api.dal.object.FreeAlbianObject;
+import org.albianj.api.dal.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.api.dal.object.rants.AlbianObjectRant;
 
-@AblObjRant
+@AlbianObjectRant
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-public class UTF8M64 extends FreeAblObj {
+public class UTF8M64 extends FreeAlbianObject  {
 
-    @AblEntityFieldRant(IsPrimaryKey = true, FieldName = "id")
+    @AlbianObjectDataFieldRant(IsPrimaryKey = true, FieldName = "id")
     private int id = 0;
 
-    @AblEntityFieldRant(FieldName = "v")
+    @AlbianObjectDataFieldRant(FieldName = "v")
     private String v;
 
 

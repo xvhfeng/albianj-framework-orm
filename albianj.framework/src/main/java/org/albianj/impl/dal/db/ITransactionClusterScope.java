@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.api.dal.context.WrtJob;
+import org.albianj.api.dal.context.WriterJob;
 
 public interface ITransactionClusterScope {
-    public boolean execute(WrtJob wrtJob);
+    public boolean execute(WriterJob writerJob);
 }

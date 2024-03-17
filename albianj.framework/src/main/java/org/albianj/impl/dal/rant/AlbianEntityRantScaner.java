@@ -7,16 +7,16 @@ import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.dal.routing.AlbianDataRouterParserService;
 import org.albianj.impl.dal.storage.AlbianStorageParserService;
-import org.albianj.impl.dal.toolkit.SqlTypeConv;
+import org.albianj.impl.dal.toolkit.Convert;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;
 import org.albianj.loader.IAlbianClassFilter;
-import org.albianj.api.dal.object.rants.AblEntityFieldRant;
-import org.albianj.api.dal.object.rants.AblDrRant;
-import org.albianj.api.dal.object.rants.AblDrsRant;
-import org.albianj.api.dal.object.rants.AblObjRant;
+import org.albianj.api.dal.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.api.dal.object.rants.AlbianObjectDataRouterRant;
+import org.albianj.api.dal.object.rants.AlbianObjectDataRoutersRant;
+import org.albianj.api.dal.object.rants.AlbianObjectRant;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
 
 import java.beans.IntrospectionException;
@@ -37,8 +37,8 @@ public class AlbianEntityRantScaner {
                     public boolean verify(Class<?> cls) {
                         //must flag with anno and extends IAlbianObject
                         // extends interface is compatibling the last version
-                        return cls.isAnnotationPresent(AblObjRant.class)
-                                && IAblObj.class.isAssignableFrom(cls)
+                        return cls.isAnnotationPresent(AlbianObjectRant.class)
+                                && IAlbianObject.class.isAssignableFrom(cls)
                                 && !cls.isInterface()
                                 && !Modifier.isAbstract(cls.getModifiers());
                     }
@@ -48,14 +48,14 @@ public class AlbianEntityRantScaner {
                     @Override
                     public Object found(Class<?> clzz)  {
                         String implClzzName = clzz.getName();
-                        AblEntityAttr objAttr = null;
-                        AblObjRant or = clzz.getAnnotation(AblObjRant.class);
+                        AlbianObjectAttribute objAttr = null;
+                        AlbianObjectRant or = clzz.getAnnotation(AlbianObjectRant.class);
 
 
                         if (AlbianEntityMetadata.exist(implClzzName)) {
                             objAttr = AlbianEntityMetadata.getEntityMetadata(implClzzName);
                         } else {
-                            objAttr = new AblEntityAttr();
+                            objAttr = new AlbianObjectAttribute();
                             objAttr.setType(clzz.getName());
                             AlbianEntityMetadata.put(implClzzName, objAttr);
 
@@ -63,7 +63,7 @@ public class AlbianEntityRantScaner {
 
                         objAttr.setImplClzz(clzz);
 
-                        Map<String, AblEntityFieldAttr> fields = scanFields(clzz);
+                        Map<String, AlbianEntityFieldAttribute> fields = scanFields(clzz);
                         if (!SetUtil.isNullOrEmpty(fields)) {
                             objAttr.setFields(fields);
                         }
@@ -71,22 +71,22 @@ public class AlbianEntityRantScaner {
                         objAttr.setSqlFieldUseUnderline(or.SqlFieldUseUnderline());
                         objAttr.setTableNameUseUnderline(or.TableNameUseUnderline());
 
-                        DrAttr defaultRouting = makeDefaultDataRouter(clzz);
+                        DataRouterAttribute defaultRouting = makeDefaultDataRouter(clzz);
                         objAttr.setDefaultRouting(defaultRouting);
 
 //                        clzz.getAnnotation(AlbianObjectDataRoutersRant.class);
-                        AblDrsRant drr =  clzz.getAnnotation(AblDrsRant.class);
-                        DrsAttr pkgDataRouterAttr = scanRouters(clzz, drr);
+                        AlbianObjectDataRoutersRant drr =  clzz.getAnnotation(AlbianObjectDataRoutersRant.class);
+                        DataRoutersAttribute pkgDataRouterAttr = scanRouters(clzz, drr);
                         //set data router
                         if (null != pkgDataRouterAttr) {
-                            DrsAttr cfgDataRouterAttr = objAttr.getDataRouters();
+                            DataRoutersAttribute cfgDataRouterAttr = objAttr.getDataRouters();
                             if (null == cfgDataRouterAttr) { // not exist data router from drouter.xml
                                 objAttr.setDataRouters(pkgDataRouterAttr);
                             } else {
-                                Map<String, DrAttr> cfgWRouter = cfgDataRouterAttr.getWriterRouters();
-                                Map<String, DrAttr> cfgRRouter = cfgDataRouterAttr.getReaderRouters();
-                                Map<String, DrAttr> pkgWRouter = pkgDataRouterAttr.getWriterRouters();
-                                Map<String, DrAttr> pkgRRouter = pkgDataRouterAttr.getReaderRouters();
+                                Map<String, DataRouterAttribute> cfgWRouter = cfgDataRouterAttr.getWriterRouters();
+                                Map<String, DataRouterAttribute> cfgRRouter = cfgDataRouterAttr.getReaderRouters();
+                                Map<String, DataRouterAttribute> pkgWRouter = pkgDataRouterAttr.getWriterRouters();
+                                Map<String, DataRouterAttribute> pkgRRouter = pkgDataRouterAttr.getReaderRouters();
                                 if (null != pkgRRouter) {
                                     if (null != cfgRRouter) {
                                         //exist pkg datarouter and cfg datarouter,merger them base cfg datarouter
@@ -110,22 +110,22 @@ public class AlbianEntityRantScaner {
                 });
     }
 
-    private static DrsAttr scanRouters(Class<?> clzz, AblDrsRant drr)  {
+    private static DataRoutersAttribute scanRouters(Class<?> clzz, AlbianObjectDataRoutersRant drr)  {
         if (null == drr) {
             return null;
         }
 
         Class<?> clazz = drr.DataRouter();
 
-        if (clazz == null  || !IAblDr.class.isAssignableFrom(clazz)) {
+        if (clazz == null  || !IAlbianObjectDataRouter.class.isAssignableFrom(clazz)) {
             // datarouter not impl IAlbianObjectDataRouter
             return null;
         }
 
-        DrsAttr drsAttr = new DrsAttr();
-        IAblDr dr = null;
+        DataRoutersAttribute drsAttr = new DataRoutersAttribute();
+        IAlbianObjectDataRouter dr = null;
         try {
-            dr = (IAblDr) clazz.newInstance();
+            dr = (IAlbianObjectDataRouter) clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                    "scanRouters is IllegalAccessException error ");
@@ -134,20 +134,20 @@ public class AlbianEntityRantScaner {
         drsAttr.setReaderRouterEnable(drr.ReaderRoutersEnable());
         drsAttr.setWriterRouterEnable(drr.WriterRoutersEnable());
 
-        Map<String, DrAttr> rMap = scanRouter(clzz, drr.ReaderRouters());
+        Map<String, DataRouterAttribute> rMap = scanRouter(clzz, drr.ReaderRouters());
         drsAttr.setReaderRouters(rMap);
 
-        Map<String, DrAttr> wMap = scanRouter(clzz, drr.WriterRouters());
+        Map<String, DataRouterAttribute> wMap = scanRouter(clzz, drr.WriterRouters());
         drsAttr.setWriterRouters(wMap);
         return drsAttr;
 
     }
 
-    private static Map<String, DrAttr> scanRouter(Class<?> clzz, AblDrRant[] rrs) {
-        Map<String, DrAttr> map = new HashMap<>();
-        for (AblDrRant odrr : rrs) {
+    private static Map<String, DataRouterAttribute> scanRouter(Class<?> clzz, AlbianObjectDataRouterRant[] rrs) {
+        Map<String, DataRouterAttribute> map = new HashMap<>();
+        for (AlbianObjectDataRouterRant odrr : rrs) {
             if (odrr.Enable()) {
-                DrAttr dra = new DrAttr();
+                DataRouterAttribute dra = new DataRouterAttribute();
                 dra.setEnable(true);
                 dra.setName(odrr.Name());
                 dra.setStorageName(odrr.StorageName());
@@ -168,7 +168,7 @@ public class AlbianEntityRantScaner {
     }
 
 
-    public static Map<String, AblEntityFieldAttr> scanFields(Class<?> clzz) {
+    public static Map<String, AlbianEntityFieldAttribute> scanFields(Class<?> clzz) {
 
         Class tempClass = clzz;
         List<Field> fields = new ArrayList<>() ;
@@ -177,12 +177,12 @@ public class AlbianEntityRantScaner {
             tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
         }
 
-        Map<String, AblEntityFieldAttr> fieldsAttrs = new HashMap<>();
+        Map<String, AlbianEntityFieldAttribute> fieldsAttrs = new HashMap<>();
         for (Field f : fields) {
-            AblEntityFieldAttr fAttr = null;
-            if (f.isAnnotationPresent(AblEntityFieldRant.class)) {
-                fAttr = new AblEntityFieldAttr();
-                AblEntityFieldRant fr = f.getAnnotation(AblEntityFieldRant.class);
+            AlbianEntityFieldAttribute fAttr = null;
+            if (f.isAnnotationPresent(AlbianObjectDataFieldRant.class)) {
+                fAttr = new AlbianEntityFieldAttribute();
+                AlbianObjectDataFieldRant fr = f.getAnnotation(AlbianObjectDataFieldRant.class);
                 if (fr.Ignore()) {
                     continue;
                 }
@@ -208,7 +208,7 @@ public class AlbianEntityRantScaner {
 
                 fAttr.setAllowNull(fr.IsAllowNull());
                 if (Types.OTHER == fr.DbType()) {
-                    fAttr.setDatabaseType(SqlTypeConv.toSqlType(f.getType()));
+                    fAttr.setDatabaseType(Convert.toSqlType(f.getType()));
                 } else {
                     fAttr.setDatabaseType(fr.DbType());
                 }
@@ -230,13 +230,13 @@ public class AlbianEntityRantScaner {
                 }
 
             } else {
-                fAttr = new AblEntityFieldAttr();
+                fAttr = new AlbianEntityFieldAttribute();
                 f.setAccessible(true);
                 fAttr.setName(f.getName());
                 String propertyName = FieldConvert.fieldName2PropertyName(f.getName());
                 fAttr.setPropertyName(propertyName);
                 fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
-                fAttr.setDatabaseType(SqlTypeConv.toSqlType(f.getType()));
+                fAttr.setDatabaseType(Convert.toSqlType(f.getType()));
                 fAttr.setEntityField(f);
                 try {
                     PropertyDescriptor pd = ReflectUtil.getBeanPropertyDescriptor(clzz, propertyName);
@@ -257,8 +257,8 @@ public class AlbianEntityRantScaner {
     }
 
 
-    private static DrAttr makeDefaultDataRouter(Class<?> implClzz) {
-        DrAttr defaultRouting = new DrAttr();
+    private static DataRouterAttribute makeDefaultDataRouter(Class<?> implClzz) {
+        DataRouterAttribute defaultRouting = new DataRouterAttribute();
         defaultRouting.setName(AlbianDataRouterParserService.DEFAULT_ROUTING_NAME);
         defaultRouting.setOwner("dbo");
         defaultRouting.setStorageName(AlbianStorageParserService.DEFAULT_STORAGE_NAME);

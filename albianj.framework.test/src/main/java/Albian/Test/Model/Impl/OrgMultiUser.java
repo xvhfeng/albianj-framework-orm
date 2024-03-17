@@ -1,7 +1,7 @@
 package Albian.Test.Model.Impl;
 
 import lombok.*;
-import org.albianj.api.dal.object.FreeAblObj;
+import org.albianj.api.dal.object.FreeAlbianObject;
 
 
 @Data
@@ -9,7 +9,7 @@ import org.albianj.api.dal.object.FreeAblObj;
 @AllArgsConstructor
 @Builder
 @ToString
-public class OrgMultiUser extends FreeAblObj {
+public class OrgMultiUser extends FreeAlbianObject  {
 
     private String id;
     private String userName;

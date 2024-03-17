@@ -38,39 +38,39 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 import org.albianj.AblThrowable;
-import org.albianj.api.dal.db.PCmd;
-import org.albianj.api.dal.db.SqlPara;
-import org.albianj.api.dal.object.AblEntityFieldAttr;
-import org.albianj.api.dal.object.AblEntityAttr;
-import org.albianj.api.dal.db.CmdOpt;
-import org.albianj.api.dal.object.IAblObj;
-import org.albianj.api.dal.object.DBOpt;
+import org.albianj.api.dal.db.PersistenceCommand;
+import org.albianj.api.dal.db.SqlParameter;
+import org.albianj.api.dal.object.AlbianEntityFieldAttribute;
+import org.albianj.api.dal.object.AlbianObjectAttribute;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IAlbianObject;
+import org.albianj.api.dal.object.DatabaseOpt;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class RemoveCommandAdapter implements IDMLCmd {
+public class RemoveCommandAdapter implements IPersistenceUpdateCommand {
 
-    public static Map<String, SqlPara> makeRemoveCommand(String sessionId, int dbStyle, String tableName,
-                                                         AblEntityAttr objAttr, Map<String, Object> sqlParaVals,
-                                                         StringBuilder sqlText)  {
+    public static Map<String, SqlParameter> makeRemoveCommand(String sessionId, int dbStyle, String tableName,
+                                                              AlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
+                                                              StringBuilder sqlText)  {
         StringBuilder where = new StringBuilder();
         sqlText.append("DELETE FROM ");// .append(routing.getTableName());
-        if (DBOpt.MySql == dbStyle) {
+        if (DatabaseOpt.MySql == dbStyle) {
             sqlText.append("`").append(tableName).append("`");
         } else {
             sqlText.append("[").append(tableName).append("]");
         }
 
-        Map<String, AblEntityFieldAttr> mapMemberAttributes = objAttr.getFields();
-        Map<String, SqlPara> sqlParas = new HashMap<String, SqlPara>();
-        for (Map.Entry<String, AblEntityFieldAttr> entry : mapMemberAttributes
+        Map<String, AlbianEntityFieldAttribute> mapMemberAttributes = objAttr.getFields();
+        Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
+        for (Map.Entry<String, AlbianEntityFieldAttribute> entry : mapMemberAttributes
                 .entrySet()) {
-            AblEntityFieldAttr member = entry.getValue();
+            AlbianEntityFieldAttribute member = entry.getValue();
             if (!member.isSave() || !member.isPrimaryKey())
                 continue;
             String name = member.getPropertyName();
-            SqlPara para = new SqlPara();
+            SqlParameter para = new SqlParameter();
             para.setName(name);
             para.setSqlFieldName(member.getSqlFieldName());
             para.setSqlType(member.getDatabaseType());
@@ -79,7 +79,7 @@ public class RemoveCommandAdapter implements IDMLCmd {
                     para);
 
             where.append(" AND ");
-            if (DBOpt.MySql == dbStyle) {
+            if (DatabaseOpt.MySql == dbStyle) {
                 where.append("`").append(member.getSqlFieldName()).append("`");
             } else {
                 where.append("[").append(member.getSqlFieldName()).append("]");
@@ -97,24 +97,24 @@ public class RemoveCommandAdapter implements IDMLCmd {
         return sqlParas;
     }
 
-    public PCmd buildPstCmd(String sessionId, int dbStyle, String tableName, IAblObj object,
-                            AblEntityAttr objAttr, Map<String, Object> mapValue, boolean rbkOnError)   {
-        PCmd cmd = new PCmd();
+    public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
+                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)   {
+        PersistenceCommand cmd = new PersistenceCommand();
         StringBuilder sqlText = new StringBuilder();
 
-        Map<String, SqlPara> sqlParas = makeRemoveCommand(sessionId, dbStyle, tableName,
+        Map<String, SqlParameter> sqlParas = makeRemoveCommand(sessionId, dbStyle, tableName,
                 objAttr, mapValue, sqlText);
 
         cmd.setCommandText(sqlText.toString());
-        cmd.setCommandType(CmdOpt.Text);
+        cmd.setCommandType(CommandOpt.Text);
         cmd.setParameters(sqlParas);
 
         if (rbkOnError) {
             StringBuilder rollbackText = new StringBuilder();
-            Map<String, SqlPara> rollbackParas = CreateCommandAdapter.makeCreateCommand(sessionId, dbStyle, tableName,
+            Map<String, SqlParameter> rollbackParas = CreateCommandAdapter.makeCreateCommand(sessionId, dbStyle, tableName,
                     objAttr, mapValue, rollbackText);
             cmd.setRollbackCommandText(rollbackText.toString());
-            cmd.setRollbackCommandType(CmdOpt.Text);
+            cmd.setRollbackCommandType(CommandOpt.Text);
             cmd.setRollbackParameters(rollbackParas);
         }
 

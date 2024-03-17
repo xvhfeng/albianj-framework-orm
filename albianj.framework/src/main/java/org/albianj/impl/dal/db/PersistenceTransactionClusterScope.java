@@ -40,18 +40,18 @@ package org.albianj.impl.dal.db;
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
-import org.albianj.api.dal.context.WrtJob;
-import org.albianj.api.dal.context.WrtTask;
-import org.albianj.api.dal.db.PCmd;
-import org.albianj.api.dal.db.SqlPara;
-import org.albianj.api.dal.object.StgAttr;
-import org.albianj.impl.dal.toolkit.SetConv;
+import org.albianj.api.dal.context.WriterJob;
+import org.albianj.api.dal.context.WriterTask;
+import org.albianj.api.dal.db.PersistenceCommand;
+import org.albianj.api.dal.db.SqlParameter;
+import org.albianj.api.dal.object.StorageAttribute;
+import org.albianj.impl.dal.toolkit.ListConvert;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.dal.context.PStatement;
-import org.albianj.api.dal.context.WrtLfcOpt;
-import org.albianj.api.dal.db.IDBP;
+import org.albianj.api.dal.context.PersistenceStatement;
+import org.albianj.api.dal.context.WriterJobLifeTime;
+import org.albianj.api.dal.db.IDataBasePool;
 import org.albianj.api.dal.db.localize.IDBClientSection;
-import org.albianj.api.dal.object.RStgAttr;
+import org.albianj.api.dal.object.RunningStorageAttribute;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
 
 import java.sql.PreparedStatement;
@@ -62,43 +62,43 @@ import java.util.*;
 public class PersistenceTransactionClusterScope extends FreePersistenceTransactionClusterScope
     implements IPersistenceTransactionClusterScope {
 
-    protected void preExecute(WrtJob wrtJob)  {
-        wrtJob.setWrtLfcOpt(WrtLfcOpt.Opening);
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+    protected void preExecute(WriterJob writerJob)  {
+        writerJob.setWriterJobLifeTime(WriterJobLifeTime.Opening);
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty.");
         }
 
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
-            wrtJob.setCurrentStorage(task.getKey());
-            WrtTask t = task.getValue();
-            RStgAttr rsa = t.getStorage();
-            StgAttr storage = rsa.getStgAttr();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            writerJob.setCurrentStorage(task.getKey());
+            WriterTask t = task.getValue();
+            RunningStorageAttribute rsa = t.getStorage();
+            StorageAttribute storage = rsa.getStorageAttribute();
             IDBClientSection dbClientSection = t.getClientSection();
             if (null == storage) {
                 throw new AblThrowable("The storage for task is null.");
             }
             try {
-                IAlbianStorageParserService asps = ServRouter.getService(wrtJob.getId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-                IDBP dbp = asps.getDatabasePool(wrtJob.getId(), rsa);
+                IAlbianStorageParserService asps = ServRouter.getService(writerJob.getId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
+                IDataBasePool dbp = asps.getDatabasePool(writerJob.getId(), rsa);
                 t.setDataBasePool(dbp);
-                t.setConnection(asps.getConnection(wrtJob.getId(), dbp, rsa,false));
+                t.setConnection(asps.getConnection(writerJob.getId(), dbp, rsa,false));
             } catch (Exception e) {
-                ServRouter.logAndThrowAgain(wrtJob.getId(),  LogLevel.Error,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Error,e,
                         "get the connect to storage:{} is error.",
                         storage.getName());
             }
-            List<PCmd> cmds = t.getCommands();
+            List<PersistenceCommand> cmds = t.getCommands();
             if (SetUtil.isNullOrEmpty(cmds)) {
                 throw new AblThrowable("The commands for task is empty or null");
             }
 
-            Map<String, PStatement> psMap = new LinkedHashMap<>();
+            Map<String, PersistenceStatement> psMap = new LinkedHashMap<>();
             try {
-                for (PCmd cmd : cmds) {
+                for (PersistenceCommand cmd : cmds) {
                     String cmdTxt = cmd.getCommandText();
                     if(psMap.containsKey(cmdTxt)) {
-                        PStatement ps =  psMap.get(cmdTxt);
+                        PersistenceStatement ps =  psMap.get(cmdTxt);
                         PreparedStatement psDb = ((PreparedStatement) ps.getStatement());
                         /**
                          * 第一次设置PreparedStatement的时候都不是batch的，所以isbatch == false
@@ -114,7 +114,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
                                 String paraName = map.get(i);
-                                SqlPara para = cmd.getParameters().get(paraName);
+                                SqlParameter para = cmd.getParameters().get(paraName);
                                 if (null == para.getValue()) {
                                     psDb.setNull(i, para.getSqlType());
                                 } else {
@@ -134,7 +134,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
                                 String paraName = map.get(i);
-                                SqlPara para = cmd.getParameters().get(paraName);
+                                SqlParameter para = cmd.getParameters().get(paraName);
                                 if (null == para.getValue()) {
                                     prepareStatement.setNull(i, para.getSqlType());
                                 } else {
@@ -143,44 +143,125 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                                 }
                             }
                         }
-                        PStatement ps = new PStatement(false,cmdTxt,prepareStatement);
+                        PersistenceStatement ps = new PersistenceStatement(false,cmdTxt,prepareStatement);
                         psMap.put(cmdTxt,ps);
                     }
                 }
 
                 t.setStatements(psMap);
             } catch (SQLException e) {
-                ServRouter.logAndThrowAgain(wrtJob.getId(),LogLevel.Error,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),LogLevel.Error,e,
                         "make sql command for task is empty or null");
             }
+
+//            if(false) { // open batch submit from jdk
+//                try {
+//                    t.setBatchSubmit(true);
+//                    Connection conn = t.getConnection();
+//                    Statement batchStmt = conn.createStatement();
+//                    List<String> sqlTexts = new ArrayList<>();
+//                    String sqlText = null;
+//                    for (IPersistenceCommand cmd : cmds) {
+//                        StringBuilder sb = new StringBuilder();
+//                        sqlText = cmd.getCommandText();
+//                        Map<Integer, String> map = cmd.getParameterMapper();
+//                        if (Validate.isNullOrEmpty(map)) {
+//                            continue;
+//                        } else {
+//                            String regex = "\\?";
+//                            Pattern pattern = Pattern.compile(regex);
+//                            Matcher matcher = pattern.matcher(sqlText);
+//                            int i = 1;
+//                            while (matcher.find()){
+//                                String paraName = map.get(i);
+//                                ISqlParameter para = cmd.getParameters().get(paraName);
+//                                String sqlvalue = dbClientSection.toSqlValue(para.getSqlType(),para.getValue(), storage.getCharset());
+//                                String replacement = java.util.regex.Matcher.quoteReplacement(sqlvalue);
+//                                matcher.appendReplacement(sb,replacement);
+//                                i++;
+//                            }
+//                            sb.append(" )");//add last )
+////                            String regex = "\\?";
+////                            Pattern pattern = Pattern.compile(regex);
+////
+////                            Matcher matcher = pattern.matcher(sqlText);
+////                            for(int i = 0;i < matcher.groupCount(); i++)
+////                            {
+////                                String paraName = map.get(i);
+////                                ISqlParameter para = cmd.getParameters().get(paraName);
+////                                sqlText = matcher.replaceFirst(dbClientSection.toSqlValue(para.getSqlType(),para.getValue(), null));
+////                            }
+//
+////                            for (int i = 1; i <= map.size(); i++) {
+////                                String paraName = map.get(i);
+////                                ISqlParameter para = cmd.getParameters().get(paraName);
+////                                sqlText = sqlText.replaceFirst("\\?",dbClientSection.toSqlValue(para.getSqlType(),para.getValue(), null));
+////                            }
+//                        }
+//                        batchStmt.addBatch(sb.toString());
+//                        sqlTexts.add(sb.toString());
+//                    }
+//                    t.setBatchStmt(batchStmt);
+//                    t.setBatchSqlText(sqlTexts);
+//                } catch (SQLException e) {
+//                    throw new AlbianDataServiceException("make sql command for task is empty or null", e);
+//                }
+//            } else {
+//                List<Statement> statements = new Vector<Statement>();
+//                try {
+//                    for (IPersistenceCommand cmd : cmds) {
+//                        PreparedStatement prepareStatement = t
+//                                .getConnection().prepareStatement(cmd.getCommandText());
+//                        Map<Integer, String> map = cmd.getParameterMapper();
+//                        if (Validate.isNullOrEmpty(map)) {
+//                            continue;
+//                        } else {
+//                            for (int i = 1; i <= map.size(); i++) {
+//                                String paraName = map.get(i);
+//                                ISqlParameter para = cmd.getParameters().get(paraName);
+//                                if (null == para.getValue()) {
+//                                    prepareStatement.setNull(i, para.getSqlType());
+//                                } else {
+//                                    prepareStatement.setObject(i, para.getValue(),
+//                                            para.getSqlType());
+//                                }
+//                            }
+//                        }
+//                        statements.add(prepareStatement);
+//                    }
+//                } catch (SQLException e) {
+//                    throw new AlbianDataServiceException("make sql command for task is empty or null", e);
+//                }
+//                t.setStatements(statements);
+//            }
         }
     }
 
-    protected void executeHandler(WrtJob wrtJob)  {
-        wrtJob.setWrtLfcOpt(WrtLfcOpt.Running);
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+    protected void executeHandler(WriterJob writerJob)  {
+        writerJob.setWriterJobLifeTime(WriterJobLifeTime.Running);
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
 
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
-            WrtTask t = task.getValue();
-            wrtJob.setCurrentStorage(task.getKey());
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
+            writerJob.setCurrentStorage(task.getKey());
 
-            List<PCmd> cmds = t.getCommands();
+            List<PersistenceCommand> cmds = t.getCommands();
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "then execute sql command but may be use batchupdate when commands(size >= 2) are the same.");
             for (int i = 0; i < cmds.size(); i++) {
-                PCmd cmd = cmds.get(i);
+                PersistenceCommand cmd = cmds.get(i);
                 ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                         "executeHandler storage:{},sqltext:{},parars:{}.",
-                        task.getKey(), cmd.getCommandText(), SetConv.toString(cmd.getParameters()));
+                        task.getKey(), cmd.getCommandText(), ListConvert.toString(cmd.getParameters()));
             }
 
-            Map<String, PStatement> psMap = t.getStatements();
-            for (Map.Entry<String, PStatement> kv : psMap.entrySet()) {
-                PStatement ps =  kv.getValue();
+            Map<String,PersistenceStatement> psMap = t.getStatements();
+            for (Map.Entry<String,PersistenceStatement> kv : psMap.entrySet()) {
+                PersistenceStatement ps =  kv.getValue();
                 try {
                     if (ps.isBatch()) {
                         int[] ret = ps.getStatement().executeBatch();
@@ -188,10 +269,10 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         ((PreparedStatement) ps.getStatement()).executeUpdate();
                     }
                 }  catch (SQLException e) {
-                RStgAttr rsa = t.getStorage();
-                    ServRouter.logAndThrowAgain(wrtJob.getId(),LogLevel.Error,e,
+                RunningStorageAttribute rsa = t.getStorage();
+                    ServRouter.logAndThrowAgain(writerJob.getId(),LogLevel.Error,e,
                             "commit to storage:{}  database: {} is fail.",
-                            rsa.getStgAttr().getName() ,rsa.getDatabase() );
+                            rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
                 }
             }
 
@@ -234,45 +315,45 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
         }
     }
 
-    protected void commit(WrtJob wrtJob)  {
-        wrtJob.setWrtLfcOpt(WrtLfcOpt.Commiting);
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+    protected void commit(WriterJob writerJob)  {
+        writerJob.setWriterJobLifeTime(WriterJobLifeTime.Commiting);
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
-            WrtTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             try {
-                wrtJob.setCurrentStorage(task.getKey());
+                writerJob.setCurrentStorage(task.getKey());
                 t.getConnection().commit();
                 t.setCommit(true);
-                wrtJob.setNeedManualRollback(true);
+                writerJob.setNeedManualRollback(true);
             } catch (SQLException e) {
-                RStgAttr rsa = t.getStorage();
-                ServRouter.logAndThrowAgain(wrtJob.getId(),LogLevel.Error,e,
+                RunningStorageAttribute rsa = t.getStorage();
+                ServRouter.logAndThrowAgain(writerJob.getId(),LogLevel.Error,e,
                     "commit to storage:{}  database: {} is fail.",
-                        rsa.getStgAttr().getName() ,rsa.getDatabase() );
+                        rsa.getStorageAttribute().getName() ,rsa.getDatabase() );
             }
         }
     }
 
-    protected void exceptionHandler(WrtJob wrtJob)   {
+    protected void exceptionHandler(WriterJob writerJob)   {
         boolean isThrow = false;
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
-            WrtTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             try {
                 if (!t.isCommit()) {
                     t.getConnection().rollback();
                 }
             } catch (Exception e) {
-                RStgAttr rsa = t.getStorage();
-                ServRouter.log(wrtJob.getId(),  LogLevel.Error,e,
+                RunningStorageAttribute rsa = t.getStorage();
+                ServRouter.log(writerJob.getId(),  LogLevel.Error,e,
                         "rollback to storage:{} database:{} is error.",
-                        rsa.getStgAttr().getName(), rsa.getDatabase());
+                        rsa.getStorageAttribute().getName(), rsa.getDatabase());
                 isThrow = true;
             }
         }
@@ -280,45 +361,45 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             throw new AblThrowable("DataService is error.");
     }
 
-    protected boolean exceptionManualRollback(WrtJob wrtJob)  {
+    protected boolean exceptionManualRollback(WriterJob writerJob)  {
         try {
-            manualRollbackPreExecute(wrtJob);
-            manualRollbackExecuteHandler(wrtJob);
-            manualRollbackCommit(wrtJob);
+            manualRollbackPreExecute(writerJob);
+            manualRollbackExecuteHandler(writerJob);
+            manualRollbackCommit(writerJob);
             return true;
         } catch (Exception e) {
-            ServRouter.log(wrtJob.getId(),  LogLevel.Error,e,
+            ServRouter.log(writerJob.getId(),  LogLevel.Error,e,
                     "manual rollback is fail.");
             return false;
         }
     }
 
 
-    protected void unLoadExecute(WrtJob wrtJob)   {
+    protected void unLoadExecute(WriterJob writerJob)   {
         boolean isThrow = false;
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
-        WrtTask t = null;
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
+        WriterTask t = null;
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
             try {
                 t = task.getValue();
-                Map<String, PStatement> psMap =  t.getStatements();
+                Map<String,PersistenceStatement> psMap =  t.getStatements();
                 List<Statement> sts = new ArrayList<>();
-                for (PStatement ps: psMap.values()) {
+                for (PersistenceStatement ps: psMap.values()) {
                     sts.add(ps.getStatement());
                 }
-                RStgAttr rsa = t.getStorage();
-                IDBP dbp = t.getDataBasePool();
-                dbp.returnConnection(wrtJob.getId(), rsa.getStgAttr().getName(), rsa.getDatabase(),
+                RunningStorageAttribute rsa = t.getStorage();
+                IDataBasePool dbp = t.getDataBasePool();
+                dbp.returnConnection(writerJob.getId(), rsa.getStorageAttribute().getName(), rsa.getDatabase(),
                         t.getConnection(), sts);
             }catch (Exception e){
                 isThrow = true;
-                RStgAttr rsa = t.getStorage();
+                RunningStorageAttribute rsa = t.getStorage();
                 ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                         "close the connect to storage:{} database:{} is fail.",
-                        rsa.getStgAttr().getName(), rsa.getDatabase());
+                        rsa.getStorageAttribute().getName(), rsa.getDatabase());
             } finally {
                 t = null;
             }
@@ -326,24 +407,24 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     }
 
 
-    private void manualRollbackPreExecute(WrtJob wrtJob)  {
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+    private void manualRollbackPreExecute(WriterJob writerJob)  {
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty when manual rollbacking.");
         }
 
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
-            WrtTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             if (!t.isCommit()) continue;// not commit then use auto rollback
 
-            List<PCmd> cmds = t.getCommands();
+            List<PersistenceCommand> cmds = t.getCommands();
             if (SetUtil.isNullOrEmpty(cmds)) {
                 throw new AblThrowable("The commands for task is empty or null when manual rollbacking.");
             }
             List<Statement> statements = new Vector<Statement>();
-            List<PCmd> rbkCmds = new Vector<>();
+            List<PersistenceCommand> rbkCmds = new Vector<>();
             try {
-                for (PCmd cmd : cmds) {
+                for (PersistenceCommand cmd : cmds) {
                     if (!cmd.isCompensating()) continue;
                     PreparedStatement prepareStatement = t
                             .getConnection().prepareStatement(cmd.getRollbackCommandText());
@@ -353,7 +434,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     } else {
                         for (int i = 1; i <= map.size(); i++) {
                             String paraName = map.get(i);
-                            SqlPara para = cmd.getRollbackParameters().get(paraName);
+                            SqlParameter para = cmd.getRollbackParameters().get(paraName);
                             if (null == para.getValue()) {
                                 prepareStatement.setNull(i, para.getSqlType());
                             } else {
@@ -366,7 +447,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     rbkCmds.add(cmd);
                 }
             } catch (SQLException e) {
-                ServRouter.logAndThrowAgain(wrtJob.getId(),  LogLevel.Info,e,
+                ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Info,e,
                     "make sql command for task is empty or null when maunal rollbacking.");
             }
             if (!SetUtil.isNullOrEmpty(statements)) {
@@ -377,55 +458,55 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
         }
     }
 
-    private void manualRollbackExecuteHandler(WrtJob wrtJob)  {
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+    private void manualRollbackExecuteHandler(WriterJob writerJob)  {
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
-            WrtTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             if (!t.isCommit()) continue;
             if (!t.isCompensating()) continue;
 
             List<Statement> statements = t.getRollbackStatements();
-            List<PCmd> cmds = t.getRollbackCommands();
+            List<PersistenceCommand> cmds = t.getRollbackCommands();
             if (SetUtil.isNullOrEmpty(statements)) continue;
             ;
             for (int i = 0; i < statements.size(); i++) {
                 try {
-                    PCmd cmd = cmds.get(i);
-                    ServRouter.log(wrtJob.getId(),  LogLevel.Info,
+                    PersistenceCommand cmd = cmds.get(i);
+                    ServRouter.log(writerJob.getId(),  LogLevel.Info,
                             "manual-rollback job,storage:{},sqltext:{},parars:{}.", task.getKey(),
-                        cmd.getRollbackCommandText(), SetConv.toString(cmd.getRollbackParameters()));
+                        cmd.getRollbackCommandText(), ListConvert.toString(cmd.getRollbackParameters()));
                     ((PreparedStatement)statements.get(i)).executeUpdate();
                 } catch (SQLException e) {
-                    RStgAttr rsa = t.getStorage();
-                    ServRouter.logAndThrowAgain(wrtJob.getId(),  LogLevel.Info,e,
+                    RunningStorageAttribute rsa = t.getStorage();
+                    ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Info,e,
                         "execute to storage:{} database:{} is error when manual rollbacking.",
-                            rsa.getStgAttr().getName(), rsa.getDatabase());
+                            rsa.getStorageAttribute().getName(), rsa.getDatabase());
                 }
             }
         }
     }
 
-    private void manualRollbackCommit(WrtJob wrtJob)  {
-        Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
+    private void manualRollbackCommit(WriterJob writerJob)  {
+        Map<String, WriterTask> tasks = writerJob.getWriterTasks();
         if (SetUtil.isNullOrEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
-        for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
-            WrtTask t = task.getValue();
+        for (Map.Entry<String, WriterTask> task : tasks.entrySet()) {
+            WriterTask t = task.getValue();
             if (!t.isCommit()) continue;
             try {
                 if (t.isCompensating()) {
                     t.getConnection().commit();
                 }
             } catch (SQLException e) {
-                RStgAttr rsa = t.getStorage();
-                ServRouter.logAndThrowAgain(wrtJob.getId(),  LogLevel.Info,e,
+                RunningStorageAttribute rsa = t.getStorage();
+                ServRouter.logAndThrowAgain(writerJob.getId(),  LogLevel.Info,e,
                         "commit to storage:{} database:{} is error when manual rollbacking.",
-                        rsa.getStgAttr().getName(), rsa.getDatabase());
+                        rsa.getStorageAttribute().getName(), rsa.getDatabase());
             }
         }
     }

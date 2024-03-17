@@ -1,6 +1,6 @@
 package org.albianj.api.dal.service;
 
-import org.albianj.api.dal.object.AblEntityAttr;
+import org.albianj.api.dal.object.AlbianObjectAttribute;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,12 +9,12 @@ public final class AlbianEntityMetadata {
     private static Map<String, Object> entityMetadata = new HashMap<>();
 //    private static Map<String, String> type2itf = new HashMap<>();
 
-    public static AblEntityAttr getEntityMetadata(String implClzzName) {
-        return (AblEntityAttr) entityMetadata.get(implClzzName);
+    public static AlbianObjectAttribute getEntityMetadata(String implClzzName) {
+        return (AlbianObjectAttribute) entityMetadata.get(implClzzName);
     }
 
-    public static AblEntityAttr getEntityMetadata(Class<?> implClzz) {
-        return (AblEntityAttr) entityMetadata.get(implClzz.getName());
+    public static AlbianObjectAttribute getEntityMetadata(Class<?> implClzz) {
+        return (AlbianObjectAttribute) entityMetadata.get(implClzz.getName());
     }
 
     public static boolean exist(String implClzzName) {
@@ -25,19 +25,19 @@ public final class AlbianEntityMetadata {
         return entityMetadata.containsKey(implClzz.getName());
     }
 
-    public static void put(String implClzzName, AblEntityAttr attr) {
+    public static void put(String implClzzName, AlbianObjectAttribute attr) {
 //        type2itf.put(attr.getType(), itf);
         entityMetadata.put(implClzzName, attr);
     }
 
-    public static void put(Class<?> implClzz, AblEntityAttr attr) {
+    public static void put(Class<?> implClzz, AlbianObjectAttribute attr) {
         put(implClzz.getName(), attr);
     }
 
     public static void putAll(Map<String, Object> map) {
         //can not use putAll
         for (Object entry : map.values()) {
-            AblEntityAttr objAttr = (AblEntityAttr) entry;
+            AlbianObjectAttribute objAttr = (AlbianObjectAttribute) entry;
             put(objAttr.getItf(), objAttr);
         }
     }

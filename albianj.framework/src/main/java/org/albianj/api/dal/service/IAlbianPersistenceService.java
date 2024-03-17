@@ -38,14 +38,14 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.api.dal.service;
 
 import org.albianj.AblBltinServsNames;
-import org.albianj.api.dal.object.filter.IChaExpr;
-import org.albianj.api.dal.object.OdrBy;
+import org.albianj.api.dal.object.filter.IChainExpression;
+import org.albianj.api.dal.object.OrderByCondition;
 import org.albianj.api.kernel.service.IAlbianService;
-import org.albianj.api.dal.context.ICompensateNotify;
-import org.albianj.api.dal.context.IDalNotify;
-import org.albianj.api.dal.db.CmdOpt;
-import org.albianj.api.dal.object.IAblObj;
-import org.albianj.api.dal.object.IFltCdt;
+import org.albianj.api.dal.context.IPersistenceCompensateNotify;
+import org.albianj.api.dal.context.IPersistenceNotify;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IAlbianObject;
+import org.albianj.api.dal.object.IFilterCondition;
 
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -105,7 +105,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param object    需要删除的对象
      * @return 是否完成删除
      */
-    boolean remove(String sessionId, IAblObj object) ;
+    boolean remove(String sessionId, IAlbianObject object) ;
 
     /**
      * 从存储中删除指定的对象
@@ -122,8 +122,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
      */
-    boolean remove(String sessionId, IAblObj object, IDalNotify notifyCallback,
-                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
+    boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
+                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -137,7 +137,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param objects   需要删除的对象
      * @return 是否完成删除
      */
-    boolean remove(String sessionId, List<? extends IAblObj> objects) ;
+    boolean remove(String sessionId, List<? extends IAlbianObject> objects) ;
 
     /**
      * 从存储中删除指定的对象集合
@@ -154,8 +154,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
      */
-    boolean remove(String sessionId, List<? extends IAblObj> objects, IDalNotify notifyCallback,
-                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
+    boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
+                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
 
@@ -172,7 +172,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param object    需要保存的对象
      * @return 是否保存成功
      */
-    boolean save(String sessionId, IAblObj object) ;
+    boolean save(String sessionId, IAlbianObject object) ;
 
     /**
      * 保存对象到存储层
@@ -191,9 +191,9 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
      */
-    boolean save(String sessionId, IAblObj object,
-                 IDalNotify notifyCallback, Object notifyCallbackObject,
-                 ICompensateNotify compensateCallback, Object compensateCallbackObject)
+    boolean save(String sessionId, IAlbianObject object,
+                 IPersistenceNotify notifyCallback, Object notifyCallbackObject,
+                 IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
             ;
 
     /**
@@ -209,7 +209,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param objects   需要保存的对象
      * @return 是否保存成功
      */
-    boolean save(String sessionId, List<? extends IAblObj> objects) ;
+    boolean save(String sessionId, List<? extends IAlbianObject> objects) ;
 
     /**
      * 保存对象集合到存储层
@@ -228,8 +228,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param compensateCallbackObject 事务发生异常时触发通知的自定义对象
      * @return 是否完成删除
      */
-    boolean save(String sessionId, List<? extends IAblObj> objects, IDalNotify notifyCallback,
-                 Object notifyCallbackObject, ICompensateNotify compensateCallback,
+    boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
+                 Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                  Object compensateCallbackObject) ;
 
     /**
@@ -241,7 +241,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param wheres    过滤条件
      * @return 加载的对象
      */
-    <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres)
+    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
             ;
 
     /**
@@ -254,7 +254,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param wheres       过滤条件
      * @return 加载的对象
      */
-    <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, String rountingName, IChaExpr wheres)
+    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, IChainExpression wheres)
             ;
 
     /**
@@ -271,8 +271,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param statement 执行命令的语句
      * @return 加载的数据
      */
-    <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, CmdOpt cmdType,
-                                     Statement statement) ;
+    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, CommandOpt cmdType,
+                                           Statement statement) ;
 
     /**
      * 从存储层批量加载数据
@@ -283,7 +283,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param wheres    过滤条件
      * @return 加载的对象
      */
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
             ;
 
     /**
@@ -297,8 +297,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param orderbys     排序的条件
      * @return 加载的对象
      */
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                            IChaExpr f, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                  IChainExpression f, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -311,8 +311,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param orderbys  排序的条件
      * @return 加载的对象
      */
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                            IChaExpr f, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                  IChainExpression f, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -329,8 +329,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param statement 执行命令的语句
      * @return 加载的数据
      */
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, CmdOpt cmdType,
-                                            Statement statement) ;
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, CommandOpt cmdType,
+                                                  Statement statement) ;
 
     /**
      * 从存储层批量加载数据
@@ -342,8 +342,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param step      加载的数量
      * @return 加载的对象
      */
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                            int start, int step, IChaExpr f)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                  int start, int step, IChainExpression f)
             ;
 
     /**
@@ -358,8 +358,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param orderbys  排序的条件
      * @return 加载的对象
      */
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                            int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                  int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -375,8 +375,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param orderbys     排序的条件
      * @return 加载的对象
      */
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                            int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                  int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     /**
@@ -388,7 +388,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param wheres    过滤条件
      * @return 满足条件的对象数量
      */
-    <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres)
+    <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
             ;
 
     /**
@@ -401,54 +401,54 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @param wheres       过滤条件
      * @return 满足条件的对象数量
      */
-    <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls, DrOpt loadType,
-                                              String rountingName, IChaExpr wheres)
+    <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                    String rountingName, IChainExpression wheres)
             ;
 
     @Deprecated
-    <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres)
+    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres)
             ;
 
     @Deprecated
-    <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, String rountingName, LinkedList<IFltCdt> wheres)
+    <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName, LinkedList<IFilterCondition> wheres)
             ;
 
     @Deprecated
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres)
             ;
 
     @Deprecated
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                            LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                  LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     @Deprecated
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                            LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                  LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     @Deprecated
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                            int start, int step, LinkedList<IFltCdt> wheres)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                  int start, int step, LinkedList<IFilterCondition> wheres)
             ;
 
     @Deprecated
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                            int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                  int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     @Deprecated
-    <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                            int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
+    <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                  int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
             ;
 
     @Deprecated
-    <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres)
+    <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres)
             ;
 
     @Deprecated
-    <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls, DrOpt loadType,
-                                              String rountingName, LinkedList<IFltCdt> wheres)
+    <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                    String rountingName, LinkedList<IFilterCondition> wheres)
             ;
 
 
@@ -458,7 +458,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean create(String sessionId, IAblObj object) ;
+    boolean create(String sessionId, IAlbianObject object) ;
 
     /**
      * @param sessionId
@@ -470,8 +470,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean create(String sessionId, IAblObj object, IDalNotify notifyCallback,
-                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
+    boolean create(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
+                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -480,7 +480,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean create(String sessionId, List<? extends IAblObj> objects) ;
+    boolean create(String sessionId, List<? extends IAlbianObject> objects) ;
 
     /**
      * @param sessionId
@@ -492,8 +492,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean create(String sessionId, List<? extends IAblObj> objects, IDalNotify notifyCallback,
-                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
+    boolean create(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
+                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -502,7 +502,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean modify(String sessionId, IAblObj object) ;
+    boolean modify(String sessionId, IAlbianObject object) ;
 
     /**
      * @param sessionId
@@ -514,8 +514,8 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean modify(String sessionId, IAblObj object, IDalNotify notifyCallback,
-                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
+    boolean modify(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
+                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     /**
@@ -524,7 +524,7 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean modify(String sessionId, List<? extends IAblObj> objects) ;
+    boolean modify(String sessionId, List<? extends IAlbianObject> objects) ;
 
     /**
      * @param sessionId
@@ -536,98 +536,98 @@ public interface IAlbianPersistenceService extends IAlbianService {
      * @return
      */
     @Deprecated
-    boolean modify(String sessionId, List<? extends IAblObj> objects, IDalNotify notifyCallback,
-                   Object notifyCallbackObject, ICompensateNotify compensateCallback,
+    boolean modify(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
+                   Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
                    Object compensateCallbackObject) ;
 
     String makeDetailLogSessionId(String sessionId);
 
 
-    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres, String idxName)
+    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres, String idxName)
             ;
 
-    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls,
-                                            DrOpt loadType, String rountingName, IChaExpr wheres, String idxName)
+    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
+                                                  QueryToOpt loadType, String rountingName, IChainExpression wheres, String idxName)
             ;
 
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres, String idxName)
             ;
 
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                                   IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                                   IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                                   int start, int step, IChaExpr wheres, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                         int start, int step, IChainExpression wheres, String idxName)
             ;
 
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                                   int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                                   int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
-    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                     DrOpt loadType, IChaExpr wheres, String idxName)
+    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                           QueryToOpt loadType, IChainExpression wheres, String idxName)
             ;
 
-    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                     DrOpt loadType, String rountingName, IChaExpr wheres, String idxName)
-            ;
-
-    @Deprecated
-    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres, String idxName)
+    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                           QueryToOpt loadType, String rountingName, IChainExpression wheres, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls,
-                                            DrOpt loadType, String rountingName, LinkedList<IFltCdt> wheres, String idxName)
+    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres, String idxName)
+    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
+                                                  QueryToOpt loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                                   LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                                   LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+            ;
+
+    @Deprecated
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
 
     @Deprecated
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                                   int start, int step, LinkedList<IFltCdt> wheres, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                         int start, int step, LinkedList<IFilterCondition> wheres, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
-                                                   int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
+                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
-                                                   int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
+    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
+                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                     DrOpt loadType, LinkedList<IFltCdt> wheres, String idxName)
+    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                           QueryToOpt loadType, LinkedList<IFilterCondition> wheres, String idxName)
             ;
 
     @Deprecated
-    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                     DrOpt loadType, String rountingName, LinkedList<IFltCdt> wheres, String idxName)
+    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                           QueryToOpt loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
             ;
 
 

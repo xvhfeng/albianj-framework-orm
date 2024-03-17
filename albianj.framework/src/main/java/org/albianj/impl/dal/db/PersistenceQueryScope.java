@@ -41,20 +41,20 @@ import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.dal.context.RdrJob;
-import org.albianj.api.dal.db.PCmd;
-import org.albianj.api.dal.db.SqlPara;
-import org.albianj.api.dal.object.AblEntityFieldAttr;
-import org.albianj.api.dal.object.AblEntityAttr;
-import org.albianj.impl.dal.toolkit.SetConv;
-import org.albianj.impl.dal.toolkit.RstConv;
+import org.albianj.api.dal.context.ReaderJob;
+import org.albianj.api.dal.db.PersistenceCommand;
+import org.albianj.api.dal.db.SqlParameter;
+import org.albianj.api.dal.object.AlbianEntityFieldAttribute;
+import org.albianj.api.dal.object.AlbianObjectAttribute;
+import org.albianj.impl.dal.toolkit.ListConvert;
+import org.albianj.impl.dal.toolkit.ResultConvert;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.loader.AlbianClassLoader;
-import org.albianj.api.dal.db.IDBP;
+import org.albianj.api.dal.db.IDataBasePool;
 
-import org.albianj.api.dal.db.CmdOpt;
-import org.albianj.api.dal.object.IAblObj;
-import org.albianj.api.dal.object.RStgAttr;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IAlbianObject;
+import org.albianj.api.dal.object.RunningStorageAttribute;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
 
@@ -66,23 +66,23 @@ import java.util.Vector;
 public class PersistenceQueryScope extends FreePersistenceQueryScope implements IPersistenceQueryScope {
 
 
-    protected void perExecute(RdrJob job)  {
+    protected void perExecute(ReaderJob job)  {
         String sessionId = job.getId();
         PersistenceNamedParameter.parseSql(job.getCommand());
-        RStgAttr rsa = job.getStorage();
+        RunningStorageAttribute rsa = job.getStorage();
         IAlbianStorageParserService asps = ServRouter
             .getService(job.getId(), IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        IDBP dbp = asps.getDatabasePool(sessionId, rsa);
+        IDataBasePool dbp = asps.getDatabasePool(sessionId, rsa);
         Connection conn = dbp.getConnection(sessionId, rsa, true);
 
         if (conn == null) {
             throw new AblThrowable(
-                "could't get connection from " + job.getStorage().getStgAttr().getName());
+                "could't get connection from " + job.getStorage().getStorageAttribute().getName());
         }
 
         job.setConnection(conn);
         job.setDatabasePool(dbp);
-        PCmd cmd = job.getCommand();
+        PersistenceCommand cmd = job.getCommand();
         PreparedStatement statement = null;
         try {
             statement = job.getConnection().prepareStatement(cmd.getCommandText());
@@ -94,7 +94,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         if (!SetUtil.isNullOrEmpty(map)) {
             for (int i = 1; i <= map.size(); i++) {
                 String paraName = map.get(i);
-                SqlPara para = cmd.getParameters().get(paraName);
+                SqlParameter para = cmd.getParameters().get(paraName);
                 try {
                     if (null == para.getValue()) {
 
@@ -105,25 +105,25 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                 } catch (SQLException e) {
                     ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
                         "set the sql paras is error.para name: {} ,para value: {}" ,
-                            para.getName() , RstConv.sqlValueToString(para.getSqlType(), para.getValue()));
+                            para.getName() , ResultConvert.sqlValueToString(para.getSqlType(), para.getValue()));
                 }
             }
         }
         job.setStatement(statement);
     }
 
-    protected void executing(RdrJob job)  {
+    protected void executing(ReaderJob job)  {
         String text = job.getCommand().getCommandText();
-        Map<String, SqlPara> map = job.getCommand().getParameters();
-        RStgAttr st = job.getStorage();
+        Map<String, SqlParameter> map = job.getCommand().getParameters();
+        RunningStorageAttribute st = job.getStorage();
         String sessionId = job.getId();
 
         ResultSet result = null;
         try {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                     "job:{} Storage:{},database:{},SqlText:{},paras:{}.",
-                   job.getId(), st.getStgAttr().getName(),
-                st.getDatabase(), text, SetConv.toString(map));
+                   job.getId(), st.getStorageAttribute().getName(),
+                st.getDatabase(), text, ListConvert.toString(map));
             long begin1 = System.currentTimeMillis();
             result = ((PreparedStatement)job.getStatement()).executeQuery();
 
@@ -148,7 +148,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         job.setResult(result);
     }
 
-    protected <T extends IAblObj> List<T> executed(Class<T> cls, RdrJob job)
+    protected <T extends IAlbianObject> List<T> executed(Class<T> cls, ReaderJob job)
             {
         long begin1 = System.currentTimeMillis();
         String sessionId = job.getId();
@@ -160,27 +160,27 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     end1 - begin1);
         }
         String text = job.getCommand().getCommandText();
-        Map<String, SqlPara> map = job.getCommand().getParameters();
-        RStgAttr st = job.getStorage();
+        Map<String, SqlParameter> map = job.getCommand().getParameters();
+        RunningStorageAttribute st = job.getStorage();
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
-                st.getStgAttr().getName(), st.getDatabase(), text, SetConv.toString(map),
+                st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
             SetUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
         return list;
     }
 
-    protected void unloadExecute(RdrJob job)   {
+    protected void unloadExecute(ReaderJob job)   {
         String sessionId = job.getId();
-        RStgAttr rsa = job.getStorage();
-        IDBP dbp = job.getDatabasePool();
-        dbp.returnConnection(sessionId, rsa.getStgAttr().getName(), rsa.getDatabase(), job.getConnection(),
+        RunningStorageAttribute rsa = job.getStorage();
+        IDataBasePool dbp = job.getDatabasePool();
+        dbp.returnConnection(sessionId, rsa.getStorageAttribute().getName(), rsa.getDatabase(), job.getConnection(),
             job.getStatement(), job.getResult());
     }
 
-    protected ResultSet executing(String sessionId, CmdOpt cmdType, Statement statement)
+    protected ResultSet executing(String sessionId, CommandOpt cmdType, Statement statement)
             {
         try {
-            if (CmdOpt.Text == cmdType) {
+            if (CommandOpt.Text == cmdType) {
                 return ((PreparedStatement)statement).executeQuery();
             }
             return ((CallableStatement)statement).executeQuery();
@@ -192,13 +192,13 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         return null;
     }
 
-    protected <T extends IAblObj> List<T> executed(Class<T> cli, String sessionId, ResultSet result)
+    protected <T extends IAlbianObject> List<T> executed(Class<T> cli, String sessionId, ResultSet result)
             {
         String inter = cli.getName();
 
-                AblEntityAttr objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
+                AlbianObjectAttribute objAttr = AlbianEntityMetadata.getEntityMetadata(inter);
         String className = objAttr.getType();
-        Map<String, AblEntityFieldAttr> member = objAttr.getFields();
+        Map<String, AlbianEntityFieldAttribute> member = objAttr.getFields();
 
         Class<?> cls = null;
         try {
@@ -212,14 +212,14 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
             while (result.next()) {
                 try {
                     @SuppressWarnings("unchecked") T obj = (T)cls.newInstance();
-                    for (AblEntityFieldAttr fAttr : member.values()) {
+                    for (AlbianEntityFieldAttribute fAttr : member.values()) {
                         if (!fAttr.isSave()) {
                             continue;
                         }
 
                         Object v = result.getObject(fAttr.getPropertyName());
                         if (null != v) {
-                            Object rc = RstConv.toBoxValue(fAttr.getEntityField().getType(), v);
+                            Object rc = ResultConvert.toBoxValue(fAttr.getEntityField().getType(), v);
                             fAttr.getEntityField().set(obj, rc);
                             obj.setOldAlbianObject(fAttr.getPropertyName(), rc);
                         }
@@ -241,18 +241,18 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
     }
 
     @Override
-    protected Object executed(String sessionId, RdrJob job)  {
+    protected Object executed(String sessionId, ReaderJob job)  {
         Object v = null;
         ResultSet result = job.getResult();
         try {
             if (result.next()) {
                 v = result.getObject("COUNT");
                 String text = job.getCommand().getCommandText();
-                Map<String, SqlPara> map = job.getCommand().getParameters();
-                RStgAttr st = job.getStorage();
+                Map<String, SqlParameter> map = job.getCommand().getParameters();
+                RunningStorageAttribute st = job.getStorage();
                 ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                         "Storage:{},database:{},SqlText:{},paras:{}.return COUNT(1) :{}",
-                    st.getStgAttr().getName(), st.getDatabase(), text, SetConv.toString(map),
+                    st.getStorageAttribute().getName(), st.getDatabase(), text, ListConvert.toString(map),
                     String.valueOf(v));
             }
         } catch (Exception e) {

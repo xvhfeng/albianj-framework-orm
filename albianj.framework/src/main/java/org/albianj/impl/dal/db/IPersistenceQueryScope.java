@@ -38,20 +38,20 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.api.dal.context.RdrJob;
-import org.albianj.api.dal.db.CmdOpt;
-import org.albianj.api.dal.object.IAblObj;
+import org.albianj.api.dal.context.ReaderJob;
+import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.object.IAlbianObject;
 
 import java.sql.Statement;
 import java.util.List;
 
 public interface IPersistenceQueryScope {
-    public <T extends IAblObj> List<T> execute(Class<T> cls,
-                                               RdrJob job) ;
+    public <T extends IAlbianObject> List<T> execute(Class<T> cls,
+                                                     ReaderJob job) ;
 
-    public <T extends IAblObj> List<T> execute(String sessionId, Class<T> cls,
-                                               CmdOpt cmdType, Statement statement) ;
+    public <T extends IAlbianObject> List<T> execute(String sessionId, Class<T> cls,
+                                                     CommandOpt cmdType, Statement statement) ;
 
     public Object execute(
-            RdrJob job) ;
+            ReaderJob job) ;
 }

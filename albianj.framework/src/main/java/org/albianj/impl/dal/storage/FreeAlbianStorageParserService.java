@@ -42,11 +42,11 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.api.dal.object.StgAttr;
+import org.albianj.api.dal.object.StorageAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.api.dal.object.DBOpt;
-import org.albianj.api.dal.object.RStgAttr;
+import org.albianj.api.dal.object.DatabaseOpt;
+import org.albianj.api.dal.object.RunningStorageAttribute;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -59,56 +59,56 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
 
     private final static String tagName = "Storages/Storage";
     private String file = "storage.xml";
-    private HashMap<String, StgAttr> cached = null;
+    private HashMap<String, StorageAttribute> cached = null;
 
     public static String generateConnectionUrl(
-            RStgAttr rsa) {
+            RunningStorageAttribute rsa) {
         if (null == rsa) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                     "The argument storageAttribute is null.");
             return null;
         }
 
-        StgAttr stgAttr = rsa.getStgAttr();
+        StorageAttribute storageAttribute = rsa.getStorageAttribute();
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:");
         // String url =
         // "jdbc:mysql://localhost/baseinfo?useUnicode=true&characterEncoding=8859_1";
-        switch (stgAttr.getDatabaseStyle()) {
-            case (DBOpt.Oracle): {
-                sb.append("oracle:thin:@").append(stgAttr.getServer());
-                if (0 != stgAttr.getPort()) {
-                    sb.append(":").append(stgAttr.getPort());
+        switch (storageAttribute.getDatabaseStyle()) {
+            case (DatabaseOpt.Oracle): {
+                sb.append("oracle:thin:@").append(storageAttribute.getServer());
+                if (0 != storageAttribute.getPort()) {
+                    sb.append(":").append(storageAttribute.getPort());
                 }
                 sb.append(":").append(rsa.getDatabase());
             }
-            case (DBOpt.SqlServer): {
+            case (DatabaseOpt.SqlServer): {
                 sb.append("microsoft:sqlserver://").append(
-                        stgAttr.getServer());
-                if (0 != stgAttr.getPort()) {
-                    sb.append(":").append(stgAttr.getPort());
+                        storageAttribute.getServer());
+                if (0 != storageAttribute.getPort()) {
+                    sb.append(":").append(storageAttribute.getPort());
                 }
                 sb.append(";").append(rsa.getDatabase());
             }
-            case (DBOpt.MySql):
+            case (DatabaseOpt.MySql):
             default: {
-                sb.append("mysql://").append(stgAttr.getServer());
-                if (0 != stgAttr.getPort()) {
-                    sb.append(":").append(stgAttr.getPort());
+                sb.append("mysql://").append(storageAttribute.getServer());
+                if (0 != storageAttribute.getPort()) {
+                    sb.append(":").append(storageAttribute.getPort());
                 }
                 sb.append("/").append(rsa.getDatabase());
                 sb.append("?useUnicode=true");
-                if (null != stgAttr.getCharset()) {
+                if (null != storageAttribute.getCharset()) {
                     sb.append("&characterEncoding=").append(
-                            stgAttr.getCharset());
+                            storageAttribute.getCharset());
                 }
-                int timeout = rsa.getStgAttr().getTimeout();
+                int timeout = rsa.getStorageAttribute().getTimeout();
                 if (0 < timeout) {
                     sb.append("&connectTimeout=").append(timeout * 1000).append("&socketTimeout=").append(timeout * 1000);
                 }
                 sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&maxReconnect=3&autoReconnectForPools=true&rewriteBatchedStatements=true&useSSL=true&serverTimezone=CTT");
-                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
-                    sb.append("&").append(rsa.getStgAttr().getUrlParaments());
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStorageAttribute().getUrlParaments())){
+                    sb.append("&").append(rsa.getStorageAttribute().getUrlParaments());
                 }
 //                sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull");
             }
@@ -123,7 +123,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     @Override
     public void init()  {
         Document doc = null;
-        cached = new HashMap<String, StgAttr>();
+        cached = new HashMap<String, StorageAttribute>();
         try {
             parserFile(file);
         } catch (Throwable e) {
@@ -135,7 +135,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
 
     private void parserFile(String filename)  {
         Document doc = null;
-        cached = new HashMap<String, StgAttr>();
+        cached = new HashMap<String, StorageAttribute>();
         try {
             String fname = findConfigFile(filename);
             doc = XmlUtil.load(fname);
@@ -171,13 +171,13 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
     protected abstract void parserStorages(
             @SuppressWarnings("rawtypes") List nodes);
 
-    protected abstract StgAttr parserStorage(Element node);
+    protected abstract StorageAttribute parserStorage(Element node);
 
-    public void addStorageAttribute(String name, StgAttr sa) {
+    public void addStorageAttribute(String name, StorageAttribute sa) {
         cached.put(name, sa);
     }
 
-    public StgAttr getStorageAttribute(String name) {
+    public StorageAttribute getStorageAttribute(String name) {
         return cached.get(name);
     }
 }

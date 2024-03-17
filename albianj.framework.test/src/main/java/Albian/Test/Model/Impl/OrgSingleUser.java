@@ -1,7 +1,9 @@
 package Albian.Test.Model.Impl;
 
 import lombok.*;
-import org.albianj.api.dal.object.FreeAblObj;
+import org.albianj.api.dal.object.FreeAlbianObject;
+
+import java.math.BigInteger;
 
 
 @Data
@@ -9,7 +11,7 @@ import org.albianj.api.dal.object.FreeAblObj;
 @AllArgsConstructor
 @Builder
 @ToString
-public class OrgSingleUser extends FreeAblObj {
+public class OrgSingleUser extends FreeAlbianObject  {
     private String id;
     private String userName;
     private String password;

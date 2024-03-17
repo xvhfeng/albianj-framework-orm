@@ -1,6 +1,6 @@
 package org.albianj.api.dal.service;
 
-import org.albianj.api.dal.context.ManualCmd;
+import org.albianj.api.dal.context.ManualCommand;
 import org.albianj.api.kernel.service.IAlbianService;
 
 import java.util.List;
@@ -19,11 +19,11 @@ public interface IAlbianManualPersistenceService extends IAlbianService {
     String Name = "AlbianManualPersistenceService";
 
 
-    int execute(String sessionId, String storageName, String dbName, ManualCmd cmd) ;
+    int execute(String sessionId, String storageName, String dbName, ManualCommand cmd) ;
 
-    int execute(String sessionId, String storageName, ManualCmd cmd) ;
+    int execute(String sessionId, String storageName, ManualCommand cmd) ;
 
-    List<Integer> execute(String sessionId, String storageName, String dbName, List<ManualCmd> cmds) ;
+    List<Integer> execute(String sessionId, String storageName, String dbName, List<ManualCommand> cmds) ;
 
-    List<Integer> execute(String sessionId, String storageName, List<ManualCmd> cmds) ;
+    List<Integer> execute(String sessionId, String storageName, List<ManualCommand> cmds) ;
 }

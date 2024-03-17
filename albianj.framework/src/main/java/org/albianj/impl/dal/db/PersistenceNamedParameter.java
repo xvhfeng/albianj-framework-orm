@@ -38,9 +38,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.dal.context.ItlManualCmd;
-import org.albianj.api.dal.context.ManualCmd;
-import org.albianj.api.dal.db.PCmd;
+import org.albianj.api.dal.context.InternalManualCommand;
+import org.albianj.api.dal.context.ManualCommand;
+import org.albianj.api.dal.db.PersistenceCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +51,7 @@ public class PersistenceNamedParameter {
     /**
 
      */
-    public static void parseSql(PCmd cmd) {
+    public static void parseSql(PersistenceCommand cmd) {
         String regex = "#\\w+#";// insert into tablename(col1,col2) values(
         // #col1#,#col2#)
         String cmdText = cmd.getCommandText();
@@ -83,7 +83,7 @@ public class PersistenceNamedParameter {
         return;
     }
 
-    public static ItlManualCmd parseSql(ManualCmd cmd) {
+    public static InternalManualCommand parseSql(ManualCommand cmd) {
         String regex = "#\\w+#";// insert into tablename(col1,col2) values(
         // #col1#,#col2#)
         String cmdText = cmd.getCommandText();
@@ -96,7 +96,7 @@ public class PersistenceNamedParameter {
             paramsMap.put(idx++, m.group());
         }
         cmdText = cmdText.replaceAll(regex, "?");
-        ItlManualCmd imc = new ItlManualCmd();
+        InternalManualCommand imc = new InternalManualCommand();
         imc.setParameterMapper(paramsMap);
         imc.setSqlText(cmdText);
 
