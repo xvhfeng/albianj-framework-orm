@@ -1,25 +1,25 @@
 package Albian.Test.Model.Impl;
 
 import lombok.*;
-import org.albianj.api.dal.object.FreeAlbianObject;
-import org.albianj.api.dal.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.api.dal.object.rants.AlbianObjectRant;
+import org.albianj.api.dal.object.FreeAblObj;
+import org.albianj.api.dal.object.rants.AblEntityFieldRant;
+import org.albianj.api.dal.object.rants.AblObjRant;
 
 import java.math.BigInteger;
 
 //如果使用特性模式，必须使用此标注，否则albianj不会对其进行解析
-@AlbianObjectRant
+@AblObjRant
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-public class SingleUser extends FreeAlbianObject  {
+public class SingleUser extends FreeAblObj {
 
-    @AlbianObjectDataFieldRant(IsPrimaryKey = true)
+    @AblEntityFieldRant(IsPrimaryKey = true)
     private BigInteger id;
     private String userName;
-    @AlbianObjectDataFieldRant(FieldName = "Pwd")
+    @AblEntityFieldRant(FieldName = "Pwd")
     private String password;
 
 

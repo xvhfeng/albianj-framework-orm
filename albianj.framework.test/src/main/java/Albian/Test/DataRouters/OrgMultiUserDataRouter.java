@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
+public class OrgMultiUserDataRouter extends FreeAblDr {
 
     @Override
-    public List<DataRouterAttribute> mappingWriterRouting(
-            Map<String, DataRouterAttribute> routings, IAlbianObject obj) {
+    public List<DrAttr> mappingWriterRouting(
+            Map<String, DrAttr> routings, IAblObj obj) {
         // TODO Auto-generated method stub
         OrgMultiUser u = (OrgMultiUser) obj;
         String id = u.getId();
         String drBasename = "MUserWrite";
         String[] ids = id.split("_");
         String drName = drBasename + ids[2]; //使用表标识定位到那个路由
-        List<DataRouterAttribute> drs = new ArrayList<>(1);
+        List<DrAttr> drs = new ArrayList<>(1);
         drs.add(routings.get(drName)); // 若一个对象需要同时保存到两个库，请选择两个路由
         return drs;
     }
@@ -38,8 +38,8 @@ public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
 //    }
 
     @Override
-    public String mappingWriterTable(DataRouterAttribute routing,
-                                     IAlbianObject obj) {
+    public String mappingWriterTable(DrAttr routing,
+                                     IAblObj obj) {
         // TODO Auto-generated method stub
         OrgMultiUser u = (OrgMultiUser) obj;
         String id = u.getId();
@@ -50,11 +50,11 @@ public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
 
 
     @Override
-    public DataRouterAttribute mappingReaderRouting(
-            Map<String, DataRouterAttribute> routings,
-            Map<String, IFilterCondition> wheres,
-            Map<String, OrderByCondition> orderbys) {
-        IFilterCondition fc = wheres.get("Id");
+    public DrAttr mappingReaderRouting(
+            Map<String, DrAttr> routings,
+            Map<String, IFltCdt> wheres,
+            Map<String, OdrBy> orderbys) {
+        IFltCdt fc = wheres.get("Id");
         String id = (String) fc.getValue();
         String drBasename = "MUserRead";
         String[] ids = id.split("_");
@@ -63,11 +63,11 @@ public class OrgMultiUserDataRouter extends FreeAlbianObjectDataRouter {
     }
 
     @Override
-    public String mappingReaderTable(DataRouterAttribute routing,
-                                     Map<String, IFilterCondition> wheres,
-                                     Map<String, OrderByCondition> orderbys) {
+    public String mappingReaderTable(DrAttr routing,
+                                     Map<String, IFltCdt> wheres,
+                                     Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
-        IFilterCondition fc = wheres.get("Id");
+        IFltCdt fc = wheres.get("Id");
         String id = (String) fc.getValue();
         String[] ids = id.split("_");
         String tablename = routing.getTableName() + "_" + ids[3]; //使用表标识定位到那个路由
