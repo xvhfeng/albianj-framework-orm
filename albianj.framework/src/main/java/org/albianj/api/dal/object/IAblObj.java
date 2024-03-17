@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.api.dal.object;
 
-import org.albianj.api.dal.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.api.dal.object.rants.AblEntityFieldRant;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -52,9 +52,9 @@ import java.util.HashMap;
  *
  * @author Seapeak
  */
-public interface IAlbianObject extends Serializable {
+public interface IAblObj extends Serializable {
 
-    @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
+    @AblEntityFieldRant(IsSave = false, Ignore = true)
     HashMap<String, Object> dic = null;
 
     /**
@@ -94,7 +94,7 @@ public interface IAlbianObject extends Serializable {
     public Object getOldAlbianObject(String key);
 
 
-    boolean needUpdate(Object sessionId, Class<? extends IAlbianObject> itf) ;
+    boolean needUpdate(Object sessionId, Class<? extends IAblObj> itf) ;
 
     boolean needUpdate(Object sessionId) ;
 

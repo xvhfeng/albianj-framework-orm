@@ -49,7 +49,7 @@ import java.util.List;
  * @author seapeak
  * @since v2.1
  */
-public class FilterExpression implements IFilterExpression {
+public class FltExpr implements IFltExpr {
 
     private BOpt _ro = BOpt.Normal;
     private int _style = STYLE_FILTER;
@@ -62,13 +62,13 @@ public class FilterExpression implements IFilterExpression {
     private boolean _isAddition = false;
     private boolean _isIdentical = false;
 
-    private List<IChainExpression> _chains = new ArrayList<>();
+    private List<IChaExpr> _chains = new ArrayList<>();
 
-    public FilterExpression() {
+    public FltExpr() {
         // TODO Auto-generated constructor stub
     }
 
-    public FilterExpression(String fieldName, String aliasName, OOpt lo, Object value) {
+    public FltExpr(String fieldName, String aliasName, OOpt lo, Object value) {
         this._fieldName = fieldName;
         this._aliasName = aliasName;
         this._lo = lo;
@@ -76,7 +76,7 @@ public class FilterExpression implements IFilterExpression {
         this._chains.add(this);
     }
 
-    public FilterExpression(String fieldName, OOpt lo, Object value) {
+    public FltExpr(String fieldName, OOpt lo, Object value) {
         this._fieldName = fieldName;
         this._lo = lo;
         this._value = value;
@@ -109,7 +109,7 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression and(IFilterExpression fe) {
+    public IFltExpr and(IFltExpr fe) {
         fe.setBoolOpt(BOpt.And);
         _chains.add(fe);
         return this;
@@ -117,14 +117,14 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression or(IFilterExpression fe) {
+    public IFltExpr or(IFltExpr fe) {
         // TODO Auto-generated method stub
         fe.setBoolOpt(BOpt.OR);
         _chains.add(fe);
         return this;
     }
 
-    public IFilterExpression addAddition(IFilterExpression fe) {
+    public IFltExpr addAddition(IFltExpr fe) {
         // TODO Auto-generated method stub
         fe.setBoolOpt(BOpt.Normal);
         fe.setAddition(true);
@@ -134,55 +134,55 @@ public class FilterExpression implements IFilterExpression {
 
 
     @Override
-    public IFilterExpression and(String fieldName, OOpt lo, Object value) {
+    public IFltExpr and(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression ce = new FilterExpression(fieldName, lo, value);
+        IFltExpr ce = new FltExpr(fieldName, lo, value);
         this.and(ce);
         return this;
     }
 
     @Override
-    public IFilterExpression and(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltExpr and(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression ce = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr ce = new FltExpr(fieldName, aliasName, lo, value);
         this.and(ce);
         return this;
     }
 
     @Override
-    public IFilterExpression or(String fieldName, OOpt lo, Object value) {
+    public IFltExpr or(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression ce = new FilterExpression(fieldName, lo, value);
+        IFltExpr ce = new FltExpr(fieldName, lo, value);
         this.or(ce);
         return this;
     }
 
     @Override
-    public IFilterExpression or(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltExpr or(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression ce = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr ce = new FltExpr(fieldName, aliasName, lo, value);
         this.or(ce);
         return this;
     }
 
     @Override
-    public IFilterExpression addAddition(String fieldName, OOpt lo, Object value) {
+    public IFltExpr addAddition(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression ce = new FilterExpression(fieldName, lo, value);
+        IFltExpr ce = new FltExpr(fieldName, lo, value);
         this.addAddition(ce);
         return this;
     }
 
     @Override
-    public IFilterExpression addAddition(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltExpr addAddition(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression ce = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr ce = new FltExpr(fieldName, aliasName, lo, value);
         this.addAddition(ce);
         return this;
     }
 
     @Override
-    public IFilterExpression and(IFilterGroupExpression fge) {
+    public IFltExpr and(IFltGExpr fge) {
         // TODO Auto-generated method stub
         fge.setStyle(STYLE_FILTER_GROUP);
         fge.setBoolOpt(BOpt.And);
@@ -191,15 +191,15 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IChainExpression addAutoIdExpr() {
-        IFilterExpression fe = new FilterExpression();
+    public IChaExpr addAutoIdExpr() {
+        IFltExpr fe = new FltExpr();
         fe.setAutoId(true);
         this.add(fe);
         return this;
     }
 
     @Override
-    public IFilterExpression or(IFilterGroupExpression fge) {
+    public IFltExpr or(IFltGExpr fge) {
         // TODO Auto-generated method stub
         fge.setStyle(STYLE_FILTER_GROUP);
         fge.setBoolOpt(BOpt.OR);
@@ -208,22 +208,22 @@ public class FilterExpression implements IFilterExpression {
     }
 
     @Override
-    public IFilterExpression add(String fieldName, OOpt lo, Object value) {
+    public IFltExpr add(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, lo, value);
         this.add(fe);
         return this;
     }
 
     @Override
-    public IFilterExpression add(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltExpr add(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
         this.add(fe);
         return this;
     }
 
-    public IFilterExpression add(IFilterExpression fe) {
+    public IFltExpr add(IFltExpr fe) {
         fe.setBoolOpt(BOpt.Normal);
         // TODO Auto-generated method stub
         this._chains.add(fe);
@@ -303,7 +303,7 @@ public class FilterExpression implements IFilterExpression {
         this._aliasName = an;
     }
 
-    public List<IChainExpression> getChainExpression() {
+    public List<IChaExpr> getChainExpression() {
         return this._chains;
     }
 

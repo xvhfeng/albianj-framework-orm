@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class StorageAttribute  {
+public class StgAttr {
 
     private String name = null;
     private int databaseStyle = DBOpt.MySql;

@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianObjectDataRoutersRant {
+public @interface AblDrsRant {
 
     Class<?> DataRouter()  default AblDrDef.class;
 
@@ -17,8 +17,8 @@ public @interface AlbianObjectDataRoutersRant {
 
     boolean WriterRoutersEnable() default true;
 
-    AlbianObjectDataRouterRant[] ReaderRouters() default {};
+    AblDrRant[] ReaderRouters() default {};
 
-    AlbianObjectDataRouterRant[] WriterRouters() default {};
+    AblDrRant[] WriterRouters() default {};
 
 }

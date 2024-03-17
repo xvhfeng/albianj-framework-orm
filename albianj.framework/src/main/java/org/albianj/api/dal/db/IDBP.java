@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by xuhaifeng on 17/2/26.
  */
-public interface IDataBasePool {
+public interface IDBP {
 
     /**
      * 从链接池中得到一个连接

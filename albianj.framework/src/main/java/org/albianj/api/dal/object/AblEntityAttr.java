@@ -44,12 +44,12 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 @Data
 @NoArgsConstructor
-public class AlbianObjectAttribute  {
+public class AblEntityAttr {
     private DrAttr defaultRouting = null;
     private String type = null;
     private String itf = null;
     private DrsAttr dataRouters = null;
-    private Map<String, AlbianEntityFieldAttribute> fields = null;
+    private Map<String, AblEntityFieldAttr> fields = null;
     private Class<?> implClzz = null;
     private boolean tableNameUseUnderline = false;
     private boolean sqlFieldUseUnderline = false;

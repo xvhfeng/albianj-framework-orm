@@ -39,7 +39,7 @@ package org.albianj.api.dal.object;
 
 import org.albianj.api.dal.object.filter.IFltExpr;
 
-public class FilterCondition implements IFilterCondition {
+public class FltCdt implements IFltCdt {
     private BOpt bOpt = BOpt.And;
     private String fieldName = null;
     private String aliasName = null;
@@ -50,12 +50,12 @@ public class FilterCondition implements IFilterCondition {
     private boolean closeSub = false;
     private boolean isAddition = false;
 
-    public FilterCondition() {
+    public FltCdt() {
 
     }
 
 
-    public FilterCondition(IFltExpr f) {
+    public FltCdt(IFltExpr f) {
         this.bOpt = f.getBoolOpt();
         this.fieldName = f.getFieldName();
         this.aliasName = f.getAliasName();
@@ -64,41 +64,41 @@ public class FilterCondition implements IFilterCondition {
         this.value = f.getValue();
     }
 
-    public FilterCondition(String aliasName, String fieldName, Object value) {
+    public FltCdt(String aliasName, String fieldName, Object value) {
         this.aliasName = aliasName;
         this.fieldName = fieldName;
         this.value = value;
     }
 
-    public FilterCondition(String aliasName, String fieldName, Object value, boolean isAddition) {
+    public FltCdt(String aliasName, String fieldName, Object value, boolean isAddition) {
         this.aliasName = aliasName;
         this.fieldName = fieldName;
         this.value = value;
         this.isAddition = isAddition;
     }
 
-    public FilterCondition(String fieldName, Object value) {
+    public FltCdt(String fieldName, Object value) {
         this.fieldName = fieldName;
         this.value = value;
     }
 
-    public FilterCondition(String fieldName, Object value, boolean isAddition) {
+    public FltCdt(String fieldName, Object value, boolean isAddition) {
         this.fieldName = fieldName;
         this.value = value;
         this.isAddition = isAddition;
     }
 
 
-    public FilterCondition(BOpt bOpt,
-                           String fieldName, OOpt oOpt, Object value) {
+    public FltCdt(BOpt bOpt,
+                  String fieldName, OOpt oOpt, Object value) {
         this.fieldName = fieldName;
         this.value = value;
         this.bOpt = bOpt;
         this.oOpt = oOpt;
     }
 
-    public FilterCondition(BOpt bOpt, String aliasName,
-                           String fieldName, OOpt oOpt, Object value) {
+    public FltCdt(BOpt bOpt, String aliasName,
+                  String fieldName, OOpt oOpt, Object value) {
         this.aliasName = aliasName;
         this.fieldName = fieldName;
         this.value = value;

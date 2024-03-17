@@ -41,7 +41,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.*;
 
-public class Convert {
+public class SqlTypeConv {
     public static int toSqlType(Class<?> cls) {
         if (String.class.isAssignableFrom(cls)) {
             return Types.VARCHAR;

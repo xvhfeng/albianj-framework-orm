@@ -44,7 +44,7 @@ import org.albianj.api.dal.object.IAblObj;
 
 import java.util.List;
 
-public interface IWriterJobAdapter {
+public interface IWrtJobAdp {
     public WrtJob buildCreation(String sessionId, IAblObj object)
            ;
 

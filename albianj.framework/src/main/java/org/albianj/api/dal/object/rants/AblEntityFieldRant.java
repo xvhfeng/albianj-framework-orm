@@ -8,7 +8,7 @@ import java.sql.Types;
 @Target(ElementType.FIELD)
 @Inherited
 @Documented
-public @interface AlbianObjectDataFieldRant {
+public @interface AblEntityFieldRant {
 
     String FieldName() default "";
 

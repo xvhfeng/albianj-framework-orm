@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.toolkit;
 
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.dal.db.SqlParameter;
+import org.albianj.api.dal.db.SqlPara;
 import org.albianj.api.dal.object.ICondition;
 import org.albianj.api.dal.object.OdrBy;
 
@@ -47,7 +47,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ListConvert {
+public class SetConv {
     public static <T extends OdrBy> Map<String, T> toLinkedHashMap(
             LinkedList<T> filters) {
         if (null == filters) {
@@ -80,12 +80,12 @@ public class ListConvert {
         return map;
     }
 
-    public static String toString(Map<String, SqlParameter> paras) {
+    public static String toString(Map<String, SqlPara> paras) {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, SqlParameter> para : paras.entrySet()) {
-            SqlParameter sp = para.getValue();
+        for (Map.Entry<String, SqlPara> para : paras.entrySet()) {
+            SqlPara sp = para.getValue();
             sb.append(para.getKey()).append(" = ")
-                    .append(ResultConvert.sqlValueToString(sp.getSqlType(), sp.getValue()))
+                    .append(RstConv.sqlValueToString(sp.getSqlType(), sp.getValue()))
                     .append(" ");
         }
         return sb.toString();

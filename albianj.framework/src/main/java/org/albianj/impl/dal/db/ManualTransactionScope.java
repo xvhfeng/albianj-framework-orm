@@ -4,14 +4,14 @@ import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.dal.context.ManualContext;
-import org.albianj.api.dal.db.SqlParameter;
-import org.albianj.api.dal.object.StorageAttribute;
-import org.albianj.impl.dal.toolkit.ListConvert;
+import org.albianj.api.dal.context.ManualCtx;
+import org.albianj.api.dal.db.SqlPara;
+import org.albianj.api.dal.object.StgAttr;
+import org.albianj.impl.dal.toolkit.SetConv;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.dal.context.InternalManualCommand;
-import org.albianj.api.dal.context.ManualCommand;
-import org.albianj.api.dal.object.RunningStorageAttribute;
+import org.albianj.api.dal.context.ItlManualCmd;
+import org.albianj.api.dal.context.ManualCmd;
+import org.albianj.api.dal.object.RStgAttr;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
 
 import java.sql.Connection;
@@ -28,22 +28,22 @@ import java.util.Vector;
 public class ManualTransactionScope extends FreeManualTransactionScope {
 
 
-    protected void preExecute(ManualContext mctx)  {
-        List<ManualCommand> mcs = mctx.getCommands();
-        List<InternalManualCommand> imcs = mctx.getInternalCommands();
+    protected void preExecute(ManualCtx mctx)  {
+        List<ManualCmd> mcs = mctx.getCommands();
+        List<ItlManualCmd> imcs = mctx.getInternalCommands();
         IAlbianStorageParserService asps = ServRouter.getService(mctx.getSessionId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        StorageAttribute storage = asps.getStorageAttribute(mctx.getStorageName());
+        StgAttr storage = asps.getStorageAttribute(mctx.getStorageName());
         if (StringsUtil.isNullOrEmptyOrAllSpace(mctx.getDatabaseName())) {
             mctx.setDatabaseName(storage.getDatabase());
         }
-        RunningStorageAttribute rsa = new RunningStorageAttribute(storage, mctx.getDatabaseName());
-        mctx.setRunningStorageAttribute(rsa);
+        RStgAttr rsa = new RStgAttr(storage, mctx.getDatabaseName());
+        mctx.setRStgAttr(rsa);
         Connection conn = asps.getConnection(mctx.getSessionId(), rsa,false);
         mctx.setConnection(conn);
 
         List<Statement> statements = new Vector<Statement>();
         try {
-            for (InternalManualCommand imc : imcs) {
+            for (ItlManualCmd imc : imcs) {
                 PreparedStatement prepareStatement =
                         conn.prepareStatement(imc.getSqlText());
                 Map<Integer, String> map = imc.getParameterMapper();
@@ -52,7 +52,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 } else {
                     for (int i = 1; i <= map.size(); i++) {
                         String paraName = map.get(i);
-                        SqlParameter para = imc.getCommandParameters().get(paraName);
+                        SqlPara para = imc.getCommandParameters().get(paraName);
                         if (null == para.getValue()) {
                             prepareStatement.setNull(i, para.getSqlType());
                         } else {
@@ -71,17 +71,17 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
     }
 
 
-    protected void executeHandler(ManualContext mctx)  {
+    protected void executeHandler(ManualCtx mctx)  {
 
             List<Integer> rcs = new Vector<>();
             List<Statement> statements = mctx.getStatements();
-            List<ManualCommand> cmds = mctx.getCommands();
+            List<ManualCmd> cmds = mctx.getCommands();
             for (int i = 0; i < statements.size(); i++) {
                 try {
-                    ManualCommand cmd = cmds.get(i);
+                    ManualCmd cmd = cmds.get(i);
                     ServRouter.log(mctx.getSessionId(),  LogLevel.Info,
                             "storage:{},sqltext:{},parars:{}", mctx.getStorageName(), cmd.getCommandText(),
-                        ListConvert.toString(cmd.getCommandParameters()));
+                        SetConv.toString(cmd.getCommandParameters()));
                     int rc = ((PreparedStatement)statements.get(i)).executeUpdate();
                     rcs.add(rc);
                 } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
         return;
     }
 
-    protected void commit(ManualContext mctx)  {
+    protected void commit(ManualCtx mctx)  {
         try {
             mctx.getConnection().commit();
         } catch (SQLException e) {
@@ -107,7 +107,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
     }
 
 
-    protected void exceptionHandler(ManualContext mctx)  {
+    protected void exceptionHandler(ManualCtx mctx)  {
         try {
             mctx.getConnection().rollback();
         } catch (SQLException e) {
@@ -118,7 +118,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
     }
 
 
-    protected void unLoadExecute(ManualContext mctx)  {
+    protected void unLoadExecute(ManualCtx mctx)  {
         boolean isThrow = false;
         try {
             List<Statement> statements = mctx.getStatements();

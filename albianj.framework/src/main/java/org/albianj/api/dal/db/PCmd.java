@@ -45,15 +45,15 @@ import java.util.Map;
 
 @Data
 @NoArgsConstructor
-public class PersistenceCommand {
+public class PCmd {
     private String commandText = null;
     private CmdOpt commandType = CmdOpt.Text;
-    private Map<String, SqlParameter> parameters = null;
+    private Map<String, SqlPara> parameters = null;
     private Map<Integer, String> parameterMapper = null;
 
     private String rollbackCommandText = null;
     private CmdOpt rollbackCommandType = CmdOpt.Text;
-    private Map<String, SqlParameter> rollbackParameters = null;
+    private Map<String, SqlPara> rollbackParameters = null;
     private Map<Integer, String> rollbackParameterMapper = null;
 
     //this default value must the same as AlbianObjectAttribute.compensating

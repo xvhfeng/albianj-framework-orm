@@ -8,27 +8,27 @@ import java.util.List;
 
 
 
-public interface IIduCtx {
+public interface IDMLCtx {
 
-    IIduCtx addList(QryOpt opt, List<? extends IAblObj> entity);
+    IDMLCtx addList(QryOpt opt, List<? extends IAblObj> entity);
 
-    IIduCtx addList(QryOpt opt, List<? extends IAblObj> entity, String storageAlias);
+    IDMLCtx addList(QryOpt opt, List<? extends IAblObj> entity, String storageAlias);
 
-    IIduCtx addList(QryOpt opt, List<? extends IAblObj> entity, String storageAlias, String tableAlias);
+    IDMLCtx addList(QryOpt opt, List<? extends IAblObj> entity, String storageAlias, String tableAlias);
 
-    IIduCtx add(QryOpt opt, IAblObj entiry);
+    IDMLCtx add(QryOpt opt, IAblObj entiry);
 
-    IIduCtx add(QryOpt opt, IAblObj entiry, String storageAliasName);
+    IDMLCtx add(QryOpt opt, IAblObj entiry, String storageAliasName);
 
-    IIduCtx add(QryOpt opt, IAblObj entiry, String storageAliasName, String tableAliasName);
+    IDMLCtx add(QryOpt opt, IAblObj entiry, String storageAliasName, String tableAliasName);
 
-    IIduCtx withQueryGenKey();
+    IDMLCtx withQueryGenKey();
 
-    IIduCtx setFinishNotify(IDalNotify notifyCallback, Object notifyCallbackObject);
+    IDMLCtx setFinishNotify(IDalNotify notifyCallback, Object notifyCallbackObject);
 
-    IIduCtx setMakeupFor(ICompensateNotify compensateCallback, Object compensateCallbackObject);
+    IDMLCtx setMakeupFor(ICompensateNotify compensateCallback, Object compensateCallbackObject);
 
-    IIduCtx setRollBackOnError();
+    IDMLCtx setRollBackOnError();
 
     boolean commit(String sessionId) ;
 

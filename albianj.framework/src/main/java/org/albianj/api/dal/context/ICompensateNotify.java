@@ -42,7 +42,7 @@ package org.albianj.api.dal.context;
  *
  * @author seapeak
  */
-public interface IPersistenceCompensateNotify {
+public interface ICompensateNotify {
 
     /**
      * 存储发生异常的时候，发送的通知

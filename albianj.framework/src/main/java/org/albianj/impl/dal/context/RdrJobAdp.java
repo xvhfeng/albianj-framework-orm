@@ -49,10 +49,10 @@ import org.albianj.api.dal.service.IAlbianStorageParserService;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJobAdapter {
+public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
 
     protected StgAttr makeReaderToStorageCtx(String sessionId, AblEntityAttr objAttr, boolean isExact,
-                                             String storageAlias, String tableAlias, String drouterAlias, Map<String, IFilterCondition> hashWheres,
+                                             String storageAlias, String tableAlias, String drouterAlias, Map<String, IFltCdt> hashWheres,
                                              Map<String, OdrBy> hashOrderbys, RefArg<String> dbName, RefArg<String> tableName) {
         StgAttr stgAttr = null;
         IAlbianStorageParserService asps = ServRouter
@@ -188,10 +188,10 @@ public class ReaderJobAdapter extends FreeReaderJobAdapter implements IReaderJob
     }
 
     protected StringBuilder makeSltCmdWhrs(String sessionId, AblEntityAttr objAttr, int dbStyle,
-                                           String implType, LinkedList<IFilterCondition> wheres, Map<String, SqlPara> paras) {
+                                           String implType, LinkedList<IFltCdt> wheres, Map<String, SqlPara> paras) {
         StringBuilder sbWhrs = new StringBuilder();
         if (null != wheres) {
-            for (IFilterCondition where : wheres) {
+            for (IFltCdt where : wheres) {
                 if (where.isAddition())
                     continue;
                 AblEntityFieldAttr member = objAttr.getFields().get(where.getFieldName().toLowerCase());

@@ -43,53 +43,53 @@ import java.util.Map;
 /**
  * @author Seapeak
  */
-public interface IAlbianObjectDataRouter {
+public interface IAblDr {
     //reader routing
-    List<DataRouterAttribute> mappingWriterRouting(
-            Map<String, DataRouterAttribute> routings, IAlbianObject obj);
+    List<DrAttr> mappingWriterRouting(
+            Map<String, DrAttr> routings, IAblObj obj);
 
-    String mappingWriterRoutingStorage(DataRouterAttribute routing,
-                                       IAlbianObject obj);
+    String mappingWriterRoutingStorage(DrAttr routing,
+                                       IAblObj obj);
 
-    String mappingWriterRoutingDatabase(StorageAttribute storage,
-                                        IAlbianObject obj);
+    String mappingWriterRoutingDatabase(StgAttr storage,
+                                        IAblObj obj);
 
-    String mappingWriterTable(DataRouterAttribute routing,
-                              IAlbianObject obj);
+    String mappingWriterTable(DrAttr routing,
+                              IAblObj obj);
 
     //writer routing
-    DataRouterAttribute mappingReaderRouting(
-            Map<String, DataRouterAttribute> routings,
-            Map<String, IFilterCondition> wheres,
-            Map<String, OrderByCondition> orderbys);
+    DrAttr mappingReaderRouting(
+            Map<String, DrAttr> routings,
+            Map<String, IFltCdt> wheres,
+            Map<String, OdrBy> orderbys);
 
-    String mappingReaderRoutingStorage(DataRouterAttribute routing,
-                                       Map<String, IFilterCondition> wheres,
-                                       Map<String, OrderByCondition> orderbys);
+    String mappingReaderRoutingStorage(DrAttr routing,
+                                       Map<String, IFltCdt> wheres,
+                                       Map<String, OdrBy> orderbys);
 
-    String mappingReaderRoutingDatabase(StorageAttribute storage,
-                                        Map<String, IFilterCondition> wheres,
-                                        Map<String, OrderByCondition> orderbys);
+    String mappingReaderRoutingDatabase(StgAttr storage,
+                                        Map<String, IFltCdt> wheres,
+                                        Map<String, OdrBy> orderbys);
 
-    String mappingReaderTable(DataRouterAttribute routing,
-                              Map<String, IFilterCondition> wheres,
-                              Map<String, OrderByCondition> orderbys);
+    String mappingReaderTable(DrAttr routing,
+                              Map<String, IFltCdt> wheres,
+                              Map<String, OdrBy> orderbys);
 
     //exact reader routing
-    DataRouterAttribute mappingExactReaderRouting(
-            Map<String, DataRouterAttribute> routings,
-            Map<String, IFilterCondition> wheres,
-            Map<String, OrderByCondition> orderbys);
+    DrAttr mappingExactReaderRouting(
+            Map<String, DrAttr> routings,
+            Map<String, IFltCdt> wheres,
+            Map<String, OdrBy> orderbys);
 
-    String mappingExactReaderRoutingStorage(DataRouterAttribute routing,
-                                            Map<String, IFilterCondition> wheres,
-                                            Map<String, OrderByCondition> orderbys);
+    String mappingExactReaderRoutingStorage(DrAttr routing,
+                                            Map<String, IFltCdt> wheres,
+                                            Map<String, OdrBy> orderbys);
 
-    String mappingExactReaderRoutingDatabase(StorageAttribute storage,
-                                             Map<String, IFilterCondition> wheres,
-                                             Map<String, OrderByCondition> orderbys);
+    String mappingExactReaderRoutingDatabase(StgAttr storage,
+                                             Map<String, IFltCdt> wheres,
+                                             Map<String, OdrBy> orderbys);
 
-    String mappingExactReaderTable(DataRouterAttribute routing,
-                                   Map<String, IFilterCondition> wheres,
-                                   Map<String, OrderByCondition> orderbys);
+    String mappingExactReaderTable(DrAttr routing,
+                                   Map<String, IFltCdt> wheres,
+                                   Map<String, OdrBy> orderbys);
 }

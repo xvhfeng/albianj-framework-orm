@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DataRouterAttribute  {
+public class DrAttr {
     public boolean enable = true;
     private String name = null;
     private String storageName = null;

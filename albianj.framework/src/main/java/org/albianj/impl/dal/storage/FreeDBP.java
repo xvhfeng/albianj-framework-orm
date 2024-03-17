@@ -4,7 +4,7 @@ package org.albianj.impl.dal.storage;
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.dal.db.IDataBasePool;
+import org.albianj.api.dal.db.IDBP;
 import org.albianj.api.dal.object.RStgAttr;
 
 import javax.sql.DataSource;
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by xuhaifeng on 2017/11/10.
  */
-public abstract class FreeDataBasePool implements IDataBasePool {
+public abstract class FreeDBP implements IDBP {
 
     private final ConcurrentMap<String, DataSource> _dataSource = new ConcurrentHashMap<>();
 

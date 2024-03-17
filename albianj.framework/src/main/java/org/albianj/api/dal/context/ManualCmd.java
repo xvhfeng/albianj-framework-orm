@@ -2,7 +2,7 @@ package org.albianj.api.dal.context;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.albianj.api.dal.db.SqlParameter;
+import org.albianj.api.dal.db.SqlPara;
 import org.albianj.api.dal.db.CmdOpt;
 
 import java.util.Map;
@@ -12,8 +12,8 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
-public class ManualCommand  {
+public class ManualCmd {
     private String commandText;
     private CmdOpt cmdType = CmdOpt.Text;
-    private Map<String, SqlParameter> commandParameters = null;
+    private Map<String, SqlPara> commandParameters = null;
 }

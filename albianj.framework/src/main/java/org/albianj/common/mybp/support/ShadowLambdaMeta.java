@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.albianj.api.dal.mybp.support;
+package org.albianj.common.mybp.support;
 
-
-import org.albianj.api.dal.mybp.ClassUtils;
+import org.albianj.common.mybp.ClassUtils;
 
 /**
  * 基于 {@link LambdaSerializer} 创建的元信息

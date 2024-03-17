@@ -45,7 +45,7 @@ import org.albianj.api.dal.object.IAblObj;
 
 import java.util.Map;
 
-public interface IPersistenceUpdateCommand {
+public interface IDMLCmd {
 
     public PCmd buildPstCmd(String sessionId, int dbStyle, String tableName, IAblObj object,
                             AblEntityAttr objAttr, Map<String, Object> mapValue, boolean rbkOnError)  ;

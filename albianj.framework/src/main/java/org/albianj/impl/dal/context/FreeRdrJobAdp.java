@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
+public abstract class FreeRdrJobAdp implements IRdrJobAdp {
 
     protected abstract StringBuilder makeSltCmdTxt(String sessionId,int sbStyle, StringBuilder sbCols, String tableName,
                                                    StringBuilder sbWhere, StringBuilder sbOrderby,
@@ -69,7 +69,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
                                                       String storageAlias,
                                                       String tableAlias,
                                                       String drouterAlias,
-                                                      Map<String, IFilterCondition> hashWheres,
+                                                      Map<String, IFltCdt> hashWheres,
                                                       Map<String, OdrBy> hashOrderbys,
                                                       RefArg<String> dbName,
                                                       RefArg<String> tableName
@@ -77,14 +77,14 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
     protected abstract StringBuilder makeSltCmdWhrs(String sessionId, AblEntityAttr objAttr,
                                                     int dbStyle, String implType,
-                                                    LinkedList<IFilterCondition> wheres,
+                                                    LinkedList<IFltCdt> wheres,
                                                     Map<String, SqlPara> paras);
 
     protected abstract StringBuilder makeSltCmdCount(int dbStyle);
 
     @Deprecated
     public RdrJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
-                                 int start, int step, LinkedList<IFilterCondition> wheres,
+                                 int start, int step, LinkedList<IFltCdt> wheres,
                                  LinkedList<OdrBy> orderbys, String idxName)   {
         RdrJob job = new RdrJob(sessionId);
         AblEntityAttr objAttr = AlbianEntityMetadata.getEntityMetadata(itf);
@@ -97,7 +97,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         Map<String, OdrBy> hashOrderbys = SetConv
                 .toLinkedHashMap(orderbys);
 
-        Map<String, IFilterCondition> hashWheres = SetConv
+        Map<String, IFltCdt> hashWheres = SetConv
                 .toLinkedHashMap(wheres);
 
         RefArg<String> dbName = new RefArg<>();
@@ -128,7 +128,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
 
     @Deprecated
     public RdrJob buildReaderJob(String sessionId, Class<?> itf, boolean isExact, String drouterAlias,
-                                 LinkedList<IFilterCondition> wheres, LinkedList<OdrBy> orderbys,
+                                 LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys,
                                  String idxName)   {
 
         RdrJob job = new RdrJob(sessionId);
@@ -142,7 +142,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         Map<String, OdrBy> hashOrderbys = SetConv
                 .toLinkedHashMap(orderbys);
 
-        Map<String, IFilterCondition> hashWheres = SetConv
+        Map<String, IFltCdt> hashWheres = SetConv
                 .toLinkedHashMap(wheres);
 
         RefArg<String> dbName = new RefArg<>();
@@ -187,8 +187,8 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         Map<String, OdrBy> hashOrderbys = SetConv
                 .toLinkedHashMap(orderbys);
 
-        Map<String, IFilterCondition> hashWheres = new HashMap<>();
-        ChainExpressionParser.toFilterConditionMap(f, hashWheres);
+        Map<String, IFltCdt> hashWheres = new HashMap<>();
+        ChaExprPrs.toFilterConditionMap(f, hashWheres);
 
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
@@ -201,7 +201,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         StringBuilder sbCols = makeSltCmdCols(sessionId, objAttr, stgAttr.getDatabaseStyle());
 
         StringBuilder sbWhere = new StringBuilder();
-        ChainExpressionParser.toConditionText(sessionId, implClzz, objAttr, stgAttr, f, sbWhere, paras);
+        ChaExprPrs.toConditionText(sessionId, implClzz, objAttr, stgAttr, f, sbWhere, paras);
         StringBuilder sbOdrs = makeSltCmdOdrs(sessionId, objAttr, orderbys, stgAttr.getDatabaseStyle());
 
         StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),
@@ -231,8 +231,8 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         Map<String, OdrBy> hashOrderbys = SetConv
                 .toLinkedHashMap(orderbys);
 
-        Map<String, IFilterCondition> hashWheres = new HashMap<>();
-        ChainExpressionParser.toFilterConditionMap(f, hashWheres);
+        Map<String, IFltCdt> hashWheres = new HashMap<>();
+        ChaExprPrs.toFilterConditionMap(f, hashWheres);
 
         RefArg<String> dbName = new RefArg<>();
         RefArg<String> tableName = new RefArg<>();
@@ -245,7 +245,7 @@ public abstract class FreeReaderJobAdapter implements IReaderJobAdapter {
         StringBuilder sbCols = makeSltCmdCount(stgAttr.getDatabaseStyle());
 
         StringBuilder sbWhere = new StringBuilder();
-        ChainExpressionParser.toConditionText(sessionId, implClzz, objAttr, stgAttr, f, sbWhere, paras);
+        ChaExprPrs.toConditionText(sessionId, implClzz, objAttr, stgAttr, f, sbWhere, paras);
         StringBuilder sbOdrs = makeSltCmdOdrs(sessionId, objAttr, orderbys, stgAttr.getDatabaseStyle());
 
         StringBuilder sbCmdTxt = makeSltCmdTxt(sessionId,stgAttr.getDatabaseStyle(), sbCols, tableName.getValue(),

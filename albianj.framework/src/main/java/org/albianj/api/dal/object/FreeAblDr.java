@@ -40,72 +40,72 @@ package org.albianj.api.dal.object;
 import java.util.List;
 import java.util.Map;
 
-public abstract class FreeAlbianObjectDataRouter implements
-        IAlbianObjectDataRouter {
+public abstract class FreeAblDr implements
+        IAblDr {
 
     @Override
-    public List<DataRouterAttribute> mappingWriterRouting(
-            Map<String, DataRouterAttribute> routings, IAlbianObject obj) {
+    public List<DrAttr> mappingWriterRouting(
+            Map<String, DrAttr> routings, IAblObj obj) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public DataRouterAttribute mappingReaderRouting(
-            Map<String, DataRouterAttribute> routings,
-            Map<String, IFilterCondition> wheres,
-            Map<String, OrderByCondition> orderbys) {
+    public DrAttr mappingReaderRouting(
+            Map<String, DrAttr> routings,
+            Map<String, IFltCdt> wheres,
+            Map<String, OdrBy> orderbys) {
         return null;
     }
 
     @Override
-    public String mappingWriterRoutingStorage(DataRouterAttribute routing,
-                                              IAlbianObject obj) {
+    public String mappingWriterRoutingStorage(DrAttr routing,
+                                              IAblObj obj) {
         // TODO Auto-generated method stub
         return routing.getStorageName();
     }
 
     @Override
-    public String mappingWriterRoutingDatabase(StorageAttribute storage,
-                                               IAlbianObject obj) {
+    public String mappingWriterRoutingDatabase(StgAttr storage,
+                                               IAblObj obj) {
         return storage.getDatabase();
     }
 
     @Override
-    public String mappingWriterTable(DataRouterAttribute routing,
-                                     IAlbianObject obj) {
+    public String mappingWriterTable(DrAttr routing,
+                                     IAblObj obj) {
         // TODO Auto-generated method stub
         return routing.getTableName();
     }
 
     @Override
-    public String mappingReaderRoutingStorage(DataRouterAttribute routing,
-                                              Map<String, IFilterCondition> wheres,
-                                              Map<String, OrderByCondition> orderbys) {
+    public String mappingReaderRoutingStorage(DrAttr routing,
+                                              Map<String, IFltCdt> wheres,
+                                              Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
         return routing.getStorageName();
     }
 
     @Override
-    public String mappingReaderRoutingDatabase(StorageAttribute storage,
-                                               Map<String, IFilterCondition> wheres,
-                                               Map<String, OrderByCondition> orderbys) {
+    public String mappingReaderRoutingDatabase(StgAttr storage,
+                                               Map<String, IFltCdt> wheres,
+                                               Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
         return storage.getDatabase();
     }
 
     @Override
-    public String mappingReaderTable(DataRouterAttribute routing,
-                                     Map<String, IFilterCondition> wheres,
-                                     Map<String, OrderByCondition> orderbys) {
+    public String mappingReaderTable(DrAttr routing,
+                                     Map<String, IFltCdt> wheres,
+                                     Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
         return routing.getTableName();
     }
 
-    public DataRouterAttribute mappingExactReaderRouting(
-            Map<String, DataRouterAttribute> routings,
-            Map<String, IFilterCondition> wheres,
-            Map<String, OrderByCondition> orderbys) {
+    public DrAttr mappingExactReaderRouting(
+            Map<String, DrAttr> routings,
+            Map<String, IFltCdt> wheres,
+            Map<String, OdrBy> orderbys) {
         return mappingReaderRouting(routings, wheres, orderbys);
     }
 
@@ -115,15 +115,15 @@ public abstract class FreeAlbianObjectDataRouter implements
      * @param orderbys
      * @return
      */
-    public String mappingExactReaderRoutingStorage(DataRouterAttribute routing,
-                                                   Map<String, IFilterCondition> wheres,
-                                                   Map<String, OrderByCondition> orderbys) {
+    public String mappingExactReaderRoutingStorage(DrAttr routing,
+                                                   Map<String, IFltCdt> wheres,
+                                                   Map<String, OdrBy> orderbys) {
         return mappingReaderRoutingStorage(routing, wheres, orderbys);
     }
 
-    public String mappingExactReaderRoutingDatabase(StorageAttribute storage,
-                                                    Map<String, IFilterCondition> wheres,
-                                                    Map<String, OrderByCondition> orderbys) {
+    public String mappingExactReaderRoutingDatabase(StgAttr storage,
+                                                    Map<String, IFltCdt> wheres,
+                                                    Map<String, OdrBy> orderbys) {
         return mappingReaderRoutingDatabase(storage, wheres, orderbys);
     }
 
@@ -133,9 +133,9 @@ public abstract class FreeAlbianObjectDataRouter implements
      * @param orderbys
      * @return
      */
-    public String mappingExactReaderTable(DataRouterAttribute routing,
-                                          Map<String, IFilterCondition> wheres,
-                                          Map<String, OrderByCondition> orderbys) {
+    public String mappingExactReaderTable(DrAttr routing,
+                                          Map<String, IFltCdt> wheres,
+                                          Map<String, OdrBy> orderbys) {
         return mappingReaderTable(routing, wheres, orderbys);
     }
 

@@ -43,7 +43,7 @@ package org.albianj.api.dal.object;
  *
  * @author seapeak
  */
-public enum BoolOpt {
+public enum BOpt {
 
     /**
      * and，等同于sql语句的and
@@ -62,7 +62,7 @@ public enum BoolOpt {
     private int key;
     private String word;
 
-    BoolOpt(int key,String word){
+    BOpt(int key, String word){
         this.key = key;
         this.word = word;
     }

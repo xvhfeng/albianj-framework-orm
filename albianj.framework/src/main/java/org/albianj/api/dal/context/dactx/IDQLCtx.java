@@ -8,7 +8,7 @@ import org.albianj.api.dal.service.DrOpt;
 import java.util.LinkedList;
 import java.util.List;
 
-public interface ISltCtx {
+public interface IDQLCtx {
 
     /*
       别问我为啥叫这个结构，只因为再支持方法级别的功能，方法就要爆炸了
@@ -19,17 +19,17 @@ public interface ISltCtx {
          result object or list<object.
      */
 
-    ISltCtx paging(int start, int pagesize);
+    IDQLCtx paging(int start, int pagesize);
 
-    ISltCtx forceIndex(String idxName);
+    IDQLCtx forceIndex(String idxName);
 
-    ISltCtx orderby(LinkedList<OdrBy> orderbys);
+    IDQLCtx orderby(LinkedList<OdrBy> orderbys);
 
-    ISltCtx useStorage(String storageAlias);
+    IDQLCtx useStorage(String storageAlias);
 
-    ISltCtx fromTable(String tableAlias);
+    IDQLCtx fromTable(String tableAlias);
 
-    ISltCtx byRouter(String drouterAlias);
+    IDQLCtx byRouter(String drouterAlias);
 
 
     <T extends IAblObj> T loadObject(String sessionId, Class<T> itfClzz, DrOpt loadType, IChaExpr where) ;

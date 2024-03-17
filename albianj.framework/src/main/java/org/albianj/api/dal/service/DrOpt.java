@@ -42,15 +42,15 @@ package org.albianj.api.dal.service;
  *
  * @author seapeak
  */
-public enum QueryToOpt {
+public enum DrOpt {
 
     /**
      * 直接从reader-router配置的数据库中加载数据，一般为slave中查找
      */
-    ReaderRouter,
+    Rdr,
     /**
      * 精确的加载数据
      * 从writer-router配置的数据库中加载数据，这个加载方式应该只对需要写入操作的load数据执行
      */
-    WriterRouter,
+    Wtr,
 }

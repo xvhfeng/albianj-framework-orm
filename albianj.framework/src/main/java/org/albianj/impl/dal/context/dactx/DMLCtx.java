@@ -2,9 +2,9 @@ package org.albianj.impl.dal.context.dactx;
 
 import org.albianj.AblThrowable;
 import org.albianj.common.utils.SetUtil;
-import org.albianj.impl.dal.context.IWriterJobAdapter;
+import org.albianj.impl.dal.context.IWrtJobAdp;
 import org.albianj.api.dal.context.WrtJob;
-import org.albianj.impl.dal.context.WriterJobAdapter;
+import org.albianj.impl.dal.context.WrtJobAdp;
 import org.albianj.impl.dal.db.IPersistenceTransactionClusterScope;
 import org.albianj.impl.dal.db.PersistenceTransactionClusterScope;
 import org.albianj.api.dal.context.ICompensateNotify;
@@ -17,7 +17,7 @@ import org.albianj.api.dal.object.IAblObj;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IduCtx implements IDMLCtx {
+public class DMLCtx implements IDMLCtx {
     List<AblObjWarp> entitis = null;
     private boolean isSetQueryIdentity = false;
     private IDalNotify notifyCallback;
@@ -26,7 +26,7 @@ public class IduCtx implements IDMLCtx {
     private Object compensateCallbackObject;
     private boolean rbkOnErr = false;
 
-    public IduCtx() {
+    public DMLCtx() {
         entitis = new ArrayList<>();
     }
 
@@ -128,7 +128,7 @@ public class IduCtx implements IDMLCtx {
 
     @Override
     public boolean commit(String sessionId)  {
-        IWriterJobAdapter jobAdp = new WriterJobAdapter();
+        IWrtJobAdp jobAdp = new WrtJobAdp();
         WrtJob job = jobAdp.buildWriterJob(sessionId, this.entitis, this.rbkOnErr);
         IPersistenceTransactionClusterScope tcs = new PersistenceTransactionClusterScope();
         return tcs.execute(job);

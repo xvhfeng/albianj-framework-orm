@@ -43,7 +43,7 @@ package org.albianj.api.dal.object;
  *
  * @author seapeak
  */
-public enum SortOpt {
+public enum SOpt {
 
     /**
      * 对sql结果集进行升序排序
@@ -58,7 +58,7 @@ public enum SortOpt {
     private int key;
     private String word;
 
-    SortOpt(int key,String word){
+    SOpt(int key, String word){
         this.key = key;
         this.word = word;
     }

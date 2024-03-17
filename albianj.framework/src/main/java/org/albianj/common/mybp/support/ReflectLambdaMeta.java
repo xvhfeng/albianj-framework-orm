@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.albianj.api.dal.mybp.support;
+package org.albianj.common.mybp.support;
 
 import lombok.extern.slf4j.Slf4j;
-import org.albianj.api.dal.mybp.ClassUtils;
+import org.albianj.common.mybp.ClassUtils;
 
 import java.lang.invoke.SerializedLambda;
 

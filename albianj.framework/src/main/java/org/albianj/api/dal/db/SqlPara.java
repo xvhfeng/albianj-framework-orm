@@ -46,7 +46,7 @@ import java.sql.Types;
 
 @Data
 @NoArgsConstructor
-public class SqlParameter  {
+public class SqlPara {
     private int sqlType = Types.NVARCHAR;
     private String name = null;
     private Object value = null;

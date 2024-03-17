@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.albianj.impl.dal.mybp;
+package org.albianj.common.mybp;
 
 import net.sf.cglib.beans.BeanMap;
-import org.albianj.api.dal.mybp.ClassUtils;
 import org.albianj.common.utils.SetUtil;
 
 import java.util.Collections;

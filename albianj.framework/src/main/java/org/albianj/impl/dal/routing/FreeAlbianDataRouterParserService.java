@@ -42,10 +42,10 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.api.dal.object.DataRouterAttribute;
+import org.albianj.api.dal.object.DrAttr;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.service.parser.FreeAlbianParserService;
-import org.albianj.api.dal.object.DataRoutersAttribute;
+import org.albianj.api.dal.object.DrsAttr;
 import org.albianj.api.dal.service.IAlbianDataRouterParserService;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -60,7 +60,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
 
     private final static String tagName = "AlbianObjects/AlbianObject";
     private String file = "drouter.xml";
-    private HashMap<String, DataRoutersAttribute> _cached = null;
+    private HashMap<String, DrsAttr> _cached = null;
 
     public void setConfigFileName(String fileName) {
         this.file = fileName;
@@ -120,7 +120,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         parserRoutings(objNodes);
     }
 
-    protected abstract Map<String, DataRouterAttribute> parserRoutings(
+    protected abstract Map<String, DrAttr> parserRoutings(
             @SuppressWarnings("rawtypes") List nodes) ;
 
 }

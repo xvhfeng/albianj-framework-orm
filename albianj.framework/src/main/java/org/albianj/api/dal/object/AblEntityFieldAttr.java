@@ -11,7 +11,7 @@ import java.sql.Types;
 
 @Data
 @NoArgsConstructor
-public class AlbianEntityFieldAttribute  {
+public class AblEntityFieldAttr {
 
     /*
         Name is the field name,maybe begin with '_' or word

@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.albianj.api.dal.mybp.support;
-
+package org.albianj.common.mybp.support;
 /**
  * 接受 Int 小类型的处理函数，使用小类型来避免 Java 自动装箱
  *

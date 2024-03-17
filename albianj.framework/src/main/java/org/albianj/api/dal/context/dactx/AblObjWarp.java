@@ -6,15 +6,15 @@ import org.albianj.api.dal.object.IAblObj;
 
 @Data
 @NoArgsConstructor
-public class AlbianObjectWarp  {
-    private QueryOpt queryOpt = QueryOpt.Save;
+public class AblObjWarp {
+    private QryOpt qryOpt = QryOpt.Save;
     private IAblObj entry = null;
     private String storageAliasName = null;
     private String tableAliasName = null;
     private boolean queryAutoId = false;
 
-    public AlbianObjectWarp(QueryOpt queryOpt, IAblObj entry) {
-        this.queryOpt = queryOpt;
+    public AblObjWarp(QryOpt qryOpt, IAblObj entry) {
+        this.qryOpt = qryOpt;
         this.entry = entry;
     }
 }

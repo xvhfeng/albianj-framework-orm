@@ -42,7 +42,7 @@ import org.albianj.ServRouter;
 import org.albianj.api.dal.object.*;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.impl.dal.db.IPersistenceUpdateCommand;
+import org.albianj.impl.dal.db.IDMLCmd;
 import org.albianj.api.dal.db.PCmd;
 import org.albianj.impl.dal.db.localize.MysqlClientSection;
 import org.albianj.impl.dal.db.localize.SqlServerClientSection;
@@ -54,7 +54,7 @@ import org.albianj.api.dal.service.IAlbianStorageParserService;
 
 import java.util.*;
 
-public class WriterJobAdapter extends FreeWriterJobAdapter {
+public class WrtJobAdp extends FreeWrtJobAdp {
 
     protected Map<String, Object> buildSqlParameter(String sessioId, IAblObj object,
                                                     AblEntityAttr albianObject,
@@ -212,7 +212,7 @@ public class WriterJobAdapter extends FreeWriterJobAdapter {
 
     protected void buildWriterJob(String sessionId, WrtJob job, IAblObj entity,
                                   String storageAlias, String tableAlias,
-                                  IPersistenceUpdateCommand cmd)  {
+                                  IDMLCmd cmd)  {
         Class<?> cls = entity.getClass();
         String className = cls.getName();
         AblEntityAttr objAttr = AlbianEntityMetadata.getEntityMetadata(cls);

@@ -42,7 +42,7 @@ package org.albianj.api.dal.db;
  *
  * @author seapeak
  */
-public enum CommandOpt {
+public enum CmdOpt {
     /**
      * sql语句类型
      */

@@ -10,7 +10,7 @@ import org.albianj.api.dal.object.IAblObj;
 /**
  * Created by xuhaifeng on 17/3/14.
  */
-public class AlbianObjectCreator {
+public class AblCrt {
 
     public static IAblObj newInstance(Object sessionId, String typeClzzName)  {
         AblEntityAttr attr = AlbianEntityMetadata.getEntityMetadata(typeClzzName);

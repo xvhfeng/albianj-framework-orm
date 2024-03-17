@@ -39,40 +39,40 @@ package org.albianj.impl.dal.db;
 
 
 import org.albianj.AblThrowable;
-import org.albianj.api.dal.db.PersistenceCommand;
-import org.albianj.api.dal.db.SqlParameter;
-import org.albianj.api.dal.object.AlbianEntityFieldAttribute;
-import org.albianj.api.dal.object.AlbianObjectAttribute;
-import org.albianj.api.dal.db.CommandOpt;
+import org.albianj.api.dal.db.PCmd;
+import org.albianj.api.dal.db.SqlPara;
+import org.albianj.api.dal.object.AblEntityFieldAttr;
+import org.albianj.api.dal.object.AblEntityAttr;
+import org.albianj.api.dal.db.CmdOpt;
 
-import org.albianj.api.dal.object.IAlbianObject;
-import org.albianj.api.dal.object.DatabaseOpt;
+import org.albianj.api.dal.object.IAblObj;
+import org.albianj.api.dal.object.DBOpt;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateCommandAdapter implements IPersistenceUpdateCommand {
+public class CreateCommandAdapter implements IDMLCmd {
 
-    public static Map<String, SqlParameter> makeCreateCommand(String sessionId, int dbStyle, String tableName,
-                                                              AlbianObjectAttribute objAttr, Map<String, Object> sqlParaVals,
-                                                              StringBuilder sqlText)   {
+    public static Map<String, SqlPara> makeCreateCommand(String sessionId, int dbStyle, String tableName,
+                                                         AblEntityAttr objAttr, Map<String, Object> sqlParaVals,
+                                                         StringBuilder sqlText)   {
         StringBuilder cols = new StringBuilder();
         StringBuilder paras = new StringBuilder();
 
         sqlText.append("INSERT INTO ");
 
-        if (DatabaseOpt.MySql == dbStyle) {
+        if (DBOpt.MySql == dbStyle) {
             sqlText.append("`").append(tableName).append("`");
         } else {
             sqlText.append("[").append(tableName).append("]");
         }
 
-        Map<String, AlbianEntityFieldAttribute> fieldsAttr = objAttr.getFields();
+        Map<String, AblEntityFieldAttr> fieldsAttr = objAttr.getFields();
 
-        Map<String, SqlParameter> sqlParas = new HashMap<String, SqlParameter>();
-        for (Map.Entry<String, AlbianEntityFieldAttribute> entry : fieldsAttr
+        Map<String, SqlPara> sqlParas = new HashMap<String, SqlPara>();
+        for (Map.Entry<String, AblEntityFieldAttr> entry : fieldsAttr
                 .entrySet()) {
-            AlbianEntityFieldAttribute member = entry.getValue();
+            AblEntityFieldAttr member = entry.getValue();
 
             if (member.isAutoGenKey()) {
                 continue;
@@ -81,14 +81,14 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
             if (!member.isSave() || null == v)
                 continue;
 
-            SqlParameter para = new SqlParameter();
+            SqlPara para = new SqlPara();
             para.setName(member.getPropertyName());
             para.setSqlFieldName(member.getSqlFieldName());
             para.setSqlType(member.getDatabaseType());
             para.setValue(v);
             sqlParas.put(String.format("#%1$s#", member.getSqlFieldName()),
                     para);
-            if (DatabaseOpt.MySql == dbStyle) {
+            if (DBOpt.MySql == dbStyle) {
                 cols.append("`").append(member.getSqlFieldName()).append("`");
             } else {
                 cols.append("[").append(member.getSqlFieldName()).append("]");
@@ -108,30 +108,30 @@ public class CreateCommandAdapter implements IPersistenceUpdateCommand {
         return sqlParas;
     }
 
-    public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnError)   {
+    public PCmd buildPstCmd(String sessionId, int dbStyle, String tableName, IAblObj object,
+                            AblEntityAttr objAttr, Map<String, Object> mapValue, boolean rbkOnError)   {
         if (!object.getIsAlbianNew()) {
             throw new AblThrowable(
                 "the loaded albianj object can not be insert.please new the object from database first.");
         }
 
-        PersistenceCommand cmd = new PersistenceCommand();
+        PCmd cmd = new PCmd();
         StringBuilder sqlText = new StringBuilder();
 
-        Map<String, SqlParameter> sqlParas = makeCreateCommand(sessionId, dbStyle, tableName,
+        Map<String, SqlPara> sqlParas = makeCreateCommand(sessionId, dbStyle, tableName,
                 objAttr, mapValue, sqlText);
 
         cmd.setCommandText(sqlText.toString());
-        cmd.setCommandType(CommandOpt.Text);
+        cmd.setCommandType(CmdOpt.Text);
         cmd.setParameters(sqlParas);
 
         if (rbkOnError) {
             StringBuilder rollbackText = new StringBuilder();
 
-            Map<String, SqlParameter> rollbackParas = RemoveCommandAdapter.makeRemoveCommand(sessionId,
+            Map<String, SqlPara> rollbackParas = RemoveCommandAdapter.makeRemoveCommand(sessionId,
                     dbStyle, tableName, objAttr, mapValue, rollbackText);
             cmd.setRollbackCommandText(rollbackText.toString());
-            cmd.setRollbackCommandType(CommandOpt.Text);
+            cmd.setRollbackCommandType(CmdOpt.Text);
             cmd.setRollbackParameters(rollbackParas);
         }
 

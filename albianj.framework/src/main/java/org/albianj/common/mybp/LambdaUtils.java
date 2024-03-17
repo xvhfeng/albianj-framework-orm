@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.albianj.api.dal.mybp;
+package org.albianj.common.mybp;
 
-import org.albianj.api.dal.mybp.support.*;
+import org.albianj.common.mybp.support.*;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;

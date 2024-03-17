@@ -37,7 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.api.dal.object;
 
-public interface IFilterCondition extends ICondition {
+public interface IFltCdt extends ICondition {
     public BOpt getBoolOpt();
 
     public void setBoolOpt(BOpt bOpt);

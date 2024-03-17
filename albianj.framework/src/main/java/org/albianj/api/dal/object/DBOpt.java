@@ -42,7 +42,7 @@ package org.albianj.api.dal.object;
  *
  * @author seapeak
  */
-public class DatabaseOpt {
+public class DBOpt {
     public final static int MySql = 1;
     public final static int Oracle = 2;
     public final static int SqlServer = 3;

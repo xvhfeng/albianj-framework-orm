@@ -14,11 +14,11 @@ import java.sql.SQLException;
 /**
  * Created by xuhaifeng on 17/7/27.
  */
-public class HikariCPWapper extends FreeDataBasePool {
+public class HCPWapper extends FreeDBP {
 
     public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
-    public HikariCPWapper() {
+    public HCPWapper() {
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                 "use Hikari connection pool.");
     }

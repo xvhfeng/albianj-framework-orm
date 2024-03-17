@@ -43,7 +43,7 @@ package org.albianj.api.dal.context;
  *
  * @author seapeak
  */
-public interface IPersistenceNotify {
+public interface IDalNotify {
     /**
      * 存储层完成后执行的通知
      *

@@ -49,9 +49,9 @@ import org.albianj.api.dal.service.AlbianEntityMetadata;
 import java.util.List;
 import java.util.Map;
 
-public class ChainExpressionParser {
+public class ChaExprPrs {
 
-    public static void toFilterConditionMap(IChaExpr f, Map<String, IFilterCondition> map) {
+    public static void toFilterConditionMap(IChaExpr f, Map<String, IFltCdt> map) {
         if (null == f) return;
         List<IChaExpr> ces = f.getChainExpression();
         if (null == ces || 0 == ces.size())
@@ -62,12 +62,12 @@ public class ChainExpressionParser {
             } else {
                 IFltExpr fe = (IFltExpr) ce;
                 map.put(StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fe.getFieldName() : fe.getAliasName(),
-                        new FilterCondition(fe));
+                        new FltCdt(fe));
             }
         }
     }
 
-    public static void toFilterConditionArray(IChaExpr f, List<IFilterCondition> list) {
+    public static void toFilterConditionArray(IChaExpr f, List<IFltCdt> list) {
         if (null == f) return;
         List<IChaExpr> ces = f.getChainExpression();
         if (null == ces || 0 == ces.size())
@@ -77,7 +77,7 @@ public class ChainExpressionParser {
                 toFilterConditionArray(ce, list);
             } else {
                 IFltExpr fe = (IFltExpr) ce;
-                list.add(new FilterCondition(fe));
+                list.add(new FltCdt(fe));
             }
         }
     }

@@ -9,7 +9,7 @@ import java.sql.Statement;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersistenceStatement {
+public class PStatement {
     private boolean batch = false;
     private String cmdText;
     private Statement statement;

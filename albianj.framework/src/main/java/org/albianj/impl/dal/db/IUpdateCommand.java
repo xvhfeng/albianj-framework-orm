@@ -43,11 +43,11 @@ import org.albianj.api.dal.object.*;
 import java.util.Map;
 
 public interface IUpdateCommand {
-    public ICommand builder(IAlbianObject object, DataRoutersAttribute routings,
-                            AlbianObjectAttribute albianObject, Map<String, Object> mapValue,
-                            DataRouterAttribute routing, StorageAttribute storage);
+    public ICommand builder(IAblObj object, DrsAttr routings,
+                            AblEntityAttr albianObject, Map<String, Object> mapValue,
+                            DrAttr routing, StgAttr storage);
 
-    public ICommand builder(IAlbianObject object, DataRoutersAttribute routings, AlbianObjectAttribute albianObject,
-                            Map<String, Object> mapValue, DataRouterAttribute routing, StorageAttribute storage, String[] members)
+    public ICommand builder(IAblObj object, DrsAttr routings, AblEntityAttr albianObject,
+                            Map<String, Object> mapValue, DrAttr routing, StgAttr storage, String[] members)
             throws NoSuchMethodException;
 }

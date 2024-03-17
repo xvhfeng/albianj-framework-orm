@@ -42,18 +42,18 @@ import org.albianj.common.utils.SetUtil;
 import org.albianj.api.dal.context.WrtJob;
 import org.albianj.api.dal.context.WrtTask;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.dal.context.IPersistenceCompensateNotify;
+import org.albianj.api.dal.context.ICompensateNotify;
 
 import java.util.Map;
 
-public class PersistenceCompensateNotify implements IPersistenceCompensateNotify {
+public class CompensateNotify implements ICompensateNotify {
 
-    private static IPersistenceCompensateNotify notify = null;
+    private static ICompensateNotify notify = null;
 
-    public static synchronized IPersistenceCompensateNotify getInstance() {
+    public static synchronized ICompensateNotify getInstance() {
 
         if (null == notify)
-            notify = new PersistenceCompensateNotify();
+            notify = new CompensateNotify();
         return notify;
 
     }

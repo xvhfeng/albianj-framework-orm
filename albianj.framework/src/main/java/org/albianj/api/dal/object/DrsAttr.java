@@ -42,10 +42,10 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class DataRoutersAttribute  {
+public class DrsAttr {
     private boolean writerRouterEnable = false;
     private boolean readerRouterEnable = false;
-    private Map<String, DataRouterAttribute> writerRouters = null;
-    private Map<String, DataRouterAttribute> readerRouters = null;
-    private IAlbianObjectDataRouter dataRouter = null;
+    private Map<String, DrAttr> writerRouters = null;
+    private Map<String, DrAttr> readerRouters = null;
+    private IAblDr dataRouter = null;
 }

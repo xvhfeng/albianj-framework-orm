@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.baomidou.mybatisplus.core.toolkit;
 
-import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
+package org.albianj.common.mybp;
+
+import org.albianj.AblThrowable;
+import org.albianj.common.utils.StringsUtil;
 
 /**
  * 异常辅助工具类
@@ -35,8 +37,8 @@ public final class ExceptionUtils {
      * @param t   异常信息
      * @return 返回异常
      */
-    public static MybatisPlusException mpe(String msg, Throwable t, Object... params) {
-        return new MybatisPlusException(String.format(msg, params), t);
+    public static AblThrowable mpe(String msg, Throwable t, Object... params) {
+        return new AblThrowable(StringsUtil.nonIdxFmt(msg, params), t);
     }
 
     /**
@@ -45,8 +47,8 @@ public final class ExceptionUtils {
      * @param msg 消息
      * @return 返回异常
      */
-    public static MybatisPlusException mpe(String msg, Object... params) {
-        return new MybatisPlusException(String.format(msg, params));
+    public static AblThrowable mpe(String msg, Object... params) {
+        return new AblThrowable(StringsUtil.nonIdxFmt(msg, params));
     }
 
     /**
@@ -55,8 +57,8 @@ public final class ExceptionUtils {
      * @param t 异常
      * @return 返回异常
      */
-    public static MybatisPlusException mpe(Throwable t) {
-        return new MybatisPlusException(t);
+    public static AblThrowable mpe(Throwable t) {
+        return new AblThrowable(t);
     }
 
     public static void throwMpe(boolean condition, String msg, Object... params) {

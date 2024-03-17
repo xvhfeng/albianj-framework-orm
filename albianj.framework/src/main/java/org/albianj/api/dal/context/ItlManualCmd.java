@@ -13,7 +13,7 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
-public class InternalManualCommand  {
+public class ItlManualCmd {
 
     private String sqlText;
     private CmdOpt cmdType = CmdOpt.Text;

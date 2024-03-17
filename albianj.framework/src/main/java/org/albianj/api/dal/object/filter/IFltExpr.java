@@ -45,7 +45,7 @@ import org.albianj.api.dal.object.OOpt;
  * @author seapeak
  * @since v2.1
  */
-public interface IFilterExpression extends IChainExpression {
+public interface IFltExpr extends IChaExpr {
 
     /**
      * 过滤表达式的字段名称，是指实体的属性名而不是sql语句的数据库字段名

@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.baomidou.mybatisplus.core.toolkit;
+
+package org.albianj.common.mybp;
+
+import org.albianj.common.mybp.ExceptionUtils;
+import org.albianj.common.utils.SetUtil;
+import org.albianj.common.utils.StringsUtil;
 
 import java.util.Collection;
 import java.util.Map;
@@ -80,7 +85,7 @@ public final class Assert {
      * @param message 消息
      */
     public static void notEmpty(String value, String message, Object... params) {
-        isTrue(StringUtils.isNotBlank(value), message, params);
+        isTrue(!StringsUtil.isNullOrEmpty(value), message, params);
     }
 
     /**
@@ -91,7 +96,7 @@ public final class Assert {
      * @param message    消息
      */
     public static void notEmpty(Collection<?> collection, String message, Object... params) {
-        isTrue(CollectionUtils.isNotEmpty(collection), message, params);
+        isTrue(!SetUtil.isNullOrEmpty(collection), message, params);
     }
 
     /**
@@ -102,7 +107,7 @@ public final class Assert {
      * @param message 消息
      */
     public static void notEmpty(Map<?, ?> map, String message, Object... params) {
-        isTrue(CollectionUtils.isNotEmpty(map), message, params);
+        isTrue(!SetUtil.isNullOrEmpty(map), message, params);
     }
 
     /**
@@ -113,7 +118,7 @@ public final class Assert {
      * @param message 消息
      */
     public static void isEmpty(Map<?, ?> map, String message, Object... params) {
-        isTrue(CollectionUtils.isEmpty(map), message, params);
+        isTrue(!SetUtil.isNullOrEmpty(map), message, params);
     }
 
     /**
@@ -124,6 +129,6 @@ public final class Assert {
      * @param message 消息
      */
     public static void notEmpty(Object[] array, String message, Object... params) {
-        isTrue(ArrayUtils.isNotEmpty(array), message, params);
+        isTrue(!SetUtil.isNullOrEmpty(array), message, params);
     }
 }

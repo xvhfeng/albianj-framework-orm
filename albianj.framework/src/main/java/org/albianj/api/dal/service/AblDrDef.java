@@ -8,20 +8,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter {
+public class AblDrDef extends FreeAblDr {
 
     @Override
-    public List<DataRouterAttribute> mappingWriterRouting(
-            Map<String, DataRouterAttribute> routings, IAlbianObject obj) {
+    public List<DrAttr> mappingWriterRouting(
+            Map<String, DrAttr> routings, IAblObj obj) {
         // TODO Auto-generated method stub
         if (SetUtil.isNullOrEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;
             Object[] skeys = keys.toArray();
-            DataRouterAttribute dra = routings.get(skeys[0]);
+            DrAttr dra = routings.get(skeys[0]);
             if (!dra.isEnable()) return null;
-            List<DataRouterAttribute> ras = new Vector<DataRouterAttribute>();
+            List<DrAttr> ras = new Vector<DrAttr>();
             ras.add(dra);
             return ras;
         }
@@ -29,17 +29,17 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
     }
 
     @Override
-    public DataRouterAttribute mappingReaderRouting(
-            Map<String, DataRouterAttribute> routings,
-            Map<String, IFilterCondition> wheres,
-            Map<String, OrderByCondition> orderbys) {
+    public DrAttr mappingReaderRouting(
+            Map<String, DrAttr> routings,
+            Map<String, IFltCdt> wheres,
+            Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
         if (SetUtil.isNullOrEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;
             Object[] skeys = keys.toArray();
-            DataRouterAttribute dra = routings.get(skeys[0]);
+            DrAttr dra = routings.get(skeys[0]);
             if (!dra.isEnable()) return null;
             return dra;
         }
@@ -47,43 +47,43 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
     }
 
     @Override
-    public String mappingWriterRoutingStorage(DataRouterAttribute routing,
-                                              IAlbianObject obj) {
+    public String mappingWriterRoutingStorage(DrAttr routing,
+                                              IAblObj obj) {
         // TODO Auto-generated method stub
         if (null == routing) return null;
         return routing.getStorageName();
     }
 
     @Override
-    public String mappingWriterTable(DataRouterAttribute routing,
-                                     IAlbianObject obj) {
+    public String mappingWriterTable(DrAttr routing,
+                                     IAblObj obj) {
         // TODO Auto-generated method stub
         if (null == routing) return null;
         return routing.getTableName();
     }
 
     @Override
-    public String mappingReaderRoutingStorage(DataRouterAttribute routing,
-                                              Map<String, IFilterCondition> wheres,
-                                              Map<String, OrderByCondition> orderbys) {
+    public String mappingReaderRoutingStorage(DrAttr routing,
+                                              Map<String, IFltCdt> wheres,
+                                              Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
         if (null == routing) return null;
         return routing.getStorageName();
     }
 
     @Override
-    public String mappingReaderTable(DataRouterAttribute routing,
-                                     Map<String, IFilterCondition> wheres,
-                                     Map<String, OrderByCondition> orderbys) {
+    public String mappingReaderTable(DrAttr routing,
+                                     Map<String, IFltCdt> wheres,
+                                     Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
         if (null == routing) return null;
         return routing.getTableName();
     }
 
-    public DataRouterAttribute mappingExactReaderRouting(
-            Map<String, DataRouterAttribute> routings,
-            Map<String, IFilterCondition> wheres,
-            Map<String, OrderByCondition> orderbys) {
+    public DrAttr mappingExactReaderRouting(
+            Map<String, DrAttr> routings,
+            Map<String, IFltCdt> wheres,
+            Map<String, OdrBy> orderbys) {
         return mappingReaderRouting(routings, wheres, orderbys);
     }
 
@@ -93,9 +93,9 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
      * @param orderbys
      * @return
      */
-    public String mappingExactReaderRoutingStorage(DataRouterAttribute routing,
-                                                   Map<String, IFilterCondition> wheres,
-                                                   Map<String, OrderByCondition> orderbys) {
+    public String mappingExactReaderRoutingStorage(DrAttr routing,
+                                                   Map<String, IFltCdt> wheres,
+                                                   Map<String, OdrBy> orderbys) {
         return mappingReaderRoutingStorage(routing, wheres, orderbys);
     }
 
@@ -105,9 +105,9 @@ public class AlbianObjectDataRouterDefaulter extends FreeAlbianObjectDataRouter 
      * @param orderbys
      * @return
      */
-    public String mappingExactReaderTable(DataRouterAttribute routing,
-                                          Map<String, IFilterCondition> wheres,
-                                          Map<String, OrderByCondition> orderbys) {
+    public String mappingExactReaderTable(DrAttr routing,
+                                          Map<String, IFltCdt> wheres,
+                                          Map<String, OdrBy> orderbys) {
         return mappingReaderTable(routing, wheres, orderbys);
     }
 }

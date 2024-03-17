@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.albianj.api.dal.mybp;
+package org.albianj.common.mybp;
 
 
 import java.lang.reflect.Constructor;

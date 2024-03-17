@@ -40,8 +40,8 @@ package org.albianj.api.dal.context;
 import lombok.Data;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.dal.db.PersistenceCommand;
-import org.albianj.api.dal.db.IDataBasePool;
+import org.albianj.api.dal.db.PCmd;
+import org.albianj.api.dal.db.IDBP;
 import org.albianj.api.dal.object.RStgAttr;
 
 import java.sql.Connection;
@@ -49,16 +49,16 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 @Data
-public class ReaderJob {
+public class RdrJob {
     private RStgAttr storage = null;
-    private PersistenceCommand command = null;
+    private PCmd command = null;
     private Connection connection = null;
     private Statement statement = null;
     private ResultSet result = null;
     private String id = null;
-    private IDataBasePool databasePool = null;
+    private IDBP databasePool = null;
 
-    public ReaderJob(String sessionId) {
+    public RdrJob(String sessionId) {
         if (StringsUtil.isNullOrEmptyOrAllSpace(sessionId)) {
             this.id = ServRouter.make32UUID();
         } else {

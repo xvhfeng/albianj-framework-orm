@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.context;
 
 import org.albianj.impl.dal.db.CreateCommandAdapter;
-import org.albianj.impl.dal.db.IPersistenceUpdateCommand;
+import org.albianj.impl.dal.db.IDMLCmd;
 import org.albianj.impl.dal.db.ModifyCommandAdapter;
 import org.albianj.impl.dal.db.RemoveCommandAdapter;
 import org.albianj.api.dal.context.WrtJob;
@@ -47,17 +47,17 @@ import org.albianj.api.dal.object.IAblObj;
 
 import java.util.List;
 
-public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
+public abstract class FreeWrtJobAdp implements IWrtJobAdp {
     public WrtJob buildCreation(String sessionId, IAblObj object)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand cca = new CreateCommandAdapter();
+        IDMLCmd cca = new CreateCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, cca);
         return job;
     }
 
     public WrtJob buildCreation(String sessionId, List<? extends IAblObj> objects)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand cca = new CreateCommandAdapter();
+        IDMLCmd cca = new CreateCommandAdapter();
         for (IAblObj object : objects) {
             buildWriterJob(sessionId, job, object, null, null, cca);
         }
@@ -66,14 +66,14 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
 
     public WrtJob buildModification(String sessionId, IAblObj object)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
+        IDMLCmd mca = new ModifyCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, mca);
         return job;
     }
 
     public WrtJob buildModification(String sessionId, List<? extends IAblObj> objects)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
+        IDMLCmd mca = new ModifyCommandAdapter();
         for (IAblObj object : objects) {
             buildWriterJob(sessionId, job, object, null, null, mca);
 
@@ -83,7 +83,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
 
     public WrtJob buildRemoved(String sessionId, IAblObj object)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
+        IDMLCmd rca = new RemoveCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, rca);
 
         return job;
@@ -91,7 +91,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
 
     public WrtJob buildRemoved(String sessionId, List<? extends IAblObj> objects)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand rca = new RemoveCommandAdapter();
+        IDMLCmd rca = new RemoveCommandAdapter();
         for (IAblObj object : objects) {
             buildWriterJob(sessionId, job, object, null, null, rca);
         }
@@ -100,7 +100,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
 
     public WrtJob buildSaving(String sessionId, IAblObj object)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand iuc;
+        IDMLCmd iuc;
         if (object.getIsAlbianNew()) {
             iuc = new CreateCommandAdapter();
         } else {
@@ -113,8 +113,8 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
 
     public WrtJob buildSaving(String sessionId, List<? extends IAblObj> objects)  {
         WrtJob job = new WrtJob(sessionId);
-        IPersistenceUpdateCommand cca = new CreateCommandAdapter();
-        IPersistenceUpdateCommand mca = new ModifyCommandAdapter();
+        IDMLCmd cca = new CreateCommandAdapter();
+        IDMLCmd mca = new ModifyCommandAdapter();
         for (IAblObj object : objects) {
             if (object.getIsAlbianNew()) {
                 buildWriterJob(sessionId, job, object, null, null, cca);
@@ -129,9 +129,9 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
             {
                 WrtJob job = new WrtJob(sessionId);
         job.setRollbackOnError(rollbackOnError);
-        IPersistenceUpdateCommand crtCmd = new CreateCommandAdapter();
-        IPersistenceUpdateCommand mdfCmd = new ModifyCommandAdapter();
-        IPersistenceUpdateCommand dltCmd = new RemoveCommandAdapter();
+        IDMLCmd crtCmd = new CreateCommandAdapter();
+        IDMLCmd mdfCmd = new ModifyCommandAdapter();
+        IDMLCmd dltCmd = new RemoveCommandAdapter();
         for (AblObjWarp entity : entities) {
             switch (entity.getQryOpt()) {
                 case Create: {
@@ -163,7 +163,7 @@ public abstract class FreeWriterJobAdapter implements IWriterJobAdapter {
 
     protected abstract void buildWriterJob(String sessionId, WrtJob job, IAblObj entity,
                                            String storageAlias, String tableAlias,
-                                           IPersistenceUpdateCommand cmd) ;
+                                           IDMLCmd cmd) ;
 
 
 }

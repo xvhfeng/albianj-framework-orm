@@ -48,7 +48,7 @@ import java.sql.Types;
 import java.text.SimpleDateFormat;
 //import java.util.Date;
 
-public class ResultConvert {
+public class RstConv {
 
     @SuppressWarnings("deprecation")
     public static Object toBoxValue(Class<?> cls, Object o) throws Exception {

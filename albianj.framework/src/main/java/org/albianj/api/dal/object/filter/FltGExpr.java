@@ -49,12 +49,12 @@ import java.util.List;
  * @author seapeak
  * @since v2.1
  */
-public class FilterGroupExpression implements IFilterGroupExpression {
+public class FltGExpr implements IFltGExpr {
 
     private BOpt _ro = BOpt.Normal;
     private int _style = STYLE_FILTER_GROUP;
 
-    private List<IChainExpression> _chains = new ArrayList<>();
+    private List<IChaExpr> _chains = new ArrayList<>();
 
     /* (non-Javadoc)
      * @see org.albianj.persistence.object.filter.IChainExpression#getRelationalOperator()
@@ -96,7 +96,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(org.albianj.persistence.object.filter.IFilterExpression)
      */
     @Override
-    public IFilterGroupExpression and(IFilterExpression fe) {
+    public IFltGExpr and(IFltExpr fe) {
         // TODO Auto-generated method stub
         fe.setBoolOpt(BOpt.And);
         this._chains.add(fe);
@@ -108,7 +108,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(org.albianj.persistence.object.filter.IFilterExpression)
      */
     @Override
-    public IFilterGroupExpression or(IFilterExpression fe) {
+    public IFltGExpr or(IFltExpr fe) {
         // TODO Auto-generated method stub
         fe.setBoolOpt(BOpt.OR);
         this._chains.add(fe);
@@ -119,7 +119,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#addAddition(org.albianj.persistence.object.filter.IFilterExpression)
      */
     @Override
-    public IFilterGroupExpression addAddition(IFilterExpression fe) {
+    public IFltGExpr addAddition(IFltExpr fe) {
         // TODO Auto-generated method stub
         fe.setBoolOpt(BOpt.Normal);
         this._chains.add(fe);
@@ -130,9 +130,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression and(String fieldName, OOpt lo, Object value) {
+    public IFltGExpr and(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, lo, value);
         this.and(fe);
         return this;
     }
@@ -141,9 +141,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression and(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltGExpr and(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
         this.and(fe);
         return this;
     }
@@ -152,9 +152,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression or(String fieldName, OOpt lo, Object value) {
+    public IFltGExpr or(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, lo, value);
         this.or(fe);
         return this;
     }
@@ -163,9 +163,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression or(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltGExpr or(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
         this.or(fe);
         return this;
     }
@@ -174,9 +174,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#addAddition(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression addAddition(String fieldName, OOpt lo, Object value) {
+    public IFltGExpr addAddition(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, lo, value);
         this.addAddition(fe);
         return this;
     }
@@ -185,9 +185,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#addAddition(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression addAddition(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltGExpr addAddition(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
         this.addAddition(fe);
         return this;
     }
@@ -196,7 +196,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(org.albianj.persistence.object.filter.IFilterGroupExpression)
      */
     @Override
-    public IFilterGroupExpression and(IFilterGroupExpression fge) {
+    public IFltGExpr and(IFltGExpr fge) {
         // TODO Auto-generated method stub
         fge.setBoolOpt(BOpt.And);
         this._chains.add(fge);
@@ -207,7 +207,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(org.albianj.persistence.object.filter.IFilterGroupExpression)
      */
     @Override
-    public IFilterGroupExpression or(IFilterGroupExpression fge) {
+    public IFltGExpr or(IFltGExpr fge) {
         // TODO Auto-generated method stub
         fge.setBoolOpt(BOpt.OR);
         this._chains.add(fge);
@@ -218,7 +218,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#add(org.albianj.persistence.object.filter.IFilterExpression)
      */
     @Override
-    public IFilterGroupExpression add(IFilterExpression fe) {
+    public IFltGExpr add(IFltExpr fe) {
         fe.setBoolOpt(BOpt.Normal);
         // TODO Auto-generated method stub
         this._chains.add(fe);
@@ -229,7 +229,7 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IFilterGroupExpression#addFilterGroup(org.albianj.persistence.object.filter.IFilterGroupExpression)
      */
     @Override
-    public IFilterGroupExpression addFilterGroup(IFilterGroupExpression fge) {
+    public IFltGExpr addFilterGroup(IFltGExpr fge) {
         fge.setBoolOpt(BOpt.Normal);
         // TODO Auto-generated method stub
         this._chains.add(fge);
@@ -240,9 +240,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#add(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression add(String fieldName, OOpt lo, Object value) {
+    public IFltGExpr add(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, lo, value);
         this.add(fe);
         return this;
     }
@@ -251,9 +251,9 @@ public class FilterGroupExpression implements IFilterGroupExpression {
      * @see org.albianj.persistence.object.filter.IChainExpression#add(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
-    public IFilterGroupExpression add(String fieldName, String aliasName, OOpt lo, Object value) {
+    public IFltGExpr add(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
-        IFilterExpression fe = new FilterExpression(fieldName, aliasName, lo, value);
+        IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
         this.add(fe);
         return this;
     }
@@ -261,12 +261,12 @@ public class FilterGroupExpression implements IFilterGroupExpression {
     /* (non-Javadoc)
      * @see org.albianj.persistence.object.filter.IChainExpression#getChainExpression()
      */
-    public List<IChainExpression> getChainExpression() {
+    public List<IChaExpr> getChainExpression() {
         return this._chains;
     }
 
-    public IChainExpression addAutoIdExpr() {
-        IFilterExpression fe = new FilterExpression();
+    public IChaExpr addAutoIdExpr() {
+        IFltExpr fe = new FltExpr();
         fe.setAutoId(true);
         this.add(fe);
         return this;

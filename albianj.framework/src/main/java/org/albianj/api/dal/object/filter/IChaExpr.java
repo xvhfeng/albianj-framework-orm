@@ -79,7 +79,7 @@ import java.util.List;
  * @author seapeak
  * @since v2.1
  */
-public interface IChainExpression {
+public interface IChaExpr {
     /**
      * 当前的表达式项为过滤表达式
      */
@@ -131,7 +131,7 @@ public interface IChainExpression {
      * @param fe 当前需要被加入and关系的表达式项
      * @return 表达式项关系链的头对象
      */
-    IChainExpression and(IFilterExpression fe);
+    IChaExpr and(IFltExpr fe);
 
     /**
      * 前一个表达式项and上当前的表达式
@@ -141,7 +141,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression and(String fieldName, OOpt lo, Object value);
+    IChaExpr and(String fieldName, OOpt lo, Object value);
 
     /**
      * 前一个表达式项and上当前的表达式
@@ -153,7 +153,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression and(String fieldName, String aliasName, OOpt lo, Object value);
+    IChaExpr and(String fieldName, String aliasName, OOpt lo, Object value);
 
     /**
      * * 前一个表达式项or上当前的表达式fe
@@ -161,7 +161,7 @@ public interface IChainExpression {
      * @param fe 当前需要被加入or关系的表达式项
      * @return 表达式项关系链的头对象
      */
-    IChainExpression or(IFilterExpression fe);
+    IChaExpr or(IFltExpr fe);
 
     /**
      * 前一个表达式项or上当前的表达式
@@ -171,7 +171,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression or(String fieldName, OOpt lo, Object value);
+    IChaExpr or(String fieldName, OOpt lo, Object value);
 
     /**
      * 前一个表达式项or上当前的表达式
@@ -183,7 +183,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression or(String fieldName, String aliasName, OOpt lo, Object value);
+    IChaExpr or(String fieldName, String aliasName, OOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -191,7 +191,7 @@ public interface IChainExpression {
      * @param 当前需要被加入or关系的表达式项
      * @return 表达式项关系链的头对象
      */
-    public IChainExpression addAddition(IFilterExpression fe);
+    public IChaExpr addAddition(IFltExpr fe);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -201,7 +201,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression addAddition(String fieldName, OOpt lo, Object value);
+    IChaExpr addAddition(String fieldName, OOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -213,7 +213,7 @@ public interface IChainExpression {
      * @return 表达式项关系链的头对象
      * @ fieldName 当前表达式的属性名，这个fieldName是编程实体的属性，而不是数据库的值字段名。albianj会自动根据实体属性获取数据库的字段名
      */
-    IChainExpression addAddition(String fieldName, String aliasName, OOpt lo, Object value);
+    IChaExpr addAddition(String fieldName, String aliasName, OOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -223,7 +223,7 @@ public interface IChainExpression {
      * @param fe 当前表达式项
      * @return 表达式项关系链的头对象
      */
-    IChainExpression add(IFilterExpression fe);
+    IChaExpr add(IFltExpr fe);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -235,7 +235,7 @@ public interface IChainExpression {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
-    IChainExpression add(String fieldName, OOpt lo, Object value);
+    IChaExpr add(String fieldName, OOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -249,7 +249,7 @@ public interface IChainExpression {
      * @return 表达式项关系链的头对象
      * @ fieldName 当前表达式的属性名，这个fieldName是编程实体的属性，而不是数据库的值字段名。albianj会自动根据实体属性获取数据库的字段名
      */
-    IChainExpression add(String fieldName, String aliasName, OOpt lo, Object value);
+    IChaExpr add(String fieldName, String aliasName, OOpt lo, Object value);
 
     /**
      * and 当前的表达式组项。该表达式组项会被加入到sql语句的where条件中
@@ -257,9 +257,9 @@ public interface IChainExpression {
      * @param fge 当前表达式项
      * @return 表达式项关系链的头对象
      */
-    IChainExpression and(IFilterGroupExpression fge);
+    IChaExpr and(IFltGExpr fge);
 
-    IChainExpression addAutoIdExpr();
+    IChaExpr addAutoIdExpr();
 
     /**
      * or 当前的表达式组项。该表达式组项会被加入到sql语句的where条件中
@@ -267,12 +267,12 @@ public interface IChainExpression {
      * @param fge 当前表达式项
      * @return 表达式项关系链的头对象
      */
-    IChainExpression or(IFilterGroupExpression fge);
+    IChaExpr or(IFltGExpr fge);
 
     /**
      * 得到当前表达式项下面的表达式
      *
      * @return
      */
-    List<IChainExpression> getChainExpression();
+    List<IChaExpr> getChainExpression();
 }

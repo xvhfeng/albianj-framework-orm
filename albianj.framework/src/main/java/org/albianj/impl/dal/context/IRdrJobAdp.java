@@ -41,7 +41,7 @@ import org.albianj.api.dal.db.SqlPara;
 
 import org.albianj.api.dal.context.RdrJob;
 import org.albianj.api.dal.db.CmdOpt;
-import org.albianj.api.dal.object.IFilterCondition;
+import org.albianj.api.dal.object.IFltCdt;
 import org.albianj.api.dal.object.OdrBy;
 import org.albianj.api.dal.object.RStgAttr;
 import org.albianj.api.dal.object.filter.IChaExpr;
@@ -49,16 +49,16 @@ import org.albianj.api.dal.object.filter.IChaExpr;
 import java.util.LinkedList;
 import java.util.Map;
 
-public interface IReaderJobAdapter {
+public interface IRdrJobAdp {
 
     @Deprecated
     public RdrJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String drouterAlias, int start,
-                                 int step, LinkedList<IFilterCondition> wheres, LinkedList<OdrBy> orderbys, String idxName)
+                                 int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
          ;
 
     @Deprecated
     public RdrJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String drouterAlias,
-                                 LinkedList<IFilterCondition> wheres, LinkedList<OdrBy> orderbys, String idxName)
+                                 LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
          ;
 
     public RdrJob buildReaderJob(String sessionId, Class<?> cls, boolean isExact, String storageAlias,

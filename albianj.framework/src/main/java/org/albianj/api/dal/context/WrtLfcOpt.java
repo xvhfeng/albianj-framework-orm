@@ -42,7 +42,7 @@ package org.albianj.api.dal.context;
  *
  * @author seapeak
  */
-public enum WrtJobLfcOpt {
+public enum WrtLfcOpt {
     /**
      * 事务的初始状态
      */

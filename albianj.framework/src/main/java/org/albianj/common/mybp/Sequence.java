@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.baomidou.mybatisplus.core.toolkit;
+package org.albianj.common.mybp;
 
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
+import com.mysql.cj.log.Log;
+import com.mysql.cj.log.LogFactory;
+import org.albianj.common.utils.StringsUtil;
+import org.albianj.loader.AlbianjApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
@@ -33,7 +37,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Sequence {
 
-    private static final Log logger = LogFactory.getLog(Sequence.class);
+    private static final Logger logger = LoggerFactory.getLogger(Sequence.class);
     /**
      * 时间起始标记点，作为基准，一般取系统的最近时间（一旦确定不能变动）
      */
@@ -112,7 +116,7 @@ public class Sequence {
         StringBuilder mpid = new StringBuilder();
         mpid.append(datacenterId);
         String name = ManagementFactory.getRuntimeMXBean().getName();
-        if (StringUtils.isNotBlank(name)) {
+        if (StringsUtil.isNotBlank(name)) {
             /*
              * GET jvmPid
              */

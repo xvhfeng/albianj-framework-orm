@@ -44,7 +44,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RunningStorageAttribute   {
-    private StorageAttribute storageAttribute = null;
+public class RStgAttr {
+    private StgAttr stgAttr = null;
     private String database = null;
 }

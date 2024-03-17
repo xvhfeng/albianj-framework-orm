@@ -42,7 +42,7 @@ package org.albianj.api.dal.object;
  *
  * @author seapeak
  */
-public enum OperatorOpt {
+public enum OOpt {
     /**
      * 等于，相当于sql的=
      */
@@ -89,7 +89,7 @@ statement.setArray(1, array);
     private int key;
     private String word;
 
-    OperatorOpt(int key,String word){
+    OOpt(int key, String word){
         this.key = key;
         this.word = word;
     }

@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianObjectRant {
+public @interface AblObjRant {
     boolean SqlFieldUseUnderline() default false;
     boolean TableNameUseUnderline() default false;
 }

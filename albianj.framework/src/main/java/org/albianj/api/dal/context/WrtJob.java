@@ -44,19 +44,19 @@ import org.albianj.common.utils.StringsUtil;
 import java.util.Map;
 
 @Data
-public class WriterJob  {
-    private Map<String, WriterTask> writerTasks = null;
-    private WriterJobLifeTime writerJobLifeTime = WriterJobLifeTime.Normal;
-    private IPersistenceCompensateNotify compensateCallback = null;
+public class WrtJob {
+    private Map<String, WrtTask> writerTasks = null;
+    private WrtLfcOpt writerJobLifeTime = WrtLfcOpt.Normal;
+    private ICompensateNotify compensateCallback = null;
     private Object compensateCallbackObject = null;
-    private IPersistenceNotify notifyCallback = null;
+    private IDalNotify notifyCallback = null;
     private String currentStorage = null;
     private Object notifyCallbackobject = null;
     private String id = null;
     private boolean needManualRollback = false;
     private boolean rollbackOnError = false;
 
-    public WriterJob(String sessionId) {
+    public WrtJob(String sessionId) {
         // TODO Auto-generated constructor stub
         if (StringsUtil.isNullOrEmptyOrAllSpace(sessionId)) {
             this.id = ServRouter.make32UUID();

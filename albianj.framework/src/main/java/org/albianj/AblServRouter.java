@@ -1,14 +1,14 @@
 package org.albianj;
 
-import org.albianj.api.dal.context.dactx.IIduCtx;
-import org.albianj.api.dal.context.dactx.ISltCtx;
-import org.albianj.api.dal.object.IAlbianObject;
-import org.albianj.api.dal.object.OrderByCondition;
-import org.albianj.api.dal.object.filter.FilterExpression;
-import org.albianj.api.dal.object.filter.FilterGroupExpression;
-import org.albianj.api.dal.object.filter.IChainExpression;
-import org.albianj.api.dal.object.filter.IFilterGroupExpression;
-import org.albianj.api.dal.service.AlbianObjectCreator;
+import org.albianj.api.dal.context.dactx.IDMLCtx;
+import org.albianj.api.dal.context.dactx.IDQLCtx;
+import org.albianj.api.dal.object.IAblObj;
+import org.albianj.api.dal.object.OdrBy;
+import org.albianj.api.dal.object.filter.FltExpr;
+import org.albianj.api.dal.object.filter.FltGExpr;
+import org.albianj.api.dal.object.filter.IChaExpr;
+import org.albianj.api.dal.object.filter.IFltGExpr;
+import org.albianj.api.dal.service.AblCrt;
 import org.albianj.api.dal.service.IAlbianDataAccessService;
 import org.albianj.api.dal.service.IAlbianOpenedStorageService;
 
@@ -18,32 +18,32 @@ public final class AblServRouter extends ServRouter {
         _FilterStackFrameClasses.add(AblServRouter.class.getName());
     }
 
-    public static IAlbianObject newInstance(Object sessionId, String itf)  {
-        return AlbianObjectCreator.newInstance(sessionId, itf);
+    public static IAblObj newInstance(Object sessionId, String itf)  {
+        return AblCrt.newInstance(sessionId, itf);
     }
 
-    public static <T extends IAlbianObject> T newInstance(Object sessionId, Class<T> clazz)  {
+    public static <T extends IAblObj> T newInstance(Object sessionId, Class<T> clazz)  {
         return (T) newInstance(sessionId, clazz.getName());
     }
 
-    public static IChainExpression newFilterExpression(){
-        return  new FilterExpression();
+    public static IChaExpr newFilterExpression(){
+        return  new FltExpr();
     }
 
-    public static OrderByCondition newOrderByCondition(){
-        return new OrderByCondition();
+    public static OdrBy newOrderByCondition(){
+        return new OdrBy();
     }
 
-    public static  IFilterGroupExpression newFilterGroupExpression(){
-        return new FilterGroupExpression();
+    public static IFltGExpr newFilterGroupExpression(){
+        return new FltGExpr();
     }
 
-    public static IIduCtx newDataAccessContext(Object sessionId) {
+    public static IDMLCtx newDataAccessContext(Object sessionId) {
         IAlbianDataAccessService das = getService(sessionId,IAlbianDataAccessService.class,IAlbianDataAccessService.Name);
         return das.newDataAccessContext();
     }
 
-    public static ISltCtx newQueryContext(Object sessionId) {
+    public static IDQLCtx newQueryContext(Object sessionId) {
         IAlbianDataAccessService das = getService(sessionId,IAlbianDataAccessService.class,IAlbianDataAccessService.Name);
         return das.newQueryContext();
     }

@@ -44,17 +44,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderByCondition  {
+public class OdrBy {
     private String fieldName = null;
     private String aliasName = null;
-    private SortOpt sortOpt = SortOpt.Asc;
+    private SOpt sOpt = SOpt.Asc;
 
-    public OrderByCondition(String fieldName) {
+    public OdrBy(String fieldName) {
         this.fieldName = fieldName;
     }
 
-    public OrderByCondition(String fieldName, SortOpt sortOpt) {
+    public OdrBy(String fieldName, SOpt sOpt) {
         this.fieldName = fieldName;
-        this.sortOpt = sortOpt;
+        this.sOpt = sOpt;
     }
 }

@@ -40,8 +40,8 @@ package org.albianj.api.dal.context;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.albianj.api.dal.db.PersistenceCommand;
-import org.albianj.api.dal.db.IDataBasePool;
+import org.albianj.api.dal.db.PCmd;
+import org.albianj.api.dal.db.IDBP;
 import org.albianj.api.dal.db.localize.IDBClientSection;
 import org.albianj.api.dal.object.RStgAttr;
 
@@ -52,16 +52,16 @@ import java.util.Map;
 
 @Data
 @NoArgsConstructor
-public class WriterTask  {
-    List<PersistenceCommand> rollbackCommands = null;
+public class WrtTask {
+    List<PCmd> rollbackCommands = null;
     boolean compensating = true;
     private RStgAttr storage = null;
-    private List<PersistenceCommand> commands = null;
+    private List<PCmd> commands = null;
     private Connection connection = null;
-    private Map<String, PersistenceStatement> statements = null;
+    private Map<String, PStatement> statements = null;
     private List<Statement> rollbackStatements = null;
     private boolean commit= false;
-    private IDataBasePool dataBasePool = null;
+    private IDBP dataBasePool = null;
     private boolean batchSubmit = false;
     private Statement batchStmt = null;
     private IDBClientSection clientSection =null;

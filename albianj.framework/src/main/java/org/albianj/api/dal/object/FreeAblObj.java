@@ -39,8 +39,8 @@ package org.albianj.api.dal.object;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
-import org.albianj.api.dal.context.dactx.AlbianObjectWarp;
-import org.albianj.api.dal.object.rants.AlbianObjectDataFieldRant;
+import org.albianj.api.dal.context.dactx.AblObjWarp;
+import org.albianj.api.dal.object.rants.AblEntityFieldRant;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
 import org.albianj.common.comment.SpecialWarning;
 import org.albianj.common.utils.SetUtil;
@@ -49,36 +49,36 @@ import org.albianj.api.kernel.logger.LogLevel;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class FreeAlbianObject implements IAlbianObject {
+public abstract class FreeAblObj implements IAblObj {
 
-    @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
+    @AblEntityFieldRant(IsSave = false, Ignore = true)
     private static final long serialVersionUID = 1608573290358087720L;
 
-    @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
+    @AblEntityFieldRant(IsSave = false, Ignore = true)
     protected transient HashMap<String, Object> dic = null;
 
-    @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
-    protected transient Map<String, AlbianObjectWarp> chainEntity = null;
+    @AblEntityFieldRant(IsSave = false, Ignore = true)
+    protected transient Map<String, AblObjWarp> chainEntity = null;
 
-    @AlbianObjectDataFieldRant(IsSave = false, Ignore = true)
+    @AblEntityFieldRant(IsSave = false, Ignore = true)
     private transient boolean isAlbianNew = true;
 
-    protected FreeAlbianObject() {
+    protected FreeAblObj() {
         chainEntity = new HashMap<>();
     }
 
 
-    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
+//    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public boolean getIsAlbianNew() {
         return this.isAlbianNew;
     }
 
-    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
+//    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public void setIsAlbianNew(boolean isAlbianNew) {
         this.isAlbianNew = isAlbianNew;
     }
 
-    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
+//    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public void setOldAlbianObject(String key, Object v) {
         if (null == dic) {
             dic = new HashMap<String, Object>();
@@ -86,7 +86,7 @@ public abstract class FreeAlbianObject implements IAlbianObject {
         dic.put(key, v);
     }
 
-    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
+//    @AlbianObjectMemberRant(IsSave = false, Ignore = true)
     public Object getOldAlbianObject(String key) {
         if (null == dic) {
             return null;
@@ -107,26 +107,26 @@ public abstract class FreeAlbianObject implements IAlbianObject {
         return needUpdate(sessionId, className);
     }
 
-    public boolean needUpdate(Object sessionId, Class<? extends IAlbianObject> implClzz)  {
+    public boolean needUpdate(Object sessionId, Class<? extends IAblObj> implClzz)  {
         return needUpdate(sessionId, implClzz.getName());
     }
 
     private boolean needUpdate(Object sessionId, String implClzzName)  {
         String className = this.getClass().getName();
-        AlbianObjectAttribute entiryAttr = AlbianEntityMetadata.getEntityMetadata(implClzzName);
+        AblEntityAttr entiryAttr = AlbianEntityMetadata.getEntityMetadata(implClzzName);
         if (null == entiryAttr) {
             throw new AblThrowable(
                 "PersistenceService is error. albian-object:" + className + " attribute is not found.");
         }
 
-        Map<String, AlbianEntityFieldAttribute> fields = entiryAttr.getFields();
+        Map<String, AblEntityFieldAttr> fields = entiryAttr.getFields();
         if (SetUtil.isNullOrEmpty(fields)) {
             throw new AblThrowable(
                 "PersistenceService is error. albian-object:" + className + " PropertyDescriptor is not found.");
         }
         try {
 
-            for (AlbianEntityFieldAttribute fieldAttr : fields.values()) {
+            for (AblEntityFieldAttr fieldAttr : fields.values()) {
                 if (!fieldAttr.isSave())
                     continue;
                 Object newVal = fieldAttr.getEntityField().get(this);

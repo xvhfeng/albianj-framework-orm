@@ -14,16 +14,16 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-public class ManualContext {
+public class ManualCtx {
 
     private String sessionId;
-    private List<ManualCommand> commands;
-    private List<InternalManualCommand> internalCommands;
+    private List<ManualCmd> commands;
+    private List<ItlManualCmd> internalCommands;
     private Connection connection;
     private List<Statement> statements;
     private String storageName;
     private RStgAttr RStgAttr;
     private String databaseName;
     private List<Integer> results;
-    private WrtJobLfcOpt lifeTime = WrtJobLfcOpt.Normal;
+    private WrtLfcOpt lifeTime = WrtLfcOpt.Normal;
 }
