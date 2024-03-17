@@ -7,7 +7,9 @@ import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.loader.AlbianjApplication;
 import org.albianj.AblServRouter;
 import org.albianj.loader.IAlbianCommandLineApplication;
+import org.albianj.loader.annos.AblScanRant;
 
+@AblScanRant(value = {"dsdss","dsdscsds"})
 public class DoTest implements IAlbianCommandLineApplication {
     public static void main(String[] argv) {
         try {
