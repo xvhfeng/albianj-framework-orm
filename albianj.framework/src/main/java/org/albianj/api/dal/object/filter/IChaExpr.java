@@ -39,6 +39,7 @@ package org.albianj.api.dal.object.filter;
 
 import org.albianj.api.dal.object.OOpt;
 import org.albianj.api.dal.object.BOpt;
+import org.albianj.common.mybp.support.SFunction;
 
 import java.util.List;
 
@@ -80,14 +81,14 @@ import java.util.List;
  * @since v2.1
  */
 public interface IChaExpr {
-    /**
-     * 当前的表达式项为过滤表达式
-     */
-    static int STYLE_FILTER = 0;
-    /**
-     * 当前的表达式项为一个表达式组，等同于sql语句中使用()括起来的内容
-     */
-    static int STYLE_FILTER_GROUP = 1;
+//    /**
+//     * 当前的表达式项为过滤表达式
+//     */
+//    static int STYLE_FILTER = 0;
+//    /**
+//     * 当前的表达式项为一个表达式组，等同于sql语句中使用()括起来的内容
+//     */
+//    static int STYLE_FILTER_GROUP = 1;
 
     /**
      * 返回表达式项和前面的兄弟表达式项的逻辑关系。
@@ -114,7 +115,7 @@ public interface IChaExpr {
      *
      * @return STYLE_FILTER或者STYLE_FILTER_GROUP
      */
-    int getStyle();
+    ExprOpt getExprOpt();
 
     /**
      * 设置当前表达式项的类型
@@ -123,7 +124,7 @@ public interface IChaExpr {
      *
      * @param style
      */
-    void setStyle(int style);
+    void setExprOpt(ExprOpt style);
 
     /**
      * 前一个表达式项and上当前的表达式fe
@@ -141,7 +142,9 @@ public interface IChaExpr {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr and(String fieldName, OOpt lo, Object value);
+    <T,R> IChaExpr  and(SFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 前一个表达式项and上当前的表达式
@@ -153,7 +156,9 @@ public interface IChaExpr {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr and(String fieldName, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr and(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * * 前一个表达式项or上当前的表达式fe
@@ -171,7 +176,9 @@ public interface IChaExpr {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr or(String fieldName, OOpt lo, Object value);
+    <T,R> IChaExpr or(SFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 前一个表达式项or上当前的表达式
@@ -183,12 +190,13 @@ public interface IChaExpr {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr or(String fieldName, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr or(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
      *
-     * @param 当前需要被加入or关系的表达式项
      * @return 表达式项关系链的头对象
      */
     public IChaExpr addAddition(IFltExpr fe);
@@ -201,7 +209,9 @@ public interface IChaExpr {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr addAddition(String fieldName, OOpt lo, Object value);
+    <T,R> IChaExpr addAddition(SFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -213,7 +223,9 @@ public interface IChaExpr {
      * @return 表达式项关系链的头对象
      * @ fieldName 当前表达式的属性名，这个fieldName是编程实体的属性，而不是数据库的值字段名。albianj会自动根据实体属性获取数据库的字段名
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr addAddition(String fieldName, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr addAddition(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -235,7 +247,9 @@ public interface IChaExpr {
      * @param value     当前表达式的值
      * @return 表达式项关系链的头对象
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr add(String fieldName, OOpt lo, Object value);
+    <T,R> IChaExpr add(SFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -249,7 +263,9 @@ public interface IChaExpr {
      * @return 表达式项关系链的头对象
      * @ fieldName 当前表达式的属性名，这个fieldName是编程实体的属性，而不是数据库的值字段名。albianj会自动根据实体属性获取数据库的字段名
      */
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr add(String fieldName, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr add(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * and 当前的表达式组项。该表达式组项会被加入到sql语句的where条件中

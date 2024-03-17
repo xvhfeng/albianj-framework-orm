@@ -50,15 +50,12 @@ public class AlbianEntityRantScaner {
                         String implClzzName = clzz.getName();
                         AblEntityAttr objAttr = null;
                         AblObjRant or = clzz.getAnnotation(AblObjRant.class);
-
-
                         if (AlbianEntityMetadata.exist(implClzzName)) {
                             objAttr = AlbianEntityMetadata.getEntityMetadata(implClzzName);
                         } else {
                             objAttr = new AblEntityAttr();
                             objAttr.setType(clzz.getName());
                             AlbianEntityMetadata.put(implClzzName, objAttr);
-
                         }
 
                         objAttr.setImplClzz(clzz);
@@ -227,6 +224,9 @@ public class AlbianEntityRantScaner {
                         }
                     }
                 } catch (ClassNotFoundException | IntrospectionException e) {
+                    ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,e,
+                            "class:{},field:{} cat not find getter/setter by name:{}.",
+                            clzz.getName(),f.getName(),propertyName);
                 }
 
             } else {
@@ -249,11 +249,15 @@ public class AlbianEntityRantScaner {
                         }
                     }
                 } catch (ClassNotFoundException | IntrospectionException e) {
+                    ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,e,
+                            "class:{},field:{} cat not find getter/setter by name:{}.",
+                            clzz.getName(),f.getName(),propertyName);
                 }
             }
+            AlbianEntityMetadata.putGetterLinkFieldAttr(clzz,fAttr);
             fieldsAttrs.put(fAttr.getPropertyName().toLowerCase(), fAttr);
         }
-        return 0 == fieldsAttrs.size() ? null : fieldsAttrs;
+        return fieldsAttrs.isEmpty() ? null : fieldsAttrs;
     }
 
 

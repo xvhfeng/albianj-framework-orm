@@ -37,10 +37,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.impl.dal.toolkit;
 
+import org.albianj.api.dal.object.filter.IFltExpr;
+import org.albianj.api.dal.service.AlbianEntityMetadata;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.api.dal.db.SqlPara;
 import org.albianj.api.dal.object.ICondition;
 import org.albianj.api.dal.object.OdrBy;
+import org.albianj.impl.dal.context.ChaExprPrs;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -59,9 +62,23 @@ public class SetConv {
         }
         Map<String, T> map = new LinkedHashMap<String, T>(len);
         for (T filter : filters) {
-            map.put(StringsUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
+            map.put(decideFieldName(filter), filter);
         }
         return map;
+    }
+
+    public static String decideFieldName(OdrBy expr){
+        String fieldName = null;
+        if(StringsUtil.isNullOrEmptyOrAllSpace(expr.getFieldName())) {
+            fieldName = AlbianEntityMetadata.getFieldNameByGetter(expr.getGetter());
+            expr.setFieldName(fieldName);
+        }
+
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(expr.getAliasName())) {
+            return expr.getAliasName();
+        }
+
+        return expr.getFieldName();
     }
 
     public static <T extends ICondition> Map<String, T> toLinkedHashMap(

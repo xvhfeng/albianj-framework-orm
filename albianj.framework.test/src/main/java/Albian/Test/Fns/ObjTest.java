@@ -1,2 +1,8 @@
-package Albian.Test.Fns;public class ObjTest {
+package Albian.Test.Fns;
+
+import lombok.Data;
+
+@Data
+public class ObjTest {
+    private String id;
 }

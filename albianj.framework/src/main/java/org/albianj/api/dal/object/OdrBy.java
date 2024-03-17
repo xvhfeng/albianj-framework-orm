@@ -40,6 +40,7 @@ package org.albianj.api.dal.object;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.albianj.common.mybp.support.SFunction;
 
 @Data
 @NoArgsConstructor
@@ -48,6 +49,7 @@ public class OdrBy {
     private String fieldName = null;
     private String aliasName = null;
     private SOpt sOpt = SOpt.Asc;
+    private SFunction getter;
 
     public OdrBy(String fieldName) {
         this.fieldName = fieldName;
@@ -57,4 +59,16 @@ public class OdrBy {
         this.fieldName = fieldName;
         this.sOpt = sOpt;
     }
+
+    public <T,R> OdrBy(SFunction<T,R> getter) {
+        this.getter = getter;
+    }
+
+    public <T,R> OdrBy(SFunction<T,R> getter, SOpt sOpt) {
+        this.getter = getter;
+        this.sOpt = sOpt;
+    }
+
+
+
 }

@@ -16,6 +16,8 @@ public interface IUserService extends IAlbianService {
 
     void queryMulitUserById() ;
 
+    void qryForTestWhrGetter();
+
     int  testInExpr();
 
     int  testLikeExpr();

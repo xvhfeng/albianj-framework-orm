@@ -39,6 +39,7 @@ package org.albianj.api.dal.object.filter;
 
 import org.albianj.api.dal.object.OOpt;
 import org.albianj.api.dal.object.BOpt;
+import org.albianj.common.mybp.support.SFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ import java.util.List;
 public class FltExpr implements IFltExpr {
 
     private BOpt _ro = BOpt.Normal;
-    private int _style = STYLE_FILTER;
+    private ExprOpt _exprOpt = ExprOpt.Filter;
 
     private String _fieldName = null;
     private String _aliasName = null;
@@ -61,6 +62,7 @@ public class FltExpr implements IFltExpr {
     private Class<?> _cls = null;
     private boolean _isAddition = false;
     private boolean _isIdentical = false;
+    private SFunction _getter = null;
 
     private List<IChaExpr> _chains = new ArrayList<>();
 
@@ -68,6 +70,7 @@ public class FltExpr implements IFltExpr {
         // TODO Auto-generated constructor stub
     }
 
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public FltExpr(String fieldName, String aliasName, OOpt lo, Object value) {
         this._fieldName = fieldName;
         this._aliasName = aliasName;
@@ -76,8 +79,23 @@ public class FltExpr implements IFltExpr {
         this._chains.add(this);
     }
 
+    public <T,R> FltExpr(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        this._getter = getter;
+        this._aliasName = aliasName;
+        this._lo = lo;
+        this._value = value;
+        this._chains.add(this);
+    }
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public FltExpr(String fieldName, OOpt lo, Object value) {
         this._fieldName = fieldName;
+        this._lo = lo;
+        this._value = value;
+        this._chains.add(this);
+    }
+
+    public <T,R> FltExpr(SFunction<T,R> getter, OOpt lo, Object value) {
+        this._getter = getter;
         this._lo = lo;
         this._value = value;
         this._chains.add(this);
@@ -97,15 +115,15 @@ public class FltExpr implements IFltExpr {
     }
 
     @Override
-    public int getStyle() {
+    public ExprOpt getExprOpt() {
         // TODO Auto-generated method stub
-        return this._style;
+        return this._exprOpt;
     }
 
     @Override
-    public void setStyle(int style) {
+    public void setExprOpt(ExprOpt exprOpt) {
         // TODO Auto-generated method stub
-        this._style = style;
+        this._exprOpt = exprOpt;
     }
 
     @Override
@@ -133,6 +151,7 @@ public class FltExpr implements IFltExpr {
     }
 
 
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     @Override
     public IFltExpr and(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
@@ -141,6 +160,14 @@ public class FltExpr implements IFltExpr {
         return this;
     }
 
+    public <T,R> IFltExpr and(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr ce = new FltExpr(getter, lo, value);
+        this.and(ce);
+        return this;
+    }
+
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     @Override
     public IFltExpr and(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
@@ -149,6 +176,14 @@ public class FltExpr implements IFltExpr {
         return this;
     }
 
+    public <T,R> IFltExpr and(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr ce = new FltExpr(getter, aliasName, lo, value);
+        this.and(ce);
+        return this;
+    }
+
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     @Override
     public IFltExpr or(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
@@ -156,8 +191,15 @@ public class FltExpr implements IFltExpr {
         this.or(ce);
         return this;
     }
+    public <T,R> IFltExpr or(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr ce = new FltExpr(getter, lo, value);
+        this.or(ce);
+        return this;
+    }
 
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltExpr or(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr ce = new FltExpr(fieldName, aliasName, lo, value);
@@ -165,7 +207,15 @@ public class FltExpr implements IFltExpr {
         return this;
     }
 
+    public <T,R> IFltExpr or(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr ce = new FltExpr(getter, aliasName, lo, value);
+        this.or(ce);
+        return this;
+    }
+
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltExpr addAddition(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr ce = new FltExpr(fieldName, lo, value);
@@ -173,7 +223,15 @@ public class FltExpr implements IFltExpr {
         return this;
     }
 
+    public <T,R> IFltExpr addAddition(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr ce = new FltExpr(getter, lo, value);
+        this.addAddition(ce);
+        return this;
+    }
+
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltExpr addAddition(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr ce = new FltExpr(fieldName, aliasName, lo, value);
@@ -181,10 +239,17 @@ public class FltExpr implements IFltExpr {
         return this;
     }
 
+    public <T,R> IFltExpr addAddition(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr ce = new FltExpr(getter, aliasName, lo, value);
+        this.addAddition(ce);
+        return this;
+    }
+
     @Override
     public IFltExpr and(IFltGExpr fge) {
         // TODO Auto-generated method stub
-        fge.setStyle(STYLE_FILTER_GROUP);
+        fge.setExprOpt(ExprOpt.FilterGroup);
         fge.setBoolOpt(BOpt.And);
         _chains.add(fge);
         return this;
@@ -201,27 +266,44 @@ public class FltExpr implements IFltExpr {
     @Override
     public IFltExpr or(IFltGExpr fge) {
         // TODO Auto-generated method stub
-        fge.setStyle(STYLE_FILTER_GROUP);
+        fge.setExprOpt(ExprOpt.FilterGroup);
         fge.setBoolOpt(BOpt.OR);
         _chains.add(fge);
         return this;
     }
 
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltExpr add(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, lo, value);
         this.add(fe);
         return this;
     }
+    public <T,R> IFltExpr add(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, lo, value);
+        this.add(fe);
+        return this;
+    }
 
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltExpr add(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
         this.add(fe);
         return this;
     }
+
+    @Override
+    public <T,R> IFltExpr add(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
+        this.add(fe);
+        return this;
+    }
+
 
     public IFltExpr add(IFltExpr fe) {
         fe.setBoolOpt(BOpt.Normal);
@@ -241,6 +323,10 @@ public class FltExpr implements IFltExpr {
     public void setFieldName(String fieldName) {
         // TODO Auto-generated method stub
         this._fieldName = fieldName;
+    }
+
+    public SFunction getGetter(){
+        return this._getter;
     }
 
     @Override

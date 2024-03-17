@@ -37,6 +37,8 @@ public class DoTest implements IAlbianCommandLineApplication {
         AblServRouter.log("Test app",LogLevel.Debug,"in expr load count:{}",us.testInExpr());
         AblServRouter.log("Test app",LogLevel.Debug,"like expr load count:{}",us.testLikeExpr());
 
+        us.qryForTestWhrGetter();
+
     }
 
     private static void test2()  {

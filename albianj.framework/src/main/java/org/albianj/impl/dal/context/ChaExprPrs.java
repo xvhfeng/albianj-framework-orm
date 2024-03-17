@@ -39,6 +39,8 @@ package org.albianj.impl.dal.context;
 
 import org.albianj.AblThrowable;
 import org.albianj.api.dal.object.*;
+import org.albianj.api.dal.object.filter.ExprOpt;
+import org.albianj.api.dal.object.filter.FltExpr;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.api.dal.db.SqlPara;
 import org.albianj.impl.dal.toolkit.SqlTypeConv;
@@ -46,6 +48,7 @@ import org.albianj.api.dal.object.filter.IChaExpr;
 import org.albianj.api.dal.object.filter.IFltExpr;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
 
+import javax.swing.text.DefaultStyledDocument;
 import java.util.List;
 import java.util.Map;
 
@@ -54,26 +57,37 @@ public class ChaExprPrs {
     public static void toFilterConditionMap(IChaExpr f, Map<String, IFltCdt> map) {
         if (null == f) return;
         List<IChaExpr> ces = f.getChainExpression();
-        if (null == ces || 0 == ces.size())
+        if (null == ces || ces.isEmpty())
             return;
         for (IChaExpr ce : ces) {
-            if (IChaExpr.STYLE_FILTER_GROUP == ce.getStyle()) {
+            if (ExprOpt.FilterGroup == ce.getExprOpt()) {
                 toFilterConditionMap(ce, map);
             } else {
                 IFltExpr fe = (IFltExpr) ce;
-                map.put(StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fe.getFieldName() : fe.getAliasName(),
-                        new FltCdt(fe));
+                map.put(decideFieldName(fe),new FltCdt(fe));
             }
         }
+    }
+
+    public static String decideFieldName(IFltExpr expr){
+        String fieldName = null;
+        if(StringsUtil.isNullOrEmptyOrAllSpace(expr.getFieldName())) {
+            fieldName = AlbianEntityMetadata.getFieldNameByGetter(expr.getGetter());
+            expr.setFieldName(fieldName);
+        }
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(expr.getAliasName())) {
+            return expr.getAliasName();
+        }
+        return expr.getFieldName();
     }
 
     public static void toFilterConditionArray(IChaExpr f, List<IFltCdt> list) {
         if (null == f) return;
         List<IChaExpr> ces = f.getChainExpression();
-        if (null == ces || 0 == ces.size())
+        if (null == ces || ces.isEmpty())
             return;
         for (IChaExpr ce : ces) {
-            if (IChaExpr.STYLE_FILTER_GROUP == ce.getStyle()) {
+            if (ExprOpt.FilterGroup == ce.getExprOpt()) {
                 toFilterConditionArray(ce, list);
             } else {
                 IFltExpr fe = (IFltExpr) ce;
@@ -90,7 +104,7 @@ public class ChaExprPrs {
         if (null == ces || 0 == ces.size())
             return;
         for (IChaExpr ce : ces) {
-            if (IChaExpr.STYLE_FILTER_GROUP == ce.getStyle()) {
+            if (ExprOpt.FilterGroup == ce.getExprOpt()) {
                 if (null == ce.getChainExpression() || ce.getChainExpression().isEmpty()) {
                     continue;
                 }

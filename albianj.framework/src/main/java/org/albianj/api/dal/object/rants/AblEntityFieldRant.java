@@ -27,6 +27,11 @@ public @interface AblEntityFieldRant {
      */
     boolean Ignore() default false;
 
+    /**
+     * 程序中属性set，get的名字
+     * 当出现field名字和setter getter名字不一样的时候，用这个指定
+     * @return
+     */
     String PropertyName() default "";
 
     boolean IsAutoGenKey() default false;

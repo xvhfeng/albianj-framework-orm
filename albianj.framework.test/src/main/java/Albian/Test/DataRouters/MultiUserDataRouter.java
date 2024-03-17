@@ -2,6 +2,7 @@ package Albian.Test.DataRouters;
 
 import Albian.Test.Model.Impl.MultiUser;
 import org.albianj.api.dal.object.*;
+import org.albianj.api.dal.service.AlbianEntityMetadata;
 
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class MultiUserDataRouter extends FreeAblDr {
             Map<String, DrAttr> routings,
             Map<String, IFltCdt> wheres,
             Map<String, OdrBy> orderbys) {
-        IFltCdt fc = wheres.get("Id");
+        IFltCdt fc = wheres.get(AlbianEntityMetadata.getFieldNameByGetter(MultiUser::getId));
         String id = (String) fc.getValue();
         String drBasename = "MUserRead";
         String[] ids = id.split("_");
@@ -73,7 +74,7 @@ public class MultiUserDataRouter extends FreeAblDr {
                                      Map<String, IFltCdt> wheres,
                                      Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
-        IFltCdt fc = wheres.get("Id");
+        IFltCdt fc = wheres.get(AlbianEntityMetadata.getFieldNameByGetter(MultiUser::getId));
         String id = (String) fc.getValue();
         String[] ids = id.split("_");
         String tablename = routing.getTableName() + "_" + ids[3]; //使用表标识定位到那个路由

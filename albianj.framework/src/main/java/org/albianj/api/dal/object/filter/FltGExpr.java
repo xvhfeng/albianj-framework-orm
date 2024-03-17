@@ -39,6 +39,7 @@ package org.albianj.api.dal.object.filter;
 
 import org.albianj.api.dal.object.OOpt;
 import org.albianj.api.dal.object.BOpt;
+import org.albianj.common.mybp.support.SFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ import java.util.List;
 public class FltGExpr implements IFltGExpr {
 
     private BOpt _ro = BOpt.Normal;
-    private int _style = STYLE_FILTER_GROUP;
+    private ExprOpt _exprOpt = ExprOpt.FilterGroup;
 
     private List<IChaExpr> _chains = new ArrayList<>();
 
@@ -78,18 +79,18 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#getStyle()
      */
     @Override
-    public int getStyle() {
+    public ExprOpt getExprOpt() {
         // TODO Auto-generated method stub
-        return this._style;
+        return this._exprOpt;
     }
 
     /* (non-Javadoc)
      * @see org.albianj.persistence.object.filter.IChainExpression#setStyle(int)
      */
     @Override
-    public void setStyle(int style) {
+    public void setExprOpt(ExprOpt _exprOpt) {
         // TODO Auto-generated method stub
-        this._style = style;
+        this._exprOpt = _exprOpt;
     }
 
     /* (non-Javadoc)
@@ -130,9 +131,17 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr and(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, lo, value);
+        this.and(fe);
+        return this;
+    }
+
+    public <T,R> IFltGExpr and(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, lo, value);
         this.and(fe);
         return this;
     }
@@ -141,9 +150,17 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#and(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr and(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
+        this.and(fe);
+        return this;
+    }
+
+    public <T,R> IFltGExpr and(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.and(fe);
         return this;
     }
@@ -152,9 +169,16 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr or(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, lo, value);
+        this.or(fe);
+        return this;
+    }
+    public <T,R> IFltGExpr or(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, lo, value);
         this.or(fe);
         return this;
     }
@@ -163,9 +187,17 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#or(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr or(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
+        this.or(fe);
+        return this;
+    }
+
+    public <T,R> IFltGExpr or(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.or(fe);
         return this;
     }
@@ -174,9 +206,17 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#addAddition(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr addAddition(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, lo, value);
+        this.addAddition(fe);
+        return this;
+    }
+
+    public <T,R> IFltGExpr addAddition(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, lo, value);
         this.addAddition(fe);
         return this;
     }
@@ -185,9 +225,17 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#addAddition(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr addAddition(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
+        this.addAddition(fe);
+        return this;
+    }
+
+    public <T,R> IFltGExpr addAddition(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.addAddition(fe);
         return this;
     }
@@ -240,6 +288,7 @@ public class FltGExpr implements IFltGExpr {
      * @see org.albianj.persistence.object.filter.IChainExpression#add(java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr add(String fieldName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, lo, value);
@@ -247,13 +296,29 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
+    public <T,R> IFltGExpr add(SFunction<T,R> getter, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, lo, value);
+        this.add(fe);
+        return this;
+    }
+
+
     /* (non-Javadoc)
      * @see org.albianj.persistence.object.filter.IChainExpression#add(java.lang.String, java.lang.String, org.albianj.persistence.object.LogicalOperation, java.lang.Object)
      */
     @Override
+    @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     public IFltGExpr add(String fieldName, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(fieldName, aliasName, lo, value);
+        this.add(fe);
+        return this;
+    }
+
+    public <T,R> IFltGExpr add(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+        // TODO Auto-generated method stub
+        IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.add(fe);
         return this;
     }

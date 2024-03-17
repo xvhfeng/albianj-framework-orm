@@ -158,7 +158,100 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
     }
 
-//    private static AblEntityFieldAttr reflexAlbianObjectMember(String type, PropertyDescriptor propertyDescriptor) {
+
+
+
+    public String getServiceName() {
+        return Name;
+    }
+
+    @Override
+    protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes)  {
+        if (SetUtil.isNullOrEmpty(nodes)) {
+            throw new IllegalArgumentException("nodes");
+        }
+        String inter = null;
+        for (Object node : nodes) {
+            Element ele = (Element) node;
+            try {
+                parserAlbianObject(ele);
+            } catch (Exception e) {
+                ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
+                "parser persisten node is fail,xml:{}" ,ele.asXML());
+            }
+        }
+
+    }
+
+    protected void parserAlbianObject(Element node)  {
+        String type = XmlUtil.getAttributeValue(node, "Type");
+        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
+            throw new AblThrowable("The AlbianObject's type is empty in persistence.xml");
+        }
+
+        String inter = XmlUtil.getAttributeValue(node, "Interface");
+
+
+        AblEntityAttr pkgEntityAttr = null;
+        if (AlbianEntityMetadata.exist(type)) {
+            pkgEntityAttr = AlbianEntityMetadata.getEntityMetadata(type);
+            pkgEntityAttr.setType(type);
+        } else {
+            pkgEntityAttr = new AblEntityAttr();
+            pkgEntityAttr.setItf(inter);
+            pkgEntityAttr.setType(type);
+            AlbianEntityMetadata.put(type, pkgEntityAttr);
+        }
+
+        Class<?> implClzz = null;
+        try {
+            implClzz = AlbianClassLoader.getInstance().loadClass(type);
+
+            if (!IAblObj.class.isAssignableFrom(implClzz)) {
+                throw new AblThrowable(
+                    "the albian-object class:" + type + " is not implements from interface: IAlbianObject.");
+            }
+        } catch (ClassNotFoundException e1) {
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e1,
+                    "the type:{} is not found",type);
+        }
+
+        pkgEntityAttr.setImplClzz(implClzz);
+
+        DrAttr defaultRouting = new DrAttr();
+        defaultRouting.setName(AlbianDataRouterParserService.DEFAULT_ROUTING_NAME);
+        defaultRouting.setOwner("dbo");
+        defaultRouting.setStorageName(AlbianStorageParserService.DEFAULT_STORAGE_NAME);
+        String csn = null;
+        try {
+            csn = ReflectUtil.getClassSimpleName(AlbianClassLoader.getInstance(), type);
+        } catch (ClassNotFoundException e) {
+            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
+
+                    "the type:{} is not found",type);
+        }
+        if (null != csn) {
+            defaultRouting.setTableName(csn);
+        }
+
+        Map<String, AblEntityFieldAttr> entityFieldAttr = null;
+        if (SetUtil.isNullOrEmpty(pkgEntityAttr.getFields())) {
+            entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz);
+            pkgEntityAttr.setFields(entityFieldAttr);
+        } else {
+            entityFieldAttr = pkgEntityAttr.getFields();
+        }
+        @SuppressWarnings("rawtypes")
+        List nodes = node.selectNodes(memberTagName);
+        if (!SetUtil.isNullOrEmpty(nodes)) {
+            parserEntityFields(type, nodes, entityFieldAttr);
+        }
+
+        pkgEntityAttr.setDefaultRouting(defaultRouting);
+        return;
+    }
+
+    //    private static AblEntityFieldAttr reflexAlbianObjectMember(String type, PropertyDescriptor propertyDescriptor) {
 //        Method mr = propertyDescriptor.getReadMethod();
 //        Method mw = propertyDescriptor.getWriteMethod();
 //        if (null == mr || null == mw) {
@@ -210,113 +303,6 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 //        member.setName(propertyDescriptor.getName());
 //        return member;
 //    }
-
-
-    public String getServiceName() {
-        return Name;
-    }
-
-    @Override
-    protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes)  {
-        if (SetUtil.isNullOrEmpty(nodes)) {
-            throw new IllegalArgumentException("nodes");
-        }
-        String inter = null;
-        for (Object node : nodes) {
-            Element ele = (Element) node;
-            try {
-                parserAlbianObject(ele);
-            } catch (Exception e) {
-                ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
-                "parser persisten node is fail,xml:{}" ,ele.asXML());
-            }
-        }
-
-    }
-
-    protected void parserAlbianObject(Element node)  {
-        String type = XmlUtil.getAttributeValue(node, "Type");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
-            throw new AblThrowable("The AlbianObject's type is empty in persistence.xml");
-            //return;
-        }
-
-        String inter = XmlUtil.getAttributeValue(node, "Interface");
-//        if (StringsUtil.isNullOrEmptyOrAllSpace(inter)) {
-//            throw new AblThrowable("The AlbianObject's type->:" + type + " is empty in persistence.xml");
-//            //return;
-//        }
-
-        AblEntityAttr pkgEntityAttr = null;
-        if (AlbianEntityMetadata.exist(type)) {
-            pkgEntityAttr = AlbianEntityMetadata.getEntityMetadata(type);
-            pkgEntityAttr.setType(type);
-        } else {
-            pkgEntityAttr = new AblEntityAttr();
-            pkgEntityAttr.setItf(inter);
-            pkgEntityAttr.setType(type);
-            AlbianEntityMetadata.put(type, pkgEntityAttr);
-        }
-
-        Class<?> implClzz = null;
-        try {
-            implClzz = AlbianClassLoader.getInstance().loadClass(type);
-//            Class<?> itf = AlbianClassLoader.getInstance().loadClass(inter);
-//            if (!itf.isAssignableFrom(implClzz)) {
-//                throw new AblThrowable(
-//                    "the albian-object class:" + type + " is not implements from interface:" + inter + ".");
-//            }
-
-            if (!IAblObj.class.isAssignableFrom(implClzz)) {
-                throw new AblThrowable(
-                    "the albian-object class:" + type + " is not implements from interface: IAlbianObject.");
-            }
-
-//            if (!IAlbianObject.class.isAssignableFrom(itf)) {
-//                throw new AblThrowable(
-//                    "the albian-object interface:" + inter + " is not implements from interface: IAlbianObject.");
-//            }
-
-
-        } catch (ClassNotFoundException e1) {
-            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e1,
-                    "the type:{} is not found",type);
-        }
-
-        pkgEntityAttr.setImplClzz(implClzz);
-
-        DrAttr defaultRouting = new DrAttr();
-        defaultRouting.setName(AlbianDataRouterParserService.DEFAULT_ROUTING_NAME);
-        defaultRouting.setOwner("dbo");
-        defaultRouting.setStorageName(AlbianStorageParserService.DEFAULT_STORAGE_NAME);
-        String csn = null;
-        try {
-            csn = ReflectUtil.getClassSimpleName(AlbianClassLoader.getInstance(), type);
-        } catch (ClassNotFoundException e) {
-            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
-
-                    "the type:{} is not found",type);
-        }
-        if (null != csn) {
-            defaultRouting.setTableName(csn);
-        }
-
-        Map<String, AblEntityFieldAttr> entityFieldAttr = null;
-        if (SetUtil.isNullOrEmpty(pkgEntityAttr.getFields())) {
-            entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz);
-            pkgEntityAttr.setFields(entityFieldAttr);
-        } else {
-            entityFieldAttr = pkgEntityAttr.getFields();
-        }
-        @SuppressWarnings("rawtypes")
-        List nodes = node.selectNodes(memberTagName);
-        if (!SetUtil.isNullOrEmpty(nodes)) {
-            parserEntityFields(type, nodes, entityFieldAttr);
-        }
-
-        pkgEntityAttr.setDefaultRouting(defaultRouting);
-        return;
-    }
 
 //    private Map<String, AblEntityFieldAttr> reflexAlbianObjectMembers(String type)  {
 //        Map<String, AblEntityFieldAttr> map = new LinkedHashMap<String, AblEntityFieldAttr>();
