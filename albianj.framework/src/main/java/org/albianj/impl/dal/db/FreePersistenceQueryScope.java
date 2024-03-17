@@ -40,10 +40,10 @@ package org.albianj.impl.dal.db;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
-import org.albianj.dal.context.ReaderJob;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.db.CommandOpt;
-import org.albianj.dal.object.IAlbianObject;
+import org.albianj.api.dal.context.RdrJob;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.db.CmdOpt;
+import org.albianj.api.dal.object.IAblObj;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,8 +52,8 @@ import java.util.List;
 
 public abstract class FreePersistenceQueryScope implements IPersistenceQueryScope {
 
-    public <T extends IAlbianObject> List<T> execute(Class<T> cls,
-                                                     ReaderJob job)  {
+    public <T extends IAblObj> List<T> execute(Class<T> cls,
+                                               RdrJob job)  {
         try {
             perExecute(job);
             executing(job);
@@ -69,7 +69,7 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
     }
 
     public Object execute(
-            ReaderJob job)  {
+            RdrJob job)  {
         try {
             perExecute(job);
             executing(job);
@@ -84,8 +84,8 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
         return null;
     }
 
-    public <T extends IAlbianObject> List<T> execute(String sessionId, Class<T> cls,
-                                                     CommandOpt cmdType, Statement statement)  {
+    public <T extends IAblObj> List<T> execute(String sessionId, Class<T> cls,
+                                               CmdOpt cmdType, Statement statement)  {
         ResultSet result = null;
         List<T> list = null;
         try {
@@ -106,21 +106,21 @@ public abstract class FreePersistenceQueryScope implements IPersistenceQueryScop
         return list;
     }
 
-    protected abstract void perExecute(ReaderJob job) ;
+    protected abstract void perExecute(RdrJob job) ;
 
-    protected abstract void executing(ReaderJob job) ;
+    protected abstract void executing(RdrJob job) ;
 
-    protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls,
-                                                                  ReaderJob job) ;
+    protected abstract <T extends IAblObj> List<T> executed(Class<T> cls,
+                                                            RdrJob job) ;
 
-    protected abstract Object executed(String jobId, ReaderJob job)
+    protected abstract Object executed(String jobId, RdrJob job)
            ;
 
-    protected abstract void unloadExecute(ReaderJob job)  ;
+    protected abstract void unloadExecute(RdrJob job)  ;
 
-    protected abstract ResultSet executing(String sessionId, CommandOpt cmdType,
+    protected abstract ResultSet executing(String sessionId, CmdOpt cmdType,
                                            Statement statement) ;
 
-    protected abstract <T extends IAlbianObject> List<T> executed(Class<T> cls, String jobId,
-                                                                  ResultSet result) ;
+    protected abstract <T extends IAblObj> List<T> executed(Class<T> cls, String jobId,
+                                                            ResultSet result) ;
 }

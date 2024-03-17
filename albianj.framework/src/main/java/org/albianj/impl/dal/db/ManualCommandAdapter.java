@@ -1,8 +1,8 @@
 package org.albianj.impl.dal.db;
 
-import org.albianj.dal.context.ManualContext;
-import org.albianj.dal.context.InternalManualCommand;
-import org.albianj.dal.context.ManualCommand;
+import org.albianj.api.dal.context.ManualCtx;
+import org.albianj.api.dal.context.ItlManualCmd;
+import org.albianj.api.dal.context.ManualCmd;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class ManualCommandAdapter implements IManualCommandAdapter {
     @Override
-    public ManualContext createManualCommands(ManualContext mctx) {
-        List<ManualCommand> cmds = mctx.getCommands();
-        List<InternalManualCommand> imcs = new LinkedList<>();
-        for (ManualCommand cmd : cmds) {
-            InternalManualCommand imc = PersistenceNamedParameter.parseSql(cmd);
+    public ManualCtx createManualCommands(ManualCtx mctx) {
+        List<ManualCmd> cmds = mctx.getCommands();
+        List<ItlManualCmd> imcs = new LinkedList<>();
+        for (ManualCmd cmd : cmds) {
+            ItlManualCmd imc = PersistenceNamedParameter.parseSql(cmd);
             imc.setCmdType(cmd.getCmdType());
             imc.setCommandParameters(cmd.getCommandParameters());
             imcs.add(imc);

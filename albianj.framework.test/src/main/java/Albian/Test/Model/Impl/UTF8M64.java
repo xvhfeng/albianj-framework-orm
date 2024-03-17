@@ -1,36 +1,23 @@
 package Albian.Test.Model.Impl;
 
-import Albian.Test.Model.IUTF8M64;
-import org.albianj.dal.object.FreeAlbianObject;
-import org.albianj.dal.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.dal.object.rants.AlbianObjectRant;
+import lombok.*;
+import org.albianj.api.dal.object.FreeAblObj;
+import org.albianj.api.dal.object.rants.AblEntityFieldRant;
+import org.albianj.api.dal.object.rants.AblObjRant;
 
-@AlbianObjectRant(Interface = IUTF8M64.class)
-public class UTF8M64 extends FreeAlbianObject implements IUTF8M64 {
+@AblObjRant
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+public class UTF8M64 extends FreeAblObj {
 
-    @AlbianObjectDataFieldRant(IsPrimaryKey = true, FieldName = "id")
+    @AblEntityFieldRant(IsPrimaryKey = true, FieldName = "id")
     private int id = 0;
 
-    @AlbianObjectDataFieldRant(FieldName = "v")
+    @AblEntityFieldRant(FieldName = "v")
     private String v;
 
-    @Override
-    public int getId() {
-        return id;
-    }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getV() {
-        return this.v;
-    }
-
-    @Override
-    public void setV(String v) {
-        this.v = v;
-    }
 }

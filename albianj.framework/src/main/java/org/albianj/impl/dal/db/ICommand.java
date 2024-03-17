@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.dal.db.CommandOpt;
-import org.albianj.dal.db.SqlParameter;
+import org.albianj.api.dal.db.CmdOpt;
+import org.albianj.api.dal.db.SqlPara;
 
 import java.util.Map;
 
@@ -49,15 +49,15 @@ public interface ICommand {
 
     public void setCommandText(String commandText);
 
-    public CommandOpt getCommandType();
+    public CmdOpt getCommandType();
 
-    public void setCommandType(CommandOpt commandType);
+    public void setCommandType(CmdOpt commandType);
 
     public Map<Integer, String> getParameterMapper();
 
     public void setParameterMapper(Map<Integer, String> parameterMapper);
 
-    public Map<String, SqlParameter> getParameters();
+    public Map<String, SqlPara> getParameters();
 
-    public void setParameters(Map<String, SqlParameter> parameters);
+    public void setParameters(Map<String, SqlPara> parameters);
 }

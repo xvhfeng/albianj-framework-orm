@@ -1,7 +1,7 @@
 package org.albianj.impl.dal.db.localize;
 
 
-import org.albianj.dal.db.localize.IDBClientSection;
+import org.albianj.api.dal.db.localize.IDBClientSection;
 
 import java.sql.Types;
 

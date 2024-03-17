@@ -1,62 +1,35 @@
 package Albian.Test.Model.Impl;
 
 import Albian.Test.DataRouters.MultiUserDataRouter;
-import Albian.Test.Model.IMultiUser;
-import org.albianj.dal.object.FreeAlbianObject;
-import org.albianj.dal.object.rants.AlbianObjectDataFieldRant;
-import org.albianj.dal.object.rants.AlbianObjectDataRouterRant;
-import org.albianj.dal.object.rants.AlbianObjectDataRoutersRant;
-import org.albianj.dal.object.rants.AlbianObjectRant;
+import lombok.*;
+import org.albianj.api.dal.object.FreeAblObj;
+import org.albianj.api.dal.object.rants.AblEntityFieldRant;
+import org.albianj.api.dal.object.rants.AblDrRant;
+import org.albianj.api.dal.object.rants.AblDrsRant;
+import org.albianj.api.dal.object.rants.AblObjRant;
 
 
-@AlbianObjectRant(Interface = IMultiUser.class, // 配置当前实体继承的接口，一个接口对应一个实现类
-        DataRouters = @AlbianObjectDataRoutersRant( // 数据路由配置
-                DataRouter = MultiUserDataRouter.class, //指定数据路由算法
-                ReaderRouters = { // 配置读路由
-                        @AlbianObjectDataRouterRant(Name = "MUserRead1", StorageName = "MUserStorage1", TableName = "MUser"),
-                        @AlbianObjectDataRouterRant(Name = "MUserRead2", StorageName = "MUserStorage2",TableName = "MUser")
-                },
-                WriterRouters = { //配置写路由
-                        @AlbianObjectDataRouterRant(Name = "MUserWrite1", StorageName = "MUserStorage1", TableName = "MUser"),
-                        @AlbianObjectDataRouterRant(Name = "MUserWrite2", StorageName = "MUserStorage2",TableName = "MUser")
-                }
-        )
-
+@AblObjRant()
+@AblDrsRant( // 数据路由配置
+        DataRouter = MultiUserDataRouter.class, //指定数据路由算法
+        ReaderRouters = { // 配置读路由
+                @AblDrRant(Name = "MUserRead1", StorageName = "MUserStorage1", TableName = "MUser"),
+                @AblDrRant(Name = "MUserRead2", StorageName = "MUserStorage2",TableName = "MUser")
+        },
+        WriterRouters = { //配置写路由
+                @AblDrRant(Name = "MUserWrite1", StorageName = "MUserStorage1", TableName = "MUser"),
+                @AblDrRant(Name = "MUserWrite2", StorageName = "MUserStorage2",TableName = "MUser")
+        }
 )
-public class MultiUser extends FreeAlbianObject implements IMultiUser {
-    @AlbianObjectDataFieldRant(IsPrimaryKey = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder@ToString
+public class MultiUser extends FreeAblObj {
+    @AblEntityFieldRant(IsPrimaryKey = true)
     private String id;
     private String userName;
-    @AlbianObjectDataFieldRant(FieldName = "Pwd")
+    @AblEntityFieldRant(FieldName = "Pwd")
     private String password;
 
-    @Override
-    public String getId() {
-        return this.id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getUserName() {
-        return this.userName;
-    }
-
-    @Override
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

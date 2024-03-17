@@ -39,35 +39,35 @@ package org.albianj.impl.dal.db;
 
 
 import org.albianj.ServRouter;
-import org.albianj.dal.context.WriterJob;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.context.IPersistenceCompensateNotify;
-import org.albianj.dal.context.WriterJobLifeTime;
+import org.albianj.api.dal.context.WrtJob;
+import org.albianj.api.dal.context.WrtLfcOpt;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.context.ICompensateNotify;
 
 public abstract class FreePersistenceTransactionClusterScope implements IPersistenceTransactionClusterScope {
 
 
-    public boolean execute(WriterJob writerJob)  {
+    public boolean execute(WrtJob wrtJob)  {
         boolean isSuccess = true;
         boolean isAutoRollbackSuccess = true;
         boolean isManualRollbackSuccess = true;
         StringBuilder sbMsg = new StringBuilder();
         try {
-            writerJob.setWriterJobLifeTime(WriterJobLifeTime.NoStarted);
-            this.preExecute(writerJob);
-            writerJob.setWriterJobLifeTime(WriterJobLifeTime.Opened);
-            this.executeHandler(writerJob);
-            writerJob.setWriterJobLifeTime(WriterJobLifeTime.Runned);
-            this.commit(writerJob);
-            writerJob.setWriterJobLifeTime(WriterJobLifeTime.Commited);
+            wrtJob.setWriterJobLifeTime(WrtLfcOpt.NoStarted);
+            this.preExecute(wrtJob);
+            wrtJob.setWriterJobLifeTime(WrtLfcOpt.Opened);
+            this.executeHandler(wrtJob);
+            wrtJob.setWriterJobLifeTime(WrtLfcOpt.Runned);
+            this.commit(wrtJob);
+            wrtJob.setWriterJobLifeTime(WrtLfcOpt.Commited);
         } catch (Exception e) {
             isSuccess = false;
-            sbMsg.append("Execute job is error.Job lifetime is:").append(writerJob.getWriterJobLifeTime())
+            sbMsg.append("Execute job is error.Job lifetime is:").append(wrtJob.getWriterJobLifeTime())
                 .append(",exception msg:").append(e.getMessage()).append(",Current task:")
-                .append(writerJob.getCurrentStorage()).append(",job id:").append(writerJob.getId());
-            ServRouter.log(writerJob.getId(),  LogLevel.Error,e,sbMsg.toString());
+                .append(wrtJob.getCurrentStorage()).append(",job id:").append(wrtJob.getId());
+            ServRouter.log(wrtJob.getId(),  LogLevel.Error,e,sbMsg.toString());
             try {
-                switch (writerJob.getWriterJobLifeTime()) {
+                switch (wrtJob.getWriterJobLifeTime()) {
                     case Opened:
                     case Opening: {
                         break;
@@ -78,26 +78,26 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                     case Commited: {
                         // commited then manua rollback the data by albian
                         // and it can not keep the data consistency
-                        writerJob.setWriterJobLifeTime(WriterJobLifeTime.AutoRollbacking);
+                        wrtJob.setWriterJobLifeTime(WrtLfcOpt.AutoRollbacking);
                         try {
-                            this.exceptionHandler(writerJob);
+                            this.exceptionHandler(wrtJob);
                         } catch (Exception exc) {
                             isAutoRollbackSuccess = false;
-                            ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
-                                    "auto rollback  the job {} is fail.",writerJob.getId());
+                            ServRouter.log(wrtJob.getId(),LogLevel.Error,exc,
+                                    "auto rollback  the job {} is fail.", wrtJob.getId());
                         }
-                        if (writerJob.isNeedManualRollback()) {
-                            writerJob.setWriterJobLifeTime(WriterJobLifeTime.ManualRollbacking);
+                        if (wrtJob.isNeedManualRollback()) {
+                            wrtJob.setWriterJobLifeTime(WrtLfcOpt.ManualRollbacking);
                             try {
-                                isManualRollbackSuccess = this.exceptionManualRollback(writerJob);
+                                isManualRollbackSuccess = this.exceptionManualRollback(wrtJob);
                             } catch (Exception exc) {
                                 isManualRollbackSuccess = false;
-                                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
-                                        "manual rollback  the job {} is fail.",writerJob.getId());
+                                ServRouter.log(wrtJob.getId(),LogLevel.Error,exc,
+                                        "manual rollback  the job {} is fail.", wrtJob.getId());
                             }
                         }
 
-                        writerJob.setWriterJobLifeTime(WriterJobLifeTime.Rollbacked);
+                        wrtJob.setWriterJobLifeTime(WrtLfcOpt.Rollbacked);
                         break;
                     }
                     default:
@@ -105,60 +105,60 @@ public abstract class FreePersistenceTransactionClusterScope implements IPersist
                 }
 
             } catch (Exception exc) {
-                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
-                        " rollback  the job {} is fail.",writerJob.getId());
+                ServRouter.log(wrtJob.getId(),LogLevel.Error,exc,
+                        " rollback  the job {} is fail.", wrtJob.getId());
             }
 
             try {
                 if (!isManualRollbackSuccess) {
-                    if (writerJob.isNeedManualRollback()) {
-                        IPersistenceCompensateNotify callback = null;
-                        callback = writerJob.getCompensateCallback();
+                    if (wrtJob.isNeedManualRollback()) {
+                        ICompensateNotify callback = null;
+                        callback = wrtJob.getCompensateCallback();
 
                         if (null == callback) {
-                            callback = PersistenceCompensateNotify.getInstance();
+                            callback = CompensateNotify.getInstance();
                         }
-                        callback.send(isAutoRollbackSuccess, isManualRollbackSuccess, writerJob);
+                        callback.send(isAutoRollbackSuccess, isManualRollbackSuccess, wrtJob);
                     }
                 }
             } catch (Exception exc) {
-                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
-                        " Execute the compensate callback of job {} is fail.",writerJob.getId());
+                ServRouter.log(wrtJob.getId(),LogLevel.Error,exc,
+                        " Execute the compensate callback of job {} is fail.", wrtJob.getId());
 
             }
 
         } finally {
             try {
-                unLoadExecute(writerJob);
+                unLoadExecute(wrtJob);
             } catch (Exception exc) {
-                ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
-                        " unload job {} is fail.",writerJob.getId());
+                ServRouter.log(wrtJob.getId(),LogLevel.Error,exc,
+                        " unload job {} is fail.", wrtJob.getId());
             }
-            if (null != writerJob.getNotifyCallback()) {
+            if (null != wrtJob.getNotifyCallback()) {
                 try {
 
-                    writerJob.getNotifyCallback().notice(isSuccess, sbMsg.toString(),
-                            writerJob.getNotifyCallbackobject());
+                    wrtJob.getNotifyCallback().notice(isSuccess, sbMsg.toString(),
+                            wrtJob.getNotifyCallbackobject());
                 } catch (Exception exc) {
-                    ServRouter.log(writerJob.getId(),LogLevel.Error,exc,
-                            " Execute the notice of job {} is fail.",writerJob.getId());
+                    ServRouter.log(wrtJob.getId(),LogLevel.Error,exc,
+                            " Execute the notice of job {} is fail.", wrtJob.getId());
                 }
             }
-            writerJob.setCurrentStorage(null);
+            wrtJob.setCurrentStorage(null);
         }
 
         return isSuccess;
     }
 
-    protected abstract void preExecute(WriterJob writerJob) ;
+    protected abstract void preExecute(WrtJob wrtJob) ;
 
-    protected abstract void executeHandler(WriterJob writerJob) ;
+    protected abstract void executeHandler(WrtJob wrtJob) ;
 
-    protected abstract void commit(WriterJob writerJob) ;
+    protected abstract void commit(WrtJob wrtJob) ;
 
-    protected abstract void exceptionHandler(WriterJob writerJob)  ;
+    protected abstract void exceptionHandler(WrtJob wrtJob)  ;
 
-    protected abstract void unLoadExecute(WriterJob writerJob)  ;
+    protected abstract void unLoadExecute(WrtJob wrtJob)  ;
 
-    protected abstract boolean exceptionManualRollback(WriterJob writerJob) ;
+    protected abstract boolean exceptionManualRollback(WrtJob wrtJob) ;
 }

@@ -1,15 +1,15 @@
 package org.albianj.impl.kernel.service;
 
+import org.albianj.api.kernel.service.IAlbianService;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.kernel.anno.serv.AlbianServiceFieldRant;
-import org.albianj.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.kernel.attr.AlbianServiceAopAttribute;
-import org.albianj.kernel.anno.proxy.AlbianServiceProxyRant;
-import org.albianj.kernel.anno.proxy.AlbianServiceProxyRants;
-import org.albianj.kernel.attr.AlbianServiceAttribute;
-import org.albianj.kernel.attr.AlbianServiceFieldAttribute;
-import org.albianj.kernel.service.*;
+import org.albianj.api.kernel.anno.serv.AlbianServiceFieldRant;
+import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
+import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRant;
+import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRants;
+import org.albianj.api.kernel.attr.AlbianServiceAttribute;
+import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.loader.AlbianClassScanner;
 import org.albianj.loader.IAlbianClassExcavator;
@@ -39,7 +39,7 @@ public class AlbianServiceRantParser {
 
                 new IAlbianClassExcavator() {
                     @Override
-                    public Object finder(Class<?> clzz) {
+                    public Object found(Class<?> clzz) {
                         return scanAlbianService(clzz);
                     }
                 });

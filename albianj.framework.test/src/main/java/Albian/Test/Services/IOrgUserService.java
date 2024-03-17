@@ -1,7 +1,7 @@
 package Albian.Test.Services;
 
 
-import org.albianj.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAlbianService;
 
 public interface IOrgUserService extends IAlbianService {
     final String Name = "OrgUserService";

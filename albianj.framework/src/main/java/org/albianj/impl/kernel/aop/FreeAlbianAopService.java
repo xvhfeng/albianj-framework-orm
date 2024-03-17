@@ -1,9 +1,9 @@
 package org.albianj.impl.kernel.aop;
 
-import org.albianj.kernel.aop.AlbianAopContext;
-import org.albianj.kernel.aop.IAlbianAopService;
-import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.kernel.service.IAlbianService;
+import org.albianj.api.kernel.aop.AlbianAopContext;
+import org.albianj.api.kernel.aop.IAlbianAopService;
+import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.service.IAlbianService;
 
 import java.lang.reflect.Method;
 
