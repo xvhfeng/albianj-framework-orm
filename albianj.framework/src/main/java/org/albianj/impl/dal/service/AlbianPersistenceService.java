@@ -38,24 +38,24 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.service;
 
 import org.albianj.common.utils.SetUtil;
-import org.albianj.dal.object.OrderByCondition;
+import org.albianj.api.dal.object.OdrBy;
 import org.albianj.impl.dal.context.*;
 import org.albianj.impl.dal.db.IPersistenceQueryScope;
 import org.albianj.impl.dal.db.IPersistenceTransactionClusterScope;
 import org.albianj.impl.dal.db.PersistenceQueryScope;
 import org.albianj.impl.dal.db.PersistenceTransactionClusterScope;
-import org.albianj.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.kernel.service.FreeAlbianService;
-import org.albianj.dal.context.IPersistenceCompensateNotify;
-import org.albianj.dal.context.IPersistenceNotify;
-import org.albianj.dal.context.ReaderJob;
-import org.albianj.dal.context.WriterJob;
-import org.albianj.dal.db.CommandOpt;
-import org.albianj.dal.object.IAlbianObject;
-import org.albianj.dal.object.IFilterCondition;
-import org.albianj.dal.object.filter.IChainExpression;
-import org.albianj.dal.service.IAlbianPersistenceService;
-import org.albianj.dal.service.QueryToOpt;
+import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.dal.context.ICompensateNotify;
+import org.albianj.api.dal.context.IDalNotify;
+import org.albianj.api.dal.context.RdrJob;
+import org.albianj.api.dal.context.WrtJob;
+import org.albianj.api.dal.db.CmdOpt;
+import org.albianj.api.dal.object.IAblObj;
+import org.albianj.api.dal.object.IFltCdt;
+import org.albianj.api.dal.object.filter.IChaExpr;
+import org.albianj.api.dal.service.IAlbianPersistenceService;
+import org.albianj.api.dal.service.DrOpt;
 
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -65,9 +65,9 @@ import java.util.List;
 public class AlbianPersistenceService extends FreeAlbianService implements IAlbianPersistenceService {
 
     @Deprecated
-    protected static <T extends IAlbianObject> T doLoadObject(String sessionId,
-                                                              Class<T> cls, boolean isExact,
-                                                              String routingName, LinkedList<IFilterCondition> wheres)
+    protected static <T extends IAblObj> T doLoadObject(String sessionId,
+                                                        Class<T> cls, boolean isExact,
+                                                        String routingName, LinkedList<IFltCdt> wheres)
             {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, null);
         if (SetUtil.isNullOrEmpty(list))
@@ -76,14 +76,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    protected static <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
-                                                                     Class<T> cls, boolean isExact, String routingName, int start, int step,
-                                                                     LinkedList<IFilterCondition> wheres,
-                                                                     LinkedList<OrderByCondition> orderbys, String idxName)
+    protected static <T extends IAblObj> List<T> doLoadObjects(String sessionId,
+                                                               Class<T> cls, boolean isExact, String routingName, int start, int step,
+                                                               LinkedList<IFltCdt> wheres,
+                                                               LinkedList<OdrBy> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
+        IRdrJobAdp ad = new RdrJobAdp();
         List<T> list = null;
-                ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName, start, step,
+                RdrJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName, start, step,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         list = scope.execute(cls, job);
@@ -91,13 +91,13 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    protected static <T extends IAlbianObject> long doLoadPageingCount(String sessionId,
-                                                                       Class<T> cls, boolean isExact, String routingName,
-                                                                       LinkedList<IFilterCondition> wheres,
-                                                                       LinkedList<OrderByCondition> orderbys, String idxName)
+    protected static <T extends IAblObj> long doLoadPageingCount(String sessionId,
+                                                                 Class<T> cls, boolean isExact, String routingName,
+                                                                 LinkedList<IFltCdt> wheres,
+                                                                 LinkedList<OdrBy> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
-                ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName,
+        IRdrJobAdp ad = new RdrJobAdp();
+                RdrJob job = ad.buildReaderJob(sessionId, cls, isExact, routingName,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         Object o = scope.execute(job);
@@ -113,16 +113,16 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean create(String sessionId, IAlbianObject object)  {
+    public boolean create(String sessionId, IAblObj object)  {
         return create(sessionId, object, null, null, null, null);
     }
 
     @Deprecated
-    public boolean create(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+    public boolean create(String sessionId, IAblObj object, IDalNotify notifyCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        WriterJob job = ja.buildCreation(sessionId, object);
+        IWrtJobAdp ja = new WrtJobAdp();
+        WrtJob job = ja.buildCreation(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
@@ -136,16 +136,16 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean create(String sessionId, List<? extends IAlbianObject> objects)  {
+    public boolean create(String sessionId, List<? extends IAblObj> objects)  {
         return this.create(sessionId, objects, null, null, null, null);
     }
 
     @Deprecated
-    public boolean create(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+    public boolean create(String sessionId, List<? extends IAblObj> objects, IDalNotify notifyCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        WriterJob job = ja.buildCreation(sessionId, objects);
+        IWrtJobAdp ja = new WrtJobAdp();
+        WrtJob job = ja.buildCreation(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
@@ -159,16 +159,16 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean modify(String sessionId, IAlbianObject object)  {
+    public boolean modify(String sessionId, IAblObj object)  {
         return this.modify(sessionId, object, null, null, null, null);
     }
 
     @Deprecated
-    public boolean modify(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+    public boolean modify(String sessionId, IAblObj object, IDalNotify notifyCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        WriterJob job = ja.buildModification(sessionId, object);
+        IWrtJobAdp ja = new WrtJobAdp();
+        WrtJob job = ja.buildModification(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
@@ -182,17 +182,17 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public boolean modify(String sessionId, List<? extends IAlbianObject> objects)  {
+    public boolean modify(String sessionId, List<? extends IAblObj> objects)  {
         return this.modify(sessionId, objects, null, null, null, null);
     }
 
     @Deprecated
-    public boolean modify(String sessionId, List<? extends IAlbianObject> objects,
-                          IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+    public boolean modify(String sessionId, List<? extends IAblObj> objects,
+                          IDalNotify notifyCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        WriterJob job = ja.buildModification(sessionId, objects);
+        IWrtJobAdp ja = new WrtJobAdp();
+        WrtJob job = ja.buildModification(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
@@ -205,15 +205,15 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean remove(String sessionId, IAlbianObject object)  {
+    public boolean remove(String sessionId, IAblObj object)  {
         return this.remove(sessionId, object, null, null, null, null);
     }
 
-    public boolean remove(String sessionId, IAlbianObject object, IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+    public boolean remove(String sessionId, IAblObj object, IDalNotify notifyCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        WriterJob job = ja.buildRemoved(sessionId, object);
+        IWrtJobAdp ja = new WrtJobAdp();
+        WrtJob job = ja.buildRemoved(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
@@ -226,15 +226,15 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean remove(String sessionId, List<? extends IAlbianObject> objects)  {
+    public boolean remove(String sessionId, List<? extends IAblObj> objects)  {
         return this.remove(sessionId, objects, null, null, null, null);
     }
 
-    public boolean remove(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                          Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+    public boolean remove(String sessionId, List<? extends IAblObj> objects, IDalNotify notifyCallback,
+                          Object notifyCallbackObject, ICompensateNotify compensateCallback,
                           Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        WriterJob job = ja.buildRemoved(sessionId, objects);
+        IWrtJobAdp ja = new WrtJobAdp();
+        WrtJob job = ja.buildRemoved(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
@@ -247,16 +247,16 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean save(String sessionId, IAlbianObject object)  {
+    public boolean save(String sessionId, IAblObj object)  {
         return this.save(sessionId, object, null, null, null, null);
     }
 
-    public boolean save(String sessionId, IAlbianObject object,
-                        IPersistenceNotify notifyCallback, Object notifyCallbackObject,
-                        IPersistenceCompensateNotify compensateCallback, Object compensateCallbackObject)
+    public boolean save(String sessionId, IAblObj object,
+                        IDalNotify notifyCallback, Object notifyCallbackObject,
+                        ICompensateNotify compensateCallback, Object compensateCallbackObject)
             {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-                WriterJob job = ja.buildSaving(sessionId, object);
+        IWrtJobAdp ja = new WrtJobAdp();
+                WrtJob job = ja.buildSaving(sessionId, object);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
                 if (null != notifyCallbackObject)
@@ -269,15 +269,15 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public boolean save(String sessionId, List<? extends IAlbianObject> objects)  {
+    public boolean save(String sessionId, List<? extends IAblObj> objects)  {
         return this.save(sessionId, objects, null, null, null, null);
     }
 
-    public boolean save(String sessionId, List<? extends IAlbianObject> objects, IPersistenceNotify notifyCallback,
-                        Object notifyCallbackObject, IPersistenceCompensateNotify compensateCallback,
+    public boolean save(String sessionId, List<? extends IAblObj> objects, IDalNotify notifyCallback,
+                        Object notifyCallbackObject, ICompensateNotify compensateCallback,
                         Object compensateCallbackObject)  {
-        IWriterJobAdapter ja = new WriterJobAdapter();
-        WriterJob job = ja.buildSaving(sessionId, objects);
+        IWrtJobAdp ja = new WrtJobAdp();
+        WrtJob job = ja.buildSaving(sessionId, objects);
         if (null != notifyCallback)
             job.setNotifyCallback(notifyCallback);
         if (null != notifyCallbackObject)
@@ -290,15 +290,15 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return tcs.execute(job);
     }
 
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres)
             {
         return this.loadObject(sessionId, cls, loadType, null, wheres);
     }
 
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
-                                                  QueryToOpt loadType, String rountingName, IChainExpression wheres)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls,
+                                            DrOpt loadType, String rountingName, IChaExpr wheres)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -306,7 +306,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             return list.get(0);
         }
 
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -325,46 +325,46 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return newObj;
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, null);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   IChaExpr wheres, LinkedList<OdrBy> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   IChaExpr wheres, LinkedList<OdrBy> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, IChaExpr wheres)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -383,21 +383,21 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return objs;
     }
 
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, IChainExpression wheres)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, IChaExpr wheres)
             {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres);
     }
 
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, String rountingName, IChainExpression wheres)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, String rountingName, IChaExpr wheres)
             {
         long count = 0;
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, null);
 //            AlbianPersistenceCache.setPagesize(cls, wheres, null, count);
         } else {
-            if (QueryToOpt.ReaderRouter == loadType) {
+            if (DrOpt.Rdr == loadType) {
                 count = doLoadPageingCount(sessionId, cls, false, rountingName, wheres, null, null);
 //                AlbianPersistenceCache.setPagesize(cls, wheres, null, count);
             } else {
@@ -415,16 +415,16 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres)
             {
         return this.loadObject(sessionId, cls, loadType, null, wheres);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
-                                                  QueryToOpt loadType, String rountingName, LinkedList<IFilterCondition> wheres)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls,
+                                            DrOpt loadType, String rountingName, LinkedList<IFltCdt> wheres)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -432,7 +432,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             return list.get(0);
         }
 
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -451,8 +451,8 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return newObj;
     }
 
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, CommandOpt cmdType,
-                                                  Statement statement)  {
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, CmdOpt cmdType,
+                                            Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
             return null;
@@ -460,27 +460,27 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, null, null);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
             {
         return loadObjects(sessionId, cls, loadType, rountingName, 0, 0, wheres, orderbys);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, CommandOpt cmdType,
-                                                         Statement statement)  {
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, CmdOpt cmdType,
+                                                   Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
             return null;
@@ -488,31 +488,31 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, LinkedList<IFltCdt> wheres)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, null);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -532,21 +532,21 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, LinkedList<IFilterCondition> wheres)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, LinkedList<IFltCdt> wheres)
             {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, String rountingName, LinkedList<IFilterCondition> wheres)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, String rountingName, LinkedList<IFltCdt> wheres)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             long count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, null);
             return count;
         }
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             long count = doLoadPageingCount(sessionId, cls, false, rountingName, wheres, null, null);
             return count;
         }
@@ -562,8 +562,8 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
 
-    protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
-                                                              Class<T> cls, CommandOpt cmdType, Statement statement)
+    protected <T extends IAblObj> List<T> doLoadObjects(String sessionId,
+                                                        Class<T> cls, CmdOpt cmdType, Statement statement)
             {
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         List<T> list = null;
@@ -571,8 +571,8 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return list;
     }
 
-    protected <T extends IAlbianObject> T doLoadObject(String sessionId, Class<T> cls,
-                                                       CommandOpt cmdType, Statement statement)
+    protected <T extends IAblObj> T doLoadObject(String sessionId, Class<T> cls,
+                                                 CmdOpt cmdType, Statement statement)
             {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
         if (SetUtil.isNullOrEmpty(list))
@@ -580,9 +580,9 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return list.get(0);
     }
 
-    protected <T extends IAlbianObject> T doLoadObject(String sessionId,
-                                                       Class<T> cls, boolean isExact,
-                                                       String routingName, IChainExpression wheres, String idxName)
+    protected <T extends IAblObj> T doLoadObject(String sessionId,
+                                                 Class<T> cls, boolean isExact,
+                                                 String routingName, IChaExpr wheres, String idxName)
             {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, idxName);
         if (SetUtil.isNullOrEmpty(list))
@@ -590,27 +590,27 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return list.get(0);
     }
 
-    protected <T extends IAlbianObject> List<T> doLoadObjects(String sessionId,
-                                                              Class<T> cls, boolean isExact, String routingName, int start, int step,
-                                                              IChainExpression wheres,
-                                                              LinkedList<OrderByCondition> orderbys, String idxName)
+    protected <T extends IAblObj> List<T> doLoadObjects(String sessionId,
+                                                        Class<T> cls, boolean isExact, String routingName, int start, int step,
+                                                        IChaExpr wheres,
+                                                        LinkedList<OdrBy> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
+        IRdrJobAdp ad = new RdrJobAdp();
         List<T> list = null;
-                ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName, start, step,
+                RdrJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName, start, step,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         list = scope.execute(cls, job);
         return list;
     }
 
-    protected <T extends IAlbianObject> long doLoadPageingCount(String sessionId,
-                                                                Class<T> cls, boolean isExact, String routingName,
-                                                                IChainExpression wheres,
-                                                                LinkedList<OrderByCondition> orderbys, String idxName)
+    protected <T extends IAblObj> long doLoadPageingCount(String sessionId,
+                                                          Class<T> cls, boolean isExact, String routingName,
+                                                          IChaExpr wheres,
+                                                          LinkedList<OdrBy> orderbys, String idxName)
             {
-        IReaderJobAdapter ad = new ReaderJobAdapter();
-                ReaderJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
+        IRdrJobAdp ad = new RdrJobAdp();
+                RdrJob job = ad.buildReaderJob(sessionId, cls, isExact, null, null, routingName,
                 wheres, orderbys, idxName);
         IPersistenceQueryScope scope = new PersistenceQueryScope();
         Object o = scope.execute(job);
@@ -620,15 +620,15 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
 //----- add by 木木，强行指定索引名字
 
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres, String idxName)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres, String idxName)
             {
         return this.loadObject(sessionId, cls, loadType, null, wheres, idxName);
     }
 
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
-                                                  QueryToOpt loadType, String rountingName, IChainExpression wheres, String idxName)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls,
+                                            DrOpt loadType, String rountingName, IChaExpr wheres, String idxName)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -636,7 +636,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             return list.get(0);
         }
 
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -655,46 +655,46 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return newObj;
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, IChainExpression wheres, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, IChaExpr wheres, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, null, idxName);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, null, wheres, orderbys, idxName);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys, idxName);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, IChaExpr wheres, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null, idxName);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys, idxName);
     }
 
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, IChainExpression wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -713,21 +713,21 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
         return objs;
     }
 
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, IChainExpression wheres, String idxName)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, IChaExpr wheres, String idxName)
             {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres, idxName);
     }
 
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, String rountingName, IChainExpression wheres, String idxName)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, String rountingName, IChaExpr wheres, String idxName)
             {
         long count = 0;
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, idxName);
 //            AlbianPersistenceCache.setPagesize(cls, wheres, null, count);
         } else {
-            if (QueryToOpt.ReaderRouter == loadType) {
+            if (DrOpt.Rdr == loadType) {
                 count = doLoadPageingCount(sessionId, cls, false, rountingName, wheres, null, idxName);
 //                AlbianPersistenceCache.setPagesize(cls, wheres, null, count);
             } else {
@@ -745,16 +745,16 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres, String idxName)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres, String idxName)
             {
         return this.loadObject(sessionId, cls, loadType, null, wheres, idxName);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> T loadObject(String sessionId, Class<T> cls,
-                                                  QueryToOpt loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
+    public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls,
+                                            DrOpt loadType, String rountingName, LinkedList<IFltCdt> wheres, String idxName)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -762,7 +762,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             return list.get(0);
         }
 
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -782,52 +782,52 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, LinkedList<IFilterCondition> wheres, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, LinkedList<IFltCdt> wheres, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, null, idxName);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, 0, 0, wheres, orderbys, idxName);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
         return loadObjects(sessionId, cls, loadType, rountingName, 0, 0, wheres, orderbys, idxName);
     }
 
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, LinkedList<IFltCdt> wheres, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, null, idxName);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType,
+                                                   int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
         return this.loadObjects(sessionId, cls, loadType, null, start, step, wheres, orderbys, idxName);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> List<T> loadObjects(String sessionId, Class<T> cls, QueryToOpt loadType, String rountingName,
-                                                         int start, int step, LinkedList<IFilterCondition> wheres, LinkedList<OrderByCondition> orderbys, String idxName)
+    public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, DrOpt loadType, String rountingName,
+                                                   int start, int step, LinkedList<IFltCdt> wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, idxName);
             if (SetUtil.isNullOrEmpty(list))
                 return null;
@@ -847,21 +847,21 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     }
 
     @Deprecated
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, LinkedList<IFilterCondition> wheres, String idxName)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, LinkedList<IFltCdt> wheres, String idxName)
             {
         return this.loadObjectsCount(sessionId, cls, loadType, null, wheres, idxName);
     }
 
     @Deprecated
-    public <T extends IAlbianObject> long loadObjectsCount(String sessionId, Class<T> cls,
-                                                           QueryToOpt loadType, String rountingName, LinkedList<IFilterCondition> wheres, String idxName)
+    public <T extends IAblObj> long loadObjectsCount(String sessionId, Class<T> cls,
+                                                     DrOpt loadType, String rountingName, LinkedList<IFltCdt> wheres, String idxName)
             {
-        if (QueryToOpt.WriterRouter == loadType) {
+        if (DrOpt.Wtr == loadType) {
             long count = doLoadPageingCount(sessionId, cls, true, rountingName, wheres, null, idxName);
             return count;
         }
-        if (QueryToOpt.ReaderRouter == loadType) {
+        if (DrOpt.Rdr == loadType) {
             long count = doLoadPageingCount(sessionId, cls, false, rountingName, wheres, null, idxName);
             return count;
         }

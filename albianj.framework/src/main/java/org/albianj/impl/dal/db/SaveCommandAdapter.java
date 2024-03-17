@@ -38,20 +38,17 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 import org.albianj.AblThrowable;
-import org.albianj.dal.db.PersistenceCommand;
-import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.object.DataRouterAttribute;
-import org.albianj.dal.object.StorageAttribute;
-import org.albianj.dal.object.*;
+import org.albianj.api.dal.db.PCmd;
+import org.albianj.api.dal.object.*;
 
 import java.util.Map;
 
-public class SaveCommandAdapter implements IPersistenceUpdateCommand {
+public class SaveCommandAdapter implements IDMLCmd {
 
-    private IPersistenceUpdateCommand create;
-    private IPersistenceUpdateCommand modify;
+    private IDMLCmd create;
+    private IDMLCmd modify;
 
-    public SaveCommandAdapter(IPersistenceUpdateCommand create, IPersistenceUpdateCommand modify) {
+    public SaveCommandAdapter(IDMLCmd create, IDMLCmd modify) {
         this.create = create;
         this.modify = modify;
     }
@@ -63,8 +60,8 @@ public class SaveCommandAdapter implements IPersistenceUpdateCommand {
             this.modify = new ModifyCommandAdapter();
     }
 
-    public PersistenceCommand buildPstCmd(String sessionId, int dbStyle, String tableName, IAlbianObject object,
-                                          AlbianObjectAttribute objAttr, Map<String, Object> mapValue, boolean rbkOnErr)   {
+    public PCmd buildPstCmd(String sessionId, int dbStyle, String tableName, IAblObj object,
+                            AblEntityAttr objAttr, Map<String, Object> mapValue, boolean rbkOnErr)   {
         if (object.getIsAlbianNew()) {
             return create.buildPstCmd(sessionId, dbStyle, tableName, object, objAttr, mapValue, rbkOnErr);
         } else {
@@ -72,8 +69,8 @@ public class SaveCommandAdapter implements IPersistenceUpdateCommand {
         }
     }
 
-    public PersistenceCommand buildPstCmd(String sessionId, IAlbianObject object, DataRoutersAttribute routings, AlbianObjectAttribute albianObject,
-                                          Map<String, Object> mapValue, DataRouterAttribute routing, StorageAttribute storage, String[] members)   {
+    public PCmd buildPstCmd(String sessionId, IAblObj object, DrsAttr routings, AblEntityAttr albianObject,
+                            Map<String, Object> mapValue, DrAttr routing, StgAttr storage, String[] members)   {
         throw new AblThrowable();
     }
 

@@ -38,19 +38,16 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.dal.object.AlbianObjectAttribute;
-import org.albianj.dal.object.DataRouterAttribute;
-import org.albianj.dal.object.StorageAttribute;
-import org.albianj.dal.object.*;
+import org.albianj.api.dal.object.*;
 
 import java.util.Map;
 
 public interface IUpdateCommand {
-    public ICommand builder(IAlbianObject object, DataRoutersAttribute routings,
-                            AlbianObjectAttribute albianObject, Map<String, Object> mapValue,
-                            DataRouterAttribute routing, StorageAttribute storage);
+    public ICommand builder(IAblObj object, DrsAttr routings,
+                            AblEntityAttr albianObject, Map<String, Object> mapValue,
+                            DrAttr routing, StgAttr storage);
 
-    public ICommand builder(IAlbianObject object, DataRoutersAttribute routings, AlbianObjectAttribute albianObject,
-                            Map<String, Object> mapValue, DataRouterAttribute routing, StorageAttribute storage, String[] members)
+    public ICommand builder(IAblObj object, DrsAttr routings, AblEntityAttr albianObject,
+                            Map<String, Object> mapValue, DrAttr routing, StgAttr storage, String[] members)
             throws NoSuchMethodException;
 }

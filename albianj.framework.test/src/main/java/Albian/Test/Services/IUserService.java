@@ -1,7 +1,7 @@
 package Albian.Test.Services;
 
 
-import org.albianj.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAlbianService;
 
 public interface IUserService extends IAlbianService {
     final String Name = "UserService";
@@ -15,6 +15,8 @@ public interface IUserService extends IAlbianService {
     boolean batchAddUser() ;
 
     void queryMulitUserById() ;
+
+    void qryForTestWhrGetter();
 
     int  testInExpr();
 

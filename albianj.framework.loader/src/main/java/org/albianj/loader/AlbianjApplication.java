@@ -92,6 +92,7 @@ public class AlbianjApplication {
             }
         }
 
+        logger.info("The sun rises in the east and the lighthouse is no more!");
         logger.info(AlbianAsciiArt.Images);
         logger.info("Albianj startup,main class:" + mainClass.getName() + ",configurtion folder: " + cfPath);
         logger.info("Albianj found log4j configuration file:" + null == cfFileName || cfFileName.isEmpty() ? "EMPTY": cfFileName);

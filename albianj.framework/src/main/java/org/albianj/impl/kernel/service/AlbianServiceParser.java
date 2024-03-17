@@ -42,12 +42,12 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.kernel.attr.AlbianServiceAopAttribute;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.kernel.attr.AlbianServiceAttribute;
-import org.albianj.kernel.attr.AlbianServiceFieldAttribute;
-import org.albianj.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.kernel.service.parser.IAlbianParserService;
+import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.kernel.attr.AlbianServiceAttribute;
+import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
+import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.service.parser.IAlbianParserService;
 import org.albianj.loader.AlbianClassLoader;
 import org.dom4j.Element;
 

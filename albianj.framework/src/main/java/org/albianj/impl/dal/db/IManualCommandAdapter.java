@@ -1,12 +1,12 @@
 package org.albianj.impl.dal.db;
 
 
-import org.albianj.dal.context.ManualContext;
+import org.albianj.api.dal.context.ManualCtx;
 
 /**
  * Created by xuhaifeng on 17/8/31.
  */
 public interface IManualCommandAdapter {
 
-    ManualContext createManualCommands(ManualContext mctx);
+    ManualCtx createManualCommands(ManualCtx mctx);
 }

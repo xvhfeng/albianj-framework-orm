@@ -5,9 +5,9 @@ import org.albianj.impl.dal.dbpool.ISpxDBPool;
 import org.albianj.impl.dal.dbpool.ISpxDBPoolConfig;
 import org.albianj.impl.dal.dbpool.impl.SpxDBPool;
 import org.albianj.impl.dal.dbpool.impl.SpxDBPoolConfig;
-import org.albianj.dal.object.StorageAttribute;
-import org.albianj.kernel.logger.LogLevel;
-import org.albianj.dal.object.RunningStorageAttribute;
+import org.albianj.api.dal.object.StgAttr;
+import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.api.dal.object.RStgAttr;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,12 +16,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public class SpxWapper extends FreeDataBasePool {
+public class SpxWapper extends FreeDBP {
 
     public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
-    public Connection getConnection(String sessionId, RunningStorageAttribute rsa, boolean isAutoCommit)  {
-        StorageAttribute sa = rsa.getStorageAttribute();
+    public Connection getConnection(String sessionId, RStgAttr rsa, boolean isAutoCommit)  {
+        StgAttr sa = rsa.getStgAttr();
         String key = sa.getName() + rsa.getDatabase();
         DataSource ds = getDatasource(sessionId,key, rsa);
         ISpxDBPool pool = (ISpxDBPool)ds;
@@ -46,7 +46,7 @@ public class SpxWapper extends FreeDataBasePool {
     }
 
     @Override
-    public DataSource setupDataSource(String sessionid,String key, RunningStorageAttribute rsa)  {
+    public DataSource setupDataSource(String sessionid,String key, RStgAttr rsa)  {
         ISpxDBPoolConfig cf = null;
         try {
             cf = new SpxDBPoolConfig();
@@ -55,7 +55,7 @@ public class SpxWapper extends FreeDataBasePool {
                     "create dabasepool for storage:{} is fail.",key);
         }
         try {
-            StorageAttribute stgAttr = rsa.getStorageAttribute();
+            StgAttr stgAttr = rsa.getStgAttr();
             String url = FreeAlbianStorageParserService.generateConnectionUrl(rsa);
             cf.setDriverName(DRIVER_CLASSNAME);
             cf.setUrl(url);

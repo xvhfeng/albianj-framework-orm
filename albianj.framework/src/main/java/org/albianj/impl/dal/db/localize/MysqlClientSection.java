@@ -1,7 +1,7 @@
 package org.albianj.impl.dal.db.localize;
 
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.dal.db.localize.IDBClientSection;
+import org.albianj.api.dal.db.localize.IDBClientSection;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
