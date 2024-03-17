@@ -1,4 +1,4 @@
-package org.albianj.loader.annos;
+package org.albianj.scanner.annos;
 
 import java.lang.annotation.*;
 
