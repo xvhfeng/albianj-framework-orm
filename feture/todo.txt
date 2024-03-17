@@ -1,0 +1,57 @@
+0. update的时候，可以update字段的自身值，比如set field=field + 2,且可以在whr子句中指定field=origin value，来达到简单的版本控制
+1.  join 功能
+2.  自动驼峰转下划线
+3.  支持DDL语言 可以根据albianj object的注解自动创建表
+4.  查询不用非要制定class result支持map
+5.  不需要load即可进行insert or update功能，且支持区分null是否被使用
+6.  加强异常、log信息，启动信息
+7.  增加select时候的指定列
+8.  delete、update增加where条件（非主键依赖）的能力
+9.  去掉启动时一定需要配置文件的存在
+10. 将配置文件中的package配置用annotation取代
+11. 增加对敏感信息加密功能，并能自定义key
+12. 增加对list保存时候，是否需要update的test方法
+13. 具有DataRouterRant配置的object自动默认为AblEntityRant支持
+14. 增加groupby，having功能
+15. 重写serivce结构，支持init等功能
+16. stoage配置文件增加template功能
+17. 开放的storage storage寻址和管理，framework仅为一个链接管理器，剩下的sql你只要写得出来，请随意
+18. exist，not in ，not exist，子查询。。。是否也考虑一下
+
+已经完成：
+0.  统一了exception，删除了原型每个类型一个的exception，现统一使用ABlThrowable，其继承自RuntimeException
+1.  保存的时候增加list保存
+2.  精简了pom文件，精简了jar引用，精简了项目数
+3.  原有部分吞掉exception信息的已经改为throw again
+4.  更改了log配置文件的支持，可以使用-D参数（log4j的使用方式）来注入配置文件
+5.  logger去掉了target的功能，改为统一文件，以期和log4j的传统使用方法一致
+6.  增加了logger时候记录stack frame的功能，并且过滤掉指定的class，以保信息更准确
+7.  增加了统一的throw exception，log and throw exception功能
+8.  增加了部分的util功能，包括但不限于stringsutil，classload等等
+9   更改了对外的service router类名，原来的太长了，不好看，颜值就是战斗力
+10. 删除了第三方的数据库连接池warp，不知道拿来干啥的？删除也能工作
+11. 数据库连接池默认使用HCP，去掉了c3p0和dbcp的支持，spxdbp保留
+12. 更改了启动流程，log必须先启动，然后才是kernel和bit
+13. 启动增加了run和wait两种功能，并且增加了run模式下的commandline接口，以便调用业务代码
+14. 去掉了kernel setting，增加了global settings
+15. 更改了查询是否的选择，很多原先使用int来区分的因为写代码的时候不醒目，使用eumn替代，这样可以直接使用emun点出来
+16. 删除了不需要或者不常用的service，例如v1版本的logger service，threadpool等等
+17. 精简了大部分的单interface-单impl class模式，因为在一个framework中，其实没有这个必要
+18. 彻底删除了原本设计的object cached机制代码，后续的所有对象使用者自行解决缓存问题，框架不解决缓存问题
+19. load数据的方式改为了从写路由和读路由，这样更能明白意思，且可以读写分离
+20. 增加了对单表的in like表达式的支持
+21. 删除了数据对象必须具有interface的原则，现在数据类只要继承FreeAblObj即可，FreeAblObj不可省略，有部分数据机制需要；
+    省掉接口的好处是可以直接写数据类，并且使用@Data节省getter，setter，就算使用插件自动生成getter setter，再push method up也是非常烦人的操作
+22. 测试删除了Mapping中注解在setter或者getter方法上原先SB设计
+23. 引入了myb plus的部分util代码（SFunction相关部分），薅羊毛了。非常感谢myb plus的作者
+24. 增加FilterExpr中原先必须指定FieldName的查询，改成了使用字段的getter，这样最大的好处是可以编译期检查了，也解决了string对于值意义不明
+25. orderby也增加了使用getter来替代手写field name
+26. 删除了启动时候的各种度量，没有意义
+27. 增加了熊猫的Ascii图画和framework的艺术字，挺好玩
+28. 引入了部分aspectj util的代码（LangUtil部分，被分割了），再次薅了羊毛，非常感谢aspectj的作者
+29. 删除了运行中的方法throw各种不可隐匿的exception，现全部使用AblThrowable
+30. 去掉了原先对于MDB预留的支持接口
+31. 重新设置了AblEntityRant，去掉了接口的配置，增加了对于数据库名字的控制
+32. DataRouter的Rant从AblEntityRant中脱离而独立出来
+33. 原先kernel config的必须读取设计改为了prop的map模式，不再强求配置信息
+
