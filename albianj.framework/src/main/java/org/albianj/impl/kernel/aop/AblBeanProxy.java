@@ -6,6 +6,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.albianj.ServRouter;
 import org.albianj.api.kernel.aop.AlbianAopContext;
 import org.albianj.api.kernel.aop.IAlbianAopService;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.api.kernel.anno.proxy.AlbianProxyIgnoreRant;
 import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * Created by xuhaifeng on 16/5/30.
  */
-public class AlbianServiceAopProxy implements MethodInterceptor {
+public class AblBeanProxy implements MethodInterceptor {
 
     IAlbianService _service = null;
     Map<String, AlbianServiceAopAttribute> _aopAttributes = null;
@@ -36,6 +37,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
 
             enhancer.setSuperclass(this._service.getClass()); //设置被代理类字节码（obj将被代理类设置成父类；作为产生的代理的父类传进来的）。CGLIB依据字节码生成被代理类的子类
             enhancer.setCallback(this);    //设置回调函数，即一个方法拦截
+            enhancer.setInterfaces(new Class[]{IAblServ.class});
             Object proxy = enhancer.create(); //创建代理类
             return proxy;
         } catch (Exception e) {

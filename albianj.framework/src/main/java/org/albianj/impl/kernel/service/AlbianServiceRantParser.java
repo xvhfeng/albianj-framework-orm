@@ -4,10 +4,10 @@ import org.albianj.api.kernel.service.IAlbianService;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.api.kernel.anno.serv.AlbianServiceFieldRant;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServiceRant;
 import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
 import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRant;
-import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRants;
+import org.albianj.api.kernel.anno.proxy.AblProxyRant;
 import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
 import org.albianj.loader.AlbianClassLoader;
@@ -30,7 +30,7 @@ public class AlbianServiceRantParser {
                     public boolean verify(Class<?> cls) {
                         //must flag with anno and extends IAlbianService
                         // extends interface is compatibling the last version
-                        return cls.isAnnotationPresent(AlbianServiceRant.class)
+                        return cls.isAnnotationPresent(AblServiceRant.class)
                                 && IAlbianService.class.isAssignableFrom(cls)
                                 && !cls.isInterface()
                                 && !Modifier.isAbstract(cls.getModifiers());
@@ -47,7 +47,7 @@ public class AlbianServiceRantParser {
 
     public static AlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
         AlbianServiceAttribute asa = new AlbianServiceAttribute();
-        AlbianServiceRant rant = implClzz.getAnnotation(AlbianServiceRant.class);
+        AblServiceRant rant = implClzz.getAnnotation(AblServiceRant.class);
         asa.setId(rant.Id());
         if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
             asa.setItf(IAlbianService.class.getName());
@@ -58,8 +58,8 @@ public class AlbianServiceRantParser {
         asa.setType(implClzz.getName());
         asa.setServiceClass(implClzz.asSubclass(IAlbianService.class));
 
-        if (implClzz.isAnnotationPresent(AlbianServiceProxyRants.class)) {
-            AlbianServiceProxyRants prants = implClzz.getAnnotation(AlbianServiceProxyRants.class);
+        if (implClzz.isAnnotationPresent(AblProxyRant.class)) {
+            AblProxyRant prants = implClzz.getAnnotation(AblProxyRant.class);
             Map<String, AlbianServiceAopAttribute> asaas = new HashMap<>();
             for (AlbianServiceProxyRant prant : prants.Rants()) {
                 AlbianServiceAopAttribute aspa = new AlbianServiceAopAttribute();

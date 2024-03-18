@@ -1,0 +1,33 @@
+template:
+  name: localhost-template
+  database:
+    type: mysql
+    para: autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&maxReconnect=3&autoReconnectForPools=true&rewriteBatchedStatements=true&useSSL=true&serverTimezone=CTT
+    timeout: 20
+    transactional: true
+    alivetime: 300
+  pool:
+    style: hcp
+    min: 10
+    max: 50
+
+storage:
+  -
+    database:
+      name: MuiltUserDB01
+      server: 127.0.0.1
+      port: 3306
+      user: root
+      password: 123456
+    pool:
+      min: 30
+    template: localhost-template
+
+  -
+    database:
+      name: MuiltUserDB02
+      server: 127.0.0.1
+      port: 3306
+      user: root
+      password: 123456
+    template: localhost-template

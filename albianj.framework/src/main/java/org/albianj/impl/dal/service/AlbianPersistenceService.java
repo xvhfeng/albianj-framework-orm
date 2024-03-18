@@ -44,7 +44,7 @@ import org.albianj.impl.dal.db.IPersistenceQueryScope;
 import org.albianj.impl.dal.db.IPersistenceTransactionClusterScope;
 import org.albianj.impl.dal.db.PersistenceQueryScope;
 import org.albianj.impl.dal.db.PersistenceTransactionClusterScope;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServiceRant;
 import org.albianj.api.kernel.service.FreeAlbianService;
 import org.albianj.api.dal.context.ICompensateNotify;
 import org.albianj.api.dal.context.IDalNotify;
@@ -61,7 +61,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-@AlbianServiceRant(Id = IAlbianPersistenceService.Name, Interface = IAlbianPersistenceService.class)
+@AblServiceRant(Id = IAlbianPersistenceService.Name, Interface = IAlbianPersistenceService.class)
 public class AlbianPersistenceService extends FreeAlbianService implements IAlbianPersistenceService {
 
     @Deprecated

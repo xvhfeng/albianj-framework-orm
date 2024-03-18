@@ -49,19 +49,16 @@ import org.albianj.impl.dal.routing.AlbianDataRouterParserService;
 import org.albianj.impl.dal.storage.AlbianStorageParserService;
 import org.albianj.impl.dal.toolkit.SqlTypeConv;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServiceRant;
 import org.albianj.loader.AlbianClassLoader;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
 import org.albianj.api.dal.service.IAlbianMappingParserService;
 import org.dom4j.Element;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@AlbianServiceRant(Id = IAlbianMappingParserService.Name, Interface = IAlbianMappingParserService.class)
+@AblServiceRant(Id = IAlbianMappingParserService.Name, Interface = IAlbianMappingParserService.class)
 public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     private static final String memberTagName = "Members/Member";

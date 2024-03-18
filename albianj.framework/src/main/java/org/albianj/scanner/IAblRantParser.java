@@ -15,5 +15,5 @@ public interface IAblRantParser {
      * @param attr
      * @return
      */
-    AblClzzAttr parseClzz(AblClzzAttr attr);
+    AblBeanAttr parseClzz(AblBeanAttr attr);
 }

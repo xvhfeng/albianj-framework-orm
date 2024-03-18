@@ -74,7 +74,7 @@ public class AlbianjApplication {
         return null;
     }
 
-    public static boolean run(Class<?> mainClass,String configurtionFolder) {
+    private static boolean doStartup(Class<?> mainClass,String configurtionFolder) {
 
         String cfPath = configurtionFolder;
         if(null == configurtionFolder ||  configurtionFolder.trim().isEmpty()) {
@@ -110,21 +110,22 @@ public class AlbianjApplication {
         return true;
     }
 
-    public static void runBlock(Class<?> mainClass,String configPath,String...paras) {
-        if(!IAlbianCommandLineApplication.class.isAssignableFrom(mainClass)) {
-            throw new RuntimeException(mainClass.getName() + " must assignable from IAlbianCommandLine ");
-        }
-        run(mainClass,configPath);
-        try {
-            IAlbianCommandLineApplication cmdFunc = (IAlbianCommandLineApplication) mainClass.getConstructor().newInstance();
-            cmdFunc.run(paras);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            Thread.currentThread().join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    public static void run(Class<?> mainClass,String configPath,String...paras) {
+        doStartup(mainClass,configPath);
+        boolean isAppMode = IAlbianCommandLineApplication.class.isAssignableFrom(mainClass);
+        if(isAppMode) {
+            try {
+                IAlbianCommandLineApplication cmdFunc = (IAlbianCommandLineApplication) mainClass.getConstructor().newInstance();
+
+                cmdFunc.run(paras);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                Thread.currentThread().join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

@@ -15,5 +15,5 @@ public interface IAblRantFilter {
      * @param annos
      * @return
      */
-    AblClzzAttr foundRants(Class<?> clzz, List<? extends  Annotation> annos);
+    AblBeanAttr foundRants(Class<?> clzz, List<Class<? extends  Annotation>> annos);
 }

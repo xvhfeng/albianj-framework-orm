@@ -1,6 +1,5 @@
 package org.albianj.scanner;
 
-import org.albianj.loader.AlbianjApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,15 +18,15 @@ public class AblPkgScanner {
 
     private static final Logger logger = LoggerFactory.getLogger(AblPkgScanner.class);
 
-    private synchronized static void putClzzAttr( Map<String, Map<String, AblClzzAttr>>  scanerClzzes,
-                                                  AblClzzAttr attr) {
-        Map<String, AblClzzAttr> map = null;
+    private synchronized static void putClzzAttr( Map<String, Map<String, AblBeanAttr>>  scanerClzzes,
+                                                  AblBeanAttr attr) {
+        Map<String, AblBeanAttr> map = null;
         String rantName = attr.getBelongRantFullName();
         synchronized (scanerClzzes) {
             if (scanerClzzes.containsKey(rantName)) {
                 map = scanerClzzes.get(rantName);
             } else {
-                map = new LinkedHashMap<String, AblClzzAttr>();
+                map = new LinkedHashMap<String, AblBeanAttr>();
                 scanerClzzes.put(rantName, map);
             }
             map.put(attr.getClzzFullName(), attr);
@@ -49,13 +48,13 @@ public class AblPkgScanner {
      * value - AblRantAttr，所有解析的结果，具体看AblRantAttr结构
      * @throws Throwable
      */
-    public static Map<String, Map<String, AblClzzAttr>> filter(ClassLoader classLoader,
-                              List<String> pkgs,
-                              IAblRantFilter filter,
-                              List<? extends Annotation> annos,
-                              IAblRantParser parser)
+    public static Map<String, Map<String, AblBeanAttr>> filter(ClassLoader classLoader,
+                                                               List<String> pkgs,
+                                                               IAblRantFilter filter,
+                                                               List<Class<? extends  Annotation>> annos,
+                                                               IAblRantParser parser)
             throws Throwable {
-        Map<String, Map<String, AblClzzAttr>>  scanerClzzes = new LinkedHashMap<>();
+        Map<String, Map<String, AblBeanAttr>>  scanerClzzes = new LinkedHashMap<>();
         for(String pkg : pkgs) {
             filter(classLoader,pkg,filter,annos,parser,scanerClzzes);
         }
@@ -65,9 +64,9 @@ public class AblPkgScanner {
     private static void filter(ClassLoader classLoader,
                               String pkg,
                               IAblRantFilter filter,
-                              List<? extends Annotation> annos,
+                               List<Class<? extends  Annotation>> annos,
                               IAblRantParser parser,
-                               Map<String, Map<String, AblClzzAttr>>  scanerClzzes)
+                               Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
 
         // 是否循环迭代
@@ -111,9 +110,9 @@ public class AblPkgScanner {
                                   URL url,
                                   boolean isFilterChildDir,
                                   IAblRantFilter filter,
-                                  List<? extends Annotation> annos,
+                                  List<Class<? extends  Annotation>> annos,
                                   IAblRantParser parser,
-                                  Map<String, Map<String, AblClzzAttr>>  scanerClzzes)
+                                  Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
         JarFile jar = ((JarURLConnection) url.openConnection()).getJarFile();
         Enumeration<JarEntry> entries = jar.entries();
@@ -152,9 +151,9 @@ public class AblPkgScanner {
                                      String pkgPath,
                                      final boolean isFilterChildDir,
                                      IAblRantFilter filter,
-                                     List<? extends Annotation> annos,
+                                     List<Class<? extends  Annotation>> annos,
                                      IAblRantParser parser,
-                                     Map<String, Map<String, AblClzzAttr>>  scanerClzzes)
+                                     Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
         File dir = new File(pkgPath);
         if (!dir.exists() || !dir.isDirectory()) {
@@ -193,15 +192,15 @@ public class AblPkgScanner {
                                   String pkgName,
                                   String clzzSimpleName,
                                   IAblRantFilter filter,
-                                  List<? extends Annotation> annos,
+                                  List<Class<? extends  Annotation>> annos,
                                   IAblRantParser parser,
-                                  Map<String, Map<String, AblClzzAttr>>  scanerClzzes)
+                                  Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
         String fullClassName = pkgName + '.' + clzzSimpleName;
         Class<?> cls = classLoader.loadClass(fullClassName);
-        AblClzzAttr attr = filter.foundRants(cls, annos);
+        AblBeanAttr attr = filter.foundRants(cls, annos);
         if (null != attr) {
-            AblClzzAttr info = parser.parseClzz(attr);
+            AblBeanAttr info = parser.parseClzz(attr);
             putClzzAttr(scanerClzzes,attr);
         }
     }

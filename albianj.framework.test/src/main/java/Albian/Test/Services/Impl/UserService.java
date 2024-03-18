@@ -9,7 +9,7 @@ import org.albianj.api.dal.object.filter.IFltGExpr;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.anno.serv.AlbianServiceFieldRant;
 import org.albianj.api.kernel.anno.serv.AlbianServiceFieldType;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServiceRant;
 import org.albianj.api.kernel.service.FreeAlbianService;
 import org.albianj.api.dal.context.dactx.IDMLCtx;
 import org.albianj.api.dal.context.dactx.IDQLCtx;
@@ -25,7 +25,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 // service必须使用此特性进行标注，否则albianj不对其进行解析
-@AlbianServiceRant(Id = "UserService", Interface = IUserService.class)
+@AblServiceRant(Id = "UserService", Interface = IUserService.class)
 public class UserService extends FreeAlbianService implements IUserService {
 
     int idx = 0;

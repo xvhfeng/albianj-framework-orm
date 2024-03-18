@@ -56,9 +56,7 @@ import java.util.*;
  */
 public class AlbianTransmitterService implements IAlbianTransmitterService {
 
-    public String getServiceName() {
-        return Name;
-    }
+
 
     @Override
     public void start(Class<?> mainClzz,String configurtionFolder)  {

@@ -6,7 +6,7 @@ import org.albianj.impl.dal.context.*;
 import org.albianj.impl.dal.context.dactx.DMLCtx;
 import org.albianj.impl.dal.context.dactx.DQLCtx;
 import org.albianj.impl.dal.db.*;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServiceRant;
 import org.albianj.api.kernel.service.FreeAlbianService;
 import org.albianj.api.dal.context.ICompensateNotify;
 import org.albianj.api.dal.context.IDalNotify;
@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * Created by xuhaifeng on 16/12/22.
  */
-@AlbianServiceRant(Id = IAlbianDataAccessService.Name, Interface = IAlbianDataAccessService.class)
+@AblServiceRant(Id = IAlbianDataAccessService.Name, Interface = IAlbianDataAccessService.class)
 public class AlbianDataAccessService extends FreeAlbianService implements IAlbianDataAccessService {
 
     public String getServiceName() {

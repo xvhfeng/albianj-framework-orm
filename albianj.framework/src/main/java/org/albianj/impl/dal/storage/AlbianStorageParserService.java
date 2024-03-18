@@ -44,7 +44,7 @@ import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.api.dal.object.StgAttr;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServiceRant;
 import org.albianj.api.dal.db.IDBP;
 import org.albianj.api.dal.object.DBOpt;
 import org.albianj.api.dal.object.RStgAttr;
@@ -59,7 +59,7 @@ import java.util.concurrent.ConcurrentMap;
 import static org.albianj.api.dal.object.DBPOpt.SpxDBCP;
 
 
-@AlbianServiceRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
+@AblServiceRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
 public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     public final static String DEFAULT_STORAGE_NAME = "!@#$%Albianj_Default_Storage%$#@!";

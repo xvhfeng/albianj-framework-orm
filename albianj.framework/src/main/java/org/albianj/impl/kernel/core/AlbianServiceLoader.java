@@ -5,7 +5,7 @@ import org.albianj.ServRouter;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.impl.kernel.aop.AlbianServiceAopProxy;
+import org.albianj.impl.kernel.aop.AblBeanProxy;
 import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
@@ -64,7 +64,7 @@ public class AlbianServiceLoader {
             if (SetUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
                 rtnService = service;
             } else {
-                AlbianServiceAopProxy proxy = new AlbianServiceAopProxy();
+                AblBeanProxy proxy = new AblBeanProxy();
                 IAlbianService serviceProxy = (IAlbianService) proxy.newInstance(sessionId,service, serviceAttr.getAopAttributes());
                 serviceProxy.setRealService(service);
                 serviceProxy.beforeLoad();

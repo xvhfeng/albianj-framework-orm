@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianServiceRant {
+public @interface AblServiceRant {
     /*
      * service id,it must not be null or empty.
      */

@@ -43,7 +43,7 @@ import org.albianj.api.kernel.attr.ApplicationSettings;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.security.IAlbianSecurityService;
 import org.albianj.api.kernel.security.SecurityOpt;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServiceRant;
 import org.albianj.api.kernel.service.FreeAlbianService;
 import org.apache.commons.codec.binary.Base64;
 
@@ -53,7 +53,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 
-@AlbianServiceRant(Id = IAlbianSecurityService.Name, Interface = IAlbianSecurityService.class)
+@AblServiceRant(Id = IAlbianSecurityService.Name, Interface = IAlbianSecurityService.class)
 public class AlbianSecurityService extends FreeAlbianService implements IAlbianSecurityService {
 
     //donot try in my system,we not use this key
