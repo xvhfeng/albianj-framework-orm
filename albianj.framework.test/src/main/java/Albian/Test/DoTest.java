@@ -4,17 +4,17 @@ import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.ServRouter;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.loader.AlbianjApplication;
+import org.albianj.loader.AblApp;
 import org.albianj.AblServRouter;
-import org.albianj.loader.IAlbianCommandLineApplication;
+import org.albianj.loader.IAblCmdLineApp;
 import org.albianj.scanner.annos.AblScanRant;
 
 @AblScanRant(value = {"dsdss","dsdscsds"})
-public class DoTest implements IAlbianCommandLineApplication {
+public class DoTest implements IAblCmdLineApp {
     public static void main(String[] argv) {
         try {
 
-            AlbianjApplication.run(DoTest.class,argv[0]);
+            AblApp.run(DoTest.class,argv[0]);
             test1();
             return;
 

@@ -17,8 +17,6 @@
         <project.build.locales>zh_CN</project.build.locales>
     </properties>
 
-
-
     <dependencies>
         <dependency>
             <groupId>albianj-framework</groupId>
@@ -59,7 +57,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -80,7 +77,7 @@
         <dependency>
             <groupId>ognl</groupId>
             <artifactId>ognl</artifactId>
-            <version>3.1.11</version>
+            <version>3.4.2</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>

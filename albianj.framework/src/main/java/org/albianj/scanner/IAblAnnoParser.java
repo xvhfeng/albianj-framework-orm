@@ -6,7 +6,7 @@ package org.albianj.scanner;
  * 得到的结果保存在AblRantAttr的attr中
  * 该步骤需要填充AblRantAttr（belongRant，belongRantName，attr)
  */
-public interface IAblRantParser {
+public interface IAblAnnoParser {
 
     /**
      * 按照优先级选择最匹配的Anno
@@ -15,5 +15,5 @@ public interface IAblRantParser {
      * @param attr
      * @return
      */
-    AblBeanAttr parseClzz(AblBeanAttr attr);
+    AblBeanAttr parseBeanClass(AblBeanAttr attr);
 }

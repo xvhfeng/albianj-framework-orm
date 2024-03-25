@@ -64,6 +64,28 @@ public class SetUtil {
         return ((null == ra) || (0 == ra.length));
     }
 
+    public static boolean isNotNullEmpty(Collection<?> collection) {
+        return null != collection && !collection.isEmpty();
+    }
+
+    public static boolean isNotNullEmpty(@SuppressWarnings("rawtypes") Map map) {
+        return null != map && !map.isEmpty();
+    }
+
+    public static boolean isNotNull(@SuppressWarnings("rawtypes") Map map) {
+        return null != map;
+    }
+
+    /** @return ((null == ra) || (0 == ra.length)) */
+    public static boolean isNotNullEmpty(Object[] ra) {
+        return ((null != ra) && (0 != ra.length));
+    }
+
+    /** @return ((null == ra) || (0 == ra.length)) */
+    public static boolean isNotNullEmpty(byte[] ra) {
+        return ((null != ra) && (0 != ra.length));
+    }
+
     /** @return a non-null unmodifiable List */
     public static <T> List<T> safeList(List<T> list) {
         return (null == list ? Collections.<T>emptyList() : Collections.unmodifiableList(list));

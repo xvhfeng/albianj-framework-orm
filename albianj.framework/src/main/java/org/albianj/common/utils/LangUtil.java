@@ -183,6 +183,12 @@ public class LangUtil {
         return 22 <= vmVersion;
     }
 
+    public static boolean isNull(Object o) {
+        return null == o;
+    }
+    public static boolean isNotNull(Object o) {
+        return null != o;
+    }
 
     /**
      * Split string as classpath, delimited at File.pathSeparator. Entries are not trimmed, but empty entries are ignored.
@@ -324,7 +330,7 @@ public class LangUtil {
             for (int i = 0; !found && (i < validOptions.length); i++) {
                 String sought = validOptions[i];
                 int doMore = (null == optionArgs ? 0 : optionArgs[i]);
-                if (StringsUtil.isNullOrEmpty(sought)) {
+                if (StringsUtil.isNullEmpty(sought)) {
                     continue;
                 }
                 found = sought.equals(args[j]);
@@ -372,7 +378,7 @@ public class LangUtil {
         ArrayList result = new ArrayList();
         for (int i = 0; i < validOptions.length; i++) {
             String sought = validOptions[i];
-            if (StringsUtil.isNullOrEmpty(sought)) {
+            if (StringsUtil.isNullEmpty(sought)) {
                 continue;
             }
             for (int j = 0; j < args.length; j++) {
@@ -395,7 +401,7 @@ public class LangUtil {
         ArrayList result = new ArrayList();
         for (int i = 0; i < validOptions.length; i++) {
             String sought = validOptions[i];
-            if (StringsUtil.isNullOrEmpty(sought)) {
+            if (StringsUtil.isNullEmpty(sought)) {
                 continue;
             }
             for (Iterator iter = args.iterator(); iter.hasNext(); ) {
@@ -432,7 +438,7 @@ public class LangUtil {
 
         for (int i = 0; i < options.length; i++) {
             String option = options[i];
-            if (StringsUtil.isNullOrEmpty(option)) {
+            if (StringsUtil.isNullEmpty(option)) {
                 throw new IllegalArgumentException("empty option at " + i);
             }
             if (option.endsWith("-")) {

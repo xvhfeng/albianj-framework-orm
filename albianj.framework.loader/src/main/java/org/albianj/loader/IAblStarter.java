@@ -37,11 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.loader;
 
-import java.util.Date;
-
-public interface IAlbianTransmitterService {
+public interface IAblStarter {
     static String Name = "AlbianKernelBootService";
     void start(Class<?> mainClzz,String configUrl) ;
-    void unload() ;
+    void stop() ;
 
 }

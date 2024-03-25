@@ -14,6 +14,8 @@ public class GlobalSettings {
     private Class<?> mainClzz;
     private String configurtionFolder;
     private Properties kernelProps;
+    private int argc = 0;
+    private String[] argv;
 
     public <T> T getPropValue(String key,T defVal){
         if(!kernelProps.containsKey(key)) {

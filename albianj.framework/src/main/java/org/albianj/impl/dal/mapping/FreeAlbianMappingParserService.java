@@ -91,7 +91,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
             for (Object node : nodes) {
                 Element elt = XmlUtil.toElement(node);
                 String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                if (StringsUtil.isNullEmptyTrimmed(path)) continue;
                 parserFile(path);
             }
         }
@@ -105,17 +105,17 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
                 String enable = XmlUtil.getAttributeValue(elt, "Enable");
                 String pkg = XmlUtil.getAttributeValue(elt, "Path");
 
-                if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
+                if (!StringsUtil.isNullEmptyTrimmed(enable)) {
                     boolean b = Boolean.parseBoolean(enable);
                     if (!b) {
                         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
                                 "Path -> :{} in the Package enable is false,so not load it.",
-                            StringsUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+                            StringsUtil.isNullEmptyTrimmed(pkg) ? "NoPath" : pkg);
                         continue;// not load pkg
                     }
                 }
 
-                if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
+                if (StringsUtil.isNullEmptyTrimmed(pkg)) {
                     throw new AblThrowable(
                         "loading the persistence.xml is error. 'Path' attribute in  Package config-item is null or empty.");
                 } else {

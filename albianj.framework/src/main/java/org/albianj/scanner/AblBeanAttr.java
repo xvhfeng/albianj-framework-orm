@@ -14,18 +14,34 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class AblBeanAttr {
+
+    public AblBeanAttr(Class<?> clzz) {
+        this.clzz = clzz;
+        this.clzzFullName = clzz.getName();
+    }
+
+    /**
+     * class的class对象
+     */
+    private Class<?> clzz;
+
     /**
      * class的类名的全名
      */
     private String clzzFullName;
 
     /**
-     * 最后优先级后归属的Rant
-     * 一般来说，一个class只有一个anno
-     * 在有多个anno，并且其中有anno同质的情况下会根据优先级进行anno的选择
-     * 该项即为最终被选中的Anno的name
+     * service的id
      */
-    private String belongRantFullName;
+    private String id;
+
+//    /**
+//     * 最后优先级后归属的Rant
+//     * 一般来说，一个class只有一个anno
+//     * 在有多个anno，并且其中有anno同质的情况下会根据优先级进行anno的选择
+//     * 该项即为最终被选中的Anno的name
+//     */
+//    private String belongAnnoFullName;
 
     /**
      * 最后优先级后归属的Rant
@@ -34,17 +50,12 @@ public class AblBeanAttr {
      * 在有多个anno，并且其中有anno同质的情况下会根据优先级进行anno的选择
      * 该项即为最终被选中的Anno
      */
-    private Annotation belongRant;
+    private Annotation belongAnno;
 
     /**
      * class被标注的rants
      */
-    private Annotation[] rants;
-
-    /**
-     * class的class对象
-     */
-    private Class<?> clzz;
+    private Annotation[] annos;
 
     /**
      * 以下为被解析出来的attr
@@ -59,7 +70,7 @@ public class AblBeanAttr {
     /**
      * 卸载函数
      */
-    private Method destroyFn;
+    private Method dsyFn;
 
     /**
      * 所有在init函数被调用前的field
@@ -74,12 +85,17 @@ public class AblBeanAttr {
     /**
      * 所有factory方法
      */
-    private Map<String,AblMethodAttr> methodsOfFactory;
+    private Map<String,AblMethodAttr> factoryFns;
 
     /**
      * 所有普通方法
      */
-    private Map<String,AblMethodAttr> methods;
+    private Map<String,AblMethodAttr> fns;
+
+    /**
+     * 这个service是aop的话，该项为aop的attribute
+     */
+    private AblAopAttr aopAttr;
 
 }
 

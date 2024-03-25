@@ -1,6 +1,6 @@
 package org.albianj.loader;
 
-public class AlbianAsciiArt {
+public class AblAsciiArt {
     public final static String Images = """
           
                                                               _,add8ba,

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.lang.annotation.Annotation;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -21,7 +20,7 @@ public class AblPkgScanner {
     private synchronized static void putClzzAttr( Map<String, Map<String, AblBeanAttr>>  scanerClzzes,
                                                   AblBeanAttr attr) {
         Map<String, AblBeanAttr> map = null;
-        String rantName = attr.getBelongRantFullName();
+        String rantName = attr.getBelongAnno().getClass().getName();
         synchronized (scanerClzzes) {
             if (scanerClzzes.containsKey(rantName)) {
                 map = scanerClzzes.get(rantName);
@@ -50,9 +49,9 @@ public class AblPkgScanner {
      */
     public static Map<String, Map<String, AblBeanAttr>> filter(ClassLoader classLoader,
                                                                List<String> pkgs,
-                                                               IAblRantFilter filter,
-                                                               List<Class<? extends  Annotation>> annos,
-                                                               IAblRantParser parser)
+                                                               IAblAnnoFilter filter,
+                                                               Map<String, AnnoData> annos,
+                                                               IAblAnnoParser parser)
             throws Throwable {
         Map<String, Map<String, AblBeanAttr>>  scanerClzzes = new LinkedHashMap<>();
         for(String pkg : pkgs) {
@@ -63,9 +62,9 @@ public class AblPkgScanner {
 
     private static void filter(ClassLoader classLoader,
                               String pkg,
-                              IAblRantFilter filter,
-                               List<Class<? extends  Annotation>> annos,
-                              IAblRantParser parser,
+                              IAblAnnoFilter filter,
+                               Map<String, AnnoData> annos,
+                              IAblAnnoParser parser,
                                Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
 
@@ -109,9 +108,9 @@ public class AblPkgScanner {
                                   String pkgDir,
                                   URL url,
                                   boolean isFilterChildDir,
-                                  IAblRantFilter filter,
-                                  List<Class<? extends  Annotation>> annos,
-                                  IAblRantParser parser,
+                                  IAblAnnoFilter filter,
+                                  Map<String, AnnoData> annos,
+                                  IAblAnnoParser parser,
                                   Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
         JarFile jar = ((JarURLConnection) url.openConnection()).getJarFile();
@@ -150,9 +149,9 @@ public class AblPkgScanner {
                                      String pkgName,
                                      String pkgPath,
                                      final boolean isFilterChildDir,
-                                     IAblRantFilter filter,
-                                     List<Class<? extends  Annotation>> annos,
-                                     IAblRantParser parser,
+                                     IAblAnnoFilter filter,
+                                     Map<String, AnnoData> annos,
+                                     IAblAnnoParser parser,
                                      Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
         File dir = new File(pkgPath);
@@ -191,16 +190,16 @@ public class AblPkgScanner {
     private static void loadClass(ClassLoader classLoader,
                                   String pkgName,
                                   String clzzSimpleName,
-                                  IAblRantFilter filter,
-                                  List<Class<? extends  Annotation>> annos,
-                                  IAblRantParser parser,
+                                  IAblAnnoFilter filter,
+                                  Map<String, AnnoData> annos,
+                                  IAblAnnoParser parser,
                                   Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
             throws Throwable {
         String fullClassName = pkgName + '.' + clzzSimpleName;
         Class<?> cls = classLoader.loadClass(fullClassName);
-        AblBeanAttr attr = filter.foundRants(cls, annos);
+        AblBeanAttr attr = filter.found(cls, annos);
         if (null != attr) {
-            AblBeanAttr info = parser.parseClzz(attr);
+            AblBeanAttr info = parser.parseBeanClass(attr);
             putClzzAttr(scanerClzzes,attr);
         }
     }

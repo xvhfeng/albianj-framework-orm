@@ -149,10 +149,10 @@ public class AlbianEntityRantScaner {
                 dra.setName(odrr.Name());
                 dra.setStorageName(odrr.StorageName());
 
-                if (!StringsUtil.isNullOrEmptyOrAllSpace(odrr.TableOwner())) {
+                if (!StringsUtil.isNullEmptyTrimmed(odrr.TableOwner())) {
                     dra.setOwner(odrr.TableOwner());
                 }
-                if (!StringsUtil.isNullOrEmptyOrAllSpace(odrr.TableName())) {
+                if (!StringsUtil.isNullEmptyTrimmed(odrr.TableName())) {
                     dra.setTableName(odrr.TableName());
                 } else {
                     dra.setTableName(clzz.getSimpleName());
@@ -187,7 +187,7 @@ public class AlbianEntityRantScaner {
                 f.setAccessible(true);
                 fAttr.setEntityField(f);
                 String propertyName = null;
-                if (StringsUtil.isNullOrEmptyOrAllSpace(fr.PropertyName())) {
+                if (StringsUtil.isNullEmptyTrimmed(fr.PropertyName())) {
                     propertyName = FieldConvert.fieldName2PropertyName(f.getName());
                     fAttr.setPropertyName(propertyName);
                 } else {
@@ -196,7 +196,7 @@ public class AlbianEntityRantScaner {
                 }
 
 
-                if (StringsUtil.isNullOrEmptyOrAllSpace(fr.FieldName())) {
+                if (StringsUtil.isNullEmptyTrimmed(fr.FieldName())) {
                     fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
                 } else {
                     fAttr.setSqlFieldName(fr.FieldName());

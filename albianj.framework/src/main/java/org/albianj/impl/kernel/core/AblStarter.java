@@ -47,14 +47,14 @@ import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.service.IAlbianService;
 import org.albianj.api.kernel.attr.ServiceAttributeMap;
 import org.albianj.api.kernel.attr.ServiceContainer;
-import org.albianj.loader.IAlbianTransmitterService;
+import org.albianj.loader.IAblStarter;
 
 import java.util.*;
 
 /**
  * @author Seapeak
  */
-public class AlbianTransmitterService implements IAlbianTransmitterService {
+public class AblStarter implements IAblStarter {
 
 
 
@@ -159,7 +159,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
      * @see org.albianj.kernel.impl.IAlbianBootService#unload()
      */
     @Override
-    public void unload()  {
+    public void stop()  {
         Set<String> keys = ServiceContainer.getAllServiceNames();
         for (String key : keys) {
             try {

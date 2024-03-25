@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class AlbianjApplication {
-    private static final Logger logger = LoggerFactory.getLogger(AlbianjApplication.class);
+public class AblApp {
+    private static final Logger logger = LoggerFactory.getLogger(AblApp.class);
     private static final String AlbianStarter = "org.albianj.impl.kernel.core.AlbianTransmitterService";
 
     private static String lookupLoggerConfigFile(String configPath){
@@ -93,14 +93,14 @@ public class AlbianjApplication {
         }
 
         logger.info("The sun rises in the east and the lighthouse is no more!");
-        logger.info(AlbianAsciiArt.Images);
+        logger.info(AblAsciiArt.Images);
         logger.info("Albianj startup,main class:" + mainClass.getName() + ",configurtion folder: " + cfPath);
         logger.info("Albianj found log4j configuration file:" + null == cfFileName || cfFileName.isEmpty() ? "EMPTY": cfFileName);
 
         try {
             logger.info("load albianj start class:{}",AlbianStarter);
             Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
-            IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
+            IAblStarter abs = (IAblStarter) clss.newInstance();
             abs.start(mainClass,configurtionFolder);
         } catch (Throwable e) {
             // TODO Auto-generated catch block
@@ -112,11 +112,10 @@ public class AlbianjApplication {
 
     public static void run(Class<?> mainClass,String configPath,String...paras) {
         doStartup(mainClass,configPath);
-        boolean isAppMode = IAlbianCommandLineApplication.class.isAssignableFrom(mainClass);
+        boolean isAppMode = IAblCmdLineApp.class.isAssignableFrom(mainClass);
         if(isAppMode) {
             try {
-                IAlbianCommandLineApplication cmdFunc = (IAlbianCommandLineApplication) mainClass.getConstructor().newInstance();
-
+                IAblCmdLineApp cmdFunc = (IAblCmdLineApp) mainClass.getConstructor().newInstance();
                 cmdFunc.run(paras);
             } catch (Throwable e) {
                 throw new RuntimeException(e);

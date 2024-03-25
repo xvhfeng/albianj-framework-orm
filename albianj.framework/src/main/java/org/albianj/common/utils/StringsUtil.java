@@ -128,7 +128,7 @@ public class StringsUtil extends StringUtils {
     }
 
     public static String censoredZero(String s) {
-        if (isNullOrEmptyOrAllSpace(s)) {
+        if (isNullEmptyTrimmed(s)) {
             return null;
         }
         int idx = s.lastIndexOf("0");
@@ -237,24 +237,24 @@ public class StringsUtil extends StringUtils {
         return sb.toString();
     }
 
-    public static boolean isNullOrEmpty(String value) {
+    public static boolean isNullEmpty(String value) {
         return null == value || value.isEmpty();
     }
 
-    public static boolean isNullOrEmptyOrAllSpace(String value) {
-        return null == value || value.trim().isEmpty();
+    public static boolean isNotNullEmpty(String value) {
+        return null != value && !value.isEmpty();
     }
 
     /** @return ((null == s) || (0 == s.trim().length())); */
-    public static boolean isNullOrEmptyTrimmed(String s) {
+    public static boolean isNullEmptyTrimmed(String s) {
     return ((null == s) || (0 == s.length())
     || (0 == s.trim().length()));
     }
 
-    /** @return ((null == s) || (0 == s.length())); */
-   public static boolean isEmpty(String s) {
-       return ((null == s) || (0 == s.length()));
-   }
+    public static boolean isNotNullEmptyTrimmed(String value) {
+        return null != value && !value.trim().isEmpty();
+    }
+
 
     /**
      * Splits <code>text</code> at whitespace.

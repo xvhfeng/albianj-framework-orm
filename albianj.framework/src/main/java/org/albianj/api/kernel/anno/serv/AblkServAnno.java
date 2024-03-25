@@ -29,5 +29,5 @@ public @interface AblkServAnno {
 
     boolean enable() default true;
 
-    Class<?> itfClzz() default AblNull.class;
+    Class<?> itfClass() default AblNull.class;
 }
