@@ -5,12 +5,12 @@
     <parent>
         <artifactId>albianj</artifactId>
          <groupId>albianj-framework</groupId>
-        <version>10010-SNAPSHOT</version>
+        <version>10011-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework.loader</artifactId>
-    <version>10010-SNAPSHOT</version>
+    <version>10011-SNAPSHOT</version>
 
     <dependencies>
         <dependency>

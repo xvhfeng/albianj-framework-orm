@@ -52,7 +52,14 @@ import java.util.Map;
 
 public class ModifyCommandAdapter implements IDMLCmd {
 
+/*
+            String sqlTxt = "INSERT INTO
+            keyword(radical, show_text, katakana, speech_id, show_times,
+             speech_1, speech_2, speech_next)
+             VALUES(?,?,?,?,?,?,?,?)
+             ON DUPLICATE KEY UPDATE show_times= show_times+VALUES(show_times) ";
 
+ */
     public PCmd buildPstCmd(String sessionId, int dbStyle, String tableName, IAblObj object,
                             AblEntityAttr objAttr, Map<String, Object> mapValue, boolean rbkOnError)
               {
