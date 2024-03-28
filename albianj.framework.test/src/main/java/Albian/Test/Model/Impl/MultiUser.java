@@ -2,11 +2,11 @@ package Albian.Test.Model.Impl;
 
 import Albian.Test.DataRouters.MultiUserDataRouter;
 import lombok.*;
-import org.albianj.api.dal.object.FreeAblObj;
-import org.albianj.api.dal.object.rants.AblEntityFieldRant;
-import org.albianj.api.dal.object.rants.AblDrRant;
-import org.albianj.api.dal.object.rants.AblDrsRant;
-import org.albianj.api.dal.object.rants.AblObjRant;
+import org.albianj.dal.api.object.FreeAblObj;
+import org.albianj.dal.api.object.rants.AblEntityFieldRant;
+import org.albianj.dal.api.object.rants.AblDrRant;
+import org.albianj.dal.api.object.rants.AblDrsRant;
+import org.albianj.dal.api.object.rants.AblObjRant;
 
 
 @AblObjRant()

@@ -1,7 +1,7 @@
 package Albian.Test.Model.Impl;
 
 import lombok.*;
-import org.albianj.api.dal.object.FreeAblObj;
+import org.albianj.dal.api.object.FreeAblObj;
 
 
 @Data

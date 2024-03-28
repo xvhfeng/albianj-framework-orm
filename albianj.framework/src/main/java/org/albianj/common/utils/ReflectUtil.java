@@ -535,17 +535,13 @@ public class ReflectUtil {
         }
 
         return uniqueMethods;
-
-//        Collection<Method> methods = uniqueMethods.values();
-//
-//        return methods.toArray(new Method[methods.size()]);
     }
 
     private static void addUniqueMethods(Map<String, Method> uniqueMethods, Method[] methods) {
         for (Method currentMethod : methods) {
             if (!currentMethod.isBridge()) {
                 //获取方法的签名，格式是：返回值类型#方法名称:参数类型列表
-                String signature = makeSignature(currentMethod);
+                String signature = makeMethodSign(currentMethod);
                 //检查是否在子类中已经添加过该方法，如果在子类中已经添加过，则表示子类覆盖了该方法，无须再向uniqueMethods集合中添加该方法了
                 if (!uniqueMethods.containsKey(signature)) {
                     if (canControlMemberAccessible()) {
@@ -561,7 +557,7 @@ public class ReflectUtil {
         }
     }
 
-    private static String makeSignature(Method method) {
+    private static String makeMethodSign(Method method) {
         StringBuilder sb = new StringBuilder();
         Class<?> returnType = method.getReturnType();
         if (returnType != null) {
@@ -596,6 +592,56 @@ public class ReflectUtil {
             return false;
         }
         return true;
+    }
+
+    public static String makeMethodSignJVMForm(Method method) {
+        // 获取方法的名称
+        String methodName = method.getName();
+
+        // 获取方法的返回类型描述符
+        Class<?> returnType = method.getReturnType();
+        String returnTypeDescriptor = getDescriptor(returnType);
+
+        // 获取方法的参数类型描述符
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        StringBuilder parametersDescriptorBuilder = new StringBuilder("(");
+        for (Class<?> parameterType : parameterTypes) {
+            parametersDescriptorBuilder.append(getDescriptor(parameterType));
+        }
+        parametersDescriptorBuilder.append(")");
+        String parametersDescriptor = parametersDescriptorBuilder.toString();
+
+        // 构造方法签名
+        String methodSignature = methodName + parametersDescriptor + returnTypeDescriptor;
+
+        return methodSignature;
+    }
+
+    // 获取类型的描述符
+    public static String getDescriptor(Class<?> type) {
+        if (type == void.class) {
+            return "V";
+        } else if (type == boolean.class) {
+            return "Z";
+        } else if (type == byte.class) {
+            return "B";
+        } else if (type == char.class) {
+            return "C";
+        } else if (type == short.class) {
+            return "S";
+        } else if (type == int.class) {
+            return "I";
+        } else if (type == long.class) {
+            return "J";
+        } else if (type == float.class) {
+            return "F";
+        } else if (type == double.class) {
+            return "D";
+        } else if (type.isArray()) {
+            return "[" + getDescriptor(type.getComponentType());
+        } else {
+            return "L" + type.getName().replace('.', '/') + ";";
+        }
     }
 
 }

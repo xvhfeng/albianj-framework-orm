@@ -3,16 +3,16 @@ package Albian.Test.Services.Impl;
 import Albian.Test.Model.Impl.OrgSingleUser;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
-import org.albianj.api.kernel.service.FreeAlbianService;
-import org.albianj.api.dal.context.dactx.IDMLCtx;
-import org.albianj.api.dal.context.dactx.IDQLCtx;
-import org.albianj.api.dal.context.dactx.QryOpt;
-import org.albianj.api.dal.object.OOpt;
-import org.albianj.api.dal.object.filter.FltExpr;
-import org.albianj.api.dal.object.filter.IChaExpr;
+import org.albianj.kernel.api.service.FreeAlbianService;
+import org.albianj.dal.api.context.dactx.IDMLCtx;
+import org.albianj.dal.api.context.dactx.IDQLCtx;
+import org.albianj.dal.api.context.dactx.QryOpt;
+import org.albianj.dal.api.object.OOpt;
+import org.albianj.dal.api.object.filter.FltExpr;
+import org.albianj.dal.api.object.filter.IChaExpr;
 import org.albianj.AblServRouter;
-import org.albianj.api.dal.service.IAlbianDataAccessService;
-import org.albianj.api.dal.service.DrOpt;
+import org.albianj.dal.api.service.IAlbianDataAccessService;
+import org.albianj.dal.api.service.DrOpt;
 
 
 import java.util.List;

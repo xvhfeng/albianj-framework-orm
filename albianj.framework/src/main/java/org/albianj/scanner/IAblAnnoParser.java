@@ -15,5 +15,5 @@ public interface IAblAnnoParser {
      * @param attr
      * @return
      */
-    AblBeanAttr parseBeanClass(AblBeanAttr attr);
+    AblClassAttr parseBeanClass(AblClassAttr attr);
 }

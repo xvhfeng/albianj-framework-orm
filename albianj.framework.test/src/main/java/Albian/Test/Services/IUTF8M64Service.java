@@ -1,7 +1,7 @@
 package Albian.Test.Services;
 
 
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.kernel.api.service.IAlbianService;
 
 public interface IUTF8M64Service extends IAlbianService {
 

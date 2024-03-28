@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.albianj.api.kernel.anno.serv.SetWhenOpt;
+import org.albianj.kernel.api.anno.serv.SetWhenOpt;
 
 @Data
 @NoArgsConstructor

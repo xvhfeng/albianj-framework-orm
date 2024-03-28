@@ -17,15 +17,15 @@ public class AblPkgScanner {
 
     private static final Logger logger = LoggerFactory.getLogger(AblPkgScanner.class);
 
-    private synchronized static void putClzzAttr( Map<String, Map<String, AblBeanAttr>>  scanerClzzes,
-                                                  AblBeanAttr attr) {
-        Map<String, AblBeanAttr> map = null;
+    private synchronized static void putClzzAttr( Map<String, Map<String, AblClassAttr>>  scanerClzzes,
+                                                  AblClassAttr attr) {
+        Map<String, AblClassAttr> map = null;
         String rantName = attr.getBelongAnno().getClass().getName();
         synchronized (scanerClzzes) {
             if (scanerClzzes.containsKey(rantName)) {
                 map = scanerClzzes.get(rantName);
             } else {
-                map = new LinkedHashMap<String, AblBeanAttr>();
+                map = new LinkedHashMap<String, AblClassAttr>();
                 scanerClzzes.put(rantName, map);
             }
             map.put(attr.getClzzFullName(), attr);
@@ -47,13 +47,13 @@ public class AblPkgScanner {
      * value - AblRantAttr，所有解析的结果，具体看AblRantAttr结构
      * @throws Throwable
      */
-    public static Map<String, Map<String, AblBeanAttr>> filter(ClassLoader classLoader,
-                                                               List<String> pkgs,
-                                                               IAblAnnoFilter filter,
-                                                               Map<String, AnnoData> annos,
-                                                               IAblAnnoParser parser)
+    public static Map<String, Map<String, AblClassAttr>> filter(ClassLoader classLoader,
+                                                                List<String> pkgs,
+                                                                IAblAnnoFilter filter,
+                                                                Map<String, AnnoData> annos,
+                                                                IAblAnnoParser parser)
             throws Throwable {
-        Map<String, Map<String, AblBeanAttr>>  scanerClzzes = new LinkedHashMap<>();
+        Map<String, Map<String, AblClassAttr>>  scanerClzzes = new LinkedHashMap<>();
         for(String pkg : pkgs) {
             filter(classLoader,pkg,filter,annos,parser,scanerClzzes);
         }
@@ -65,7 +65,7 @@ public class AblPkgScanner {
                               IAblAnnoFilter filter,
                                Map<String, AnnoData> annos,
                               IAblAnnoParser parser,
-                               Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
+                               Map<String, Map<String, AblClassAttr>>  scanerClzzes)
             throws Throwable {
 
         // 是否循环迭代
@@ -111,7 +111,7 @@ public class AblPkgScanner {
                                   IAblAnnoFilter filter,
                                   Map<String, AnnoData> annos,
                                   IAblAnnoParser parser,
-                                  Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
+                                  Map<String, Map<String, AblClassAttr>>  scanerClzzes)
             throws Throwable {
         JarFile jar = ((JarURLConnection) url.openConnection()).getJarFile();
         Enumeration<JarEntry> entries = jar.entries();
@@ -152,7 +152,7 @@ public class AblPkgScanner {
                                      IAblAnnoFilter filter,
                                      Map<String, AnnoData> annos,
                                      IAblAnnoParser parser,
-                                     Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
+                                     Map<String, Map<String, AblClassAttr>>  scanerClzzes)
             throws Throwable {
         File dir = new File(pkgPath);
         if (!dir.exists() || !dir.isDirectory()) {
@@ -193,13 +193,13 @@ public class AblPkgScanner {
                                   IAblAnnoFilter filter,
                                   Map<String, AnnoData> annos,
                                   IAblAnnoParser parser,
-                                  Map<String, Map<String, AblBeanAttr>>  scanerClzzes)
+                                  Map<String, Map<String, AblClassAttr>>  scanerClzzes)
             throws Throwable {
         String fullClassName = pkgName + '.' + clzzSimpleName;
         Class<?> cls = classLoader.loadClass(fullClassName);
-        AblBeanAttr attr = filter.found(cls, annos);
+        AblClassAttr attr = filter.found(cls, annos);
         if (null != attr) {
-            AblBeanAttr info = parser.parseBeanClass(attr);
+            AblClassAttr info = parser.parseBeanClass(attr);
             putClzzAttr(scanerClzzes,attr);
         }
     }

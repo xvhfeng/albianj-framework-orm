@@ -14,5 +14,5 @@ public interface IAblAnnoFilter {
      * @param annos
      * @return
      */
-    AblBeanAttr found(Class<?> clzz, Map<String,AnnoData> annos);
+    AblClassAttr found(Class<?> clzz, Map<String,AnnoData> annos);
 }

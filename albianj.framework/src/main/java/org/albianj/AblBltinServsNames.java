@@ -1,14 +1,14 @@
 package org.albianj;
 
-import org.albianj.impl.kernel.core.AlbianKernelParserService;
-import org.albianj.impl.kernel.logger.AlbianLoggerService;
-import org.albianj.impl.kernel.security.AlbianSecurityService;
-import org.albianj.impl.kernel.service.AlbianServiceParser;
-import org.albianj.impl.dal.mapping.AlbianMappingParserService;
-import org.albianj.impl.dal.routing.AlbianDataRouterParserService;
-import org.albianj.impl.dal.service.AlbianDataAccessService;
-import org.albianj.impl.dal.service.AlbianPersistenceService;
-import org.albianj.impl.dal.storage.AlbianStorageParserService;
+import org.albianj.kernel.impl.core.AlbianKernelParserService;
+import org.albianj.kernel.impl.logger.AlbianLoggerService;
+import org.albianj.kernel.impl.security.AlbianSecurityService;
+import org.albianj.kernel.impl.service.AlbianServiceParser;
+import org.albianj.dal.impl.mapping.AlbianMappingParserService;
+import org.albianj.dal.impl.routing.AlbianDataRouterParserService;
+import org.albianj.dal.impl.service.AlbianDataAccessService;
+import org.albianj.dal.impl.service.AlbianPersistenceService;
+import org.albianj.dal.impl.storage.AlbianStorageParserService;
 
 public class AblBltinServsNames {
 

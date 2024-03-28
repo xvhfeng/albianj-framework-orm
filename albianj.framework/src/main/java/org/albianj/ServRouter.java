@@ -39,10 +39,10 @@ package org.albianj;
 
 import org.albianj.common.utils.LangUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.kernel.logger.IAlbianLoggerService;
-import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.service.IAlbianService;
-import org.albianj.api.kernel.attr.ServiceContainer;
+import org.albianj.kernel.api.logger.IAlbianLoggerService;
+import org.albianj.kernel.api.logger.LogLevel;
+import org.albianj.kernel.api.service.IAlbianService;
+import org.albianj.kernel.api.attr.ServiceContainer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -78,7 +78,7 @@ public class ServRouter extends ServiceContainer {
      */
     public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, String id, boolean isThrowIfException) {
         String servId = id;
-        if (StringsUtil.isNullOrEmptyOrAllSpace(servId)) {
+        if (StringsUtil.isNullEmptyTrimmed(servId)) {
             if (null == cla) {
                 ServRouter.throwIfTrue(isThrowIfException, "Service Id is nullOrEmpty and interface is Null.");
                 return null;

@@ -16,6 +16,12 @@ public class AblMethodAttr {
      * 方法的限定级别
      */
     private int modifier = Modifier.PUBLIC;
+
+    /**
+     * 方法所属的类
+     */
+    private Class<?> belongClass;
+
     /**
      * 方法的简单名字
      */
@@ -25,6 +31,12 @@ public class AblMethodAttr {
      * class-full-name.method-name
      */
     private String fullName;
+
+    /**
+     * 函数的签名
+     * 不会包括函数名称，只有返回值与参数类型
+     */
+    private String sign;
     /**
      * 方法的本体
      */
@@ -41,5 +53,4 @@ public class AblMethodAttr {
      * 方法可能会抛出的异常
      */
     private Class<? extends Throwable> raises;
-
 }
