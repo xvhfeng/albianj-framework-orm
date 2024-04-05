@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class IstOrUpdCommandAdapter implements IDMLCmd {
 
-    public static Map<String, SqlPara> makeCreateCommand(String sessionId, int dbStyle, String tableName,
+    public static Map<String, SqlPara> makeIstOrUpdCommand(String sessionId, int dbStyle, String tableName,
                                                          AblEntityAttr objAttr, Map<String, Object> sqlParaVals,
                                                          StringBuilder sqlText)   {
         StringBuilder cols = new StringBuilder();
@@ -107,22 +107,22 @@ public class IstOrUpdCommandAdapter implements IDMLCmd {
         PCmd cmd = new PCmd();
         StringBuilder sqlText = new StringBuilder();
 
-        Map<String, SqlPara> sqlParas = makeCreateCommand(sessionId, dbStyle, tableName,
+        Map<String, SqlPara> sqlParas = makeIstOrUpdCommand(sessionId, dbStyle, tableName,
                 objAttr, mapValue, sqlText);
 
         cmd.setCommandText(sqlText.toString());
         cmd.setCommandType(CmdOpt.Text);
         cmd.setParameters(sqlParas);
 
-        if (rbkOnError) {
-            StringBuilder rollbackText = new StringBuilder();
-
-            Map<String, SqlPara> rollbackParas = RemoveCommandAdapter.makeRemoveCommand(sessionId,
-                    dbStyle, tableName, objAttr, mapValue, rollbackText);
-            cmd.setRollbackCommandText(rollbackText.toString());
-            cmd.setRollbackCommandType(CmdOpt.Text);
-            cmd.setRollbackParameters(rollbackParas);
-        }
+//        if (rbkOnError) {
+//            StringBuilder rollbackText = new StringBuilder();
+//
+//            Map<String, SqlPara> rollbackParas = RemoveCommandAdapter.makeRemoveCommand(sessionId,
+//                    dbStyle, tableName, objAttr, mapValue, rollbackText);
+//            cmd.setRollbackCommandText(rollbackText.toString());
+//            cmd.setRollbackCommandType(CmdOpt.Text);
+//            cmd.setRollbackParameters(rollbackParas);
+//        }
 
         PersistenceNamedParameter.parseSql(cmd);
         return cmd;
