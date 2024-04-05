@@ -44,6 +44,7 @@ import org.albianj.impl.dal.db.RemoveCommandAdapter;
 import org.albianj.api.dal.context.WrtJob;
 import org.albianj.api.dal.context.dactx.AblObjWarp;
 import org.albianj.api.dal.object.IAblObj;
+import org.albianj.impl.dal.db.localize.mysql.IstOrUpdCommandAdapter;
 
 import java.util.List;
 
@@ -132,6 +133,7 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
         IDMLCmd crtCmd = new CreateCommandAdapter();
         IDMLCmd mdfCmd = new ModifyCommandAdapter();
         IDMLCmd dltCmd = new RemoveCommandAdapter();
+        IDMLCmd iouCmd = new IstOrUpdCommandAdapter();
         for (AblObjWarp entity : entities) {
             switch (entity.getQryOpt()) {
                 case Create: {
@@ -144,6 +146,10 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
                 }
                 case Delete: {
                     buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), dltCmd);
+                    break;
+                }
+                case IstOrUpd: {
+                    buildWriterJob(sessionId,job,entity.getEntry(),entity.getStorageAliasName(),entity.getTableAliasName(),iouCmd);
                     break;
                 }
                 case Save:

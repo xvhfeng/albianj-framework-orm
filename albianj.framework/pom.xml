@@ -5,12 +5,12 @@
     <parent>
         <artifactId>albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>10010-SNAPSHOT</version>
+        <version>10012-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework</artifactId>
-    <version>10010-SNAPSHOT</version>
+    <version>10012-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
