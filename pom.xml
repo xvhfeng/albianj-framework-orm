@@ -6,7 +6,7 @@
 
     <artifactId>albianj</artifactId>
     <groupId>albianj-framework</groupId>
-    <version>10011-SNAPSHOT</version>
+    <version>10012-SNAPSHOT</version>
     <modules>
         <module>albianj.framework.loader</module>
         <module>albianj.framework</module>
