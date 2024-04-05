@@ -4,7 +4,8 @@ public enum QryOpt {
     Create(1),
     Update(2),
     Save(3),
-    Delete(4);
+    Delete(4),
+    IstOrUpd(5);
 
     private int val;
     QryOpt(int val){

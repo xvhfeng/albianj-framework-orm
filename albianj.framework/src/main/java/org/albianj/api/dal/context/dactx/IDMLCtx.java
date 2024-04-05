@@ -32,5 +32,7 @@ public interface IDMLCtx {
 
     boolean commit(String sessionId) ;
 
+    boolean needUpd();
+
     void reset();
 }
