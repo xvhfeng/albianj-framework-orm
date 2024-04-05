@@ -99,9 +99,10 @@ public class AblApp {
 
         try {
             logger.info("load albianj start class:{}",AlbianStarter);
-            Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
+            ClassLoader loader = AlbianClassLoader.getInstance();
+            Class<?> clss = loader.loadClass(AlbianStarter);
             IAblStarter abs = (IAblStarter) clss.newInstance();
-            abs.start(mainClass,configurtionFolder);
+            abs.start(loader,mainClass,configurtionFolder);
         } catch (Throwable e) {
             // TODO Auto-generated catch block
             logger.error("AlbianBootService start is error ",e);

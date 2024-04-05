@@ -2,12 +2,9 @@ package org.albianj.kernel.api.anno.proxy;
 
 import java.lang.annotation.*;
 
-/**
- * 标注该类为AOP的service类
- */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Inherited
 @Documented
-public @interface AblAopAnno {
+public @interface AblAopAroundAnno {
 }

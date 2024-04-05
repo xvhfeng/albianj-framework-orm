@@ -520,6 +520,8 @@ public class ReflectUtil {
     }
 
 
+
+
     public static Map<String, Method> getAllMethods(Class<?> cls) {
         Map<String, Method> uniqueMethods = new HashMap<String, Method>();
         Class<?> currentClass = cls;
@@ -615,6 +617,14 @@ public class ReflectUtil {
         String methodSignature = methodName + parametersDescriptor + returnTypeDescriptor;
 
         return methodSignature;
+    }
+
+    public static String getClassPackageName( Class<?> clazz )
+    {
+        String className = clazz.getName();
+        int index = className.lastIndexOf( '.' );
+
+        return ( index < 0 ) ? null : className.substring( 0, index );
     }
 
     // 获取类型的描述符

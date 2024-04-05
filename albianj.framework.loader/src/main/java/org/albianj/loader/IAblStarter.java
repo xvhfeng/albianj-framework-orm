@@ -39,7 +39,7 @@ package org.albianj.loader;
 
 public interface IAblStarter {
     static String Name = "AlbianKernelBootService";
-    void start(Class<?> mainClzz,String configUrl) ;
+    void start(ClassLoader loader,Class<?> mainClzz,String configUrl) ;
     void stop() ;
 
 }

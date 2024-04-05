@@ -1,40 +1,41 @@
-package org.albianj.kernel.impl.core;
+package org.albianj.kernel.impl.core.resolvers;
 
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.kernel.api.anno.proxy.AblAopAnno;
+import org.albianj.kernel.api.anno.proxy.AblAopPointAnno;
 import org.albianj.kernel.api.anno.proxy.AblWatchClassAnno;
 import org.albianj.kernel.api.anno.proxy.AblWatchPkg;
 import org.albianj.kernel.api.anno.proxy.AblWatchThrow;
 import org.albianj.kernel.api.anno.serv.AblServAnno;
-import org.albianj.kernel.api.anno.serv.SetWhenOpt;
-import org.albianj.kernel.api.attr.IAblServAttrParser;
+import org.albianj.kernel.api.attr.IAblAnnoResolver;
 import org.albianj.common.mybp.Assert;
 import org.albianj.common.values.RefArg;
-import org.albianj.scanner.AblAopAttr;
-import org.albianj.scanner.AblClassAttr;
+import org.albianj.scanner.AopAnnoAttr;
+import org.albianj.scanner.ClassAttr;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-public class AblAopAttrParser implements IAblServAttrParser {
+public class AblAopAnnoResolver implements IAblAnnoResolver {
     @Override
-    public void annoParser(Class<?> clzz, AblClassAttr attr) {
-        if(clzz.isAnnotationPresent(AblAopAnno.class)) {
+    public ClassAttr parse(Class<?> clzz) {
+        if(clzz.isAnnotationPresent(AblAopPointAnno.class)) {
             Assert.isFalse(clzz.isAnnotationPresent(AblServAnno.class),
                     "AblAopAnno present class:{} must is AblServAnno class first.",
                     clzz.getName());
 
             RefArg<Annotation> aopAnno = new RefArg<>();
-            AblAopAttr aopAttr = getAopAttr(clzz,aopAnno);
-            attr.setBelongAnno(aopAnno.getValue());
-            attr.setAopAttr(aopAttr);
+            AopAnnoAttr aopAttr = getAopAttr(clzz,aopAnno);
+//            attr.setBelongAnno(aopAnno.getValue());
+//            attr.setAopAttr(aopAttr);
         }
+
+        return null;
     }
 
-    private AblAopAttr getAopAttr(Class<?> clzz, RefArg<Annotation> aopAnno) {
-        AblAopAnno anno = clzz.getAnnotation(AblAopAnno.class);
-        AblAopAttr aopAttr = new AblAopAttr();
+    private AopAnnoAttr getAopAttr(Class<?> clzz, RefArg<Annotation> aopAnno) {
+        AblAopPointAnno anno = clzz.getAnnotation(AblAopPointAnno.class);
+        AopAnnoAttr aopAttr = new AopAnnoAttr();
 
         AblWatchClassAnno[] watchClassAnno = anno.classes();
         Set<Class<?>> onClasses = new HashSet<>();

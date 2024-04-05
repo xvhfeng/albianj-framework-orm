@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AblFieldAttr {
+public class FieldAttr {
 
     private Field field;
 
@@ -39,7 +39,7 @@ public class AblFieldAttr {
      * 字段的类型class
      * 与type不同，该项仅仅可以得到最外层类型
      */
-    private Class<?> clzz;
+    private Type getGenericType;
 
 
     /**
@@ -55,5 +55,5 @@ public class AblFieldAttr {
     /**
      * 字段如果被@AutoAnno标注的话，这个是AutoAnno标注的信息
      */
-    private AblAutoAttr autoAttr;
+    private AutoSetAnnoAttr autoAttr;
 }

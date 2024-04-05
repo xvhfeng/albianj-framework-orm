@@ -9,6 +9,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AblScanRant {
+public @interface AblScanAnno {
     String[] value() default {};
 }
+

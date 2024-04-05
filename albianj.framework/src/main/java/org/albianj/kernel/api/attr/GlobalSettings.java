@@ -1,6 +1,7 @@
 package org.albianj.kernel.api.attr;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,9 @@ import java.util.Properties;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class GlobalSettings {
+    private ClassLoader loader;
     private Class<?> mainClzz;
     private String configurtionFolder;
     private Properties kernelProps;

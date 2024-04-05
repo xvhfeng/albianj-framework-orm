@@ -10,13 +10,11 @@ import org.albianj.kernel.api.anno.serv.SetWhenOpt;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AblAutoAttr {
+public class AutoSetAnnoAttr {
     /**
-     * 不管是配置了id还是value，最后全部赋值给id
-     * 注意：支持OGNL表达式
-     * 当id以@或#开头，即为OGNL表达式
+     * field的值
      */
-    private String id;
+    private String value;
     /**
      * field被赋值的时间点
      */

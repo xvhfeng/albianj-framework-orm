@@ -1,0 +1,13 @@
+plugin机制
+1. kernel内部的是IOC和AOP设计：
+    - ServAnno和AopAnno两个Anno
+    - 遍历kernel内部的pkg加载kernel内部的serv
+        - 解析ServAnno
+        - 解析AopAnno
+        - 解析Method（Ctor，dtor，Factory）
+        - 解析para（ArgAnno）
+
+2. plugin机制
+    - 自定义package
+    - 使用kernel中的serv和aop机制加载plugin的serv
+    - 自定义Anno，且解析

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AblAopAttr {
+public class AopAnnoAttr {
 
     /**
      * 监听的class集合

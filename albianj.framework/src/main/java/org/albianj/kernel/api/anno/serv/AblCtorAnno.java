@@ -11,6 +11,5 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Inherited
 @Documented
-public @interface AblInitAnno {
-    boolean throwIfError() default  false;
+public @interface AblCtorAnno {
 }

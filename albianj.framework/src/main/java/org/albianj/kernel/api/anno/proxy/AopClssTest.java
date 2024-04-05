@@ -1,15 +1,17 @@
 package org.albianj.kernel.api.anno.proxy;
 
-@AblAopAnno(
-        classes = @AblWatchClassAnno(watch ={ AopClssTest.class},exclusion = AopClssTest.class),
-        pkgs = @AblWatchPkg(watch = "",exclusion = ""),
-        raises = @AblWatchThrow(watch = Throwable.class,exclusion = Exception.class),
-        beginWith = "get",
-        expr = "/*get$/"
-)
+
+@AblAopAnno
 public class AopClssTest {
 
-    @AblAopBeforeAnno
+    @AblAopPointAnno(
+            when = AopWhen.Brf | AopWhen.Aft,
+            classes = @AblWatchClassAnno(watch ={ AopClssTest.class},exclusion = AopClssTest.class),
+            pkgs = @AblWatchPkg(watch = "",exclusion = ""),
+            raises = @AblWatchThrow(watch = Throwable.class,exclusion = Exception.class),
+            beginWith = "get",
+            expr = "/*get$/"
+    )
     public void runBeforeMethod() {
         /**
          select（DataObj.clss).use(storagename).choose(read-router).from(table)
@@ -63,12 +65,10 @@ public class AopClssTest {
          */
     }
 
-    @AblAopAfterAnno
     public void runAfterMethod(){
 
     }
 
-    @AblAopThrowAnno
     public void runWhenThrow() {
 
     }

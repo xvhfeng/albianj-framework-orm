@@ -1,5 +1,6 @@
 package org.albianj.scanner;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /**
@@ -9,10 +10,10 @@ import java.util.Map;
 public interface IAblAnnoFilter {
     /**
      * 找到annos指定标注的rants的类
-     * 返回AblRantAttr（fullName，rants，clzz这3个对象被填充）
+     * 返回Anno的class信息
+     * 如果clzz没有在found的annos中，则返回null
      * @param clzz
-     * @param annos
      * @return
      */
-    AblClassAttr found(Class<?> clzz, Map<String,AnnoData> annos);
+    Class<? extends Annotation> found(Class<?> clzz);
 }

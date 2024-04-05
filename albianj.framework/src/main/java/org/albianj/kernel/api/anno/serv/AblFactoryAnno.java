@@ -21,9 +21,6 @@ public @interface AblFactoryAnno {
      *
      * @return
      */
-    @AblAliasForAnno(attribute = "Id")
-    String value() default "";
 
-    @AblAliasForAnno(attribute = "value")
-    String Id() default "";
+    String value() default "";
 }

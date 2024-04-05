@@ -59,7 +59,7 @@ public class AblStarter implements IAblStarter {
 
 
     @Override
-    public void start(Class<?> mainClzz,String configurtionFolder)  {
+    public void start(ClassLoader loader,Class<?> mainClzz,String configurtionFolder)  {
 
         GlobalSettings globalSettings = new GlobalSettings(mainClzz,configurtionFolder);
         ApplicationSettings.setGlobalSettings(globalSettings);
