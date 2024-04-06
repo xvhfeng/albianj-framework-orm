@@ -8,6 +8,7 @@ import org.albianj.common.mybp.Assert;
 import org.albianj.common.utils.LangUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.StringsUtil;
+import org.albianj.kernel.impl.core.resolvers.data.ResolverClassCached;
 import org.albianj.scanner.*;
 
 import java.beans.PropertyDescriptor;

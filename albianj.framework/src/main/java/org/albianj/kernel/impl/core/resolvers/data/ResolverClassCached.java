@@ -1,4 +1,4 @@
-package org.albianj.kernel.impl.core.resolvers;
+package org.albianj.kernel.impl.core.resolvers.data;
 
 import org.albianj.scanner.ClassAttr;
 import org.albianj.scanner.IResolverAttr;
