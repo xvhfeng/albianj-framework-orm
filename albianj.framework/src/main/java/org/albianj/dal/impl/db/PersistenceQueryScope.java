@@ -91,7 +91,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                     "get the statement is fail." );
         }
         Map<Integer, String> map = cmd.getParameterMapper();
-        if (!SetUtil.isNullOrEmpty(map)) {
+        if (!SetUtil.isEmpty(map)) {
             for (int i = 1; i <= map.size(); i++) {
                 String paraName = map.get(i);
                 SqlPara para = cmd.getParameters().get(paraName);
@@ -165,7 +165,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                 "Storage:{},database:{},SqlText:{},paras:{}.return count:{}",
                 st.getStgAttr().getName(), st.getDatabase(), text, SetConv.toString(map),
-            SetUtil.isNullOrEmpty(list) ? "NULL" : String.valueOf(list.size()));
+            SetUtil.isEmpty(list) ? "NULL" : String.valueOf(list.size()));
         return list;
     }
 

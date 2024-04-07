@@ -10,4 +10,15 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface AblAopAnno {
+    /**
+     * 监视与不用监视的classes
+     * @return
+     */
+    AblWatchClassAnno[] classes() default {};
+
+    /**
+     * 所要监听与排除监视的所有pkg路径
+     * @return
+     */
+    AblWatchPkg[] pkgs() default {};
 }

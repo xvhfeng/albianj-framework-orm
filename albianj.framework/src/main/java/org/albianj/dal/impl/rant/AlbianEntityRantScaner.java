@@ -61,7 +61,7 @@ public class AlbianEntityRantScaner {
                         objAttr.setImplClzz(clzz);
 
                         Map<String, AblEntityFieldAttr> fields = scanFields(clzz);
-                        if (!SetUtil.isNullOrEmpty(fields)) {
+                        if (!SetUtil.isEmpty(fields)) {
                             objAttr.setFields(fields);
                         }
 

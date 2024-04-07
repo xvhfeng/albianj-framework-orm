@@ -21,18 +21,6 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface AblAopPointAnno {
-    /**
-     * 监视与不用监视的classes
-     * @return
-     */
-    AblWatchClassAnno[] classes() default {};
-
-    /**
-     * 所要监听与排除监视的所有pkg路径
-     * @return
-     */
-    AblWatchPkg[] pkgs() default {};
-
     /*
      * 监听所有以当前项配置开始的方法
      */
@@ -79,16 +67,4 @@ public @interface AblAopPointAnno {
      * 允许的值在AopWhen中设定
      */
     int when() default 0;
-
-//    /*
-//     * 所有需要监听的异常
-//     */
-//    Class<? extends Throwable>[] raises() default {};
-//
-//    /**
-//     * 配置的这些异常不需要监听
-//     * @return
-//     */
-//    Class<? extends Throwable>[] exclusionRaises() default {};
-
 }

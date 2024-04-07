@@ -160,7 +160,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         }
 
         List<?> writers = elt.selectNodes("WriterRouters/WriterRouter");
-        if (!SetUtil.isNullOrEmpty(writers)) {
+        if (!SetUtil.isEmpty(writers)) {
             Map<String, DrAttr> cfgWRouters = parserRouting(writers);
             if (null != cfgWRouters) {
                 if (null == routing.getWriterRouters()) {
@@ -175,7 +175,7 @@ public class AlbianDataRouterParserService extends FreeAlbianDataRouterParserSer
         }
 
         List<?> readers = elt.selectNodes("ReaderRouters/ReaderRouter");
-        if (!SetUtil.isNullOrEmpty(readers)) {
+        if (!SetUtil.isEmpty(readers)) {
             Map<String, DrAttr> cfgRRouters = parserRouting(readers);
             if (null != cfgRRouters) {
                 if (null == routing.getReaderRouters()) {

@@ -93,7 +93,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     @Override
     protected void parserStorages(@SuppressWarnings("rawtypes") List nodes)   {
-        if (SetUtil.isNullOrEmpty(nodes)) {
+        if (SetUtil.isEmpty(nodes)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "Storage node is null or size is 0.");
             return;

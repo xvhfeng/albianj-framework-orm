@@ -73,7 +73,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                         String routingName, LinkedList<IFltCdt> wheres)
             {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, null);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
     }
@@ -303,7 +303,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -311,7 +311,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -362,14 +362,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
@@ -429,7 +429,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -437,7 +437,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -457,7 +457,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, CmdOpt cmdType,
                                             Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
     }
@@ -485,7 +485,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
     public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, CmdOpt cmdType,
                                                    Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list;
     }
@@ -510,14 +510,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, null);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
@@ -578,7 +578,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                  CmdOpt cmdType, Statement statement)
             {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
     }
@@ -588,7 +588,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
                                                  String routingName, IChaExpr wheres, String idxName)
             {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, idxName);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
     }
@@ -633,7 +633,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -641,7 +641,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -692,14 +692,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
@@ -759,7 +759,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, 0, 0, wheres, null, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -767,7 +767,7 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
 
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, 0, 0, wheres, null, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObject(cls, wheres, null, list.get(0));
             return list.get(0);
@@ -825,14 +825,14 @@ public class AlbianPersistenceService extends FreeAlbianService implements IAlbi
             {
         if (DrOpt.Wtr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, true, rountingName, start, step, wheres, orderbys, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;
         }
         if (DrOpt.Rdr == loadType) {
             List<T> list = doLoadObjects(sessionId, cls, false, rountingName, start, step, wheres, orderbys, idxName);
-            if (SetUtil.isNullOrEmpty(list))
+            if (SetUtil.isEmpty(list))
                 return null;
 //            AlbianPersistenceCache.setObjects(cls, start, step, wheres, orderbys, list);
             return list;

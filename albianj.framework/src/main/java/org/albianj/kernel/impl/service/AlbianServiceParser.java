@@ -69,7 +69,7 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
     @Override
     protected void parserServices(Map<String, AlbianServiceAttribute> map,
                                   String tagName, @SuppressWarnings("rawtypes") List nodes)  {
-        if (SetUtil.isNullOrEmpty(nodes)) {
+        if (SetUtil.isEmpty(nodes)) {
             ServRouter.logAndThrowNew(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "parser the nodes named {} for service is null or empty.",tagName);
         }
@@ -132,18 +132,18 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         }
 
         List nodes = elt.selectNodes("Properties/Property");
-        if (!SetUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isEmpty(nodes)) {
             Map<String, AlbianServiceFieldAttribute> ps = parserAlbianServiceFieldsAttribute(clzz, id, nodes);
-            if (!SetUtil.isNullOrEmpty(ps)) {
+            if (!SetUtil.isEmpty(ps)) {
                 serviceAttr.setServiceFields(ps);
             }
 
         }
 
         List aopNodes = elt.selectNodes("Aop/Aspect");
-        if (!SetUtil.isNullOrEmpty(aopNodes)) {
+        if (!SetUtil.isEmpty(aopNodes)) {
             Map<String, AlbianServiceAopAttribute> aas = parserAlbianServiceAopAttribute(id, aopNodes);
-            if (!SetUtil.isNullOrEmpty(aas)) {
+            if (!SetUtil.isEmpty(aas)) {
                 serviceAttr.setAopAttributes(aas);
             }
 

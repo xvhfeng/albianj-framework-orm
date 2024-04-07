@@ -299,7 +299,7 @@ public class FileUtil {
 	 * @return String with absolute paths to entries in order, delimited with infix
 	 */
 	public static String flatten(File[] files, String infix) {
-		if (SetUtil.isNullOrEmpty(files)) {
+		if (SetUtil.isEmpty(files)) {
 			return "";
 		}
 		return flatten(getPaths(files), infix);
@@ -732,7 +732,7 @@ public class FileUtil {
 		ServRouter.throwIaxIfNull(basedir, "basedir");
 		ServRouter.throwIaxIfNull(paths, "paths");
 		File[] result = null;
-		if (!SetUtil.isNullOrEmpty(suffixes)) {
+		if (!SetUtil.isEmpty(suffixes)) {
 			ArrayList<File> list = new ArrayList<>();
             for (String path : paths) {
                 for (String suffix : suffixes) {
@@ -1252,7 +1252,7 @@ public class FileUtil {
 	 */
 	// OPTIMIZE only used by tests? move it out
 	public static List<String> lineSeek(String sought, List<String> sources, boolean listAll, PrintStream errorSink) {
-		if (StringsUtil.isEmpty(sought) || SetUtil.isNullOrEmpty(sources)) {
+		if (StringsUtil.isEmpty(sought) || SetUtil.isEmpty(sources)) {
 			return Collections.emptyList();
 		}
 		ArrayList<String> result = new ArrayList<>();
@@ -1437,7 +1437,7 @@ public class FileUtil {
 	 * @return String[] of input that end with any input
 	 */
 	 public static String[] selectDirectories(String[] inputs, File baseDir) {
-	 if (SetUtil.isNullOrEmpty(inputs)) {
+	 if (SetUtil.isEmpty(inputs)) {
 	 return new String[0];
 	 }
 	 ArrayList result = new ArrayList();

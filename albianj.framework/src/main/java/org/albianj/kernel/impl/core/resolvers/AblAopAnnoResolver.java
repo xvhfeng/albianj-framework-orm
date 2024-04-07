@@ -40,22 +40,22 @@ public class AblAopAnnoResolver implements IAblAnnoResolver {
         AblWatchClassAnno[] watchClassAnno = anno.classes();
         Set<Class<?>> onClasses = new HashSet<>();
         Set<Class<?>> offClasses = new HashSet<>();
-        if(SetUtil.isNotNullEmpty(watchClassAnno)){
+        if(SetUtil.isNotEmpty(watchClassAnno)){
             Arrays.stream(watchClassAnno).forEach(e ->{
                 Class<?>[] on = e.value();
                 Class<?>[] watch = e.watch();
                 Class<?>[] off = e.exclusion();
-                if(SetUtil.isNotNullEmpty(on)){
+                if(SetUtil.isNotEmpty(on)){
                     Arrays.stream(on).forEach(t ->{
                         onClasses.add(t);
                     });
                 }
-                if(SetUtil.isNotNullEmpty(watch)){
+                if(SetUtil.isNotEmpty(watch)){
                     Arrays.stream(watch).forEach(t ->{
                         onClasses.add(t);
                     });
                 }
-                if(SetUtil.isNotNullEmpty(off)){
+                if(SetUtil.isNotEmpty(off)){
                     Arrays.stream(off).forEach(t ->{
                         offClasses.add(t);
                     });
@@ -68,28 +68,28 @@ public class AblAopAnnoResolver implements IAblAnnoResolver {
         AblWatchPkg[] watchPkgs = anno.pkgs();
         Set<String> onPkgs = new HashSet<>();
         Set<String> offPkgs = new HashSet<>();
-        if(SetUtil.isNotNullEmpty(watchPkgs)){
+        if(SetUtil.isNotEmpty(watchPkgs)){
             Arrays.stream(watchPkgs).forEach(e ->{
                 String[] on = e.value();
                 String[] watch = e.watch();
                 String[] off = e.exclusion();
-                if(SetUtil.isNotNullEmpty(on)){
+                if(SetUtil.isNotEmpty(on)){
                     Arrays.stream(on).forEach(t ->{
-                        if(StringsUtil.isNotNullEmptyTrimmed(t)) {
+                        if(StringsUtil.isNotEmptyTrimmed(t)) {
                             onPkgs.add(t);
                         }
                     });
                 }
-                if(SetUtil.isNotNullEmpty(watch)){
+                if(SetUtil.isNotEmpty(watch)){
                     Arrays.stream(watch).forEach(t ->{
-                        if(StringsUtil.isNotNullEmptyTrimmed(t)) {
+                        if(StringsUtil.isNotEmptyTrimmed(t)) {
                             onPkgs.add(t);
                         }
                     });
                 }
-                if(SetUtil.isNotNullEmpty(off)){
+                if(SetUtil.isNotEmpty(off)){
                     Arrays.stream(off).forEach(t ->{
-                        if(StringsUtil.isNotNullEmptyTrimmed(t)) {
+                        if(StringsUtil.isNotEmptyTrimmed(t)) {
                             offPkgs.add(t);
                         }
                     });
@@ -111,22 +111,22 @@ public class AblAopAnnoResolver implements IAblAnnoResolver {
         AblWatchThrow[] watchThrows = anno.raises();
         Set<Class<? extends  Throwable>> onThrows = new HashSet<>();
         Set<Class<? extends  Throwable>> offThrows = new HashSet<>();
-        if(SetUtil.isNotNullEmpty(watchThrows)){
+        if(SetUtil.isNotEmpty(watchThrows)){
             Arrays.stream(watchThrows).forEach(e ->{
                 Class<? extends  Throwable>[] on = e.value();
                 Class<? extends  Throwable>[] watch = e.watch();
                 Class<? extends  Throwable>[] off = e.exclusion();
-                if(SetUtil.isNotNullEmpty(on)){
+                if(SetUtil.isNotEmpty(on)){
                     Arrays.stream(on).forEach(t ->{
                         onThrows.add(t);
                     });
                 }
-                if(SetUtil.isNotNullEmpty(watch)){
+                if(SetUtil.isNotEmpty(watch)){
                     Arrays.stream(watch).forEach(t ->{
                         onThrows.add(t);
                     });
                 }
-                if(SetUtil.isNotNullEmpty(off)){
+                if(SetUtil.isNotEmpty(off)){
                     Arrays.stream(off).forEach(t ->{
                         offThrows.add(t);
                     });

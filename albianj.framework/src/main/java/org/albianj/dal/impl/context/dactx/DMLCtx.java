@@ -146,7 +146,7 @@ public class DMLCtx implements IDMLCtx {
         this.notifyCallbackObject = null;
         this.notifyCallback = null;
         this.notifyCallbackObject = null;
-        if (!SetUtil.isNullOrEmpty(entitis)) {
+        if (!SetUtil.isEmpty(entitis)) {
             entitis.clear();
         }
     }

@@ -98,7 +98,7 @@ public class AblServClassResolver {
                             Map<String, FuncAttr> factoryFnTbl,
                             Map<String, FuncAttr> normalFnTbl) {
         Method[] fns = clzz.getDeclaredMethods();
-        if(SetUtil.isNotNullEmpty(fns)){
+        if(SetUtil.isNotEmpty(fns)){
             Arrays.stream(fns).forEach(f -> {
                 FuncAttr fnAttr = parseMethod(clzz,f);
                 switch (fnAttr.getFnOpt()) {
@@ -128,7 +128,7 @@ public class AblServClassResolver {
                              Map<String, FieldAttr> bfrFieldMap,
                              Map<String, FieldAttr> aftFieldMap) {
         Field[] fields = clzz.getDeclaredFields();
-        if(SetUtil.isNotNullEmpty(fields)) {
+        if(SetUtil.isNotEmpty(fields)) {
             Arrays.stream(fields).forEach(f -> {
                 f.setAccessible(true);
                 if(f.isAnnotationPresent(AblAutoSetAnno.class)) {
@@ -146,7 +146,7 @@ public class AblServClassResolver {
     private Map<String, ItfAttr> parseItfs(Class<?> clzz) {
         Map<String, ItfAttr> itfAttrs = new LinkedHashMap<>();
         Class<?>[] itfs =  clzz.getInterfaces();
-        if(SetUtil.isNotNullEmpty(itfs)) {
+        if(SetUtil.isNotEmpty(itfs)) {
             Arrays.stream(itfs).forEach(e -> {
                 IResolverAttr attr = ResolverClassCached.get(e.getName());
                 ItfAttr itfAttr = null;
@@ -175,7 +175,7 @@ public class AblServClassResolver {
         Map<String, FuncAttr> normalFnTbl = new LinkedHashMap<>();
 
         Method[] fns = itf.getDeclaredMethods();
-        if(SetUtil.isNotNullEmpty(fns)){
+        if(SetUtil.isNotEmpty(fns)){
             Arrays.stream(fns).forEach(f -> {
                 if(f.isDefault()) {
                     FuncAttr fnAttr = parseMethod(itf, f);
@@ -207,7 +207,7 @@ public class AblServClassResolver {
         itfAttr.fnsTbl(normalFnTbl);
 
         Class<?>[] itfs =  itf.getInterfaces();
-        if(SetUtil.isNotNullEmpty(itfs)) {
+        if(SetUtil.isNotEmpty(itfs)) {
             Arrays.stream(itfs).forEach(e -> {
                 ItfAttr iMateAttr = parseItf(e);
             });
@@ -313,7 +313,7 @@ public class AblServClassResolver {
         Parameter[] paras = fn.getParameters();
         List<ArgAnnoAttr> argAttrs = new ArrayList<>(paras.length);
 
-        if(SetUtil.isNotNullEmpty(paras)) {
+        if(SetUtil.isNotEmpty(paras)) {
             for(int i = 0;i < paras.length;i++) {
                 Parameter p = paras[i];
                 Class<?> pc = p.getType();
@@ -326,7 +326,7 @@ public class AblServClassResolver {
                 String resId = null;
                 if(p.isAnnotationPresent(AblArgSetAnno.class)) {
                     AblArgSetAnno argAnno = p.getAnnotation(AblArgSetAnno.class);
-                    if(StringsUtil.isNotNullEmptyTrimmed(argAnno.value())) {
+                    if(StringsUtil.isNotEmptyTrimmed(argAnno.value())) {
                         resId = argAnno.value();
                     } else {
                         if(LangUtil.isNotNull(argAnno.clzz())) {
@@ -337,7 +337,7 @@ public class AblServClassResolver {
 
                 // 当只有AblArgAetAnno标注，但是并未给任何值的时候
                 // 默认使用参数的类型来当资源的id
-                if(StringsUtil.isNotNullEmptyTrimmed(resId)) {
+                if(StringsUtil.isNotEmptyTrimmed(resId)) {
                     resId = pc.getName();
                 }
                 a3b.value(resId);
@@ -356,7 +356,7 @@ public class AblServClassResolver {
             AblFnOpt fnOpt = fnAnno.Opt();
             fnAttr.fnOpt(fnOpt);
             if(fnOpt == AblFnOpt.Factory) {
-                if(StringsUtil.isNotNullEmptyTrimmed(fnAnno.value())) {
+                if(StringsUtil.isNotEmptyTrimmed(fnAnno.value())) {
                     fnAttr.resIdForFactory(fnAnno.value());
                 } else {
                     fnAttr.resIdForFactory(rtnClzz.getName());

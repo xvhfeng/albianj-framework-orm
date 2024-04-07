@@ -97,7 +97,7 @@ public class AlbianServiceRantParser {
         }
 
         Map<String, AlbianServiceFieldAttribute> fields = scanFields(implClzz);
-        if (!SetUtil.isNullOrEmpty(fields)) {
+        if (!SetUtil.isEmpty(fields)) {
             asa.setServiceFields(fields);
         }
 

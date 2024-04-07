@@ -61,7 +61,7 @@ public class AlbianServiceLoader {
             service.loading();
             setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterLoading, servAttrs);
             service.afterLoading();
-            if (SetUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
+            if (SetUtil.isEmpty(serviceAttr.getAopAttributes())) {
                 rtnService = service;
             } else {
                 AblBeanProxy proxy = new AblBeanProxy();
@@ -80,7 +80,7 @@ public class AlbianServiceLoader {
     }
 
     public static void setServiceFields(IAlbianService serv, AlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, AlbianServiceAttribute> servAttrs)  {
-        if(SetUtil.isNullOrEmpty(servAttr.getServiceFields())) {
+        if(SetUtil.isEmpty(servAttr.getServiceFields())) {
             return;
         }
         for (AlbianServiceFieldAttribute fAttr : servAttr.getServiceFields().values()) {

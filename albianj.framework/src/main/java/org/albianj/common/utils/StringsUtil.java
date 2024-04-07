@@ -237,11 +237,11 @@ public class StringsUtil extends StringUtils {
         return sb.toString();
     }
 
-    public static boolean isNullEmpty(String value) {
+    public static boolean isEmpty(String value) {
         return null == value || value.isEmpty();
     }
 
-    public static boolean isNotNullEmpty(String value) {
+    public static boolean isNotEmpty(String value) {
         return null != value && !value.isEmpty();
     }
 
@@ -251,7 +251,7 @@ public class StringsUtil extends StringUtils {
     || (0 == s.trim().length()));
     }
 
-    public static boolean isNotNullEmptyTrimmed(String value) {
+    public static boolean isNotEmptyTrimmed(String value) {
         return null != value && !value.trim().isEmpty();
     }
 
@@ -409,7 +409,7 @@ public class StringsUtil extends StringUtils {
     */
     public static String[] endsWith(String[] inputs, String[] suffixes,
     boolean ignoreCase) {
-    if (SetUtil.isNullOrEmpty(inputs) || SetUtil.isNullOrEmpty(suffixes)) {
+    if (SetUtil.isEmpty(inputs) || SetUtil.isEmpty(suffixes)) {
     return new String[0];
     }
     if (ignoreCase) {

@@ -87,7 +87,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
         @SuppressWarnings("rawtypes")
         List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-        if (!SetUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isEmpty(nodes)) {
             for (Object node : nodes) {
                 Element elt = XmlUtil.toElement(node);
                 String path = XmlUtil.getAttributeValue(elt, "Filename");
@@ -98,7 +98,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
 
         // add rant scaner
         List pkgNodes = XmlUtil.selectNodes(doc, "AlbianObjects/Packages/Package");
-        if (!SetUtil.isNullOrEmpty(pkgNodes)) {
+        if (!SetUtil.isEmpty(pkgNodes)) {
             for (Object node : pkgNodes) {
                 Element elt = XmlUtil.toElement(node);
 
@@ -134,7 +134,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         }
 
         List objNodes = XmlUtil.selectNodes(doc, tagName);
-        if (!SetUtil.isNullOrEmpty(objNodes)) {
+        if (!SetUtil.isEmpty(objNodes)) {
             parserAlbianObjects(objNodes);
         }
         return;

@@ -110,7 +110,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
         }
         @SuppressWarnings("rawtypes")
         List nodes = XmlUtil.selectNodes(doc, "Services/IncludeSet/Include");
-        if (!SetUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isEmpty(nodes)) {
             for (Object node : nodes) {
                 Element elt = XmlUtil.toElement(node);
                 String path = XmlUtil.getAttributeValue(elt, "Filename");
@@ -122,7 +122,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
         //parser pkg in service.xml
         HashMap<String, Object> pkgMetedataMap = new HashMap<>();
         List pkgNodes = XmlUtil.selectNodes(doc, pkgTagName);
-        if (!SetUtil.isNullOrEmpty(pkgNodes)) {
+        if (!SetUtil.isEmpty(pkgNodes)) {
             for (Object node : pkgNodes) {
                 Element elt = XmlUtil.toElement(node);
                 String enable = XmlUtil.getAttributeValue(elt, "Enable");
@@ -162,7 +162,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
         Map<String, AlbianServiceAttribute> attrMap = new HashMap<>();
         List serviceNodes = XmlUtil.selectNodes(doc, "Services/Service");
-        if (!SetUtil.isNullOrEmpty(serviceNodes)) {
+        if (!SetUtil.isEmpty(serviceNodes)) {
             parserServices(attrMap, tagName, serviceNodes);
         }
 
@@ -211,10 +211,10 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
             Map<String, AlbianServiceFieldAttribute> asaFieldAttr = asa.getServiceFields();
             Map<String, AlbianServiceFieldAttribute> pkgFieldAttr = asaPkg.getServiceFields();
 
-            if (SetUtil.isNullOrEmpty(asaFieldAttr)) {
+            if (SetUtil.isEmpty(asaFieldAttr)) {
                 asa.setServiceFields(pkgFieldAttr);
             } else {
-                if (!SetUtil.isNullOrEmpty(pkgFieldAttr)) {
+                if (!SetUtil.isEmpty(pkgFieldAttr)) {
                     // merger field attribute
                     // base on service.xml and merger field from pkg
                     // if exist in service.xml not merger field from pkg
@@ -228,10 +228,10 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
             Map<String, AlbianServiceAopAttribute> asaAopAttr = asa.getAopAttributes();
             Map<String, AlbianServiceAopAttribute> pkgAopAttr = asaPkg.getAopAttributes();
-            if (SetUtil.isNullOrEmpty(asaAopAttr)) {
+            if (SetUtil.isEmpty(asaAopAttr)) {
                 asa.setAopAttributes(pkgAopAttr);
             } else {
-                if (!SetUtil.isNullOrEmpty(pkgAopAttr)) {
+                if (!SetUtil.isEmpty(pkgAopAttr)) {
                     // merger field attribute
                     // base on service.xml and merger field from pkg
                     // if exist in service.xml not merger field from pkg

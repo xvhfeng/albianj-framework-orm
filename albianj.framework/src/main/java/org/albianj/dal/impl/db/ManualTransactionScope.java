@@ -47,7 +47,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 PreparedStatement prepareStatement =
                         conn.prepareStatement(imc.getSqlText());
                 Map<Integer, String> map = imc.getParameterMapper();
-                if (SetUtil.isNullOrEmpty(map)) {
+                if (SetUtil.isEmpty(map)) {
                     continue;
                 } else {
                     for (int i = 1; i <= map.size(); i++) {

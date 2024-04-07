@@ -42,11 +42,11 @@ import java.util.*;
 
 public class SetUtil {
 
-    public static boolean isNullOrEmpty(Collection<?> collection) {
+    public static boolean isEmpty(Collection<?> collection) {
         return null == collection || collection.isEmpty();
     }
 
-    public static boolean isNullOrEmpty(@SuppressWarnings("rawtypes") Map map) {
+    public static boolean isEmpty(@SuppressWarnings("rawtypes") Map map) {
         return null == map || map.isEmpty();
     }
 
@@ -55,20 +55,20 @@ public class SetUtil {
     }
 
     /** @return ((null == ra) || (0 == ra.length)) */
-    public static boolean isNullOrEmpty(Object[] ra) {
+    public static boolean isEmpty(Object[] ra) {
         return ((null == ra) || (0 == ra.length));
     }
 
     /** @return ((null == ra) || (0 == ra.length)) */
-    public static boolean isNullOrEmpty(byte[] ra) {
+    public static boolean isEmpty(byte[] ra) {
         return ((null == ra) || (0 == ra.length));
     }
 
-    public static boolean isNotNullEmpty(Collection<?> collection) {
+    public static boolean isNotEmpty(Collection<?> collection) {
         return null != collection && !collection.isEmpty();
     }
 
-    public static boolean isNotNullEmpty(@SuppressWarnings("rawtypes") Map map) {
+    public static boolean isNotEmpty(@SuppressWarnings("rawtypes") Map map) {
         return null != map && !map.isEmpty();
     }
 
@@ -77,12 +77,16 @@ public class SetUtil {
     }
 
     /** @return ((null == ra) || (0 == ra.length)) */
-    public static boolean isNotNullEmpty(Object[] ra) {
+    public static boolean isNotEmpty(Object[] ra) {
         return ((null != ra) && (0 != ra.length));
     }
 
+//    public static boolean isEmpty(Object[] ra) {
+//        return ((null == ra) ||  (0 == ra.length));
+//    }
+
     /** @return ((null == ra) || (0 == ra.length)) */
-    public static boolean isNotNullEmpty(byte[] ra) {
+    public static boolean isNotEmpty(byte[] ra) {
         return ((null != ra) && (0 != ra.length));
     }
 
@@ -146,7 +150,7 @@ public class SetUtil {
     * @throws IllegalArgumentException if source is null
     */
     public static final Object[] copy(Object[] source) {
-    if(SetUtil.isNullOrEmpty(source)) {
+    if(SetUtil.isEmpty(source)) {
         throw new IllegalArgumentException("source");
     }
     final Class c = source.getClass().getComponentType();

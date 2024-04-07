@@ -75,7 +75,7 @@ public class CompensateNotify implements ICompensateNotify {
     public StringBuilder writerJobCommandToString(WrtJob wrtJob)   {
         StringBuilder sb = new StringBuilder();
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
 

@@ -247,7 +247,7 @@ public class LangUtil {
      * @return String[] of args remaining after extracting options to extracted
      */
     public static String[] extractOptions(String[] args, String[][] options) {
-        if (SetUtil.isNullOrEmpty(args) || SetUtil.isNullOrEmpty(options)) {
+        if (SetUtil.isEmpty(args) || SetUtil.isEmpty(options)) {
             return args;
         }
         BitSet foundSet = new BitSet();
@@ -257,7 +257,7 @@ public class LangUtil {
             boolean found = false;
             for (int i = 0; !found && (i < options.length); i++) {
                 String[] option = options[i];
-                ServRouter.throwIaxIfFalse(!SetUtil.isNullOrEmpty(option), "options");
+                ServRouter.throwIaxIfFalse(!SetUtil.isEmpty(option), "options");
                 String sought = option[0];
                 found = sought.equals(args[j]);
                 if (found) {
@@ -314,8 +314,8 @@ public class LangUtil {
     public static String[] extractOptions(String[] args, String[]
             validOptions,
                                           int[] optionArgs, List extracted) {
-        if (SetUtil.isNullOrEmpty(args)
-                || SetUtil.isNullOrEmpty(validOptions)) {
+        if (SetUtil.isEmpty(args)
+                || SetUtil.isEmpty(validOptions)) {
             return args;
         }
         if (null != optionArgs) {
@@ -330,7 +330,7 @@ public class LangUtil {
             for (int i = 0; !found && (i < validOptions.length); i++) {
                 String sought = validOptions[i];
                 int doMore = (null == optionArgs ? 0 : optionArgs[i]);
-                if (StringsUtil.isNullEmpty(sought)) {
+                if (StringsUtil.isEmpty(sought)) {
                     continue;
                 }
                 found = sought.equals(args[j]);
@@ -372,13 +372,13 @@ public class LangUtil {
      */
     public static String[] selectOptions(String[] args, String[]
             validOptions) {
-        if (SetUtil.isNullOrEmpty(args) || SetUtil.isNullOrEmpty(validOptions)) {
+        if (SetUtil.isEmpty(args) || SetUtil.isEmpty(validOptions)) {
             return new String[0];
         }
         ArrayList result = new ArrayList();
         for (int i = 0; i < validOptions.length; i++) {
             String sought = validOptions[i];
-            if (StringsUtil.isNullEmpty(sought)) {
+            if (StringsUtil.isEmpty(sought)) {
                 continue;
             }
             for (int j = 0; j < args.length; j++) {
@@ -395,13 +395,13 @@ public class LangUtil {
      * @return String[] of entries in validOptions found in args
      */
     public static String[] selectOptions(List args, String[] validOptions) {
-        if (SetUtil.isNullOrEmpty(args) || SetUtil.isNullOrEmpty(validOptions)) {
+        if (SetUtil.isEmpty(args) || SetUtil.isEmpty(validOptions)) {
             return new String[0];
         }
         ArrayList result = new ArrayList();
         for (int i = 0; i < validOptions.length; i++) {
             String sought = validOptions[i];
-            if (StringsUtil.isNullEmpty(sought)) {
+            if (StringsUtil.isEmpty(sought)) {
                 continue;
             }
             for (Iterator iter = args.iterator(); iter.hasNext(); ) {
@@ -438,7 +438,7 @@ public class LangUtil {
 
         for (int i = 0; i < options.length; i++) {
             String option = options[i];
-            if (StringsUtil.isNullEmpty(option)) {
+            if (StringsUtil.isEmpty(option)) {
                 throw new IllegalArgumentException("empty option at " + i);
             }
             if (option.endsWith("-")) {
@@ -588,7 +588,7 @@ public class LangUtil {
         cmd.add("-classpath");
         cmd.add(classpath);
         cmd.add(mainClass);
-        if (!SetUtil.isNullOrEmpty(args)) {
+        if (!SetUtil.isEmpty(args)) {
             cmd.addAll(Arrays.asList(args));
         }
         String[] command = cmd.toArray(new String[0]);
@@ -788,7 +788,7 @@ public class LangUtil {
             cmd.add("-classpath");
             cmd.add(classpath);
             cmd.add(mainClass);
-            if (!SetUtil.isNullOrEmpty(args)) {
+            if (!SetUtil.isEmpty(args)) {
                 cmd.addAll(Arrays.asList(args));
             }
             init(cmd.toArray(new String[0]), mainClass);
@@ -894,7 +894,7 @@ public class LangUtil {
 
         public final String[] getCommand() {
             String[] toCopy = command;
-            if (SetUtil.isNullOrEmpty(toCopy)) {
+            if (SetUtil.isEmpty(toCopy)) {
                 return new String[0];
             }
             String[] result = new String[toCopy.length];

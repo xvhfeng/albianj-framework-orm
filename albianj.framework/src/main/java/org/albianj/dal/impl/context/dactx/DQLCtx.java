@@ -70,7 +70,7 @@ public class DQLCtx implements IDQLCtx {
     @Override
     public <T extends IAblObj> T loadObject(String sessionId, Class<T> itfClzz, DrOpt loadType, IChaExpr wheres)  {
         List<T> entities = loadObjects(sessionId, itfClzz, loadType, wheres);
-        if (SetUtil.isNullOrEmpty(entities)) {
+        if (SetUtil.isEmpty(entities)) {
             return null;
         }
         return entities.get(0);

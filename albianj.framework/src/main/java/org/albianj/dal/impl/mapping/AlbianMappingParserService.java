@@ -167,7 +167,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     @Override
     protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes)  {
-        if (SetUtil.isNullOrEmpty(nodes)) {
+        if (SetUtil.isEmpty(nodes)) {
             throw new IllegalArgumentException("nodes");
         }
         String inter = null;
@@ -235,7 +235,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
 
         Map<String, AblEntityFieldAttr> entityFieldAttr = null;
-        if (SetUtil.isNullOrEmpty(pkgEntityAttr.getFields())) {
+        if (SetUtil.isEmpty(pkgEntityAttr.getFields())) {
             entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz);
             pkgEntityAttr.setFields(entityFieldAttr);
         } else {
@@ -243,7 +243,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
         @SuppressWarnings("rawtypes")
         List nodes = node.selectNodes(memberTagName);
-        if (!SetUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isEmpty(nodes)) {
             parserEntityFields(type, nodes, entityFieldAttr);
         }
 

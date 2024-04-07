@@ -10,39 +10,38 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ *
+ * 遍历所有的pkg，根据指定的filter过滤出所需要的类，且根据resolver对过滤后的类进行解析
+ *
+ *  不处理解析后的数据是为了plugin的设计：
+ *    一个Plugin需要扫描的Anno不仅仅是唯一的一个，并且数据保存的形式也不具有固定的格式，有时需要使用Map保存
+ *    有时需要使用List或者Set等数据结构保存，更甚有需要自定义的数据结构，故这部分不能固定。
+ *
+ *   scanner只做对于pkg的遍历与解析调用工作，不做具体的识别（filter）和解析（resolver）工作。
+ *
+ * 注意：
+ *   所有的filter过滤自行定义，包括过滤的Anno等，scanner将不会做任何的限定，resolver同理
+ */
 public class AblScanner {
 
     private static final Logger logger = LoggerFactory.getLogger(AblScanner.class);
 
-    private synchronized static void putClzzAttr(Map<String, Map<String, ClassAttr>> scanerClzzes,
-                                                 ClassAttr attr) {
-        Map<String, ClassAttr> map = null;
-        String rantName = attr.getBlgAnno().getClass().getName();
-        synchronized (scanerClzzes) {
-            if (scanerClzzes.containsKey(rantName)) {
-                map = scanerClzzes.get(rantName);
-            } else {
-                map = new LinkedHashMap<String, ClassAttr>();
-                scanerClzzes.put(rantName, map);
-            }
-            map.put(attr.getClzzFullName(), attr);
-        }
-    }
-
     /**
-     * 根据指定的Annos过滤得到所有标注了Annos的类信息
+     * 扫描给定的所有包
      *
      * @param classLoader
      * @param pkgs
      * @param filter
-     * @param parser
-     * @return 按照每一个anno作为key，返回解析后的所有class的信息
+     * @param resolver
+     * @return 函数没有返回值。
+     *          filter作为中间的过程将返回找到的Anno（由调用者指定），若未找到特定的Anno返回NULL；
+     *          程序对于具有返回值的class执行resolver，否则直接过
+     *          resolver的结果集调用者自行解决，推荐分门别类的使用cached模式进行保存
      * Map：
      * key - anno的全名
      * value - Map类型，解析后的类信息
@@ -50,27 +49,21 @@ public class AblScanner {
      * value - AblRantAttr，所有解析的结果，具体看AblRantAttr结构
      * @throws Throwable
      */
-    public static Map<String, Map<String, ClassAttr>> filter(ClassLoader classLoader,
-                                                             List<String> pkgs,
-                                                             IAblAnnoFilter filter,
-                                                             Map<String, AnnoParserAdpter> annos,
-                                                             IAblAnnoResolver parser)
+    public static void scan(ClassLoader classLoader,
+                             List<String> pkgs,
+                             IAblAnnoFilter filter,
+                             IAblAnnoResolver resolver)
             throws Throwable {
-        Map<String, Map<String, ClassAttr>> scanerClzzes = new LinkedHashMap<>();
         for (String pkg : pkgs) {
-            filter(classLoader, pkg, filter, annos, parser, scanerClzzes);
+            filter(classLoader, pkg, filter, resolver);
         }
-        return scanerClzzes;
     }
 
     private static void filter(ClassLoader classLoader,
                                String pkg,
                                IAblAnnoFilter filter,
-                               Map<String, AnnoParserAdpter> annos,
-                               IAblAnnoResolver parser,
-                               Map<String, Map<String, ClassAttr>> scanerClzzes)
+                               IAblAnnoResolver resolver)
             throws Throwable {
-
         // 是否循环迭代
         boolean isFilterChildDir = true;
         String pkgName = pkg;
@@ -82,11 +75,11 @@ public class AblScanner {
             String protocol = url.getProtocol();
             if ("jar".equals(protocol)) { // 解析jar文件
                 pkgName = scanJar(classLoader, pkgName, pkgDir, url,
-                        isFilterChildDir, filter, annos, parser, scanerClzzes);
+                        isFilterChildDir, filter, resolver);
             } else if ("file".equals(protocol)) { // 解析文件
                 String pkgPath = URLDecoder.decode(url.getFile(), StandardCharsets.UTF_8);
                 findClzzInDir(classLoader, pkgName,
-                        pkgPath, isFilterChildDir, filter, annos, parser, scanerClzzes);
+                        pkgPath, isFilterChildDir, filter, resolver);
             }
         }
     }
@@ -102,8 +95,7 @@ public class AblScanner {
      * @param url
      * @param isFilterChildDir
      * @param filter
-     * @param annos
-     * @param parser
+     * @param resolver
      * @return
      * @throws Throwable
      */
@@ -113,9 +105,7 @@ public class AblScanner {
                                   URL url,
                                   boolean isFilterChildDir,
                                   IAblAnnoFilter filter,
-                                  Map<String, AnnoParserAdpter> annos,
-                                  IAblAnnoResolver parser,
-                                  Map<String, Map<String, ClassAttr>> scanerClzzes)
+                                  IAblAnnoResolver resolver)
             throws Throwable {
         JarFile jar = ((JarURLConnection) url.openConnection()).getJarFile();
         Enumeration<JarEntry> entries = jar.entries();
@@ -134,7 +124,7 @@ public class AblScanner {
                     if (name.endsWith(".class") && !entry.isDirectory()) {
                         String clzzSimpleName = name.substring(
                                 pkgName.length() + 1, name.length() - 6);
-                        parse(classLoader, pkgName, clzzSimpleName, filter, parser);
+                        parse(classLoader, pkgName, clzzSimpleName, filter, resolver);
                     }
                 }
             }
@@ -154,9 +144,7 @@ public class AblScanner {
                                      String pkgPath,
                                      final boolean isFilterChildDir,
                                      IAblAnnoFilter filter,
-                                     Map<String, AnnoParserAdpter> annos,
-                                     IAblAnnoResolver parser,
-                                     Map<String, Map<String, ClassAttr>> scanerClzzes)
+                                     IAblAnnoResolver resolver)
             throws Throwable {
         File dir = new File(pkgPath);
         if (!dir.exists() || !dir.isDirectory()) {
@@ -179,29 +167,27 @@ public class AblScanner {
                         file.getAbsolutePath(),
                         isFilterChildDir,
                         filter,
-                        annos,
-                        parser,
-                        scanerClzzes);
+                        resolver);
             } else {
                 String clzzSimpleName = file.getName().substring(0,
                         file.getName().length() - 6); // 截断".class"后缀
-                parse(classLoader, pkgName, clzzSimpleName, filter, parser);
+                parse(classLoader, pkgName, clzzSimpleName, filter, resolver);
             }
         }
     }
 
-    private static ClassAttr parse(ClassLoader classLoader,
+    private static void parse(ClassLoader classLoader,
                                    String pkgName,
                                    String clzzSimpleName,
                                    IAblAnnoFilter filter,
-                                   IAblAnnoResolver parser)
+                                   IAblAnnoResolver resolver)
             throws Throwable {
         String fullClassName = pkgName + '.' + clzzSimpleName;
         Class<?> cls = classLoader.loadClass(fullClassName);
         Class<? extends Annotation> annoClzz = filter.found(cls);
         if (null == annoClzz) {
-            return null;
+            return;
         }
-        return  parser.parseBeanClass(cls, annoClzz);
+        resolver.parse(cls, annoClzz);
     }
 }

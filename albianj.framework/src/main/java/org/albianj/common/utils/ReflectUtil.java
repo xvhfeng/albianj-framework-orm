@@ -466,8 +466,8 @@ public class ReflectUtil {
         ServRouter.throwIaxIfNotAssignable(libs, File.class, "jars");
         ServRouter.throwIaxIfNotAssignable(dirs, File.class, "dirs");
         URL[] libUrls = FileUtil.getFileURLs(libs);
-        if (!SetUtil.isNullOrEmpty(libUrls)) {
-            if (!SetUtil.isNullOrEmpty(urls)) {
+        if (!SetUtil.isEmpty(libUrls)) {
+            if (!SetUtil.isEmpty(urls)) {
                 URL[] temp = new URL[libUrls.length + urls.length];
                 System.arraycopy(urls, 0, temp, 0, urls.length);
                 System.arraycopy(urls, 0, temp, libUrls.length, urls.length);

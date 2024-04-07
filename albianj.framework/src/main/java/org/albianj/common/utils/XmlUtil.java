@@ -176,7 +176,7 @@ public final class XmlUtil {
         Validate.notNull(elt, "the element of xml-doc is null.");
         Validate.notBlank(childTagName, "the childTagName of element is blank.");
         List chirds = elt.selectNodes(childTagName);
-        if (SetUtil.isNullOrEmpty(chirds))
+        if (SetUtil.isEmpty(chirds))
             return null;
         return (Node)chirds.get(0);
     }

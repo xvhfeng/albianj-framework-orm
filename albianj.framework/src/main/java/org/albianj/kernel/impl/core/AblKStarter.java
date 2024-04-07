@@ -1,6 +1,7 @@
 package org.albianj.kernel.impl.core;
 
 import org.albianj.common.utils.LangUtil;
+import org.albianj.kernel.api.anno.proxy.AblAopAnno;
 import org.albianj.kernel.api.anno.proxy.AblAopPointAnno;
 import org.albianj.kernel.api.anno.serv.AblkServAnno;
 import org.albianj.kernel.api.anno.serv.AblServAnno;
@@ -63,30 +64,29 @@ public class AblKStarter implements IAblStarter {
 
     private void scanKPkgs(GlobalSettings gs) {
         try {
-            AblScanner.filter(gs.getLoader(),
+            AblScanner.scan(gs.getLoader(),
                     List.of(pkgs),
-                    (clzz, annos) -> AblServClassResolver.decideBlgAnno(clzz).getClass(),
-                    regAnnos,
-                    attr -> {
-                        if(LangUtil.isNull(attr)) {
-                            return null;
-                        }
+                    (clzz) -> AblServClassResolver.decideBlgAnno(clzz).getClass(),
+                    (clzz,anno) -> {
 
-
-                        /**
-                         * 第一步扫描所有的fields
-                         * 按照类和父类组成一个chain
-                         */
-
-                        /**
-                         * 同上，解析所有的method
-                         */
-
-                        return null;
                     }
             );
         }catch (Throwable t){
             Assert.notNull(t,"scan kernel pckage is fail.");
+        }
+    }
+
+    private void parse(Class<?> clzz,Annotation anno){
+        Class<? extends Annotation> annoClzz = anno.getClass();
+        // 当前class为aop serv
+        if(annoClzz.isAssignableFrom(AblAopAnno.class)) {
+
+        }
+        if(annoClzz.isAssignableFrom(AblkServAnno.class)) {
+
+        }
+        if(annoClzz.isAssignableFrom(AblServAnno.class)) {
+
         }
     }
 

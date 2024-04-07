@@ -40,7 +40,7 @@ public class UtilClassLoader extends URLClassLoader {
         this.urlsForDebugString = urls;
         List<File> dcopy = new ArrayList<>();
 
-        if (!SetUtil.isNullOrEmpty(dirs)) {
+        if (!SetUtil.isEmpty(dirs)) {
             dcopy.addAll(Arrays.asList(dirs));
         }
         this.dirs = Collections.unmodifiableList(dcopy);
