@@ -37,6 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj;
 
+import org.albianj.common.spring.Assert;
 import org.albianj.common.utils.LangUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.api.logger.IAlbianLoggerService;

@@ -74,7 +74,7 @@ public interface RouteMatcher {
 	 * @param route the route to extract template variables from
 	 * @return a map with template variables and values
 	 */
-	@Nullable
+	
 	Map<String, String> matchAndExtract(String pattern, Route route);
 
 	/**
