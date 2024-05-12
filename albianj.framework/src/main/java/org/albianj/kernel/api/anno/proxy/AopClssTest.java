@@ -5,12 +5,13 @@ package org.albianj.kernel.api.anno.proxy;
 public class AopClssTest {
 
     @AblAopPointAnno(
-            when = AopWhen.Brf | AopWhen.Aft,
+            when = AopFlag.Brf | AopFlag.Aft,
             classes = @AblWatchClassAnno(watch ={ AopClssTest.class},exclusion = AopClssTest.class),
             pkgs = @AblWatchPkg(watch = "",exclusion = ""),
             raises = @AblWatchThrow(watch = Throwable.class,exclusion = Exception.class),
             beginWith = "get",
-            expr = "/*get$/"
+            expr = "/*get$/",
+            tagAnnos = AblAopIgnoreAnno.class
     )
     public void runBeforeMethod() {
         /**

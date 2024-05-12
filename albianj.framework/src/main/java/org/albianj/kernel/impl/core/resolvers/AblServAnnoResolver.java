@@ -2,7 +2,7 @@ package org.albianj.kernel.impl.core.resolvers;
 
 import org.albianj.kernel.api.anno.serv.AblServAnno;
 import org.albianj.kernel.api.attr.IAblAnnoResolver;
-import org.albianj.scanner.ClassAttr;
+import org.albianj.kernel.api.attr.ClassAttr;
 
 public class AblServAnnoResolver implements IAblAnnoResolver {
     @Override

@@ -1,12 +1,10 @@
 package org.albianj.kernel.api.anno.proxy;
 
 
-import org.albianj.common.utils.LangUtil;
-
 /**
  * Aop point的设定作用起效点
  */
-public final class AopWhen {
+public final class AopFlag {
 
     /**
      * 在函数被执行之前起效
@@ -24,6 +22,24 @@ public final class AopWhen {
      * 当函数被执行的过程中触发异常时起效
      */
     public final static int Thr = 0x08;
+
+    /**
+     * 对比anno，
+     * 一个不匹配
+     */
+    public final static int None = 0x10;
+
+    /**
+     * 对比anno，
+     * 匹配任何一个
+     */
+    public final static int AnyOne = 0x20;
+
+    /**
+     * 对比anno，
+     * 匹配所有标注的annos
+     */
+    public final static int All = 0x30;
 
     public static boolean isBefore(int mod) {
         return (mod & Brf) != 0;

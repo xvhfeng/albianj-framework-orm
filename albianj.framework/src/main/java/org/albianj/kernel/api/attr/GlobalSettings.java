@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -19,6 +20,10 @@ public class GlobalSettings {
     private Properties kernelProps;
     private int argc = 0;
     private String[] argv;
+    private List<String> krlPkgs;
+    private List<String> plgPkgs;
+    private List<String> bssPkgs;
+
 
     public <T> T getPropValue(String key,T defVal){
         if(!kernelProps.containsKey(key)) {

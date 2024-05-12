@@ -1,4 +1,4 @@
-package org.albianj.scanner;
+package org.albianj.kernel.api.attr;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ItfAttr implements IResolverAttr{
+public class ItfAttr implements IResolverAttr {
     /**
      * class的class对象
      */

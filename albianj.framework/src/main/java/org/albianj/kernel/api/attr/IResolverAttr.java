@@ -1,4 +1,4 @@
-package org.albianj.scanner;
+package org.albianj.kernel.api.attr;
 
 /**
  * 标记接口

@@ -10,8 +10,8 @@ import org.albianj.kernel.api.anno.serv.AblServAnno;
 import org.albianj.kernel.api.attr.IAblAnnoResolver;
 import org.albianj.common.mybp.Assert;
 import org.albianj.common.values.RefArg;
-import org.albianj.scanner.AopAnnoAttr;
-import org.albianj.scanner.ClassAttr;
+import org.albianj.kernel.api.attr.AopAnnoAttr;
+import org.albianj.kernel.api.attr.ClassAttr;
 
 import java.lang.annotation.Annotation;
 import java.util.*;

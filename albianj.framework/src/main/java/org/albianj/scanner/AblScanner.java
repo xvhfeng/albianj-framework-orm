@@ -51,7 +51,7 @@ public class AblScanner {
      */
     public static void scan(ClassLoader classLoader,
                              List<String> pkgs,
-                             IAblAnnoFilter filter,
+                             IAblAnnoFinder filter,
                              IAblAnnoResolver resolver)
             throws Throwable {
         for (String pkg : pkgs) {
@@ -61,7 +61,7 @@ public class AblScanner {
 
     private static void filter(ClassLoader classLoader,
                                String pkg,
-                               IAblAnnoFilter filter,
+                               IAblAnnoFinder filter,
                                IAblAnnoResolver resolver)
             throws Throwable {
         // 是否循环迭代
@@ -104,7 +104,7 @@ public class AblScanner {
                                   String pkgDir,
                                   URL url,
                                   boolean isFilterChildDir,
-                                  IAblAnnoFilter filter,
+                                  IAblAnnoFinder filter,
                                   IAblAnnoResolver resolver)
             throws Throwable {
         JarFile jar = ((JarURLConnection) url.openConnection()).getJarFile();
@@ -143,7 +143,7 @@ public class AblScanner {
                                      String pkgName,
                                      String pkgPath,
                                      final boolean isFilterChildDir,
-                                     IAblAnnoFilter filter,
+                                     IAblAnnoFinder filter,
                                      IAblAnnoResolver resolver)
             throws Throwable {
         File dir = new File(pkgPath);
@@ -179,12 +179,12 @@ public class AblScanner {
     private static void parse(ClassLoader classLoader,
                                    String pkgName,
                                    String clzzSimpleName,
-                                   IAblAnnoFilter filter,
+                                   IAblAnnoFinder filter,
                                    IAblAnnoResolver resolver)
             throws Throwable {
         String fullClassName = pkgName + '.' + clzzSimpleName;
         Class<?> cls = classLoader.loadClass(fullClassName);
-        Class<? extends Annotation> annoClzz = filter.found(cls);
+        Class<?> annoClzz = filter.found(cls);
         if (null == annoClzz) {
             return;
         }

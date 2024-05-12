@@ -4,12 +4,11 @@ import org.albianj.common.utils.SetUtil;
 import org.albianj.common.values.RefArg;
 import org.albianj.kernel.api.anno.proxy.AblAopPointAnno;
 import org.albianj.kernel.api.anno.serv.*;
-import org.albianj.common.mybp.Assert;
 import org.albianj.common.utils.LangUtil;
 import org.albianj.common.utils.ReflectUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.kernel.impl.core.resolvers.data.ResolverClassCached;
-import org.albianj.scanner.*;
+import org.albianj.kernel.api.attr.*;
+import org.albianj.kernel.impl.core.resolvers.data.ResolvedClassCached;
 
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
@@ -29,7 +28,7 @@ public class AblServClassResolver {
     public ClassAttr parse(Class<?> clzz) {
 
         // 是否已经被解析过
-        IResolverAttr attr = ResolverClassCached.get(clzz.getName());
+        IResolverAttr attr = ResolvedClassCached.get(clzz.getName());
         ItfAttr itfAttr = null;
         if(LangUtil.isNotNull(attr) && attr instanceof ClassAttr) {
             return (ClassAttr) attr;
@@ -88,7 +87,7 @@ public class AblServClassResolver {
         }
 
         var classAttr =  attrb.build();
-        ResolverClassCached.putIfAbsent(clzz.getName(),classAttr);
+        ResolvedClassCached.putIfAbsent(clzz.getName(),classAttr);
         return classAttr;
     }
 
@@ -148,13 +147,13 @@ public class AblServClassResolver {
         Class<?>[] itfs =  clzz.getInterfaces();
         if(SetUtil.isNotEmpty(itfs)) {
             Arrays.stream(itfs).forEach(e -> {
-                IResolverAttr attr = ResolverClassCached.get(e.getName());
+                IResolverAttr attr = ResolvedClassCached.get(e.getName());
                 ItfAttr itfAttr = null;
                 if(LangUtil.isNotNull(attr) && attr instanceof ItfAttr) {
                     itfAttr = (ItfAttr) attr;
                 } else {
                     itfAttr = parseItf(e);
-                    ResolverClassCached.putIfAbsent(e.getName(),itfAttr);
+                    ResolvedClassCached.putIfAbsent(e.getName(),itfAttr);
                 }
                 itfAttrs.put(itfAttr.getClzzFullName(),itfAttr);
             });
@@ -229,8 +228,8 @@ public class AblServClassResolver {
             return clzz.getAnnotation(AblAopPointAnno.class);
         }
 
-        if(clzz.isAnnotationPresent(AblkServAnno.class)) {
-            return clzz.getAnnotation(AblkServAnno.class);
+        if(clzz.isAnnotationPresent(KservAnno.class)) {
+            return clzz.getAnnotation(KservAnno.class);
         }
 
         if(clzz.isAnnotationPresent(AblServAnno.class)) {

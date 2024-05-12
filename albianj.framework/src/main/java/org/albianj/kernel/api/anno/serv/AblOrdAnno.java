@@ -1,15 +1,15 @@
-package org.albianj.scanner.annos;
+package org.albianj.kernel.api.anno.serv;
+
 
 import java.lang.annotation.*;
 
 /**
- * 扫描路径配置
+ * 加载顺序
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AblScanAnno {
-    String[] value() default {};
+public @interface AblOrdAnno {
+    int value() default 0;
 }
-

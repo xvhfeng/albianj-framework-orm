@@ -1,11 +1,10 @@
 package org.albianj.kernel.impl.core;
 
-import org.albianj.common.utils.LangUtil;
-import org.albianj.kernel.api.anno.proxy.AblAopAnno;
-import org.albianj.kernel.api.anno.proxy.AblAopPointAnno;
-import org.albianj.kernel.api.anno.serv.AblkServAnno;
-import org.albianj.kernel.api.anno.serv.AblServAnno;
-import org.albianj.common.mybp.Assert;
+import org.albianj.common.spring.Assert;
+import org.albianj.common.spring.CollectionUtils;
+import org.albianj.common.utils.ReflectUtil;
+import org.albianj.kernel.api.anno.AblServScanAnno;
+import org.albianj.kernel.api.attr.ClassAttr;
 import org.albianj.kernel.api.attr.GlobalSettings;
 import org.albianj.kernel.api.attr.IAblAnnoResolver;
 import org.albianj.kernel.impl.core.resolvers.AblAopAnnoResolver;
@@ -16,6 +15,8 @@ import org.albianj.loader.IAblStarter;
 import org.albianj.scanner.*;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +28,16 @@ import java.util.Map;
  */
 public class AblKStarter implements IAblStarter {
 
-    private final static String[] pkgs = {
-            "org.albianj.api.kernel",
-            "org.albianj.impl.kernel"
-    };
+//    private final static String[] pkgs = {
+//            "org.albianj.api.kernel",
+//            "org.albianj.impl.kernel"
+//    };
 
-    private  final static Map<String, IAblAnnoResolver> regAnnos = new HashMap<>(){{
-        put(AblkServAnno.class.getName(), new AblKServAnnoResolver());
-        put(AblAopPointAnno.class.getName(), new AblAopAnnoResolver());
-        put(AblServAnno.class.getName(), new AblServAnnoResolver());
-    }};
+//    private  final static Map<String, IAblAnnoResolver> regAnnos = new HashMap<>(){{
+//        put(KservAnno.class.getName(), new AblKServAnnoResolver());
+//        put(AblAopPointAnno.class.getName(), new AblAopAnnoResolver());
+//        put(AblServAnno.class.getName(), new AblServAnnoResolver());
+//    }};
 
 
 
@@ -47,13 +48,18 @@ public class AblKStarter implements IAblStarter {
                 .configurtionFolder(configUrl)
                 .loader(loader)
                 .build();
+
+        List<String> kPkgs = defineKservScanPkgs();
+        List<String> bussPkgs = alyServScanPkgs(mainClzz);
+        settings.setKrlPkgs(kPkgs);
+        settings.setBssPkgs(bussPkgs);
+
         /**
          *  扫描albianj内核的所有注册的anno
          *  启动这些anno标注的service，构建整个albianj service体系
          *
          */
-
-        scanKPkgs(settings);
+        scanPkgs(settings);
 
     }
 
@@ -62,13 +68,13 @@ public class AblKStarter implements IAblStarter {
 
     }
 
-    private void scanKPkgs(GlobalSettings gs) {
+    private void scanPkgs(GlobalSettings gs) {
         try {
             AblScanner.scan(gs.getLoader(),
-                    List.of(pkgs),
-                    (clzz) -> AblServClassResolver.decideBlgAnno(clzz).getClass(),
-                    (clzz,anno) -> {
-
+                    gs.getKrlPkgs(),
+                    (clzz) -> ReflectUtil.isClassOrInterface(clzz) ? clzz : null ,
+                    (clzz) -> {
+                        parseClzzThenCached(clzz);
                     }
             );
         }catch (Throwable t){
@@ -76,43 +82,37 @@ public class AblKStarter implements IAblStarter {
         }
     }
 
-    private void parse(Class<?> clzz,Annotation anno){
-        Class<? extends Annotation> annoClzz = anno.getClass();
-        // 当前class为aop serv
-        if(annoClzz.isAssignableFrom(AblAopAnno.class)) {
+    private void parseClzzThenCached(Class<?> clzz){
 
-        }
-        if(annoClzz.isAssignableFrom(AblkServAnno.class)) {
-
-        }
-        if(annoClzz.isAssignableFrom(AblServAnno.class)) {
-
-        }
     }
 
-//    /**
-//     * 判断class属于哪一个anno，并且解析这个class的anno
-//     * @param clzz
-//     * @return
-//     */
-//    private Class<? extends Annotation> decideBelongAnno(Class<?> clzz) {
-//        if(clzz.isAnnotationPresent(AblAopAnno.class)) {
-//            Assert.isFalse(clzz.isAnnotationPresent(AblServAnno.class),
-//                    "Absence annotation.AblAopAnno class must be AblServAnno first.Class:{}",clzz.getName());
-//
-//            return AblAopAnno.class;
-//        }
-//
-//        if(clzz.isAnnotationPresent(AblkServAnno.class)) {
-//            return AblkServAnno.class;
-//        }
-//
-//        if(clzz.isAnnotationPresent(AblServAnno.class)) {
-//            return AblServAnno.class;
-//        }
-//
-//        return null;
-//    }
+    /**
+     * 定义系统service包的路径
+     * @return
+     */
+    private List<String> defineKservScanPkgs(){
+        return new ArrayList<>(){{
+            add("org.albianj.kernel");
+        }};
+    }
+    /**
+     * 解析当前业务的service包路径
+     * @param mainClzz
+     * @return
+     */
+    private List<String> alyServScanPkgs(Class<?> mainClzz) {
+        List<String> pkgs = new ArrayList<>();
+        String mainPkgName =  mainClzz.getPackageName();
+        pkgs.add(mainPkgName);
+
+        if(mainClzz.isAnnotationPresent(AblServScanAnno.class)) {
+            AblServScanAnno servScanAnno = mainClzz.getAnnotation(AblServScanAnno.class);
+            String[] scanPkgs = servScanAnno.packages();
+            CollectionUtils.mergeArrayIntoCollection(scanPkgs,pkgs);
+        }
+
+        return pkgs;
+    }
 
     private ClassAttr parserClassAttr(Class<?> clzz, Class<? extends Annotation> belongAnno) {
         IAblAnnoResolver p = regAnnos.get(belongAnno.getName());

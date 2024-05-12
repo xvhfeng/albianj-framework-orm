@@ -1,4 +1,4 @@
-package org.albianj.scanner;
+package org.albianj.kernel.api.attr;
 
 public class AopPointAttr {
     /**

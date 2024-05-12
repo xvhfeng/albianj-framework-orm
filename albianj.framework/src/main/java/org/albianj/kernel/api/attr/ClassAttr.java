@@ -1,4 +1,4 @@
-package org.albianj.scanner;
+package org.albianj.kernel.api.attr;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClassAttr implements IResolverAttr{
+public class ClassAttr implements IResolverAttr {
 
     public ClassAttr(Class<?> clzz) {
         this.clzz = clzz;

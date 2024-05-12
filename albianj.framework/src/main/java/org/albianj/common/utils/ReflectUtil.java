@@ -39,6 +39,7 @@ package org.albianj.common.utils;
 
 import org.albianj.ServRouter;
 import org.albianj.common.langs.UtilClassLoader;
+import org.albianj.common.spring.ReflectionUtils;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -54,7 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class ReflectUtil {
+public class ReflectUtil extends ReflectionUtils {
 
     public static BeanInfo getBeanInfo(ClassLoader cl, String className)
             throws ClassNotFoundException, IntrospectionException {
@@ -652,6 +653,15 @@ public class ReflectUtil {
         } else {
             return "L" + type.getName().replace('.', '/') + ";";
         }
+    }
+
+    /**
+     * 判断当前class是一个接口或者是类（包括抽象类）
+     * @param clazz
+     * @return
+     */
+    public static boolean isClassOrInterface(Class<?> clazz){
+        return clazz != null && !clazz.isEnum() && !clazz.isArray() && !clazz.isPrimitive();
     }
 
 }

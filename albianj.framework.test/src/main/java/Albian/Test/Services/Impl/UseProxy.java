@@ -8,22 +8,22 @@ classes = {@AblWatchClassAnno(watch = OrgUserInlService.class,exclusion = UserSe
 @AblServAnno
 public class UseProxy {
 
-    @AblAopPointAnno(beginWith = "get",when = AopWhen.Brf)
+    @AblAopPointAnno(beginWith = "get",when = AopFlag.Brf)
     public void before() {
 
     }
 
-    @AblAopPointAnno(when = AopWhen.Aft | AopWhen.Brf)
+    @AblAopPointAnno(when = AopFlag.Aft | AopFlag.Brf)
     public void around(){
 
     }
 
-    @AblAopPointAnno(beginWith = "get",when = AopWhen.Aft)
+    @AblAopPointAnno(beginWith = "get",when = AopFlag.Aft)
     public void after(){
 
     }
 
-    @AblAopPointAnno(beginWith = "get",when = AopWhen.Thr,
+    @AblAopPointAnno(beginWith = "get",when = AopFlag.Thr,
             raises = @AblWatchThrow(watch = Throwable.class))
     public void raise(){
 

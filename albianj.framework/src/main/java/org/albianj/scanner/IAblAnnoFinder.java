@@ -1,13 +1,12 @@
 package org.albianj.scanner;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
 
 /**
  * 过滤是否具有指定anno标注的class
  * 如果是，得到所标注的annos
  */
-public interface IAblAnnoFilter {
+public interface IAblAnnoFinder {
     /**
      * 找到annos指定标注的rants的类
      * 返回Anno的class信息
@@ -15,5 +14,5 @@ public interface IAblAnnoFilter {
      * @param clzz
      * @return
      */
-    Class<? extends Annotation> found(Class<?> clzz);
+    Class<?> found(Class<?> clzz);
 }

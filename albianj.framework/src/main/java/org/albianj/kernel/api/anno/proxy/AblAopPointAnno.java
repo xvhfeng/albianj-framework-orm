@@ -62,6 +62,8 @@ public @interface AblAopPointAnno {
      */
     AblWatchThrow[] raises() default {};
 
+    Class<? extends  Annotation>[] tagAnnos() default {};
+
     /**
      * 发生的时间点
      * 允许的值在AopWhen中设定
