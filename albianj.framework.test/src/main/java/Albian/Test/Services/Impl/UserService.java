@@ -109,8 +109,8 @@ public class UserService extends FreeAlbianService implements IUserService {
 //        user.setPassword("batcher");
 //        user.setUserName("batcher");
         //同时使用数据路由与单数据库保存
-        boolean success =  dctx.add(QryOpt.IstOrUpd, mu1)
-                .add(QryOpt.IstOrUpd, mu2)
+        boolean success =  dctx.add(QryOpt.Upsert, mu1)
+                .add(QryOpt.Upsert, mu2)
 //                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
 
@@ -121,8 +121,8 @@ public class UserService extends FreeAlbianService implements IUserService {
 
         mu2.setUserName("user2 name");
         mu2.setPassword("mu2pwd");
-        success =  dctx.add(QryOpt.IstOrUpd, mu1)
-                .add(QryOpt.IstOrUpd, mu2)
+        success =  dctx.add(QryOpt.Upsert, mu1)
+                .add(QryOpt.Upsert, mu2)
 //                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
         return success;

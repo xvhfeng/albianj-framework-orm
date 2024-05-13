@@ -1,5 +1,7 @@
 package Albian.Test;
 
+import Albian.Test.Model.Impl.Event;
+import Albian.Test.Services.IEventServ;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.ServRouter;
@@ -9,18 +11,34 @@ import org.albianj.AblServRouter;
 import org.albianj.loader.IAlbianCommandLineApplication;
 import org.albianj.loader.annos.AblScanRant;
 
+import java.util.List;
+
 @AblScanRant(value = {"dsdss","dsdscsds"})
 public class DoTest implements IAlbianCommandLineApplication {
     public static void main(String[] argv) {
         try {
 
             AlbianjApplication.run(DoTest.class,argv[0]);
-            test1();
+            for(int i = 0; i < 10000; i++ ) {
+
+                testRedShift();
+            }
+        //    test1();
             return;
 
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private static void testRedShift(){
+
+        IEventServ eServ = ServRouter.getService("",IEventServ.class,"eventServ");
+        eServ.insert();
+
+        List<Event> events = eServ.load();
+        AblServRouter.log("Test redshift",LogLevel.Info,"load action;{}",events.size());
+      //
     }
 
     private static void test1()  {

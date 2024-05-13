@@ -81,6 +81,10 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append(":").append(stgAttr.getPort());
                 }
                 sb.append(":").append(rsa.getDatabase());
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                    sb.append("?").append(rsa.getStgAttr().getUrlParaments());
+                }
+                break;
             }
             case (DBOpt.SqlServer): {
                 sb.append("microsoft:sqlserver://").append(
@@ -89,6 +93,22 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append(":").append(stgAttr.getPort());
                 }
                 sb.append(";").append(rsa.getDatabase());
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                    sb.append("?").append(rsa.getStgAttr().getUrlParaments());
+                }
+                break;
+            }
+            case (DBOpt.RedShift) : {
+                sb.append("redshift://").append(
+                        stgAttr.getServer());
+                if (0 != stgAttr.getPort()) {
+                    sb.append(":").append(stgAttr.getPort());
+                }
+                sb.append("/").append(rsa.getDatabase());
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                    sb.append("?").append(rsa.getStgAttr().getUrlParaments());
+                }
+                break;
             }
             case (DBOpt.MySql):
             default: {
@@ -110,6 +130,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                 if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
                     sb.append("&").append(rsa.getStgAttr().getUrlParaments());
                 }
+                break;
 //                sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull");
             }
         }

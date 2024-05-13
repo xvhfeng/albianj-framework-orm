@@ -46,6 +46,7 @@ import org.albianj.api.dal.context.WrtTask;
 import org.albianj.api.dal.db.PCmd;
 import org.albianj.api.dal.db.SqlPara;
 import org.albianj.api.dal.object.StgAttr;
+import org.albianj.impl.dal.sqlpara.DbValueFormatter;
 import org.albianj.impl.dal.toolkit.SetConv;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.dal.context.PStatement;
@@ -118,7 +119,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                                 if (null == para.getValue()) {
                                     psDb.setNull(i, para.getSqlType());
                                 } else {
-                                    psDb.setObject(i, para.getValue(),
+                                    psDb.setObject(i, DbValueFormatter.toSqlValue(para.getValue()),
                                             para.getSqlType());
                                 }
                             }
@@ -138,7 +139,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                                 if (null == para.getValue()) {
                                     prepareStatement.setNull(i, para.getSqlType());
                                 } else {
-                                    prepareStatement.setObject(i, para.getValue(),
+                                    prepareStatement.setObject(i, DbValueFormatter.toSqlValue(para.getValue()),
                                             para.getSqlType());
                                 }
                             }

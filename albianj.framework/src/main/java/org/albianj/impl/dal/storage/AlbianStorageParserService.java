@@ -160,10 +160,36 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         if (null == databaseStyle) {
             storage.setDatabaseStyle(DBOpt.MySql);
         } else {
-            String style = databaseStyle.trim().toLowerCase();
-            storage.setDatabaseStyle("sqlserver".equalsIgnoreCase(style) ? DBOpt.SqlServer :
-                "oracle".equalsIgnoreCase(style) ? DBOpt.Oracle : DBOpt.MySql);
+            switch (databaseStyle.trim().toLowerCase()) {
+                case "sqlserver": {
+                    storage.setDatabaseStyle(DBOpt.SqlServer);
+                    break;
+                }
+                case "oracle": {
+                    storage.setDatabaseStyle(DBOpt.Oracle);
+                    break;
+                }
+                case "pgsql": {
+                    storage.setDatabaseStyle(DBOpt.PgSql);
+                    break;
+                }
+                case "redshift": {
+                    storage.setDatabaseStyle(DBOpt.RedShift);
+                    break;
+                }
+                default: {
+                    storage.setDatabaseStyle(DBOpt.MySql);
+                }
+            }
         }
+//        if (null == databaseStyle) {
+//            storage.setDatabaseStyle(DBOpt.MySql);
+//        } else {
+//            String style = databaseStyle.trim().toLowerCase();
+//
+//            storage.setDatabaseStyle("sqlserver".equalsIgnoreCase(style) ? DBOpt.SqlServer :
+//                "oracle".equalsIgnoreCase(style) ? DBOpt.Oracle : DBOpt.MySql);
+//        }
         storage.setServer(server);
         storage.setDatabase(database);
         storage.setUser(user);

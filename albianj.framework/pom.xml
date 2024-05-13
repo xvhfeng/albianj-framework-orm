@@ -17,8 +17,6 @@
         <project.build.locales>zh_CN</project.build.locales>
     </properties>
 
-
-
     <dependencies>
         <dependency>
             <groupId>albianj-framework</groupId>
@@ -59,6 +57,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.amazon.redshift</groupId>
+            <artifactId>redshift-jdbc42</artifactId>
+            <version>2.1.0.27</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.zaxxer</groupId>
