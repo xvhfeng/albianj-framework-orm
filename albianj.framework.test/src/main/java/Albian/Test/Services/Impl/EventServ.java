@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-@AlbianServiceRant(Id = "eventServ")
+@AlbianServiceRant(Id = "EventServ")
 public class EventServ extends FreeAlbianService implements IEventServ {
     @AlbianServiceFieldRant(Type = AlbianServiceFieldType.Ref, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
