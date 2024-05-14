@@ -54,12 +54,16 @@ public class SetUtil {
         return null == map;
     }
 
-    /** @return ((null == ra) || (0 == ra.length)) */
+    /**
+     * @return (( null = = ra) || (0 == ra.length))
+     */
     public static boolean isEmpty(Object[] ra) {
         return ((null == ra) || (0 == ra.length));
     }
 
-    /** @return ((null == ra) || (0 == ra.length)) */
+    /**
+     * @return (( null = = ra) || (0 == ra.length))
+     */
     public static boolean isEmpty(byte[] ra) {
         return ((null == ra) || (0 == ra.length));
     }
@@ -76,7 +80,9 @@ public class SetUtil {
         return null != map;
     }
 
-    /** @return ((null == ra) || (0 == ra.length)) */
+    /**
+     * @return (( null = = ra) || (0 == ra.length))
+     */
     public static boolean isNotEmpty(Object[] ra) {
         return ((null != ra) && (0 != ra.length));
     }
@@ -85,14 +91,18 @@ public class SetUtil {
 //        return ((null == ra) ||  (0 == ra.length));
 //    }
 
-    /** @return ((null == ra) || (0 == ra.length)) */
+    /**
+     * @return (( null = = ra) || (0 == ra.length))
+     */
     public static boolean isNotEmpty(byte[] ra) {
         return ((null != ra) && (0 != ra.length));
     }
 
-    /** @return a non-null unmodifiable List */
+    /**
+     * @return a non-null unmodifiable List
+     */
     public static <T> List<T> safeList(List<T> list) {
-        return (null == list ? Collections.<T>emptyList() : Collections.unmodifiableList(list));
+        return (null == list ? Collections.emptyList() : Collections.unmodifiableList(list));
     }
 
     /**
@@ -144,18 +154,19 @@ public class SetUtil {
     }
 
     /**
-    * Make a copy of the array.
-    * @return an array with the same component type as source
-    * containing same elements, even if null.
-    * @throws IllegalArgumentException if source is null
-    */
+     * Make a copy of the array.
+     *
+     * @return an array with the same component type as source
+     * containing same elements, even if null.
+     * @throws IllegalArgumentException if source is null
+     */
     public static final Object[] copy(Object[] source) {
-    if(SetUtil.isEmpty(source)) {
-        throw new IllegalArgumentException("source");
-    }
-    final Class c = source.getClass().getComponentType();
-    Object[] result = (Object[]) Array.newInstance(c, source.length);
-    System.arraycopy(source, 0, result, 0, result.length);
-    return result;
+        if (SetUtil.isEmpty(source)) {
+            throw new IllegalArgumentException("source");
+        }
+        final Class c = source.getClass().getComponentType();
+        Object[] result = (Object[]) Array.newInstance(c, source.length);
+        System.arraycopy(source, 0, result, 0, result.length);
+        return result;
     }
 }

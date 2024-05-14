@@ -15,6 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  */
 public class DFATree {
-    Map<String,DFATreeNode> map = CollectionUtils.newHashMap();
+//    Map<String,DFATreeNode> map = CollectionUtils.newHashMap();
 
 }

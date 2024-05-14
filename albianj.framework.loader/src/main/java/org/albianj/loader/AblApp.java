@@ -45,7 +45,7 @@ import java.io.File;
 
 public class AblApp {
     private static final Logger logger = LoggerFactory.getLogger(AblApp.class);
-    private static final String AlbianStarter = "org.albianj.impl.kernel.core.AlbianTransmitterService";
+    private static final String AlbianStarter = "org.albianj.kernel.impl.core.AblStarter";
 
     private static String lookupLoggerConfigFile(String configPath){
         String[] filenames = {

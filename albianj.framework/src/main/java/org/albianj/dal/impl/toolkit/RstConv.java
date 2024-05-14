@@ -38,18 +38,26 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.dal.impl.toolkit;
 
 import org.albianj.common.utils.DateTimeUtil;
+import org.albianj.dal.impl.sqlpara.typeadapter.ITypeAdapter;
+import org.albianj.dal.impl.sqlpara.typeadapter.impl.LocalDateTimeTypeAdapter;
+import org.albianj.dal.impl.sqlpara.typeadapter.impl.LocalDateTypeAdapter;
+import org.albianj.dal.impl.sqlpara.typeadapter.impl.ZonedDateTimeTypeAdapter;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Types;
+import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 //import java.util.Date;
 
 public class RstConv {
 
+    private static  ITypeAdapter localDTTA = new LocalDateTimeTypeAdapter();
+    private static ITypeAdapter localDTA = new LocalDateTypeAdapter();
+    private static ITypeAdapter localZTTA = new ZonedDateTimeTypeAdapter();
     @SuppressWarnings("deprecation")
     public static Object toBoxValue(Class<?> cls, Object o) throws Exception {
         if (String.class.isAssignableFrom(cls)) {
@@ -83,6 +91,12 @@ public class RstConv {
             return Double.parseDouble(o.toString());
         } else if (Time.class.isAssignableFrom(cls)) {
             return Time.parse(o.toString());
+        }  else if(LocalDateTime.class.isAssignableFrom(cls)) {
+            return localDTTA.toBox(o);
+        } else if(LocalDate.class.isAssignableFrom(cls)) {
+            return localDTA.toBox(o);
+        }else if(ZonedDateTime.class.isAssignableFrom(cls)){
+            return localZTTA.toBox(o);
         } else if (Timestamp.class.isAssignableFrom(cls)) { //
             /*
                 timestamp must do before date
@@ -136,5 +150,27 @@ public class RstConv {
                 return v.toString();
             }
         }
+    }
+
+    public static Instant getDateTime(ResultSet rs,String colName){
+        try {
+             Time t =  rs.getTime(colName);
+             return t.toInstant();
+        }catch (Exception e1){
+
+        }
+        try {
+            Date t =  rs.getDate(colName);
+            return t.toInstant();
+        }catch (Exception e1){
+
+        }
+        try {
+            Timestamp t =  rs.getTimestamp(colName);
+            return t.toInstant();
+        }catch (Exception e1){
+
+        }
+        return null;
     }
 }

@@ -150,4 +150,9 @@ public class DMLCtx implements IDMLCtx {
             entitis.clear();
         }
     }
+
+    public boolean needUpd(){
+        return null != entitis && !entitis.isEmpty();
+    }
+
 }

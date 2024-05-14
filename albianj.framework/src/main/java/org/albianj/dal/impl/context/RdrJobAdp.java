@@ -41,10 +41,18 @@ import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.values.RefArg;
+//<<<<<<< HEAD:albianj.framework/src/main/java/org/albianj/dal/impl/context/RdrJobAdp.java
 import org.albianj.dal.api.db.SqlPara;
 import org.albianj.dal.api.object.*;
+import org.albianj.dal.impl.db.SqlField;
 import org.albianj.dal.impl.toolkit.SqlTypeConv;
 import org.albianj.dal.api.service.IAlbianStorageParserService;
+//=======
+//import org.albianj.api.dal.db.SqlPara;
+//import org.albianj.impl.dal.db.SqlField;
+//import org.albianj.impl.dal.toolkit.SqlTypeConv;
+//import org.albianj.api.dal.service.IAlbianStorageParserService;
+//>>>>>>> feature/02-really-throw-exception:albianj.framework/src/main/java/org/albianj/impl/dal/context/RdrJobAdp.java
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -105,19 +113,22 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
             if (!member.isSave())
                 continue;
             if (member.getSqlFieldName().equals(member.getPropertyName())) {
-                if (DBOpt.MySql == dbStyle) {
-                    sbCols.append("`").append(member.getSqlFieldName()).append("`").append(",");
-                } else {
-                    sbCols.append("[").append(member.getSqlFieldName()).append("]").append(",");
-                }
+                sbCols.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName())).append(",");
+//                if (DBOpt.MySql == dbStyle) {
+//                    sbCols.append("`").append(member.getSqlFieldName()).append("`").append(",");
+//                } else {
+//                    sbCols.append("[").append(member.getSqlFieldName()).append("]").append(",");
+//                }
             } else {
-                if (DBOpt.MySql == dbStyle) {
-                    sbCols.append("`").append(member.getSqlFieldName()).append("`").append(" AS ").append("`")
-                        .append(member.getPropertyName()).append("`").append(",");
-                } else {
-                    sbCols.append("[").append(member.getSqlFieldName()).append("]").append(" AS ").append("[")
-                        .append(member.getPropertyName()).append("]").append(",");
-                }
+                sbCols.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName())).append(" AS ")
+                        .append(SqlField.nonKeywords(dbStyle,member.getPropertyName())).append(",");
+//                if (DBOpt.MySql == dbStyle) {
+//                    sbCols.append("`").append(member.getSqlFieldName()).append("`").append(" AS ").append("`")
+//                        .append(member.getPropertyName()).append("`").append(",");
+//                } else {
+//                    sbCols.append("[").append(member.getSqlFieldName()).append("]").append(" AS ").append("[")
+//                        .append(member.getPropertyName()).append("]").append(",");
+//                }
             }
         }
         if (0 != sbCols.length())
@@ -127,11 +138,12 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
 
     protected StringBuilder makeSltCmdCount(int dbStyle) {
         StringBuilder sbCols = new StringBuilder();
-        if (DBOpt.MySql == dbStyle) {
-            sbCols.append(" COUNT(1) ").append(" AS ").append(" `COUNT` ");
-        } else {
-            sbCols.append(" COUNT(1) ").append(" AS ").append(" [COUNT] ");
-        }
+        sbCols.append(" COUNT(1) ").append("AS ").append(SqlField.nonKeywords(dbStyle,"COUNT")).append(" ");
+//        if (DBOpt.MySql == dbStyle) {
+//            sbCols.append(" COUNT(1) ").append(" AS ").append(" `COUNT` ");
+//        } else {
+//            sbCols.append(" COUNT(1) ").append(" AS ").append(" [COUNT] ");
+//        }
         return sbCols;
     }
 
@@ -145,12 +157,13 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
                     throw new AblThrowable(
                         "albian-object:" + objAttr.getType() + " member:" + orderby.getFieldName() + " is not found.");
                 }
+                sbOrderby.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
 
-                if (DBOpt.MySql == dbStyle) {
-                    sbOrderby.append("`").append(member.getSqlFieldName()).append("`");
-                } else {
-                    sbOrderby.append("[").append(member.getSqlFieldName()).append("]");
-                }
+//                if (DBOpt.MySql == dbStyle) {
+//                    sbOrderby.append("`").append(member.getSqlFieldName()).append("`");
+//                } else {
+//                    sbOrderby.append("[").append(member.getSqlFieldName()).append("]");
+//                }
                 sbOrderby.append(orderby.getSOpt().getWord()).append(",");
             }
         }
@@ -163,11 +176,12 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
         StringBuilder sbOrderby, int start, int step, String idxName) {
         StringBuilder sbCmdTxt = new StringBuilder();
         sbCmdTxt.append("SELECT ").append(sbCols).append(" FROM ");
-        if (DBOpt.MySql == sbStyle) {
-            sbCmdTxt.append("`").append(tableName).append("`");
-        } else {
-            sbCmdTxt.append("[").append(tableName).append("]");
-        }
+        sbCmdTxt.append(SqlField.nonKeywords(sbStyle,tableName));
+//        if (DBOpt.MySql == sbStyle) {
+//            sbCmdTxt.append("`").append(tableName).append("`");
+//        } else {
+//            sbCmdTxt.append("[").append(tableName).append("]");
+//        }
         if (DBOpt.MySql == sbStyle && !StringsUtil
             .isNullEmptyTrimmed(idxName)) { //按照木木的要求，增加强行执行索引行为，只为mysql使用
             sbCmdTxt.append(" FORCE INDEX (").append(idxName).append(") ");
@@ -175,7 +189,7 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
         if (!StringsUtil.isNullEmptyTrimmed(sbWhere.toString())) {
             sbCmdTxt.append(" WHERE ").append(sbWhere);
         }
-        if (0 != sbOrderby.length()) {
+        if (!sbOrderby.isEmpty()) {
             sbCmdTxt.append(" ORDER BY ").append(sbOrderby);
         }
         if (0 <= start && 0 < step) {
@@ -202,11 +216,12 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
                 }
 
                 sbWhrs.append(where.getBoolOpt().getWord()).append(where.isBeginSub() ? "(" : " ");
-                if (DBOpt.MySql == dbStyle) {
-                    sbWhrs.append("`").append(member.getSqlFieldName()).append("`");
-                } else {
-                    sbWhrs.append("[").append(member.getSqlFieldName()).append("]");
-                }
+//                if (DBOpt.MySql == dbStyle) {
+//                    sbWhrs.append("`").append(member.getSqlFieldName()).append("`");
+//                } else {
+//                    sbWhrs.append("[").append(member.getSqlFieldName()).append("]");
+//                }
+                sbWhrs.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
                 sbWhrs.append(where.getOperatorOpt().getWord()).append("#").append(
                     StringsUtil.isNullEmptyTrimmed(where.getAliasName()) ? member.getSqlFieldName() :
                         where.getAliasName())

@@ -186,6 +186,7 @@ public class LangUtil {
     public static boolean isNull(Object o) {
         return null == o;
     }
+
     public static boolean isNotNull(Object o) {
         return null != o;
     }

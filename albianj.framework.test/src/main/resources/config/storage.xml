@@ -23,6 +23,26 @@
 	</Storage>
 
 	<Storage>
+		<Name>CFUA</Name>
+		<DatabaseStyle>redshift</DatabaseStyle>
+		<Server>cf-hk-redshift-cluster-1.cnousjc8xqcs.ap-east-1.redshift.amazonaws.com</Server>
+		<Port>5439</Port>
+		<Database>cfua</Database>
+		<User>awsuser</User>
+		<Password>OH6zOT71rTAKlAFw</Password>
+		<Pooling>true</Pooling>
+		<MinPoolSize>10</MinPoolSize>
+		<MaxPoolSize>20</MaxPoolSize>
+		<Timeout>120</Timeout>
+		<Charset>utf8</Charset>
+		<Transactional>true</Transactional>
+		<AliveTime>300</AliveTime>
+		<PoolStyle>HIKARICP</PoolStyle>
+		<UrlParaments><![CDATA[autosave=always&enableFetchRingBuffer=false&reWriteBatchedInserts=true]]></UrlParaments>
+	</Storage>
+
+
+	<Storage>
 		<Name>MUserStorage1</Name>
 		<DatabaseStyle>MySql</DatabaseStyle>
 		<Server>127.0.0.1</Server>

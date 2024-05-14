@@ -26,7 +26,6 @@ public abstract class FreeDBP implements IDBP {
             return ds;
         }
 
-
         synchronized (_dataSource) {
             ds = _dataSource.get(key);
             if (ds == null) {

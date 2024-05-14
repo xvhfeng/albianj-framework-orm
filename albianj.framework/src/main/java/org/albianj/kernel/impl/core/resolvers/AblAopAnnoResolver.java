@@ -1,5 +1,6 @@
 package org.albianj.kernel.impl.core.resolvers;
 
+import org.albianj.common.mybp.Assert;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.kernel.api.anno.proxy.AblAopPointAnno;
@@ -8,7 +9,6 @@ import org.albianj.kernel.api.anno.proxy.AblWatchPkg;
 import org.albianj.kernel.api.anno.proxy.AblWatchThrow;
 import org.albianj.kernel.api.anno.serv.AblServAnno;
 import org.albianj.kernel.api.attr.IAblAnnoResolver;
-import org.albianj.common.mybp.Assert;
 import org.albianj.common.values.RefArg;
 import org.albianj.kernel.api.attr.AopAnnoAttr;
 import org.albianj.kernel.api.attr.ClassAttr;
@@ -37,7 +37,7 @@ public class AblAopAnnoResolver implements IAblAnnoResolver {
         AblAopPointAnno anno = clzz.getAnnotation(AblAopPointAnno.class);
         AopAnnoAttr aopAttr = new AopAnnoAttr();
 
-        AblWatchClassAnno[] watchClassAnno = anno.classes();
+        AblWatchClassAnno[] watchClassAnno = null;
         Set<Class<?>> onClasses = new HashSet<>();
         Set<Class<?>> offClasses = new HashSet<>();
         if(SetUtil.isNotEmpty(watchClassAnno)){
@@ -65,21 +65,21 @@ public class AblAopAnnoResolver implements IAblAnnoResolver {
         aopAttr.setClasses((Class<?>[]) onClasses.toArray());
         aopAttr.setExclusionClasses((Class<?>[]) offClasses.toArray());
 
-        AblWatchPkg[] watchPkgs = anno.pkgs();
+        AblWatchPkg[] watchPkgs = null;//anno.pkgs();
         Set<String> onPkgs = new HashSet<>();
         Set<String> offPkgs = new HashSet<>();
         if(SetUtil.isNotEmpty(watchPkgs)){
             Arrays.stream(watchPkgs).forEach(e ->{
-                String[] on = e.value();
+//                String[] on = e.value();
                 String[] watch = e.watch();
                 String[] off = e.exclusion();
-                if(SetUtil.isNotEmpty(on)){
-                    Arrays.stream(on).forEach(t ->{
-                        if(StringsUtil.isNotEmptyTrimmed(t)) {
-                            onPkgs.add(t);
-                        }
-                    });
-                }
+//                if(SetUtil.isNotEmpty(on)){
+//                    Arrays.stream(on).forEach(t ->{
+//                        if(StringsUtil.isNotEmptyTrimmed(t)) {
+//                            onPkgs.add(t);
+//                        }
+//                    });
+//                }
                 if(SetUtil.isNotEmpty(watch)){
                     Arrays.stream(watch).forEach(t ->{
                         if(StringsUtil.isNotEmptyTrimmed(t)) {
@@ -100,13 +100,13 @@ public class AblAopAnnoResolver implements IAblAnnoResolver {
         aopAttr.setExclusionPkgs((String[]) offPkgs.toArray());
 
 
-        aopAttr.setBeginWith(anno.beginWith());
-        aopAttr.setNotBeginWith(anno.notBeginWith());
-        aopAttr.setEndWith(anno.endWith());
-        aopAttr.setNotEndWith(anno.notEndWith());
-        aopAttr.setHas(anno.has());
-        aopAttr.setNotHas(anno.notHas());
-        aopAttr.setExpr(anno.expr());
+//        aopAttr.setBeginWith(anno.beginWith());
+//        aopAttr.setNotBeginWith(anno.notBeginWith());
+//        aopAttr.setEndWith(anno.endWith());
+//        aopAttr.setNotEndWith(anno.notEndWith());
+//        aopAttr.setHas(anno.has());
+//        aopAttr.setNotHas(anno.notHas());
+//        aopAttr.setExpr(anno.expr());
 
         AblWatchThrow[] watchThrows = anno.raises();
         Set<Class<? extends  Throwable>> onThrows = new HashSet<>();
@@ -133,8 +133,8 @@ public class AblAopAnnoResolver implements IAblAnnoResolver {
                 }
             });
         }
-        aopAttr.setRaises((Class<? extends  Throwable>[]) onThrows.toArray());
-        aopAttr.setExclusionRaises((Class<? extends  Throwable>[]) offThrows.toArray());
+//        aopAttr.setRaises((Class<? extends  Throwable>[]) onThrows.toArray());
+//        aopAttr.setExclusionRaises((Class<? extends  Throwable>[]) offThrows.toArray());
 
 //        aopAttr.setRaises(anno.raises());
 //        aopAttr.setExclusionRaises(anno.exclusionRaises());

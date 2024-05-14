@@ -45,6 +45,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringsUtil extends StringUtils {
+    // 自定义正则表达式
+    private static final Pattern HUMP_PATTERN = Pattern.compile("[A-Z0-9]");
+    private static final char UNDERLINE = '_';
+
     /*
      * Turns a hex encoded string into a byte array. It is specifically meant to
      * "reverse" the toHex(byte[]) method.
@@ -155,7 +159,6 @@ public class StringsUtil extends StringUtils {
 
     }
 
-
     public static String lowercasingFirstLetter(String txt) {
         char[] cs = txt.toCharArray();
         if ('A' <= cs[0] && 'Z' >= cs[0])
@@ -164,50 +167,46 @@ public class StringsUtil extends StringUtils {
     }
 
     /**
-     *  String result = MessageFormat.format("At {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",planet, new Date(), event);
+     * String result = MessageFormat.format("At {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",planet, new Date(), event);
+     *
      * @param format
      * @param paras
      * @return
      */
-    public static String fmt(String format, Object ...paras){
-        if(null== paras || 0 == paras.length){
+    public static String fmt(String format, Object... paras) {
+        if (null == paras || 0 == paras.length) {
             return format;
         }
-        return MessageFormat.format(format,paras);
+        return MessageFormat.format(format, paras);
     }
 
-    public static  String nonIdxFmt(String formatTemplate,Object...objects){
+    public static String nonIdxFmt(String formatTemplate, Object... objects) {
 
         String regex = "\\{\\}";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(formatTemplate);
         int i = 0;
         StringBuilder sb = new StringBuilder();
-        while (matcher.find()){
+        while (matcher.find()) {
             Object obj = objects[i];
             String replacement = java.util.regex.Matcher.quoteReplacement(String.valueOf(obj));
-            matcher.appendReplacement(sb,replacement);
+            matcher.appendReplacement(sb, replacement);
             i++;
         }
         matcher.appendTail(sb); // 必现补上这一句，否者后面的内容截断了
         return sb.toString();
     }
 
-
-    public static String join(Object... args){
-        if(null == args || 0 == args.length) {
+    public static String join(Object... args) {
+        if (null == args || 0 == args.length) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        for(Object arg : args){
+        for (Object arg : args) {
             sb.append(arg);
         }
         return sb.toString();
     }
-
-    // 自定义正则表达式
-    private static final Pattern HUMP_PATTERN = Pattern.compile("[A-Z0-9]");
-    private static final char UNDERLINE = '_';
 
     public static String camelToUnderline(String str) {
         Matcher matcher = HUMP_PATTERN.matcher(str);
@@ -218,6 +217,7 @@ public class StringsUtil extends StringUtils {
         matcher.appendTail(sb);
         return sb.toString();
     }
+
     public static String underlineToCamel(String param) {
         if (StringUtils.isBlank(param)) {
             return "";
@@ -245,10 +245,12 @@ public class StringsUtil extends StringUtils {
         return null != value && !value.isEmpty();
     }
 
-    /** @return ((null == s) || (0 == s.trim().length())); */
+    /**
+     * @return (( null = = s) || (0 == s.trim().length()));
+     */
     public static boolean isNullEmptyTrimmed(String s) {
-    return ((null == s) || (0 == s.length())
-    || (0 == s.trim().length()));
+        return ((null == s) || (0 == s.length())
+                || (0 == s.trim().length()));
     }
 
     public static boolean isNotEmptyTrimmed(String value) {
@@ -318,7 +320,9 @@ public class StringsUtil extends StringUtils {
         return strings;
     }
 
-    /** inefficient way to replace all instances of sought with replace */
+    /**
+     * inefficient way to replace all instances of sought with replace
+     */
     public static String replace(String in, String sought, String replace) {
         if (isEmpty(in) || isEmpty(sought)) {
             return in;
@@ -328,7 +332,7 @@ public class StringsUtil extends StringUtils {
         int start = 0;
         int loc;
         while (-1 != (loc = in.indexOf(sought, start))) {
-            result.append(in.substring(start, loc));
+            result.append(in, start, loc);
             if (!isEmpty(replace)) {
                 result.append(replace);
             }
@@ -338,7 +342,9 @@ public class StringsUtil extends StringUtils {
         return result.toString();
     }
 
-    /** render i right-justified with a given width less than about 40 */
+    /**
+     * render i right-justified with a given width less than about 40
+     */
     public static String toSizedString(long i, int width) {
         String result = "" + i;
         int size = result.length();
@@ -358,8 +364,8 @@ public class StringsUtil extends StringUtils {
      * Trim ending lines from a StringBuffer, clipping to maxLines and further removing any number of trailing lines accepted by
      * checker.
      *
-     * @param checker returns true if trailing line should be elided.
-     * @param stack StringBuffer with lines to elide
+     * @param checker  returns true if trailing line should be elided.
+     * @param stack    StringBuffer with lines to elide
      * @param maxLines int for maximum number of resulting lines
      */
     public static void elideEndingLines(StringChecker checker, StringBuffer stack, int maxLines) {
@@ -401,51 +407,51 @@ public class StringsUtil extends StringUtils {
     }
 
     /**
-    * Select from input String[] based on suffix-matching
-    * @param inputs String[] of input - null ignored
-    * @param suffixes String[] of suffix selectors - null ignored
-    * @param ignoreCase if true, ignore case
-    * @return String[] of input that end with any input
-    */
+     * Select from input String[] based on suffix-matching
+     *
+     * @param inputs     String[] of input - null ignored
+     * @param suffixes   String[] of suffix selectors - null ignored
+     * @param ignoreCase if true, ignore case
+     * @return String[] of input that end with any input
+     */
     public static String[] endsWith(String[] inputs, String[] suffixes,
-    boolean ignoreCase) {
-    if (SetUtil.isEmpty(inputs) || SetUtil.isEmpty(suffixes)) {
-    return new String[0];
-    }
-    if (ignoreCase) {
-    String[] temp = new String[suffixes.length];
-    for (int i = 0; i < temp.length; i++) {
-    String suff = suffixes[i];
-    temp[i] = (null == suff ? null : suff.toLowerCase());
-    }
-    suffixes = temp;
-    }
-    ArrayList result = new ArrayList();
-    for (int i = 0; i < inputs.length; i++) {
-    String input = inputs[i];
-    if (null == input) {
-    continue;
-    }
-    if (!ignoreCase) {
-    input = input.toLowerCase();
-    }
-    for (int j = 0; j < suffixes.length; j++) {
-    String suffix = suffixes[j];
-    if (null == suffix) {
-    continue;
-    }
-    if (input.endsWith(suffix)) {
-    result.add(input);
-    break;
-    }
-    }
-    }
-    return (String[]) result.toArray(new String[0]);
+                                    boolean ignoreCase) {
+        if (SetUtil.isEmpty(inputs) || SetUtil.isEmpty(suffixes)) {
+            return new String[0];
+        }
+        if (ignoreCase) {
+            String[] temp = new String[suffixes.length];
+            for (int i = 0; i < temp.length; i++) {
+                String suff = suffixes[i];
+                temp[i] = (null == suff ? null : suff.toLowerCase());
+            }
+            suffixes = temp;
+        }
+        ArrayList result = new ArrayList();
+        for (int i = 0; i < inputs.length; i++) {
+            String input = inputs[i];
+            if (null == input) {
+                continue;
+            }
+            if (!ignoreCase) {
+                input = input.toLowerCase();
+            }
+            for (int j = 0; j < suffixes.length; j++) {
+                String suffix = suffixes[j];
+                if (null == suffix) {
+                    continue;
+                }
+                if (input.endsWith(suffix)) {
+                    result.add(input);
+                    break;
+                }
+            }
+        }
+        return (String[]) result.toArray(new String[0]);
     }
 
     /**
      * copy non-null two-dimensional String[][]
-     *
      */
     public static String[][] copyStrings(String[][] in) {
         String[][] out = new String[in.length][];
@@ -457,8 +463,8 @@ public class StringsUtil extends StringUtils {
     }
 
     /**
-     * @param input ignored if null
-     * @param sink the StringBuffer to add input to - return false if null
+     * @param input     ignored if null
+     * @param sink      the StringBuffer to add input to - return false if null
      * @param delimiter the String to append to input when added - ignored if empty
      * @return true if input + delimiter added to sink
      */
@@ -473,51 +479,61 @@ public class StringsUtil extends StringUtils {
         return true;
     }
 
-    /** clip StringBuffer to maximum number of lines */
-    public  static String clipBuffer(StringBuffer buffer, int maxLines) {
-    if ((null == buffer) || (1 > buffer.length())) return "";
-    StringBuffer result = new StringBuffer();
-    int j = 0;
-    final int MAX = maxLines;
-    final int N = buffer.length();
-    for (int i = 0, srcBegin = 0; i < MAX; srcBegin += j) {
-    // todo: replace with String variant if/since getting char?
-    char[] chars = new char[128];
-    int srcEnd = srcBegin+chars.length;
-    if (srcEnd >= N) {
-    srcEnd = N-1;
-    }
-    if (srcBegin == srcEnd) break;
-    //log("srcBegin:" + srcBegin + ":srcEnd:" + srcEnd);
-    buffer.getChars(srcBegin, srcEnd, chars, 0);
-    for (j = 0; j < srcEnd-srcBegin/*chars.length*/; j++) {
-    char c = chars[j];
-    if (c == '\n') {
-    i++;
-    j++;
-    break;
-    }
-    }
-    try { result.append(chars, 0, j); }
-    catch (Throwable t) { }
-    }
-    return result.toString();
+    /**
+     * clip StringBuffer to maximum number of lines
+     */
+    public static String clipBuffer(StringBuffer buffer, int maxLines) {
+        if ((null == buffer) || (1 > buffer.length())) return "";
+        StringBuffer result = new StringBuffer();
+        int j = 0;
+        final int MAX = maxLines;
+        final int N = buffer.length();
+        for (int i = 0, srcBegin = 0; i < MAX; srcBegin += j) {
+            // todo: replace with String variant if/since getting char?
+            char[] chars = new char[128];
+            int srcEnd = srcBegin + chars.length;
+            if (srcEnd >= N) {
+                srcEnd = N - 1;
+            }
+            if (srcBegin == srcEnd) break;
+            //log("srcBegin:" + srcBegin + ":srcEnd:" + srcEnd);
+            buffer.getChars(srcBegin, srcEnd, chars, 0);
+            for (j = 0; j < srcEnd - srcBegin/*chars.length*/; j++) {
+                char c = chars[j];
+                if (c == '\n') {
+                    i++;
+                    j++;
+                    break;
+                }
+            }
+            try {
+                result.append(chars, 0, j);
+            } catch (Throwable t) {
+            }
+        }
+        return result.toString();
     }
 
-    /** check if input contains any packages to elide. */
+    /**
+     * check if input contains any packages to elide.
+     */
     public static class StringChecker {
-        public static StringChecker TEST_PACKAGES = new StringChecker(new String[] { "org.aspectj.testing",
+        public static StringChecker TEST_PACKAGES = new StringChecker(new String[]{"org.aspectj.testing",
                 "org.eclipse.jdt.internal.junit", "junit.framework.",
-        "org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner" });
+                "org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner"});
 
         String[] infixes;
 
-        /** @param infixes adopted */
+        /**
+         * @param infixes adopted
+         */
         StringChecker(String[] infixes) {
             this.infixes = infixes;
         }
 
-        /** @return true if input contains infixes */
+        /**
+         * @return true if input contains infixes
+         */
         public boolean acceptString(String input) {
             boolean result = false;
             if (!isEmpty(input)) {

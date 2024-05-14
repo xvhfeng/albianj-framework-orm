@@ -47,12 +47,27 @@ import org.albianj.dal.api.db.PCmd;
 import org.albianj.dal.api.db.SqlPara;
 import org.albianj.dal.api.object.StgAttr;
 import org.albianj.dal.impl.toolkit.SetConv;
+import org.albianj.dal.impl.sqlpara.DbValueFormatter;
 import org.albianj.kernel.api.logger.LogLevel;
 import org.albianj.dal.api.context.PStatement;
 import org.albianj.dal.api.db.IDBP;
 import org.albianj.dal.api.db.localize.IDBClientSection;
 import org.albianj.dal.api.object.RStgAttr;
 import org.albianj.dal.api.service.IAlbianStorageParserService;
+//import org.albianj.api.dal.context.WrtJob;
+//import org.albianj.api.dal.context.WrtTask;
+//import org.albianj.api.dal.db.PCmd;
+//import org.albianj.api.dal.db.SqlPara;
+//import org.albianj.api.dal.object.StgAttr;
+//import org.albianj.impl.dal.sqlpara.DbValueFormatter;
+//import org.albianj.impl.dal.toolkit.SetConv;
+//import org.albianj.api.kernel.logger.LogLevel;
+//import org.albianj.api.dal.context.PStatement;
+//import org.albianj.api.dal.db.IDBP;
+//import org.albianj.api.dal.db.localize.IDBClientSection;
+//import org.albianj.api.dal.object.RStgAttr;
+//import org.albianj.api.dal.service.IAlbianStorageParserService;
+//>>>>>>> feature/02-really-throw-exception:albianj.framework/src/main/java/org/albianj/impl/dal/db/PersistenceTransactionClusterScope.java
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -118,7 +133,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                                 if (null == para.getValue()) {
                                     psDb.setNull(i, para.getSqlType());
                                 } else {
-                                    psDb.setObject(i, para.getValue(),
+                                    psDb.setObject(i, DbValueFormatter.toSqlValue(para.getValue()),
                                             para.getSqlType());
                                 }
                             }
@@ -138,7 +153,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                                 if (null == para.getValue()) {
                                     prepareStatement.setNull(i, para.getSqlType());
                                 } else {
-                                    prepareStatement.setObject(i, para.getValue(),
+                                    prepareStatement.setObject(i, DbValueFormatter.toSqlValue(para.getValue()),
                                             para.getSqlType());
                                 }
                             }
@@ -153,87 +168,6 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 ServRouter.logAndThrowAgain(wrtJob.getId(),LogLevel.Error,e,
                         "make sql command for task is empty or null");
             }
-
-//            if(false) { // open batch submit from jdk
-//                try {
-//                    t.setBatchSubmit(true);
-//                    Connection conn = t.getConnection();
-//                    Statement batchStmt = conn.createStatement();
-//                    List<String> sqlTexts = new ArrayList<>();
-//                    String sqlText = null;
-//                    for (IPersistenceCommand cmd : cmds) {
-//                        StringBuilder sb = new StringBuilder();
-//                        sqlText = cmd.getCommandText();
-//                        Map<Integer, String> map = cmd.getParameterMapper();
-//                        if (Validate.isNullOrEmpty(map)) {
-//                            continue;
-//                        } else {
-//                            String regex = "\\?";
-//                            Pattern pattern = Pattern.compile(regex);
-//                            Matcher matcher = pattern.matcher(sqlText);
-//                            int i = 1;
-//                            while (matcher.find()){
-//                                String paraName = map.get(i);
-//                                ISqlParameter para = cmd.getParameters().get(paraName);
-//                                String sqlvalue = dbClientSection.toSqlValue(para.getSqlType(),para.getValue(), storage.getCharset());
-//                                String replacement = java.util.regex.Matcher.quoteReplacement(sqlvalue);
-//                                matcher.appendReplacement(sb,replacement);
-//                                i++;
-//                            }
-//                            sb.append(" )");//add last )
-////                            String regex = "\\?";
-////                            Pattern pattern = Pattern.compile(regex);
-////
-////                            Matcher matcher = pattern.matcher(sqlText);
-////                            for(int i = 0;i < matcher.groupCount(); i++)
-////                            {
-////                                String paraName = map.get(i);
-////                                ISqlParameter para = cmd.getParameters().get(paraName);
-////                                sqlText = matcher.replaceFirst(dbClientSection.toSqlValue(para.getSqlType(),para.getValue(), null));
-////                            }
-//
-////                            for (int i = 1; i <= map.size(); i++) {
-////                                String paraName = map.get(i);
-////                                ISqlParameter para = cmd.getParameters().get(paraName);
-////                                sqlText = sqlText.replaceFirst("\\?",dbClientSection.toSqlValue(para.getSqlType(),para.getValue(), null));
-////                            }
-//                        }
-//                        batchStmt.addBatch(sb.toString());
-//                        sqlTexts.add(sb.toString());
-//                    }
-//                    t.setBatchStmt(batchStmt);
-//                    t.setBatchSqlText(sqlTexts);
-//                } catch (SQLException e) {
-//                    throw new AlbianDataServiceException("make sql command for task is empty or null", e);
-//                }
-//            } else {
-//                List<Statement> statements = new Vector<Statement>();
-//                try {
-//                    for (IPersistenceCommand cmd : cmds) {
-//                        PreparedStatement prepareStatement = t
-//                                .getConnection().prepareStatement(cmd.getCommandText());
-//                        Map<Integer, String> map = cmd.getParameterMapper();
-//                        if (Validate.isNullOrEmpty(map)) {
-//                            continue;
-//                        } else {
-//                            for (int i = 1; i <= map.size(); i++) {
-//                                String paraName = map.get(i);
-//                                ISqlParameter para = cmd.getParameters().get(paraName);
-//                                if (null == para.getValue()) {
-//                                    prepareStatement.setNull(i, para.getSqlType());
-//                                } else {
-//                                    prepareStatement.setObject(i, para.getValue(),
-//                                            para.getSqlType());
-//                                }
-//                            }
-//                        }
-//                        statements.add(prepareStatement);
-//                    }
-//                } catch (SQLException e) {
-//                    throw new AlbianDataServiceException("make sql command for task is empty or null", e);
-//                }
-//                t.setStatements(statements);
-//            }
         }
     }
 
@@ -244,17 +178,20 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             throw new AblThrowable("The task is null or empty.");
         }
 
+        int updCnt = 0;
+        int preCnt = 0;
 
         for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
             WrtTask t = task.getValue();
             wrtJob.setCurrentStorage(task.getKey());
 
             List<PCmd> cmds = t.getCommands();
-            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                     "then execute sql command but may be use batchupdate when commands(size >= 2) are the same.");
+            preCnt += cmds.size();
             for (int i = 0; i < cmds.size(); i++) {
                 PCmd cmd = cmds.get(i);
-                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
+                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
                         "executeHandler storage:{},sqltext:{},parars:{}.",
                         task.getKey(), cmd.getCommandText(), SetConv.toString(cmd.getParameters()));
             }
@@ -265,8 +202,9 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 try {
                     if (ps.isBatch()) {
                         int[] ret = ps.getStatement().executeBatch();
+                        updCnt += ret.length;
                     } else {
-                        ((PreparedStatement) ps.getStatement()).executeUpdate();
+                        updCnt += ((PreparedStatement) ps.getStatement()).executeUpdate();
                     }
                 }  catch (SQLException e) {
                 RStgAttr rsa = t.getStorage();
@@ -275,44 +213,8 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                             rsa.getStgAttr().getName() ,rsa.getDatabase() );
                 }
             }
-
-
-
-
-//
-//            if(t.isBatchSubmit()) {
-//                List<String> sqlTexts = t.getBatchSqlText();
-//                Statement batchStmt = t.getBatchStmt();
-//                for(String sqlText : sqlTexts){
-//                    logger.info("executeHandler storage:{},sqltext:{}.", task.getKey(), sqlText);
-//                }
-//                try {
-//                    int[] rtn = batchStmt.executeBatch();
-//                    batchStmt.clearBatch();
-//                } catch (SQLException e) {
-//                    IRunningStorageAttribute rsa = t.getStorage();
-//                    throw new AlbianDataServiceException(
-//                            "execute to storage:" + rsa.getStorageAttribute().getName() + " dtabase:" + rsa.getDatabase()
-//                                    + " is fail.", e);
-//                }
-//            } else {
-//                List<Statement> statements = t.getStatements();
-//                List<IPersistenceCommand> cmds = t.getCommands();
-//                for (int i = 0; i < statements.size(); i++) {
-//                    try {
-//                        IPersistenceCommand cmd = cmds.get(i);
-//                        logger.info("executeHandler storage:{},sqltext:{},parars:{}.", task.getKey(), cmd.getCommandText(),
-//                                ListConvert.toString(cmd.getParameters()));
-//                        ((PreparedStatement)statements.get(i)).executeUpdate();
-//                    } catch (SQLException e) {
-//                        IRunningStorageAttribute rsa = t.getStorage();
-//                        throw new AlbianDataServiceException(
-//                                "execute to storage:" + rsa.getStorageAttribute().getName() + " dtabase:" + rsa.getDatabase()
-//                                        + " is fail.", e);
-//                    }
-//                }
-//            }
         }
+        ServRouter.log(wrtJob.getId(),LogLevel.Info,"want execute size:{},success execute size:{}",preCnt,updCnt);
     }
 
     protected void commit(WrtJob wrtJob)  {
@@ -510,5 +412,4 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             }
         }
     }
-
 }

@@ -47,12 +47,4 @@ public abstract class FreeAlbianParserService extends FreeAlbianService implemen
         init();
         super.loading();
     }
-
-//    protected String decideConfigFile(String filename){
-//        if(KernelSetting.getAlbianConfigFilePath().endsWith(File.separator)) {
-//            return KernelSetting.getAlbianConfigFilePath() + filename;
-//        } else {
-//            return   KernelSetting.getAlbianConfigFilePath() + File.separator + filename;
-//        }
-//    }
 }

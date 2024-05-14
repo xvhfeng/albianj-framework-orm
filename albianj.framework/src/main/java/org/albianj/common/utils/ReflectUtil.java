@@ -57,6 +57,8 @@ import java.util.*;
 
 public class ReflectUtil extends ReflectionUtils {
 
+    public static final Class<?>[] MAIN_PARM_TYPES = new Class[]{String[].class};
+
     public static BeanInfo getBeanInfo(ClassLoader cl, String className)
             throws ClassNotFoundException, IntrospectionException {
         Class cls = cl.loadClass(className);
@@ -77,7 +79,6 @@ public class ReflectUtil extends ReflectionUtils {
         PropertyDescriptor pd = new PropertyDescriptor(pName, clzz);
         return pd;
     }
-
 
     public static String getClassSimpleName(ClassLoader cl, String className)
             throws ClassNotFoundException {
@@ -259,7 +260,7 @@ public class ReflectUtil extends ReflectionUtils {
         } else if (genericClass instanceof GenericArrayType) { // 处理数组泛型
             return (Class) ((GenericArrayType) genericClass).getGenericComponentType();
         } else if (genericClass instanceof TypeVariable) { // 处理泛型擦拭对象
-            return (Class) getClass(((TypeVariable) genericClass).getBounds()[0], 0);
+            return getClass(((TypeVariable) genericClass).getBounds()[0], 0);
         } else {
             return (Class) genericClass;
         }
@@ -269,12 +270,11 @@ public class ReflectUtil extends ReflectionUtils {
         if (type instanceof ParameterizedType) { // 处理泛型类型
             return getGenericClass((ParameterizedType) type, i);
         } else if (type instanceof TypeVariable) {
-            return (Class) getClass(((TypeVariable) type).getBounds()[0], 0); // 处理泛型擦拭对象
+            return getClass(((TypeVariable) type).getBounds()[0], 0); // 处理泛型擦拭对象
         } else {// class本身也是type，强制转型
             return (Class) type;
         }
     }
-
 
     public static Object toRealObject(String type, String o) throws ParseException {
 
@@ -284,34 +284,34 @@ public class ReflectUtil extends ReflectionUtils {
         } else if (
                 "java.math.bigdecimal".equalsIgnoreCase(type)
                         || "bigdecimal".equalsIgnoreCase(type)) {
-            BigDecimal bd = new BigDecimal(o.toString());
+            BigDecimal bd = new BigDecimal(o);
             return bd;
         } else if ("java.lang.boolean".equalsIgnoreCase(type)
                 || "boolean".equalsIgnoreCase(type)) {
-            return Boolean.parseBoolean(o.toString());
+            return Boolean.parseBoolean(o);
         } else if ("java.lang.integer".equalsIgnoreCase(type)
                 || "int".equalsIgnoreCase(type)) {
-            return Integer.parseInt(o.toString());
+            return Integer.parseInt(o);
         } else if ("java.lang.long".equalsIgnoreCase(type)
                 || "long".equalsIgnoreCase(type)) {
-            return Long.parseLong(o.toString());
+            return Long.parseLong(o);
         } else if (
                 "java.math.biginteger".equalsIgnoreCase(type)
                         || "biginteger".equalsIgnoreCase(type)) {
-            BigInteger bi = new BigInteger(o.toString());
+            BigInteger bi = new BigInteger(o);
             return bi;
         } else if ("java.lang.float".equalsIgnoreCase(type)
                 || "float".equalsIgnoreCase(type)) {
-            return Float.parseFloat(o.toString());
+            return Float.parseFloat(o);
         } else if ("java.lang.double".equalsIgnoreCase(type)
                 || "double".equalsIgnoreCase(type)) {
-            return Double.parseDouble(o.toString());
+            return Double.parseDouble(o);
         } else if ("java.sql.time".equalsIgnoreCase(type)) {
             Date d = null;
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
                         DateTimeUtil.CHINESE_SIMPLE_FORMAT);
-                d = dateFormat.parse(o.toString());
+                d = dateFormat.parse(o);
             } catch (Exception e) {
                 d = null;
             }
@@ -319,19 +319,18 @@ public class ReflectUtil extends ReflectionUtils {
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat(
                             DateTimeUtil.CHINESE_FORMAT);
-                    d = dateFormat.parse(o.toString());
+                    d = dateFormat.parse(o);
                 } catch (Exception e) {
                     throw e;
                 }
             }
-            ;
             return new java.sql.Date(d.getTime());
         } else if ("java.util.date".equalsIgnoreCase(type)) {
             Date d = null;
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
                         DateTimeUtil.CHINESE_SIMPLE_FORMAT);
-                d = dateFormat.parse(o.toString());
+                d = dateFormat.parse(o);
             } catch (Exception e) {
                 d = null;
             }
@@ -339,7 +338,7 @@ public class ReflectUtil extends ReflectionUtils {
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat(
                             DateTimeUtil.CHINESE_FORMAT);
-                    d = dateFormat.parse(o.toString());
+                    d = dateFormat.parse(o);
                 } catch (Exception e) {
                     throw e;
                 }
@@ -352,20 +351,16 @@ public class ReflectUtil extends ReflectionUtils {
         }
     }
 
-
-    public static final Class<?>[] MAIN_PARM_TYPES = new Class[] {String[].class};
-
-
     public static Object invokestaticN(Class<?> class_, String name, Object[] args) {
         return invokeN(class_, name, null, args);
     }
 
     public static Object invoke(Class<?> class_, Object target, String name, Object arg1, Object arg2) {
-        return invokeN(class_, name, target, new Object[] { arg1, arg2 });
+        return invokeN(class_, name, target, new Object[]{arg1, arg2});
     }
 
     public static Object invoke(Class<?> class_, Object target, String name, Object arg1, Object arg2, Object arg3) {
-        return invokeN(class_, name, target, new Object[] { arg1, arg2, arg3 });
+        return invokeN(class_, name, target, new Object[]{arg1, arg2, arg3});
     }
 
 
@@ -377,8 +372,8 @@ public class ReflectUtil extends ReflectionUtils {
             throw new RuntimeException(e.toString());
         } catch (InvocationTargetException e) {
             Throwable t = e.getTargetException();
-            if (t instanceof Error) throw (Error)t;
-            if (t instanceof RuntimeException) throw (RuntimeException)t;
+            if (t instanceof Error) throw (Error) t;
+            if (t instanceof RuntimeException) throw (RuntimeException) t;
             t.printStackTrace();
             throw new RuntimeException(t.toString());
         }
@@ -399,8 +394,6 @@ public class ReflectUtil extends ReflectionUtils {
         // ignore methods with overloading other than lengths
         return meth.getParameterTypes().length == args.length;
     }
-
-
 
 
     public static Object getStaticField(Class<?> class_, String name) {
@@ -487,16 +480,18 @@ public class ReflectUtil extends ReflectionUtils {
             throw new ClassNotFoundException(s);
         }
         Method main = targetClass.getMethod("main", MAIN_PARM_TYPES);
-        main.invoke(null, new Object[] { args });
+        main.invoke(null, new Object[]{args});
     }
 
     public static void runMainInSameVM(Class<?> mainClass, String[] args) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         ServRouter.throwIaxIfNull(mainClass, "main class");
         Method main = mainClass.getMethod("main", MAIN_PARM_TYPES);
-        main.invoke(null, new Object[] { args });
+        main.invoke(null, new Object[]{args});
     }
 
-    /** @return URL if the input is valid as such */
+    /**
+     * @return URL if the input is valid as such
+     */
     private static URL makeURL(String s) {
         try {
             return new URL(s);
@@ -507,20 +502,19 @@ public class ReflectUtil extends ReflectionUtils {
 
     /**
      * get all fields include superclass‘s fields
+     *
      * @param clzz
      * @return
      */
-    public static List<Field> getAllFields(Class<?> clzz){
+    public static List<Field> getAllFields(Class<?> clzz) {
         Class tempClass = clzz;
-        List<Field> fields = new ArrayList<>() ;
-        while (tempClass !=null && tempClass != Object.class) {//当父类为null的时候说明到达了最上层的父类(Object类).
-            fields.addAll(Arrays.asList(tempClass .getDeclaredFields()));
+        List<Field> fields = new ArrayList<>();
+        while (tempClass != null && tempClass != Object.class) {//当父类为null的时候说明到达了最上层的父类(Object类).
+            fields.addAll(Arrays.asList(tempClass.getDeclaredFields()));
             tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
         }
         return fields;
     }
-
-
 
 
     public static Map<String, Method> getAllMethods(Class<?> cls) {
@@ -620,12 +614,11 @@ public class ReflectUtil extends ReflectionUtils {
         return methodSignature;
     }
 
-    public static String getClassPackageName( Class<?> clazz )
-    {
+    public static String getClassPackageName(Class<?> clazz) {
         String className = clazz.getName();
-        int index = className.lastIndexOf( '.' );
+        int index = className.lastIndexOf('.');
 
-        return ( index < 0 ) ? null : className.substring( 0, index );
+        return (index < 0) ? null : className.substring(0, index);
     }
 
     // 获取类型的描述符
@@ -657,10 +650,11 @@ public class ReflectUtil extends ReflectionUtils {
 
     /**
      * 判断当前class是一个接口或者是类（包括抽象类）
+     *
      * @param clazz
      * @return
      */
-    public static boolean isClassOrInterface(Class<?> clazz){
+    public static boolean isClassOrInterface(Class<?> clazz) {
         return clazz != null && !clazz.isEnum() && !clazz.isArray() && !clazz.isPrimitive();
     }
 

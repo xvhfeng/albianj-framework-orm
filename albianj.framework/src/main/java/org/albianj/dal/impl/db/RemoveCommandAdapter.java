@@ -55,12 +55,13 @@ public class RemoveCommandAdapter implements IDMLCmd {
                                                          AblEntityAttr objAttr, Map<String, Object> sqlParaVals,
                                                          StringBuilder sqlText)  {
         StringBuilder where = new StringBuilder();
-        sqlText.append("DELETE FROM ");// .append(routing.getTableName());
-        if (DBOpt.MySql == dbStyle) {
-            sqlText.append("`").append(tableName).append("`");
-        } else {
-            sqlText.append("[").append(tableName).append("]");
-        }
+        sqlText.append("DELETE FROM ").append(SqlField.nonKeywords(dbStyle,tableName));// .append(routing.getTableName());
+//        if (DBOpt.MySql == dbStyle) {
+//            sqlText.append("`").append(tableName).append("`");
+//        } else {
+//            sqlText.append("[").append(tableName).append("]");
+//        }
+//        sqlText.append(SqlField.nonKeywords(dbStyle,tableName));
 
         Map<String, AblEntityFieldAttr> mapMemberAttributes = objAttr.getFields();
         Map<String, SqlPara> sqlParas = new HashMap<String, SqlPara>();
@@ -79,16 +80,16 @@ public class RemoveCommandAdapter implements IDMLCmd {
                     para);
 
             where.append(" AND ");
-            if (DBOpt.MySql == dbStyle) {
-                where.append("`").append(member.getSqlFieldName()).append("`");
-            } else {
-                where.append("[").append(member.getSqlFieldName()).append("]");
-            }
-            where.append(" = ").append("#").append(member.getSqlFieldName())
+//            if (DBOpt.MySql == dbStyle) {
+//                where.append("`").append(member.getSqlFieldName()).append("`");
+//            } else {
+//                where.append("[").append(member.getSqlFieldName()).append("]");
+//            }
+            where.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName())).append(" = ").append("#").append(member.getSqlFieldName())
                     .append("# ");
         }
 
-        if (0 == where.length()) {
+        if (where.isEmpty()) {
             throw new AblThrowable(
                 "the albianj object can not be delete .there is not PrimaryKey in the object.");
         }

@@ -1,5 +1,7 @@
 package Albian.Test;
 
+import Albian.Test.Model.Impl.Event;
+import Albian.Test.Services.IEventServ;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.ServRouter;
@@ -9,18 +11,44 @@ import org.albianj.AblServRouter;
 import org.albianj.loader.IAblCmdLineApp;
 import org.albianj.kernel.api.anno.serv.AblScanAnno;
 
-@AblScanAnno(value = {"dsdss","dsdscsds"})
+//<<<<<<< HEAD
+//@AblScanAnno(value = {"dsdss","dsdscsds"})
+//public class DoTest implements IAblCmdLineApp {
+//    public static void main(String[] argv) {
+//        try {
+//
+//            AblApp.run(DoTest.class,argv[0]);
+//            test1();
+//=======
+import java.util.List;
+
+//@AblScanRant(value = {"dsdss","dsdscsds"})
 public class DoTest implements IAblCmdLineApp {
     public static void main(String[] argv) {
         try {
 
             AblApp.run(DoTest.class,argv[0]);
-            test1();
+            for(int i = 0; i < 10000; i++ ) {
+
+                testRedShift();
+            }
+        //    test1();
+//>>>>>>> feature/02-really-throw-exception
             return;
 
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private static void testRedShift(){
+
+        IEventServ eServ = ServRouter.getService("",IEventServ.class);
+        eServ.insert();
+
+        List<Event> events = eServ.load();
+        AblServRouter.log("Test redshift",LogLevel.Info,"load action;{}",events.size());
+      //
     }
 
     private static void test1()  {
@@ -57,6 +85,7 @@ public class DoTest implements IAblCmdLineApp {
     @Override
     public void run(String... paras) {
         System.out.println("run test");
-        test1();
+        testRedShift();
+//        test1();
     }
 }

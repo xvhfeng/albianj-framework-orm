@@ -37,6 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.dal.impl.context;
 
+//<<<<<<< HEAD:albianj.framework/src/main/java/org/albianj/dal/impl/context/FreeWrtJobAdp.java
 import org.albianj.dal.impl.db.CreateCommandAdapter;
 import org.albianj.dal.impl.db.ModifyCommandAdapter;
 import org.albianj.dal.impl.db.RemoveCommandAdapter;
@@ -44,18 +45,28 @@ import org.albianj.dal.impl.db.IDMLCmd;
 import org.albianj.dal.api.context.WrtJob;
 import org.albianj.dal.api.context.dactx.AblObjWarp;
 import org.albianj.dal.api.object.IAblObj;
+//=======
+//import org.albianj.api.dal.context.WrtJob;
+//import org.albianj.api.dal.context.dactx.AblObjWarp;
+//import org.albianj.api.dal.object.IAblObj;
+//import org.albianj.impl.dal.db.CreateCommandAdapter;
+//import org.albianj.impl.dal.db.IDMLCmd;
+//import org.albianj.impl.dal.db.ModifyCommandAdapter;
+//import org.albianj.impl.dal.db.RemoveCommandAdapter;
+//import org.albianj.impl.dal.db.localize.mysql.UpsertMysqlCommandAdapter;
+//>>>>>>> feature/02-really-throw-exception:albianj.framework/src/main/java/org/albianj/impl/dal/context/FreeWrtJobAdp.java
 
 import java.util.List;
 
 public abstract class FreeWrtJobAdp implements IWrtJobAdp {
-    public WrtJob buildCreation(String sessionId, IAblObj object)  {
+    public WrtJob buildCreation(String sessionId, IAblObj object) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd cca = new CreateCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, cca);
         return job;
     }
 
-    public WrtJob buildCreation(String sessionId, List<? extends IAblObj> objects)  {
+    public WrtJob buildCreation(String sessionId, List<? extends IAblObj> objects) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd cca = new CreateCommandAdapter();
         for (IAblObj object : objects) {
@@ -64,14 +75,14 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
         return job;
     }
 
-    public WrtJob buildModification(String sessionId, IAblObj object)  {
+    public WrtJob buildModification(String sessionId, IAblObj object) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd mca = new ModifyCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, mca);
         return job;
     }
 
-    public WrtJob buildModification(String sessionId, List<? extends IAblObj> objects)  {
+    public WrtJob buildModification(String sessionId, List<? extends IAblObj> objects) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd mca = new ModifyCommandAdapter();
         for (IAblObj object : objects) {
@@ -81,7 +92,7 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
         return job;
     }
 
-    public WrtJob buildRemoved(String sessionId, IAblObj object)  {
+    public WrtJob buildRemoved(String sessionId, IAblObj object) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd rca = new RemoveCommandAdapter();
         buildWriterJob(sessionId, job, object, null, null, rca);
@@ -89,7 +100,7 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
         return job;
     }
 
-    public WrtJob buildRemoved(String sessionId, List<? extends IAblObj> objects)  {
+    public WrtJob buildRemoved(String sessionId, List<? extends IAblObj> objects) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd rca = new RemoveCommandAdapter();
         for (IAblObj object : objects) {
@@ -98,7 +109,7 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
         return job;
     }
 
-    public WrtJob buildSaving(String sessionId, IAblObj object)  {
+    public WrtJob buildSaving(String sessionId, IAblObj object) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd iuc;
         if (object.getIsAlbianNew()) {
@@ -111,7 +122,7 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
         return job;
     }
 
-    public WrtJob buildSaving(String sessionId, List<? extends IAblObj> objects)  {
+    public WrtJob buildSaving(String sessionId, List<? extends IAblObj> objects) {
         WrtJob job = new WrtJob(sessionId);
         IDMLCmd cca = new CreateCommandAdapter();
         IDMLCmd mca = new ModifyCommandAdapter();
@@ -125,9 +136,8 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
         return job;
     }
 
-    public WrtJob buildWriterJob(String sessionId, List<AblObjWarp> entities, boolean rollbackOnError)
-            {
-                WrtJob job = new WrtJob(sessionId);
+    public WrtJob buildWriterJob(String sessionId, List<AblObjWarp> entities, boolean rollbackOnError) {
+        WrtJob job = new WrtJob(sessionId);
         job.setRollbackOnError(rollbackOnError);
         IDMLCmd crtCmd = new CreateCommandAdapter();
         IDMLCmd mdfCmd = new ModifyCommandAdapter();
@@ -144,6 +154,11 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
                 }
                 case Delete: {
                     buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), dltCmd);
+                    break;
+                }
+                case Upsert: {
+                    //this postion, we donot kown the db style,so we cannot new locale upsert cmd
+                    buildWriterJob(sessionId, job, entity.getEntry(), entity.getStorageAliasName(), entity.getTableAliasName(), null);
                     break;
                 }
                 case Save:
@@ -163,7 +178,7 @@ public abstract class FreeWrtJobAdp implements IWrtJobAdp {
 
     protected abstract void buildWriterJob(String sessionId, WrtJob job, IAblObj entity,
                                            String storageAlias, String tableAlias,
-                                           IDMLCmd cmd) ;
+                                           IDMLCmd cmd);
 
 
 }

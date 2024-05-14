@@ -5,7 +5,7 @@
     <parent>
         <artifactId>albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>10010-SNAPSHOT</version>
+        <version>10013-SNAPSHOT</version>
     </parent>
     <build>
         <plugins>
@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework</artifactId>
-    <version>10010-SNAPSHOT</version>
+    <version>10013-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,6 +69,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.amazon.redshift</groupId>
+            <artifactId>redshift-jdbc42</artifactId>
+            <version>2.1.0.27</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>

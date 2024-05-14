@@ -48,9 +48,12 @@ import org.albianj.dal.impl.db.localize.MysqlClientSection;
 import org.albianj.dal.impl.db.localize.SqlServerClientSection;
 import org.albianj.dal.api.context.WrtJob;
 import org.albianj.dal.api.context.WrtTask;
+import org.albianj.dal.impl.db.localize.mysql.UpsertMysqlCommandAdapter;
+import org.albianj.dal.impl.db.localize.pgsql.UpsertPgSqlCommandAdapter;
 import org.albianj.kernel.api.logger.LogLevel;
 import org.albianj.dal.api.service.AlbianEntityMetadata;
 import org.albianj.dal.api.service.IAlbianStorageParserService;
+
 
 import java.util.*;
 
@@ -230,6 +233,10 @@ public class WrtJobAdp extends FreeWrtJobAdp {
                     ? objAttr.getImplClzz().getSimpleName()
                     : tableAlias;
             StgAttr stgAttr = asps.getStorageAttribute(storageAlias);
+            if(null == cmd) {
+                cmd = stgAttr.getDatabaseStyle() == DBOpt.RedShift || stgAttr.getDatabaseStyle() == DBOpt.PgSql ?
+                        new UpsertPgSqlCommandAdapter() : new UpsertMysqlCommandAdapter();
+            }
             PCmd pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
                     tableName, entity, objAttr, sqlParaVals, job.isRollbackOnError());
             addWrtTsk(job, stgAttr, stgAttr.getDatabase(), pstCmd);
@@ -244,13 +251,17 @@ public class WrtJobAdp extends FreeWrtJobAdp {
                 StgAttr stgAttr = asps.getStorageAttribute(storageName);
                 String database = parserRoutingDatabase(job.getId(), entity, stgAttr,
                         drouter, objAttr);
-
                 String tableName = drouter.mappingWriterTable(drtAttr, entity);
+
+                if(null == cmd) {
+                    cmd = stgAttr.getDatabaseStyle() == DBOpt.RedShift || stgAttr.getDatabaseStyle() == DBOpt.PgSql ?
+                            new UpsertPgSqlCommandAdapter() : new UpsertMysqlCommandAdapter();
+                }
 
                 PCmd pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
                         tableName, entity, objAttr, sqlParaVals, job.isRollbackOnError());
-                if (null == cmd)
-                    continue;// no the upload operator
+//                if (null == cmd)
+//                    continue;// no the upload operator
 
                 addWrtTsk(job, stgAttr, database, pstCmd);
             }

@@ -188,6 +188,6 @@ public class AblScanner {
         if (null == annoClzz) {
             return;
         }
-        resolver.parse(cls, annoClzz);
+        resolver.parse(cls);
     }
 }

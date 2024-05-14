@@ -115,7 +115,8 @@ public class AblKStarter implements IAblStarter {
     }
 
     private ClassAttr parserClassAttr(Class<?> clzz, Class<? extends Annotation> belongAnno) {
-        IAblAnnoResolver p = regAnnos.get(belongAnno.getName());
-       p.parse(clzz);
+//        IAblAnnoResolver p = regAnnos.get(belongAnno.getName());
+//       p.parse(clzz);
+        return null;
     }
 }

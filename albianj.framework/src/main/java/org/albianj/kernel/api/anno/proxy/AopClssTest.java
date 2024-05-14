@@ -6,8 +6,8 @@ public class AopClssTest {
 
     @AblAopPointAnno(
             when = AopFlag.Brf | AopFlag.Aft,
-            classes = @AblWatchClassAnno(watch ={ AopClssTest.class},exclusion = AopClssTest.class),
-            pkgs = @AblWatchPkg(watch = "",exclusion = ""),
+//            classes = @AblWatchClassAnno(watch ={ AopClssTest.class},exclusion = AopClssTest.class),
+//            pkgs = @AblWatchPkg(watch = "",exclusion = ""),
             raises = @AblWatchThrow(watch = Throwable.class,exclusion = Exception.class),
             beginWith = "get",
             expr = "/*get$/",

@@ -28,7 +28,7 @@ import java.util.Map;
  * @author miemie
  * @since 2018-07-24
  */
-final class Assert {
+public final class Assert {
 
     /**
      * 断言这个 boolean 为 true

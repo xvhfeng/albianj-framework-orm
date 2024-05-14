@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-@interface KservAnno {
+public @interface KservAnno {
 
     @AblAliasForAnno(attribute = "id")
     String value() default "";

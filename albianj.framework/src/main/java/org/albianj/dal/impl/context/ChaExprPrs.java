@@ -42,11 +42,11 @@ import org.albianj.dal.api.object.*;
 import org.albianj.dal.api.object.filter.ExprOpt;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.dal.api.db.SqlPara;
+import org.albianj.dal.impl.db.SqlField;
 import org.albianj.dal.impl.toolkit.SqlTypeConv;
 import org.albianj.dal.api.object.filter.IChaExpr;
 import org.albianj.dal.api.object.filter.IFltExpr;
 import org.albianj.dal.api.service.AlbianEntityMetadata;
-
 import java.util.List;
 import java.util.Map;
 
@@ -137,11 +137,12 @@ public class ChaExprPrs {
                     sb.append(ce.getBoolOpt().getWord());
                 }
 
-                if (DBOpt.MySql == storage.getDatabaseStyle()) {
-                    sb.append(" `").append(fieldAttr.getSqlFieldName()).append("`");
-                } else {
-                    sb.append(" [").append(fieldAttr.getSqlFieldName()).append("]");
-                }
+//                if (DBOpt.MySql == storage.getDatabaseStyle()) {
+//                    sb.append(" `").append(fieldAttr.getSqlFieldName()).append("`");
+//                } else {
+//                    sb.append(" [").append(fieldAttr.getSqlFieldName()).append("]");
+//                }
+                sb.append(SqlField.nonKeywords(storage.getDatabaseStyle(),fieldAttr.getSqlFieldName()));
 
                 if(fe.getOperatorOpt() == OOpt.in) {
                    Object[] inParas = (Object[]) fe.getValue();

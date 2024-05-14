@@ -3,20 +3,28 @@ package org.albianj.dal.impl.storage;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.albianj.ServRouter;
+import org.albianj.dal.api.object.DBOpt;
+import org.albianj.dal.api.object.RStgAttr;
 import org.albianj.dal.api.object.StgAttr;
 import org.albianj.kernel.api.logger.LogLevel;
-import org.albianj.dal.api.object.RStgAttr;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by xuhaifeng on 17/7/27.
  */
 public class HCPWapper extends FreeDBP {
 
-    public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
+    public final static Map<Integer,String> DriverClassNames = new HashMap<>(){{
+        put(DBOpt.MySql,"com.mysql.cj.jdbc.Driver");
+        put(DBOpt.RedShift,"com.amazon.redshift.jdbc.Driver");
+    }};
+
+//    public final static String DRIVER_CLASSNAME = "com.mysql.cj.jdbc.Driver";
 
     public HCPWapper() {
         ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,
@@ -56,7 +64,8 @@ public class HCPWapper extends FreeDBP {
             StgAttr stgAttr = rsa.getStgAttr();
             String url = FreeAlbianStorageParserService
                     .generateConnectionUrl(rsa);
-            config.setDriverClassName(DRIVER_CLASSNAME);
+            String driverClassName = DriverClassNames.get(stgAttr.getDatabaseStyle());
+            config.setDriverClassName(driverClassName);
             config.setJdbcUrl(url);
             config.setUsername(stgAttr.getUser());
             config.setPassword(stgAttr.getPassword());
