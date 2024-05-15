@@ -17,7 +17,7 @@ public @interface AlbianServiceRant {
     /*
      * service id,it must not be null or empty.
      */
-    String Id();
+    String Id() default "";
 
     /*
      * if value is true load this service to albian kernel,
@@ -30,7 +30,7 @@ public @interface AlbianServiceRant {
      * string format for service's interface
      * this interface must be IAlbianService's child class
      */
-    String sInterface() default IAlbianService.FullName;
+//    String sInterface() default IAlbianService.FullName;
 
     /*
      * Class object format for service's interface

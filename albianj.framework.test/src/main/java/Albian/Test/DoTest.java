@@ -33,7 +33,7 @@ public class DoTest implements IAlbianCommandLineApplication {
 
     private static void testRedShift(){
 
-        IEventServ eServ = ServRouter.getService("",IEventServ.class,"eventServ");
+        IEventServ eServ = ServRouter.getService("",IEventServ.class);
         eServ.insert();
 
         List<Event> events = eServ.load();

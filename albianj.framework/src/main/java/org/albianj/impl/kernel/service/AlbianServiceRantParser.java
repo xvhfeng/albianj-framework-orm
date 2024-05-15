@@ -1,5 +1,6 @@
 package org.albianj.impl.kernel.service;
 
+import org.albianj.ServRouter;
 import org.albianj.api.kernel.service.IAlbianService;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
@@ -10,10 +11,7 @@ import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRant;
 import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRants;
 import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
-import org.albianj.loader.AlbianClassLoader;
-import org.albianj.loader.AlbianClassScanner;
-import org.albianj.loader.IAlbianClassExcavator;
-import org.albianj.loader.IAlbianClassFilter;
+import org.albianj.loader.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -45,15 +43,49 @@ public class AlbianServiceRantParser {
                 });
     }
 
+    public static String lookupServId(Class<?> implClzz,AlbianServiceRant rant) {
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(rant.Id())) {
+            return rant.Id();
+        }
+
+        if(IAlbianService.class != rant.Interface()){
+            return rant.Interface().getName();
+        }
+
+           Class<?>[] itfs =  implClzz.getInterfaces();
+           if(null != itfs && 0 != itfs.length){
+               for(Class<?> itf : itfs){
+                   if(IAlbianService.class.isAssignableFrom(itf) && itf != IAlbianService.class){
+                        return itf.getName();
+                   }
+               }
+           }
+        return null;
+    }
+
     public static AlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
         AlbianServiceAttribute asa = new AlbianServiceAttribute();
         AlbianServiceRant rant = implClzz.getAnnotation(AlbianServiceRant.class);
-        asa.setId(rant.Id());
-        if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
-            asa.setItf(IAlbianService.class.getName());
-        } else {
-            asa.setItf(null != rant.Interface() ? rant.Interface().getName() : rant.sInterface());
+//        asa.setId(rant.Id());
+//        if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
+//            asa.setItf(IAlbianService.class.getName());
+//        } else {
+//            asa.setItf(null != rant.Interface() ? rant.Interface().getName() : rant.sInterface());
+//        }
+        String id = lookupServId(implClzz,rant);
+        if(null == id){
+            ServRouter.throwIfNull( id,"service's:{} id is null.",implClzz.getName());
         }
+        asa.setId(id);
+
+
+
+//        if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
+//            asa.setItf(IAlbianService.class.getName());
+//        } else {
+            asa.setItf(null != rant.Interface() ? rant.Interface().getName() : IAlbianService.class.getName());
+//        }
+
         asa.setEnable(rant.Enable());
         asa.setType(implClzz.getName());
         asa.setServiceClass(implClzz.asSubclass(IAlbianService.class));
