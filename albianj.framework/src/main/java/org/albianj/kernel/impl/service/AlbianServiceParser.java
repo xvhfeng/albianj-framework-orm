@@ -97,11 +97,18 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         AlbianServiceAttribute serviceAttr = new AlbianServiceAttribute();
         String id = XmlUtil.getAttributeValue(elt, ID_ATTRBUITE_NAME);
         if (StringsUtil.isNullEmptyTrimmed(id)) {
-            ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
-                    "parser service node id is null or empty ,the node next id:{}", name);
-            return null;
+            String sitf = XmlUtil.getAttributeValue(elt, "Interface");
+            if (!StringsUtil.isNullEmptyTrimmed(sitf)) {
+                serviceAttr.setItf(sitf);
+            }
+            if (StringsUtil.isNullEmptyTrimmed(id) && StringsUtil.isNullEmptyTrimmed(sitf)) {
+                ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Warn,
+                        "parser service node id and interface are bose null or empty ,the node next id:{}", name);
+                return null;
+            }
+
+            serviceAttr.setId(StringsUtil.isNullEmptyTrimmed(id) ? sitf : id);
         }
-        serviceAttr.setId(id);
         String type = XmlUtil.getAttributeValue(elt, TYPE_ATTRBUITE_NAME);
         if (StringsUtil.isNullEmptyTrimmed(type)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
@@ -121,10 +128,10 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
 
         serviceAttr.setServiceClass(clzz);
 
-        String sitf = XmlUtil.getAttributeValue(elt, "Interface");
-        if (!StringsUtil.isNullEmptyTrimmed(sitf)) {
-            serviceAttr.setItf(sitf);
-        }
+//        String sitf = XmlUtil.getAttributeValue(elt, "Interface");
+//        if (!StringsUtil.isNullEmptyTrimmed(sitf)) {
+//            serviceAttr.setItf(sitf);
+//        }
 
         String enable = XmlUtil.getAttributeValue(elt, "Enable");
         if (!StringsUtil.isNullEmptyTrimmed(enable)) {

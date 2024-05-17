@@ -11,7 +11,6 @@ import org.albianj.dal.api.object.filter.FltExpr;
 import org.albianj.dal.api.object.filter.IChaExpr;
 import org.albianj.dal.api.service.DrOpt;
 import org.albianj.dal.api.service.IAlbianDataAccessService;
-import org.albianj.kernel.api.anno.serv.AblServAnno;
 import org.albianj.kernel.api.anno.serv.AblServiceRant;
 import org.albianj.kernel.api.anno.serv.AlbianServiceFieldRant;
 import org.albianj.kernel.api.anno.serv.AlbianServiceFieldType;
@@ -22,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-@AblServiceRant(Id= "EventServ",Interface = IEventServ.class)
+@AblServiceRant
 public class EventServ extends FreeAlbianService implements IEventServ {
     @AlbianServiceFieldRant(Type = AlbianServiceFieldType.Ref, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
