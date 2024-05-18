@@ -175,7 +175,7 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
 //        } else {
 //            sbCmdTxt.append("[").append(tableName).append("]");
 //        }
-        if (DBOpt.MySql == sbStyle && !StringsUtil.isNotEmptyTrimmed(idxName)) { //按照木木的要求，增加强行执行索引行为，只为mysql使用
+        if (DBOpt.MySql == sbStyle && !StringsUtil.isNullEmptyTrimmed(idxName)) { //按照木木的要求，增加强行执行索引行为，只为mysql使用
             sbCmdTxt.append(" FORCE INDEX (").append(idxName).append(") ");
         }
         if (!StringsUtil.isNullEmptyTrimmed(sbWhere.toString())) {

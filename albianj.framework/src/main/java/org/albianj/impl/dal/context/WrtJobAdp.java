@@ -172,7 +172,7 @@ public class WrtJobAdp extends FreeWrtJobAdp {
             return name;
         } else {
             String name = hashMapping.mappingWriterRoutingStorage(routing, obj);
-            if (StringsUtil.isNotEmptyTrimmed(name)) {
+            if (StringsUtil.isNullEmptyTrimmed(name)) {
                 String dname = routing.getStorageName();
                 ServRouter.log(jobId,  LogLevel.Warn,
                         "albian-object:{} writer-data-router is not found by arithmetic and use default storage:{}.",
@@ -199,7 +199,7 @@ public class WrtJobAdp extends FreeWrtJobAdp {
             return name;
         } else {
             String name = hashMapping.mappingWriterRoutingDatabase(storage, obj);
-            if (StringsUtil.isNotEmptyTrimmed(name)) {
+            if (StringsUtil.isNullEmptyTrimmed(name)) {
                 String dname = storage.getDatabase();
                 ServRouter.log(jobId,  LogLevel.Warn,
                         "albian-object:{} writer-data-router is not found by arithmetic and use default database:{}.",

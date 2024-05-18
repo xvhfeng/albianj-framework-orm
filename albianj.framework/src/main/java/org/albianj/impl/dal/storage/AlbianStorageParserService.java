@@ -210,7 +210,7 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
         String transactionLevel = XmlUtil.getSingleChildNodeValue(node, "TransactionLevel");
         if (tempAttr.isTransactional()) {
-            if (!StringsUtil.isNotEmptyTrimmed(transactionLevel)) {
+            if (StringsUtil.isNotEmptyTrimmed(transactionLevel)) {
                 if (transactionLevel.equalsIgnoreCase("READ_UNCOMMITTED")) {
                     tempAttr.setTransactionLevel(Connection.TRANSACTION_READ_UNCOMMITTED);
                 } else if (transactionLevel.equalsIgnoreCase("READ_COMMITTED")) {
