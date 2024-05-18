@@ -1,12 +1,12 @@
 package org.albianj;
 
+import org.albianj.impl.dal.service.AlbianDataAccessService;
 import org.albianj.impl.kernel.core.AlbianKernelParserService;
 import org.albianj.impl.kernel.logger.AlbianLoggerService;
-import org.albianj.impl.kernel.security.AlbianSecurityService;
+import org.albianj.impl.kernel.security.AblSecuritySecurityServ;
 import org.albianj.impl.kernel.service.AlbianServiceParser;
 import org.albianj.impl.dal.mapping.AlbianMappingParserService;
 import org.albianj.impl.dal.routing.AlbianDataRouterParserService;
-import org.albianj.impl.dal.service.AlbianDataAccessService;
 import org.albianj.impl.dal.service.AlbianPersistenceService;
 import org.albianj.impl.dal.storage.AlbianStorageParserService;
 
@@ -35,7 +35,7 @@ public class AblBltinServsNames {
 
     public final static String[] AlbianLoggerServicePair = {AlbianLoggerServiceName, AlbianLoggerService.class.getName()};
     public final static String[] AlbianKernelServicePair = {AlbianKernelServiceName, AlbianKernelParserService.class.getName()};
-    public final static String[] AlbianSecurityServicePair = {AlbianSecurityServiceName, AlbianSecurityService.class.getName()};
+    public final static String[] AlbianSecurityServicePair = {AlbianSecurityServiceName, AblSecuritySecurityServ.class.getName()};
     // persistence
     public final static String[] AlbianStorageServicePair = {AlbianStorageServiceName, AlbianStorageParserService.class.getName()};
     public final static String[] AlbianMappingServicePair = {AlbianMappingServiceName, AlbianMappingParserService.class.getName()};

@@ -82,22 +82,34 @@ public class ModifyCommandAdapter implements IDMLCmd {
             rollbackWhere = new StringBuilder();
         }
 
-
-        text.append("UPDATE ");// .append(routing.getTableName());
+        text.append("UPDATE ").append(SqlField.nonKeywords(dbStyle,tableName));
         if (rbkOnError) {
-            rollbackText.append("UPDATE ");// .append(routing.getTableName());
+            rollbackText.append("UPDATE ").append(SqlField.nonKeywords(dbStyle,tableName));
         }
-        if (DBOpt.MySql == dbStyle) {
-            text.append("`").append(tableName).append("`");
-            if (rbkOnError) {
-                rollbackText.append("`").append(tableName).append("`");
-            }
-        } else {
-            text.append("[").append(tableName).append("]");
-            if (rbkOnError) {
-                rollbackText.append("[").append(tableName).append("]");
-            }
-        }
+//        switch (dbStyle) {
+//            case DBOpt.SqlServer :{
+//                text.append("[").append(tableName).append("]");
+//                if (rbkOnError) {
+//                    rollbackText.append("[").append(tableName).append("]");
+//                }
+//                break;
+//            }
+//            case DBOpt.RedShift:
+//            case DBOpt.PgSql: {
+//                text.append("\"").append(tableName).append("\"");
+//                if (rbkOnError) {
+//                    rollbackText.append("\"").append(tableName).append("\"");
+//                }
+//                break;
+//            }
+//            case DBOpt.MySql:
+//            default:{
+//                text.append("`").append(tableName).append("`");
+//                if (rbkOnError) {
+//                    rollbackText.append("`").append(tableName).append("`");
+//                }
+//            }
+//        }
 
         Map<String, AblEntityFieldAttr> fieldsAttr = objAttr.getFields();
         Map<String, SqlPara> sqlParas = new HashMap<String, SqlPara>();
@@ -111,21 +123,21 @@ public class ModifyCommandAdapter implements IDMLCmd {
             Object oldValue = null;
 
             if (member.isPrimaryKey()) {
-                where.append(" AND ");
+                where.append(" AND ").append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
                 if (rbkOnError) {
-                    rollbackWhere.append(" AND ");
+                    rollbackWhere.append(" AND ").append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
                 }
-                if (DBOpt.MySql == dbStyle) {
-                    where.append("`").append(member.getSqlFieldName()).append("`");
-                    if (rbkOnError) {
-                        rollbackWhere.append("`").append(member.getSqlFieldName()).append("`");
-                    }
-                } else {
-                    where.append("[").append(member.getSqlFieldName()).append("]");
-                    if (rbkOnError) {
-                        rollbackWhere.append("[").append(member.getSqlFieldName()).append("]");
-                    }
-                }
+//                if (DBOpt.MySql == dbStyle) {
+//                    where.append("`").append(member.getSqlFieldName()).append("`");
+//                    if (rbkOnError) {
+//                        rollbackWhere.append("`").append(member.getSqlFieldName()).append("`");
+//                    }
+//                } else {
+//                    where.append("[").append(member.getSqlFieldName()).append("]");
+//                    if (rbkOnError) {
+//                        rollbackWhere.append("[").append(member.getSqlFieldName()).append("]");
+//                    }
+//                }
                 where.append(" = ").append("#").append(member.getSqlFieldName()).append("# ");
                 if (rbkOnError) {
                     rollbackWhere.append(" = ").append("#").append(member.getSqlFieldName()).append("# ");
@@ -142,17 +154,22 @@ public class ModifyCommandAdapter implements IDMLCmd {
                 if (null != oldValue && oldValue.equals(newValue)) {
                     continue;
                 }
-                if (DBOpt.MySql == dbStyle) {
-                    cols.append("`").append(member.getSqlFieldName()).append("`");
-                    if (rbkOnError) {
-                        rollbackCols.append("`").append(member.getSqlFieldName()).append("`");
-                    }
-                } else {
-                    cols.append("[").append(member.getSqlFieldName()).append("]");
-                    if (rbkOnError) {
-                        rollbackCols.append("[").append(member.getSqlFieldName()).append("]");
-                    }
+
+                cols.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
+                if(rbkOnError){
+                    rollbackCols.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
                 }
+//                if (DBOpt.MySql == dbStyle) {
+//                    cols.append("`").append(member.getSqlFieldName()).append("`");
+//                    if (rbkOnError) {
+//                        rollbackCols.append("`").append(member.getSqlFieldName()).append("`");
+//                    }
+//                } else {
+//                    cols.append("[").append(member.getSqlFieldName()).append("]");
+//                    if (rbkOnError) {
+//                        rollbackCols.append("[").append(member.getSqlFieldName()).append("]");
+//                    }
+//                }
                 cols.append(" = ").append("#").append(member.getSqlFieldName()).append("# ,");
                 if (rbkOnError) {
                     rollbackCols.append(" = ").append("#").append(member.getSqlFieldName()).append("# ,");
@@ -175,16 +192,16 @@ public class ModifyCommandAdapter implements IDMLCmd {
             }
         }
 
-        if (0 == cols.length())
+        if (cols.isEmpty())
             return null;// no the upload operator
-        if (0 < cols.length()) {
+        if (!cols.isEmpty()) {
             cols.deleteCharAt(cols.length() - 1);
             if (rbkOnError) {
                 rollbackCols.deleteCharAt(cols.length() - 1);
             }
         }
 
-        if (0 == where.length()) {
+        if (where.isEmpty()) {
             throw new AblThrowable(
                 "the new albianj object can not be update .there is not PrimaryKey in the object.");
         }

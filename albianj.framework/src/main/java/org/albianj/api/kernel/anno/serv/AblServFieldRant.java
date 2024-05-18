@@ -11,12 +11,12 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Inherited
 @Documented
-public @interface AlbianServiceFieldRant {
+public @interface AblServFieldRant {
     /*
      * field value type
      * default is string
      */
-    AlbianServiceFieldType Type() default AlbianServiceFieldType.String;
+    AblServFieldType Type() default AblServFieldType.String;
 
     /*
      * field value
@@ -29,5 +29,5 @@ public @interface AlbianServiceFieldRant {
 
     boolean AllowNull() default false;
 
-    AlbianServiceFieldSetterLifetime SetterLifetime() default AlbianServiceFieldSetterLifetime.AfterNew;
+    AblServFieldSetterOpt SetterLifetime() default AblServFieldSetterOpt.AfterNew;
 }

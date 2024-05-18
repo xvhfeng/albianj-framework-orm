@@ -61,11 +61,13 @@ public class CreateCommandAdapter implements IDMLCmd {
 
         sqlText.append("INSERT INTO ");
 
-        if (DBOpt.MySql == dbStyle) {
-            sqlText.append("`").append(tableName).append("`");
-        } else {
-            sqlText.append("[").append(tableName).append("]");
-        }
+//        if (DBOpt.MySql == dbStyle) {
+//            sqlText.append("`").append(tableName).append("`");
+//        } else {
+//            sqlText.append("[").append(tableName).append("]");
+//        }
+
+        sqlText.append(SqlField.nonKeywords(dbStyle,tableName));
 
         Map<String, AblEntityFieldAttr> fieldsAttr = objAttr.getFields();
 
@@ -88,11 +90,12 @@ public class CreateCommandAdapter implements IDMLCmd {
             para.setValue(v);
             sqlParas.put(String.format("#%1$s#", member.getSqlFieldName()),
                     para);
-            if (DBOpt.MySql == dbStyle) {
-                cols.append("`").append(member.getSqlFieldName()).append("`");
-            } else {
-                cols.append("[").append(member.getSqlFieldName()).append("]");
-            }
+//            if (DBOpt.MySql == dbStyle) {
+//                cols.append("`").append(member.getSqlFieldName()).append("`");
+//            } else {
+//                cols.append("[").append(member.getSqlFieldName()).append("]");
+//            }
+            cols.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
             cols.append(",");
             paras.append("#").append(member.getSqlFieldName()).append("# ,");
         }

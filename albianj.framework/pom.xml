@@ -5,19 +5,17 @@
     <parent>
         <artifactId>albianj</artifactId>
         <groupId>albianj-framework</groupId>
-        <version>10012-SNAPSHOT</version>
+        <version>10014-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albianj.framework</artifactId>
-    <version>10012-SNAPSHOT</version>
+    <version>10014-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locales>zh_CN</project.build.locales>
     </properties>
-
-
 
     <dependencies>
         <dependency>
@@ -59,6 +57,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.amazon.redshift</groupId>
+            <artifactId>redshift-jdbc42</artifactId>
+            <version>2.1.0.27</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.zaxxer</groupId>

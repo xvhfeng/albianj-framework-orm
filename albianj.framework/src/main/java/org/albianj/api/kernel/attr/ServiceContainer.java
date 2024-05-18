@@ -39,7 +39,7 @@ package org.albianj.api.kernel.attr;
 
 
 import org.albianj.api.kernel.logger.IAlbianLoggerService;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ServiceContainer {
 
-    private static ConcurrentHashMap<String, IAlbianService> _container = new ConcurrentHashMap<String, IAlbianService>();
+    private static ConcurrentHashMap<String, IAblServ> _container = new ConcurrentHashMap<String, IAblServ>();
 
     public static boolean existService(String id)
             throws IllegalArgumentException {
@@ -55,11 +55,11 @@ public class ServiceContainer {
     }
 
     // no synchronized
-    public static IAlbianService getService(String id) throws IllegalArgumentException {
+    public static IAblServ getService(String id) throws IllegalArgumentException {
         return _container.get(id);
     }
 
-    public synchronized static void addService(String id, IAlbianService value)
+    public synchronized static void addService(String id, IAblServ value)
             throws IllegalArgumentException {
         if (null == id || null == value)
             throw new IllegalArgumentException("argument is null.");

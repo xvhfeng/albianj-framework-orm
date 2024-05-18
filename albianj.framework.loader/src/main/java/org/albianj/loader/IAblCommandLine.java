@@ -1,5 +1,5 @@
 package org.albianj.loader;
 
-public interface IAlbianCommandLineApplication {
+public interface IAblCommandLine {
     public void run(String...paras);
 }

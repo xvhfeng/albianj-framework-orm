@@ -39,16 +39,18 @@ package org.albianj.impl.kernel.core;
 
 import org.albianj.AblBltinServsNames;
 import org.albianj.ServRouter;
+import org.albianj.api.kernel.attr.GlobalSettings;
 import org.albianj.common.utils.PropUtil;
-import org.albianj.api.kernel.attr.ApplicationSettings;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServRant;
 import org.albianj.api.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.api.kernel.service.parser.IAlbianParserService;
+import org.albianj.common.utils.StringsUtil;
 
+import java.io.File;
 import java.util.Properties;
 
-@AlbianServiceRant(Id = AblBltinServsNames.AlbianKernelServiceName, Interface = IAlbianParserService.class)
+@AblServRant(Id = AblBltinServsNames.AlbianKernelServiceName, Interface = IAlbianParserService.class)
 public class AlbianKernelParserService extends FreeAlbianParserService {
     private String file = "kernel.properties";
 
@@ -63,8 +65,14 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
 
     public void init()  {
         try {
-            Properties props = PropUtil.load(findConfigFile(file));
-            ApplicationSettings.getGlobalSettings().setKernelProps(props);
+            String filename = findConfigFile(file);
+            if(!StringsUtil.isNullOrEmptyOrAllSpace(filename)) {
+                File file = new File(filename);
+                if (file.exists()) {
+                    Properties props = PropUtil.load(filename);
+                    GlobalSettings.getInst().setKernelProps(props);
+                }
+            }
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "load the kernel properties is fail.pls look at the file:{} ", file);

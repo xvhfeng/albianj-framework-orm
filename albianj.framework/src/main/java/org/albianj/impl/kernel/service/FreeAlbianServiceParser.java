@@ -39,20 +39,18 @@ package org.albianj.impl.kernel.service;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
+import org.albianj.api.kernel.attr.*;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
-import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
 import org.albianj.api.kernel.anno.proxy.AlbianProxyIgnoreRant;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.attr.AlbianServiceAttribute;
-import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
-import org.albianj.api.kernel.attr.ServiceAttributeMap;
 import org.albianj.api.kernel.service.parser.FreeAlbianParserService;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,20 +61,20 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
     public final static String ALBIANJSERVICEKEY = "@$#&ALBIANJ_ALL_SERVICE&#$@";
     private final static String tagName = "Services/Service";
     private final static String pkgTagName = "Services/Packages/Package";
-    private String file = "service.xml";
+    private String filename = "service.xml";
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public String getConfigFileName() {
-        return file;
-    }
+//    @AlbianProxyIgnoreRant(ignore = true)
+//    public String getConfigFileName() {
+//        return filename;
+//    }
 
     @AlbianProxyIgnoreRant(ignore = true)
     public void init()  {
 
         Map<String, AlbianServiceAttribute> map = new LinkedHashMap<>();
         try {
-            String filename = findConfigFile(file);
-            parserFile(map, filename);
+            String cfname = findConfigFile(filename);
+            parserFile(map, GlobalSettings.getInst().getServAnnoPkgs(), cfname);
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "loading the service.xml is error." );
@@ -91,83 +89,99 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
         return;
     }
 
-    private void parserFile(Map<String, AlbianServiceAttribute> map, String filename)  {
-        Document doc = null;
-        try {
-            String realFilename = findConfigFile(filename);
-            //判断fname如果是空，则直接返回不需要进行加载操作。
-            if(StringUtils.isBlank(realFilename)){
-//                logger.error("loading the service.xml is error. service.xml is not exist");
-                return;
+    private HashMap<String, Object> parserPkgFromAnno(String[] pkgs) throws Throwable {
+        HashMap<String, Object> pkgMetedataMap = new HashMap<>();
+        for(String pkg : pkgs) {
+            HashMap<String, Object> pkgMap = AlbianServiceRantParser.scanPackage(pkg);
+            if (null != pkgMap) {
+                pkgMetedataMap.putAll(pkgMap);//merger the metedata
             }
-            doc = XmlUtil.load(realFilename);
-        } catch (Exception e) {
+        }
+        return pkgMetedataMap;
+    }
+
+    private void parserFile(Map<String, AlbianServiceAttribute> map, String[] pkgs,String filename)  {
+        Document doc = null;
+        HashMap<String, Object> mapFromAnno = null;
+        try {
+            if(null != pkgs && 0 != pkgs.length){
+                mapFromAnno =  parserPkgFromAnno(pkgs);
+            }
+
+//            File f =  new File(filename);
+            //判断fname如果是空，则直接返回不需要进行加载操作。
+            if(!StringUtils.isBlank(filename) && new File(filename).exists()){
+                doc = XmlUtil.load(filename);
+            }
+        } catch (Throwable e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
                     "loading the service.xml is error." );
         }
-        if (null == doc) {
-            throw new AblThrowable("loading the service.xml is error. the file is null.");
-        }
-        @SuppressWarnings("rawtypes")
-        List nodes = XmlUtil.selectNodes(doc, "Services/IncludeSet/Include");
-        if (!SetUtil.isNullOrEmpty(nodes)) {
-            for (Object node : nodes) {
-                Element elt = XmlUtil.toElement(node);
-                String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
-                parserFile(map, path);
-            }
-        }
 
-        //parser pkg in service.xml
         HashMap<String, Object> pkgMetedataMap = new HashMap<>();
-        List pkgNodes = XmlUtil.selectNodes(doc, pkgTagName);
-        if (!SetUtil.isNullOrEmpty(pkgNodes)) {
-            for (Object node : pkgNodes) {
-                Element elt = XmlUtil.toElement(node);
-                String enable = XmlUtil.getAttributeValue(elt, "Enable");
-                String pkg = XmlUtil.getAttributeValue(elt, "Path");
-
-                if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
-                    boolean b = Boolean.parseBoolean(enable);
-                    if (!b) {
-//                        logger.warn("Path:{} in the Package enable is false,so not load it.",
-//                            Validate.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
-                        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
-                                "Path:{} in the Package enable is false,so not load it.",
-                                StringsUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
-
-                        continue;// not load pkg
-                    }
+        Map<String, AlbianServiceAttribute> attrMap = new HashMap<>();
+        if (null != doc) {
+            @SuppressWarnings("rawtypes")
+            List nodes = XmlUtil.selectNodes(doc, "Services/IncludeSet/Include");
+            if (!SetUtil.isNullOrEmpty(nodes)) {
+                for (Object node : nodes) {
+                    Element elt = XmlUtil.toElement(node);
+                    String path = XmlUtil.getAttributeValue(elt, "Filename");
+                    if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                    parserFile(map, null, path);
                 }
+            }
 
-                if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
-                    throw new AblThrowable(
-                        "loading the service.xml is error. 'Path' attribute in  Package config-item is null or empty.");
-                } else {
-                    try {
-                        //notice:all pkgmap key is service's type,not service's id
-                        //change it when merger
-                        HashMap<String, Object> pkgMap = AlbianServiceRantParser.scanPackage(pkg);
-                        if (null != pkgMap) {
-                            pkgMetedataMap.putAll(pkgMap);//merger the metedata
+            List pkgNodes = XmlUtil.selectNodes(doc, pkgTagName);
+            if (!SetUtil.isNullOrEmpty(pkgNodes)) {
+                for (Object node : pkgNodes) {
+                    Element elt = XmlUtil.toElement(node);
+                    String enable = XmlUtil.getAttributeValue(elt, "Enable");
+                    String pkg = XmlUtil.getAttributeValue(elt, "Path");
+
+                    if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
+                        boolean b = Boolean.parseBoolean(enable);
+                        if (!b) {
+                            ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Warn,
+                                    "Path:{} in the Package enable is false,so not load it.",
+                                    StringsUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+
+                            continue;// not load pkg
                         }
-                    } catch (Throwable e) {
-                        ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
-                                "loading the service.xml is error. Path :{}s in Package is fail.",pkg );
+                    }
+
+                    if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
+                        throw new AblThrowable(
+                                "loading the service.xml is error. 'Path' attribute in  Package config-item is null or empty.");
+                    } else {
+                        try {
+                            //notice:all pkgmap key is service's type,not service's id
+                            //change it when merger
+                            HashMap<String, Object> pkgMap = AlbianServiceRantParser.scanPackage(pkg);
+                            if (null != pkgMap) {
+                                pkgMetedataMap.putAll(pkgMap);//merger the metedata
+                            }
+                        } catch (Throwable e) {
+                            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId, LogLevel.Error, e,
+                                    "loading the service.xml is error. Path :{}s in Package is fail.", pkg);
+                        }
                     }
                 }
             }
+
+            List serviceNodes = XmlUtil.selectNodes(doc, "Services/Service");
+            if (!SetUtil.isNullOrEmpty(serviceNodes)) {
+                parserServices(attrMap, tagName, serviceNodes);
+            }
         }
 
-        Map<String, AlbianServiceAttribute> attrMap = new HashMap<>();
-        List serviceNodes = XmlUtil.selectNodes(doc, "Services/Service");
-        if (!SetUtil.isNullOrEmpty(serviceNodes)) {
-            parserServices(attrMap, tagName, serviceNodes);
+        if(null != mapFromAnno){
+            for(Map.Entry<String,Object> kv : mapFromAnno.entrySet()) {
+                pkgMetedataMap.putIfAbsent(kv.getKey(), kv.getValue());
+            }
         }
 
         mergerServiceAttributes(map, attrMap, pkgMetedataMap);
-        return;
     }
 
     /*
@@ -178,6 +192,10 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
                                          Map<String, AlbianServiceAttribute> attrMap,
                                          Map<String, Object> pkgMap) {
         if(null == attrMap || 0 == attrMap.size()) {
+            for(Map.Entry<String,Object> kv : pkgMap.entrySet()){
+                AlbianServiceAttribute attr = (AlbianServiceAttribute) kv.getValue();
+                totalMap.put(attr.getId(),attr);
+            }
             return;
         }
 

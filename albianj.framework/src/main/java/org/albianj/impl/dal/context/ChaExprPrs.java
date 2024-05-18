@@ -43,12 +43,14 @@ import org.albianj.api.dal.object.filter.ExprOpt;
 import org.albianj.api.dal.object.filter.FltExpr;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.api.dal.db.SqlPara;
+import org.albianj.impl.dal.db.SqlField;
 import org.albianj.impl.dal.toolkit.SqlTypeConv;
 import org.albianj.api.dal.object.filter.IChaExpr;
 import org.albianj.api.dal.object.filter.IFltExpr;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
 
 import javax.swing.text.DefaultStyledDocument;
+import java.sql.SQLData;
 import java.util.List;
 import java.util.Map;
 
@@ -139,11 +141,12 @@ public class ChaExprPrs {
                     sb.append(ce.getBoolOpt().getWord());
                 }
 
-                if (DBOpt.MySql == storage.getDatabaseStyle()) {
-                    sb.append(" `").append(fieldAttr.getSqlFieldName()).append("`");
-                } else {
-                    sb.append(" [").append(fieldAttr.getSqlFieldName()).append("]");
-                }
+//                if (DBOpt.MySql == storage.getDatabaseStyle()) {
+//                    sb.append(" `").append(fieldAttr.getSqlFieldName()).append("`");
+//                } else {
+//                    sb.append(" [").append(fieldAttr.getSqlFieldName()).append("]");
+//                }
+                sb.append(SqlField.nonKeywords(storage.getDatabaseStyle(),fieldAttr.getSqlFieldName()));
 
                 if(fe.getOperatorOpt() == OOpt.in) {
                    Object[] inParas = (Object[]) fe.getValue();

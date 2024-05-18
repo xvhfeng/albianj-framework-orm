@@ -1,11 +1,11 @@
 package org.albianj.api.dal.service;
 
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.api.dal.object.RStgAttr;
 
 import java.sql.Connection;
 
-public interface IAlbianOpenedStorageService extends IAlbianService {
+public interface IAlbianOpenedStorageService extends IAblServ {
     String Name = "AlbianOpenedStorageService";
 
     RStgAttr getStorage(String sessionId, String storageName);

@@ -39,27 +39,33 @@ package org.albianj.impl.dal.storage;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
+import org.albianj.api.dal.object.StgTempAttr;
+import org.albianj.common.mybp.BeanUtils;
+import org.albianj.common.utils.BeanUtil;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
 import org.albianj.api.dal.object.StgAttr;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServRant;
 import org.albianj.api.dal.db.IDBP;
 import org.albianj.api.dal.object.DBOpt;
 import org.albianj.api.dal.object.RStgAttr;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Element;
 
 import java.sql.Connection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static org.albianj.api.dal.object.DBPOpt.SpxDBCP;
 
 
-@AlbianServiceRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
+@AblServRant(Id = IAlbianStorageParserService.Name, Interface = IAlbianStorageParserService.class)
 public class AlbianStorageParserService extends FreeAlbianStorageParserService {
 
     public final static String DEFAULT_STORAGE_NAME = "!@#$%Albianj_Default_Storage%$#@!";
@@ -92,14 +98,14 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
     }
 
     @Override
-    protected void parserStorages(@SuppressWarnings("rawtypes") List nodes)   {
+    protected void parserStorages(@SuppressWarnings("rawtypes") List nodes, Map<String,StgTempAttr> maps)   {
         if (SetUtil.isNullOrEmpty(nodes)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Error,
                     "Storage node is null or size is 0.");
             return;
         }
         for (int i = 0; i < nodes.size(); i++) {
-            StgAttr storage = parserStorage((Element)nodes.get(i));
+            StgAttr storage = parserStorage((Element)nodes.get(i),maps);
             if (null == storage) {
                 throw new AblThrowable(
                     "parser storage in the storage.xml is fail.xml:" + ((Element)nodes.get(i)).asXML() + ".");
@@ -111,75 +117,312 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         }
     }
 
-    @Override
-    protected StgAttr parserStorage(Element node) {
+    protected StgTempAttr parserStgTemp(Element node){
+
+        StgTempAttr tempAttr = new StgTempAttr();
+
         String name = XmlUtil.getSingleChildNodeValue(node, "Name");
         if (null == name) {
             ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                     "There is no name attribute in the storage node.");
             return null;
         }
+        tempAttr.setName(name);
+
         String databaseStyle = XmlUtil.getSingleChildNodeValue(node, "DatabaseStyle");
+        if (null == databaseStyle) {
+            tempAttr.setDatabaseStyle(DBOpt.MySql);
+        } else {
+            switch (databaseStyle.trim().toLowerCase()) {
+                case "sqlserver": {
+                    tempAttr.setDatabaseStyle(DBOpt.SqlServer);
+                    break;
+                }
+                case "oracle": {
+                    tempAttr.setDatabaseStyle(DBOpt.Oracle);
+                    break;
+                }
+                case "pgsql": {
+                    tempAttr.setDatabaseStyle(DBOpt.PgSql);
+                    break;
+                }
+                case "redshift": {
+                    tempAttr.setDatabaseStyle(DBOpt.RedShift);
+                    break;
+                }
+                default: {
+                    tempAttr.setDatabaseStyle(DBOpt.MySql);
+                }
+            }
+        }
+
         String server = XmlUtil.getSingleChildNodeValue(node, "Server");
-        if (null == server) {
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(server)) {
+            tempAttr.setServer(server);
+        }
+
+        String port = XmlUtil.getSingleChildNodeValue(node, "Port");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(port)) {
+            tempAttr.setPort(Integer.parseInt(port));
+        }
+
+        String user = XmlUtil.getSingleChildNodeValue(node, "User");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(user)) {
+            tempAttr.setUser(user);
+        }
+
+        String password = XmlUtil.getSingleChildNodeValue(node, "Password");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(password)) {
+            tempAttr.setPassword(password);
+        }
+
+        String pooling = XmlUtil.getSingleChildNodeValue(node, "Pooling");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(pooling)) {
+            tempAttr.setPooling(Boolean.parseBoolean(pooling));
+        }
+
+        String minPoolSize = XmlUtil.getSingleChildNodeValue(node, "MinPoolSize");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(minPoolSize)) {
+            int minsize = Integer.parseInt(minPoolSize);
+            tempAttr.setMinSize(Math.max(minsize, 2));
+        }
+
+        String maxPoolSize = XmlUtil.getSingleChildNodeValue(node, "MaxPoolSize");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(maxPoolSize)) {
+            int maxsize = Integer.parseInt(maxPoolSize);
+            tempAttr.setMaxSize(Math.max(maxsize, 20));
+        }
+
+        String timeout = XmlUtil.getSingleChildNodeValue(node, "Timeout");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(timeout)) {
+            int to = Integer.parseInt(timeout);
+            tempAttr.setTimeout(to);
+        }
+
+        String charset = XmlUtil.getSingleChildNodeValue(node, "Charset");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(charset)) {
+            tempAttr.setCharset(charset);
+        }
+
+        String transactional = XmlUtil.getSingleChildNodeValue(node, "Transactional");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(transactional)) {
+            tempAttr.setTransactional(Boolean.parseBoolean(transactional));
+        }
+
+        String transactionLevel = XmlUtil.getSingleChildNodeValue(node, "TransactionLevel");
+        if (tempAttr.isTransactional()) {
+            if (!StringsUtil.isNullOrEmpty(transactionLevel)) {
+                if (transactionLevel.equalsIgnoreCase("READ_UNCOMMITTED")) {
+                    tempAttr.setTransactionLevel(Connection.TRANSACTION_READ_UNCOMMITTED);
+                } else if (transactionLevel.equalsIgnoreCase("READ_COMMITTED")) {
+                    tempAttr.setTransactionLevel(Connection.TRANSACTION_READ_COMMITTED);
+                } else if (transactionLevel.equalsIgnoreCase("REPEATABLE_READ")) {
+                    tempAttr.setTransactionLevel(Connection.TRANSACTION_REPEATABLE_READ);
+                } else if (transactionLevel.equalsIgnoreCase("SERIALIZABLE")) {
+                    tempAttr.setTransactionLevel(Connection.TRANSACTION_SERIALIZABLE);
+                } else {
+                    // default level and do not means no suppert tran
+                    tempAttr.setTransactionLevel(Connection.TRANSACTION_NONE);
+                }
+            }
+        }
+
+        String options = XmlUtil.getSingleChildNodeValue(node, "Options");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(options)) {
+            tempAttr.setOptions(options);
+        }
+
+        String sidleTime = XmlUtil.getSingleChildNodeValue(node, "AliveTime");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(sidleTime)) {
+            tempAttr.setIdelTime(Integer.parseInt(sidleTime));
+        }
+
+        String sDatabasePoolStyle = XmlUtil.getSingleChildNodeValue(node, "PoolStyle");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle)) {
+            tempAttr.setDbps(sDatabasePoolStyle);
+        }
+
+        String sUrlParaments = XmlUtil.getSingleChildNodeValue(node, "UrlParaments");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(sUrlParaments)) {
+            tempAttr.setUrlParaments(sUrlParaments);
+        }
+
+        String sWaitTimeWhenGetMs = XmlUtil.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");
+        String sLifeCycleTime = XmlUtil.getSingleChildNodeValue(node, "LifeCycleTime");
+        String sWaitInFreePoolMs = XmlUtil.getSingleChildNodeValue(node, "WaitInFreePoolMs");
+        String sMaxRemedyConnectionCount = XmlUtil.getSingleChildNodeValue(node, "MaxRemedyConnectionCount");
+        String sCleanupTimestampMs = XmlUtil.getSingleChildNodeValue(node, "CleanupTimestampMs");
+        String sMaxRequestTimeMs = XmlUtil.getSingleChildNodeValue(node, "MaxRequestTimeMs");
+
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sWaitTimeWhenGetMs)) {
+            tempAttr.setWaitTimeWhenGetMs(Integer.parseInt(sWaitTimeWhenGetMs));
+        }
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sLifeCycleTime)) {
+            tempAttr.setLifeCycleTime(Integer.parseInt(sLifeCycleTime));
+        }
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sWaitInFreePoolMs)) {
+            tempAttr.setWaitInFreePoolMs(Integer.parseInt(sWaitInFreePoolMs));
+        }
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sMaxRemedyConnectionCount)) {
+            tempAttr.setMaxRemedyConnectionCount(Integer.parseInt(sMaxRemedyConnectionCount));
+        }
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sCleanupTimestampMs)) {
+            tempAttr.setCleanupTimestampMs(Integer.parseInt(sCleanupTimestampMs));
+        }
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sMaxRequestTimeMs)) {
+            tempAttr.setMaxRequestTimeMs(Integer.parseInt(sMaxRequestTimeMs));
+        }
+
+        return tempAttr;
+    }
+
+    @Override
+    protected StgAttr parserStorage(Element node, Map<String,StgTempAttr> maps) {
+        StgAttr storage = new StgAttr();
+
+        String name = XmlUtil.getSingleChildNodeValue(node, "Name");
+        if (null == name) {
             ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
-                    "There is no server attribute in the storage node.");
+                    "There is no name attribute in the storage node.");
             return null;
         }
+        storage.setName(name);
+
         String database = XmlUtil.getSingleChildNodeValue(node, "Database");
         if (null == database) {
             ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
                     "There is no database attribute in the storage node.");
             return null;
         }
-        String user = XmlUtil.getSingleChildNodeValue(node, "User");
-        if (null == user) {
-            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Error,
-                    "There is no uid attribute in the storage node.");
-            return null;
+        storage.setDatabase(database);
+
+        String template = XmlUtil.getSingleChildNodeValue(node, "Template");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(template)){
+           StgTempAttr stgTempAttr =  maps.get(template);
+           BeanUtil.copy(storage,stgTempAttr,new HashSet<String>(){{
+               add("name");
+               add("database");
+           }}, null);
+           storage.setTemplateName(template);
         }
-        String password = XmlUtil.getSingleChildNodeValue(node, "Password");
-        String pooling = XmlUtil.getSingleChildNodeValue(node, "Pooling");
-        String minPoolSize = XmlUtil.getSingleChildNodeValue(node, "MinPoolSize");
-        String maxPoolSize = XmlUtil.getSingleChildNodeValue(node, "MaxPoolSize");
-        String timeout = XmlUtil.getSingleChildNodeValue(node, "Timeout");
-        String charset = XmlUtil.getSingleChildNodeValue(node, "Charset");
-        String transactional = XmlUtil.getSingleChildNodeValue(node, "Transactional");
-        String transactionLevel = XmlUtil.getSingleChildNodeValue(node, "TransactionLevel");
-        String port = XmlUtil.getSingleChildNodeValue(node, "Port");
 
-        String options = XmlUtil.getSingleChildNodeValue(node, "Options");
-
-        String sidleTime = XmlUtil.getSingleChildNodeValue(node, "AliveTime");
-
-        String sDatabasePoolStyle = XmlUtil.getSingleChildNodeValue(node, "PoolStyle");
-        String sUrlParaments = XmlUtil.getSingleChildNodeValue(node, "UrlParaments");
-
-        StgAttr storage = new StgAttr();
-        storage.setName(name);
+        String databaseStyle = XmlUtil.getSingleChildNodeValue(node, "DatabaseStyle");
         if (null == databaseStyle) {
             storage.setDatabaseStyle(DBOpt.MySql);
         } else {
-            String style = databaseStyle.trim().toLowerCase();
-            storage.setDatabaseStyle("sqlserver".equalsIgnoreCase(style) ? DBOpt.SqlServer :
-                "oracle".equalsIgnoreCase(style) ? DBOpt.Oracle : DBOpt.MySql);
+            switch (databaseStyle.trim().toLowerCase()) {
+                case "sqlserver": {
+                    storage.setDatabaseStyle(DBOpt.SqlServer);
+                    break;
+                }
+                case "oracle": {
+                    storage.setDatabaseStyle(DBOpt.Oracle);
+                    break;
+                }
+                case "pgsql": {
+                    storage.setDatabaseStyle(DBOpt.PgSql);
+                    break;
+                }
+                case "redshift": {
+                    storage.setDatabaseStyle(DBOpt.RedShift);
+                    break;
+                }
+                default: {
+                    storage.setDatabaseStyle(DBOpt.MySql);
+                }
+            }
         }
-        storage.setServer(server);
-        storage.setDatabase(database);
-        storage.setUser(user);
-        storage.setPassword(StringsUtil.isNullOrEmptyOrAllSpace(password) ? "" : password);
-        storage.setPooling(StringsUtil.isNullOrEmptyOrAllSpace(pooling) ? true :  Boolean.parseBoolean(pooling));
-        int minsize = StringsUtil.isNullOrEmptyOrAllSpace(minPoolSize) ? 2 : Integer.parseInt(minPoolSize);
-        minsize = 2 < minsize ? 2 : minsize;
-        storage.setMinSize(minsize);//固定数据库链接池最小的链接为2
-        storage.setMaxSize(StringsUtil.isNullOrEmptyOrAllSpace(maxPoolSize) ? 20 : Integer.parseInt(maxPoolSize));
-        storage.setTimeout(StringsUtil.isNullOrEmptyOrAllSpace(timeout) ? 30 : Integer.parseInt(timeout));
-        storage.setCharset(StringsUtil.isNullOrEmptyOrAllSpace(charset) ? null : charset);
-        storage.setTransactional(StringsUtil.isNullOrEmptyOrAllSpace(transactional) ? true :  Boolean.parseBoolean(transactional));
-        storage.setIdelTime(StringsUtil.isNullOrEmptyOrAllSpace(sidleTime) ? 120 : Integer.parseInt(sidleTime));
-        storage.setDbps(
-            StringsUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? SpxDBCP.name() : sDatabasePoolStyle);
-        storage.setUrlParaments(sUrlParaments);
+
+        String server = XmlUtil.getSingleChildNodeValue(node, "Server");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(server)) {
+            storage.setServer(server);
+        }
+
+        String port = XmlUtil.getSingleChildNodeValue(node, "Port");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(port)) {
+            storage.setPort(Integer.parseInt(port));
+        }
+
+        String user = XmlUtil.getSingleChildNodeValue(node, "User");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(user)) {
+            storage.setUser(user);
+        }
+
+        String password = XmlUtil.getSingleChildNodeValue(node, "Password");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(password)) {
+            storage.setPassword(password);
+        }
+
+        String pooling = XmlUtil.getSingleChildNodeValue(node, "Pooling");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(pooling)) {
+            storage.setPooling(Boolean.parseBoolean(pooling));
+        }
+
+        String minPoolSize = XmlUtil.getSingleChildNodeValue(node, "MinPoolSize");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(minPoolSize)) {
+            int minsize = Integer.parseInt(minPoolSize);
+            storage.setMinSize(Math.max(minsize, 2));
+        }
+
+        String maxPoolSize = XmlUtil.getSingleChildNodeValue(node, "MaxPoolSize");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(maxPoolSize)) {
+            int maxsize = Integer.parseInt(maxPoolSize);
+            storage.setMaxSize(Math.max(maxsize, 20));
+        }
+
+        String timeout = XmlUtil.getSingleChildNodeValue(node, "Timeout");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(timeout)) {
+            int to = Integer.parseInt(timeout);
+            storage.setTimeout(to);
+        }
+
+        String charset = XmlUtil.getSingleChildNodeValue(node, "Charset");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(charset)) {
+            storage.setCharset(charset);
+        }
+
+        String transactional = XmlUtil.getSingleChildNodeValue(node, "Transactional");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(transactional)) {
+            storage.setTransactional(Boolean.parseBoolean(transactional));
+        }
+
+        String transactionLevel = XmlUtil.getSingleChildNodeValue(node, "TransactionLevel");
+        if (storage.isTransactional()) {
+            if (!StringsUtil.isNullOrEmpty(transactionLevel)) {
+                if (transactionLevel.equalsIgnoreCase("READ_UNCOMMITTED")) {
+                    storage.setTransactionLevel(Connection.TRANSACTION_READ_UNCOMMITTED);
+                } else if (transactionLevel.equalsIgnoreCase("READ_COMMITTED")) {
+                    storage.setTransactionLevel(Connection.TRANSACTION_READ_COMMITTED);
+                } else if (transactionLevel.equalsIgnoreCase("REPEATABLE_READ")) {
+                    storage.setTransactionLevel(Connection.TRANSACTION_REPEATABLE_READ);
+                } else if (transactionLevel.equalsIgnoreCase("SERIALIZABLE")) {
+                    storage.setTransactionLevel(Connection.TRANSACTION_SERIALIZABLE);
+                } else {
+                    // default level and do not means no suppert tran
+                    storage.setTransactionLevel(Connection.TRANSACTION_NONE);
+                }
+            }
+        }
+
+        String options = XmlUtil.getSingleChildNodeValue(node, "Options");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(options)) {
+            storage.setOptions(options);
+        }
+
+        String sidleTime = XmlUtil.getSingleChildNodeValue(node, "AliveTime");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(sidleTime)) {
+            storage.setIdelTime(Integer.parseInt(sidleTime));
+        }
+
+        String sDatabasePoolStyle = XmlUtil.getSingleChildNodeValue(node, "PoolStyle");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle)) {
+            storage.setDbps(sDatabasePoolStyle);
+        }
+
+        String sUrlParaments = XmlUtil.getSingleChildNodeValue(node, "UrlParaments");
+        if(!StringsUtil.isNullOrEmptyOrAllSpace(sUrlParaments)) {
+            storage.setUrlParaments(sUrlParaments);
+        }
 
         String sWaitTimeWhenGetMs = XmlUtil.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");
         String sLifeCycleTime = XmlUtil.getSingleChildNodeValue(node, "LifeCycleTime");
@@ -206,31 +449,52 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         if (!StringsUtil.isNullOrEmptyOrAllSpace(sMaxRequestTimeMs)) {
             storage.setMaxRequestTimeMs(Integer.parseInt(sMaxRequestTimeMs));
         }
-        storage.setOptions(options);
 
-        if (storage.isTransactional()) {
-            if (StringsUtil.isNullOrEmpty(transactionLevel)) {
-                // default level and do not means no suppert tran
-                storage.setTransactionLevel(Connection.TRANSACTION_NONE);
-            } else {
-                if (transactionLevel.equalsIgnoreCase("READ_UNCOMMITTED")) {
-                    storage.setTransactionLevel(Connection.TRANSACTION_READ_UNCOMMITTED);
-                } else if (transactionLevel.equalsIgnoreCase("READ_COMMITTED")) {
-                    storage.setTransactionLevel(Connection.TRANSACTION_READ_COMMITTED);
-                } else if (transactionLevel.equalsIgnoreCase("REPEATABLE_READ")) {
-                    storage.setTransactionLevel(Connection.TRANSACTION_REPEATABLE_READ);
-                } else if (transactionLevel.equalsIgnoreCase("SERIALIZABLE")) {
-                    storage.setTransactionLevel(Connection.TRANSACTION_SERIALIZABLE);
-                } else {
-                    // default level and do not means no suppert tran
-                    storage.setTransactionLevel(Connection.TRANSACTION_NONE);
-                }
-            }
-        }
+//        if(!StringsUtil.isNullOrEmptyOrAllSpace(timeout)) {
+//            int to = Integer.parseInt(timeout);
+//            storage.setMinSize(to < 2 ? 2 : to);
+//        }
+//
+//        storage.setPooling(StringsUtil.isNullOrEmptyOrAllSpace(pooling) ? true :  Boolean.parseBoolean(pooling));
+//        int minsize = StringsUtil.isNullOrEmptyOrAllSpace(minPoolSize) ? 2 : Integer.parseInt(minPoolSize);
+//        minsize = 2 < minsize ? 2 : minsize;
+//        storage.setMinSize(minsize);//固定数据库链接池最小的链接为2
+//
+//        storage.setMaxSize(StringsUtil.isNullOrEmptyOrAllSpace(maxPoolSize) ? 20 : Integer.parseInt(maxPoolSize));
+//        storage.setTimeout(StringsUtil.isNullOrEmptyOrAllSpace(timeout) ? 30 : Integer.parseInt(timeout));
+//        storage.setCharset(StringsUtil.isNullOrEmptyOrAllSpace(charset) ? null : charset);
+//        storage.setTransactional(StringsUtil.isNullOrEmptyOrAllSpace(transactional) ? true :  Boolean.parseBoolean(transactional));
+//        storage.setIdelTime(StringsUtil.isNullOrEmptyOrAllSpace(sidleTime) ? 120 : Integer.parseInt(sidleTime));
+//        storage.setDbps(
+//            StringsUtil.isNullOrEmptyOrAllSpace(sDatabasePoolStyle) ? SpxDBCP.name() : sDatabasePoolStyle);
+//        storage.setUrlParaments(sUrlParaments);
 
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(port)) {
-            storage.setPort(Integer.parseInt(port));
-        }
+
+//        storage.setOptions(options);
+//
+//        if (storage.isTransactional()) {
+//            if (StringsUtil.isNullOrEmpty(transactionLevel)) {
+//                // default level and do not means no suppert tran
+//                storage.setTransactionLevel(Connection.TRANSACTION_NONE);
+//            } else {
+//                if (transactionLevel.equalsIgnoreCase("READ_UNCOMMITTED")) {
+//                    storage.setTransactionLevel(Connection.TRANSACTION_READ_UNCOMMITTED);
+//                } else if (transactionLevel.equalsIgnoreCase("READ_COMMITTED")) {
+//                    storage.setTransactionLevel(Connection.TRANSACTION_READ_COMMITTED);
+//                } else if (transactionLevel.equalsIgnoreCase("REPEATABLE_READ")) {
+//                    storage.setTransactionLevel(Connection.TRANSACTION_REPEATABLE_READ);
+//                } else if (transactionLevel.equalsIgnoreCase("SERIALIZABLE")) {
+//                    storage.setTransactionLevel(Connection.TRANSACTION_SERIALIZABLE);
+//                } else {
+//                    // default level and do not means no suppert tran
+//                    storage.setTransactionLevel(Connection.TRANSACTION_NONE);
+//                }
+//            }
+//        }
+//
+//        if (!StringsUtil.isNullOrEmptyOrAllSpace(port)) {
+//            storage.setPort(Integer.parseInt(port));
+//        }
 
         return storage;
     }

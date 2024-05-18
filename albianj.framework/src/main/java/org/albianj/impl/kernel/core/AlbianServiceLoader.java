@@ -9,8 +9,8 @@ import org.albianj.impl.kernel.aop.AlbianServiceAopProxy;
 import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
-import org.albianj.api.kernel.anno.serv.AlbianServiceFieldSetterLifetime;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.anno.serv.AblServFieldSetterOpt;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.loader.AlbianClassLoader;
 
 import java.util.Map;
@@ -19,11 +19,11 @@ public class AlbianServiceLoader {
 
     private static String sessionId = "AlbianServiceLoader";
 
-    public static IAlbianService makeupService(AlbianServiceAttribute serviceAttr,
-                                               Map<String, AlbianServiceAttribute> servAttrs)  {
+    public static IAblServ makeupService(AlbianServiceAttribute serviceAttr,
+                                         Map<String, AlbianServiceAttribute> servAttrs)  {
         String sImplClzz = serviceAttr.getType();
         String id = serviceAttr.getId();
-        IAlbianService rtnService = null;
+        IAblServ rtnService = null;
 
         String sInterface = serviceAttr.getItf();
         try {
@@ -33,7 +33,7 @@ public class AlbianServiceLoader {
                         "load impl class : {}  is null for service : {} " ,sImplClzz, id);
             }
 
-            if (!IAlbianService.class.isAssignableFrom(cla)) {
+            if (!IAblServ.class.isAssignableFrom(cla)) {
                 ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     "Service :{}  class:{}  is not extends IAlbianServise",id,sImplClzz);
             }
@@ -47,25 +47,25 @@ public class AlbianServiceLoader {
                             id,sImplClzz,sInterface);
                 }
 
-                if (!IAlbianService.class.isAssignableFrom(itf)) {
+                if (!IAblServ.class.isAssignableFrom(itf)) {
                     ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                             "Service :{}  itf: {}  is not extends IAlbianSercvice ",
                             id,sInterface);
                 }
             }
 
-            IAlbianService service = (IAlbianService) cla.newInstance();
-            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterNew, servAttrs);
+            IAblServ service = (IAblServ) cla.newInstance();
+            setServiceFields(service, serviceAttr, AblServFieldSetterOpt.AfterNew, servAttrs);
             service.beforeLoad();
-            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.BeforeLoading, servAttrs);
+            setServiceFields(service, serviceAttr, AblServFieldSetterOpt.BeforeLoading, servAttrs);
             service.loading();
-            setServiceFields(service, serviceAttr, AlbianServiceFieldSetterLifetime.AfterLoading, servAttrs);
+            setServiceFields(service, serviceAttr, AblServFieldSetterOpt.AfterLoading, servAttrs);
             service.afterLoading();
             if (SetUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
                 rtnService = service;
             } else {
                 AlbianServiceAopProxy proxy = new AlbianServiceAopProxy();
-                IAlbianService serviceProxy = (IAlbianService) proxy.newInstance(sessionId,service, serviceAttr.getAopAttributes());
+                IAblServ serviceProxy = (IAblServ) proxy.newInstance(sessionId,service, serviceAttr.getAopAttributes());
                 serviceProxy.setRealService(service);
                 serviceProxy.beforeLoad();
                 serviceProxy.loading();
@@ -79,7 +79,7 @@ public class AlbianServiceLoader {
         return rtnService;
     }
 
-    public static void setServiceFields(IAlbianService serv, AlbianServiceAttribute servAttr, AlbianServiceFieldSetterLifetime lifetime, Map<String, AlbianServiceAttribute> servAttrs)  {
+    public static void setServiceFields(IAblServ serv, AlbianServiceAttribute servAttr, AblServFieldSetterOpt lifetime, Map<String, AlbianServiceAttribute> servAttrs)  {
         if(SetUtil.isNullOrEmpty(servAttr.getServiceFields())) {
             return;
         }
@@ -103,7 +103,7 @@ public class AlbianServiceLoader {
             Object realObject = null;
             int indexof = value.indexOf(".");
             if (-1 == indexof) { // real ref service
-                realObject = ServRouter.getService(sessionId,IAlbianService.class, value, false);
+                realObject = ServRouter.getService(sessionId, IAblServ.class, value, false);
                 if (!fAttr.isAllowNull() && null == realObject) {
                     ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     "not found ref service:{} to set field:{} in service:{}",
@@ -126,8 +126,8 @@ public class AlbianServiceLoader {
 
             String refServiceId = value.substring(0, indexof);
             String exp = value.substring(indexof + 1);
-            IAlbianService refService =
-                ServRouter.getService(sessionId,IAlbianService.class, refServiceId, false);
+            IAblServ refService =
+                ServRouter.getService(sessionId, IAblServ.class, refServiceId, false);
 
             if (!fAttr.isAllowNull() && null == refService) {
                 ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,

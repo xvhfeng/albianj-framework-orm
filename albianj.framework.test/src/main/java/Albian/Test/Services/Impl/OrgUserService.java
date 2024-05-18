@@ -3,7 +3,7 @@ package Albian.Test.Services.Impl;
 import Albian.Test.Model.Impl.OrgSingleUser;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.Metadata.StorageInfo;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.service.FreeAblServ;
 import org.albianj.api.dal.context.dactx.IDMLCtx;
 import org.albianj.api.dal.context.dactx.IDQLCtx;
 import org.albianj.api.dal.context.dactx.QryOpt;
@@ -17,7 +17,7 @@ import org.albianj.api.dal.service.DrOpt;
 
 import java.util.List;
 
-public class OrgUserService extends FreeAlbianService implements IOrgUserService {
+public class OrgUserService extends FreeAblServ implements IOrgUserService {
     int idx = 0;
     private IAlbianDataAccessService da;
 

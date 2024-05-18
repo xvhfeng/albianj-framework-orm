@@ -6,7 +6,7 @@ import org.albianj.api.dal.context.dactx.IDQLCtx;
 import org.albianj.api.dal.object.filter.IChaExpr;
 import org.albianj.api.dal.db.SqlPara;
 import org.albianj.api.dal.object.OdrBy;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.api.dal.context.ICompensateNotify;
 import org.albianj.api.dal.context.IDalNotify;
 import org.albianj.api.dal.db.CmdOpt;
@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by xuhaifeng on 16/12/22.
  * 不推荐使用IAlbainPersistenceService，而使用IAlbianDataAccessService
  */
-public interface IAlbianDataAccessService extends IAlbianService {
+public interface IAlbianDataAccessService extends IAblServ {
 
     /**
      * 此service在service.xml中的id
