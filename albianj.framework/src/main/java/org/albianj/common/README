@@ -1,0 +1,9 @@
+Originally, I started writing my own utility classes, but later I extracted utility classes from projects such as MyBatis Plus, Spring, Eclipse AspectJ, and others to use them.
+Initially, I planned to categorize and store them according to the names of the extracted projects, trying to retain them as much as possible, including various permission declarations, classes, methods, and so on.
+However, in the actual process, I found this approach too cumbersome. There was a lot of functional redundancy/overlap, or there were functionalities that the project wouldn't use and keeping them didn't serve much purpose.
+Therefore, I will make an adjustment later. I will split each class by functionality, combining third-party components and self-developed ones, adjusting them to fit the actual usage scenario.
+Since classes will be split, I won't be able to retain some original copyright declarations and other information.
+Here, I would like to thank the projects that provided these utility classes (in no particular order):
+1. myb plus
+2. spring
+3. eclipse-aspectj

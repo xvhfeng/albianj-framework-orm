@@ -39,6 +39,7 @@ package org.albianj.common.utils;
 
 import org.albianj.ServRouter;
 import org.albianj.common.langs.UtilClassLoader;
+import org.albianj.common.spring.ReflectionUtils;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -51,11 +52,12 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 
-public class ReflectUtil {
+public class ReflectUtil extends ReflectionUtils {
+
+    public static final Class<?>[] MAIN_PARM_TYPES = new Class[]{String[].class};
 
     public static BeanInfo getBeanInfo(ClassLoader cl, String className)
             throws ClassNotFoundException, IntrospectionException {
@@ -77,7 +79,6 @@ public class ReflectUtil {
         PropertyDescriptor pd = new PropertyDescriptor(pName, clzz);
         return pd;
     }
-
 
     public static String getClassSimpleName(ClassLoader cl, String className)
             throws ClassNotFoundException {
@@ -259,7 +260,7 @@ public class ReflectUtil {
         } else if (genericClass instanceof GenericArrayType) { // 处理数组泛型
             return (Class) ((GenericArrayType) genericClass).getGenericComponentType();
         } else if (genericClass instanceof TypeVariable) { // 处理泛型擦拭对象
-            return (Class) getClass(((TypeVariable) genericClass).getBounds()[0], 0);
+            return getClass(((TypeVariable) genericClass).getBounds()[0], 0);
         } else {
             return (Class) genericClass;
         }
@@ -269,12 +270,11 @@ public class ReflectUtil {
         if (type instanceof ParameterizedType) { // 处理泛型类型
             return getGenericClass((ParameterizedType) type, i);
         } else if (type instanceof TypeVariable) {
-            return (Class) getClass(((TypeVariable) type).getBounds()[0], 0); // 处理泛型擦拭对象
+            return getClass(((TypeVariable) type).getBounds()[0], 0); // 处理泛型擦拭对象
         } else {// class本身也是type，强制转型
             return (Class) type;
         }
     }
-
 
     public static Object toRealObject(String type, String o) throws ParseException {
 
@@ -284,34 +284,34 @@ public class ReflectUtil {
         } else if (
                 "java.math.bigdecimal".equalsIgnoreCase(type)
                         || "bigdecimal".equalsIgnoreCase(type)) {
-            BigDecimal bd = new BigDecimal(o.toString());
+            BigDecimal bd = new BigDecimal(o);
             return bd;
         } else if ("java.lang.boolean".equalsIgnoreCase(type)
                 || "boolean".equalsIgnoreCase(type)) {
-            return Boolean.parseBoolean(o.toString());
+            return Boolean.parseBoolean(o);
         } else if ("java.lang.integer".equalsIgnoreCase(type)
                 || "int".equalsIgnoreCase(type)) {
-            return Integer.parseInt(o.toString());
+            return Integer.parseInt(o);
         } else if ("java.lang.long".equalsIgnoreCase(type)
                 || "long".equalsIgnoreCase(type)) {
-            return Long.parseLong(o.toString());
+            return Long.parseLong(o);
         } else if (
                 "java.math.biginteger".equalsIgnoreCase(type)
                         || "biginteger".equalsIgnoreCase(type)) {
-            BigInteger bi = new BigInteger(o.toString());
+            BigInteger bi = new BigInteger(o);
             return bi;
         } else if ("java.lang.float".equalsIgnoreCase(type)
                 || "float".equalsIgnoreCase(type)) {
-            return Float.parseFloat(o.toString());
+            return Float.parseFloat(o);
         } else if ("java.lang.double".equalsIgnoreCase(type)
                 || "double".equalsIgnoreCase(type)) {
-            return Double.parseDouble(o.toString());
+            return Double.parseDouble(o);
         } else if ("java.sql.time".equalsIgnoreCase(type)) {
             Date d = null;
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
                         DateTimeUtil.CHINESE_SIMPLE_FORMAT);
-                d = dateFormat.parse(o.toString());
+                d = dateFormat.parse(o);
             } catch (Exception e) {
                 d = null;
             }
@@ -319,19 +319,18 @@ public class ReflectUtil {
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat(
                             DateTimeUtil.CHINESE_FORMAT);
-                    d = dateFormat.parse(o.toString());
+                    d = dateFormat.parse(o);
                 } catch (Exception e) {
                     throw e;
                 }
             }
-            ;
             return new java.sql.Date(d.getTime());
         } else if ("java.util.date".equalsIgnoreCase(type)) {
             Date d = null;
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
                         DateTimeUtil.CHINESE_SIMPLE_FORMAT);
-                d = dateFormat.parse(o.toString());
+                d = dateFormat.parse(o);
             } catch (Exception e) {
                 d = null;
             }
@@ -339,7 +338,7 @@ public class ReflectUtil {
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat(
                             DateTimeUtil.CHINESE_FORMAT);
-                    d = dateFormat.parse(o.toString());
+                    d = dateFormat.parse(o);
                 } catch (Exception e) {
                     throw e;
                 }
@@ -352,20 +351,16 @@ public class ReflectUtil {
         }
     }
 
-
-    public static final Class<?>[] MAIN_PARM_TYPES = new Class[] {String[].class};
-
-
     public static Object invokestaticN(Class<?> class_, String name, Object[] args) {
         return invokeN(class_, name, null, args);
     }
 
     public static Object invoke(Class<?> class_, Object target, String name, Object arg1, Object arg2) {
-        return invokeN(class_, name, target, new Object[] { arg1, arg2 });
+        return invokeN(class_, name, target, new Object[]{arg1, arg2});
     }
 
     public static Object invoke(Class<?> class_, Object target, String name, Object arg1, Object arg2, Object arg3) {
-        return invokeN(class_, name, target, new Object[] { arg1, arg2, arg3 });
+        return invokeN(class_, name, target, new Object[]{arg1, arg2, arg3});
     }
 
 
@@ -377,8 +372,8 @@ public class ReflectUtil {
             throw new RuntimeException(e.toString());
         } catch (InvocationTargetException e) {
             Throwable t = e.getTargetException();
-            if (t instanceof Error) throw (Error)t;
-            if (t instanceof RuntimeException) throw (RuntimeException)t;
+            if (t instanceof Error) throw (Error) t;
+            if (t instanceof RuntimeException) throw (RuntimeException) t;
             t.printStackTrace();
             throw new RuntimeException(t.toString());
         }
@@ -399,8 +394,6 @@ public class ReflectUtil {
         // ignore methods with overloading other than lengths
         return meth.getParameterTypes().length == args.length;
     }
-
-
 
 
     public static Object getStaticField(Class<?> class_, String name) {
@@ -467,8 +460,8 @@ public class ReflectUtil {
         ServRouter.throwIaxIfNotAssignable(libs, File.class, "jars");
         ServRouter.throwIaxIfNotAssignable(dirs, File.class, "dirs");
         URL[] libUrls = FileUtil.getFileURLs(libs);
-        if (!SetUtil.isNullOrEmpty(libUrls)) {
-            if (!SetUtil.isNullOrEmpty(urls)) {
+        if (!SetUtil.isEmpty(libUrls)) {
+            if (!SetUtil.isEmpty(urls)) {
                 URL[] temp = new URL[libUrls.length + urls.length];
                 System.arraycopy(urls, 0, temp, 0, urls.length);
                 System.arraycopy(urls, 0, temp, libUrls.length, urls.length);
@@ -487,22 +480,182 @@ public class ReflectUtil {
             throw new ClassNotFoundException(s);
         }
         Method main = targetClass.getMethod("main", MAIN_PARM_TYPES);
-        main.invoke(null, new Object[] { args });
+        main.invoke(null, new Object[]{args});
     }
 
     public static void runMainInSameVM(Class<?> mainClass, String[] args) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         ServRouter.throwIaxIfNull(mainClass, "main class");
         Method main = mainClass.getMethod("main", MAIN_PARM_TYPES);
-        main.invoke(null, new Object[] { args });
+        main.invoke(null, new Object[]{args});
     }
 
-    /** @return URL if the input is valid as such */
+    /**
+     * @return URL if the input is valid as such
+     */
     private static URL makeURL(String s) {
         try {
             return new URL(s);
         } catch (Throwable t) {
             return null;
         }
+    }
+
+    /**
+     * get all fields include superclass‘s fields
+     *
+     * @param clzz
+     * @return
+     */
+    public static List<Field> getAllFields(Class<?> clzz) {
+        Class tempClass = clzz;
+        List<Field> fields = new ArrayList<>();
+        while (tempClass != null && tempClass != Object.class) {//当父类为null的时候说明到达了最上层的父类(Object类).
+            fields.addAll(Arrays.asList(tempClass.getDeclaredFields()));
+            tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
+        }
+        return fields;
+    }
+
+
+    public static Map<String, Method> getAllMethods(Class<?> cls) {
+        Map<String, Method> uniqueMethods = new HashMap<String, Method>();
+        Class<?> currentClass = cls;
+        while (currentClass != null && currentClass != Object.class) {
+            addUniqueMethods(uniqueMethods, currentClass.getDeclaredMethods());
+            //获取接口中的所有方法
+            Class<?>[] interfaces = currentClass.getInterfaces();
+            for (Class<?> anInterface : interfaces) {
+                addUniqueMethods(uniqueMethods, anInterface.getMethods());
+            }
+            //获取父类，继续while循环
+            currentClass = currentClass.getSuperclass();
+        }
+
+        return uniqueMethods;
+    }
+
+    private static void addUniqueMethods(Map<String, Method> uniqueMethods, Method[] methods) {
+        for (Method currentMethod : methods) {
+            if (!currentMethod.isBridge()) {
+                //获取方法的签名，格式是：返回值类型#方法名称:参数类型列表
+                String signature = makeMethodSign(currentMethod);
+                //检查是否在子类中已经添加过该方法，如果在子类中已经添加过，则表示子类覆盖了该方法，无须再向uniqueMethods集合中添加该方法了
+                if (!uniqueMethods.containsKey(signature)) {
+                    if (canControlMemberAccessible()) {
+                        try {
+                            currentMethod.setAccessible(true);
+                        } catch (Exception e) {
+                            // Ignored. This is only a final precaution, nothing we can do.
+                        }
+                    }
+                    uniqueMethods.put(signature, currentMethod);
+                }
+            }
+        }
+    }
+
+    private static String makeMethodSign(Method method) {
+        StringBuilder sb = new StringBuilder();
+        Class<?> returnType = method.getReturnType();
+        if (returnType != null) {
+            sb.append(returnType.getName()).append('#');
+        }
+        sb.append(method.getName());
+        Class<?>[] parameters = method.getParameterTypes();
+        for (int i = 0; i < parameters.length; i++) {
+            if (i == 0) {
+                sb.append(':');
+            } else {
+                sb.append(',');
+            }
+            sb.append(parameters[i].getName());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Checks whether can control member accessible.
+     *
+     * @return If can control member accessible, it return {@literal true}
+     * @since 3.5.0
+     */
+    public static boolean canControlMemberAccessible() {
+        try {
+            SecurityManager securityManager = System.getSecurityManager();
+            if (null != securityManager) {
+                securityManager.checkPermission(new ReflectPermission("suppressAccessChecks"));
+            }
+        } catch (SecurityException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static String makeMethodSignJVMForm(Method method) {
+        // 获取方法的名称
+        String methodName = method.getName();
+
+        // 获取方法的返回类型描述符
+        Class<?> returnType = method.getReturnType();
+        String returnTypeDescriptor = getDescriptor(returnType);
+
+        // 获取方法的参数类型描述符
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        StringBuilder parametersDescriptorBuilder = new StringBuilder("(");
+        for (Class<?> parameterType : parameterTypes) {
+            parametersDescriptorBuilder.append(getDescriptor(parameterType));
+        }
+        parametersDescriptorBuilder.append(")");
+        String parametersDescriptor = parametersDescriptorBuilder.toString();
+
+        // 构造方法签名
+        String methodSignature = methodName + parametersDescriptor + returnTypeDescriptor;
+
+        return methodSignature;
+    }
+
+    public static String getClassPackageName(Class<?> clazz) {
+        String className = clazz.getName();
+        int index = className.lastIndexOf('.');
+
+        return (index < 0) ? null : className.substring(0, index);
+    }
+
+    // 获取类型的描述符
+    public static String getDescriptor(Class<?> type) {
+        if (type == void.class) {
+            return "V";
+        } else if (type == boolean.class) {
+            return "Z";
+        } else if (type == byte.class) {
+            return "B";
+        } else if (type == char.class) {
+            return "C";
+        } else if (type == short.class) {
+            return "S";
+        } else if (type == int.class) {
+            return "I";
+        } else if (type == long.class) {
+            return "J";
+        } else if (type == float.class) {
+            return "F";
+        } else if (type == double.class) {
+            return "D";
+        } else if (type.isArray()) {
+            return "[" + getDescriptor(type.getComponentType());
+        } else {
+            return "L" + type.getName().replace('.', '/') + ";";
+        }
+    }
+
+    /**
+     * 判断当前class是一个接口或者是类（包括抽象类）
+     *
+     * @param clazz
+     * @return
+     */
+    public static boolean isClassOrInterface(Class<?> clazz) {
+        return clazz != null && !clazz.isEnum() && !clazz.isArray() && !clazz.isPrimitive();
     }
 
 }

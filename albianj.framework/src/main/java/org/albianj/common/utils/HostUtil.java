@@ -101,15 +101,14 @@ public class HostUtil {
     }
 
     public static String longToIp(int n) {
-        StringBuffer sb = new StringBuffer("");
-        sb.append(String.valueOf((n >>> 24)));
-        sb.append(".");
-        sb.append(String.valueOf((n & 0x00FFFFFF) >>> 16));
-        sb.append(".");
-        sb.append(String.valueOf((n & 0x0000FFFF) >>> 8));
-        sb.append(".");
-        sb.append(String.valueOf((n & 0x000000FF)));
-        return sb.toString();
+        String sb = (n >>> 24) +
+                "." +
+                ((n & 0x00FFFFFF) >>> 16) +
+                "." +
+                ((n & 0x0000FFFF) >>> 8) +
+                "." +
+                (n & 0x000000FF);
+        return sb;
     }
 
     /* 一个将字节转化为十六进制ASSIC码的函数 */
@@ -141,7 +140,7 @@ public class HostUtil {
             }
             MacAddr = str.toUpperCase();
         } catch (SocketException e) {
-            logger.error("AlbianHost getMacAddrByName is SocketException error ",e);
+            logger.error("AlbianHost getMacAddrByName is SocketException error ", e);
             System.exit(-1);
         }
         return MacAddr;
@@ -150,7 +149,7 @@ public class HostUtil {
     public static String getLocalIPByName(String ntkName) {
         String ip = "";
         try {
-            Enumeration<?> e1 = (Enumeration<?>) NetworkInterface.getNetworkInterfaces();
+            Enumeration<?> e1 = NetworkInterface.getNetworkInterfaces();
             while (e1.hasMoreElements()) {
                 NetworkInterface ni = (NetworkInterface) e1.nextElement();
                 if (!ni.getName().equals(ntkName)) {
@@ -167,7 +166,7 @@ public class HostUtil {
                 }
             }
         } catch (SocketException e) {
-            logger.error("AlbianHost getLocalIPByName is SocketException error ",e);
+            logger.error("AlbianHost getLocalIPByName is SocketException error ", e);
         }
         return ip;
     }

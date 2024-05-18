@@ -59,7 +59,7 @@ public class RdrJob {
     private IDBP databasePool = null;
 
     public RdrJob(String sessionId) {
-        if (StringsUtil.isNullOrEmptyOrAllSpace(sessionId)) {
+        if (StringsUtil.isNullEmptyTrimmed(sessionId)) {
             this.id = ServRouter.make32UUID();
         } else {
             this.id = sessionId;

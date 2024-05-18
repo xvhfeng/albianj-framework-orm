@@ -65,7 +65,7 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
             return rc;
         }
 
-        if (SetUtil.isNullOrEmpty(_aopAttributes)) {
+        if (SetUtil.isEmpty(_aopAttributes)) {
             Object rc = methodProxy.invokeSuper(proxy, args);
             return rc;
         }

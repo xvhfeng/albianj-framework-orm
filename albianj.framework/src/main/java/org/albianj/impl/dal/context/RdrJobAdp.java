@@ -58,8 +58,8 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
         StgAttr stgAttr = null;
         IAlbianStorageParserService asps = ServRouter
             .getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        if (StringsUtil.isNullOrEmptyOrAllSpace(drouterAlias)) { // not exist fix-drouterAlias
-            if (StringsUtil.isNullOrEmptyOrAllSpace(storageAlias)) { // use drouer callback
+        if (StringsUtil.isNullEmptyTrimmed(drouterAlias)) { // not exist fix-drouterAlias
+            if (StringsUtil.isNullEmptyTrimmed(storageAlias)) { // use drouer callback
                 DrsAttr drsAttr = objAttr.getDataRouters();
                 IAblDr drouter = drsAttr.getDataRouter();
                 if (isExact) {
@@ -81,7 +81,7 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
                 stgAttr = asps.getStorageAttribute(storageAlias);
                 dbName.setValue(stgAttr.getDatabase());
                 tableName.setValue(
-                    StringsUtil.isNullOrEmptyOrAllSpace(tableAlias) ? objAttr.getImplClzz().getSimpleName() : tableAlias);
+                    StringsUtil.isNullEmptyTrimmed(tableAlias) ? objAttr.getImplClzz().getSimpleName() : tableAlias);
             }
         } else { // do fix drouter
             DrsAttr drsAttr = objAttr.getDataRouters();
@@ -175,11 +175,10 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
 //        } else {
 //            sbCmdTxt.append("[").append(tableName).append("]");
 //        }
-        if (DBOpt.MySql == sbStyle && !StringsUtil
-            .isNullOrEmptyOrAllSpace(idxName)) { //按照木木的要求，增加强行执行索引行为，只为mysql使用
+        if (DBOpt.MySql == sbStyle && !StringsUtil.isNullEmptyTrimmed(idxName)) { //按照木木的要求，增加强行执行索引行为，只为mysql使用
             sbCmdTxt.append(" FORCE INDEX (").append(idxName).append(") ");
         }
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(sbWhere.toString())) {
+        if (!StringsUtil.isNullEmptyTrimmed(sbWhere.toString())) {
             sbCmdTxt.append(" WHERE ").append(sbWhere);
         }
         if (!sbOrderby.isEmpty()) {
@@ -216,7 +215,7 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
 //                }
                 sbWhrs.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
                 sbWhrs.append(where.getOperatorOpt().getWord()).append("#").append(
-                    StringsUtil.isNullOrEmptyOrAllSpace(where.getAliasName()) ? member.getSqlFieldName() :
+                    StringsUtil.isNullEmptyTrimmed(where.getAliasName()) ? member.getSqlFieldName() :
                         where.getAliasName())
                         .append("#")
                         .append(where.isCloseSub() ? ")" : "");
@@ -231,7 +230,7 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
                 }
                 para.setValue(where.getValue());
                 paras.put(String.format("#%1$s#",
-                    StringsUtil.isNullOrEmptyOrAllSpace(where.getAliasName()) ? member.getSqlFieldName() :
+                    StringsUtil.isNullEmptyTrimmed(where.getAliasName()) ? member.getSqlFieldName() :
                         where.getAliasName()), para);
             }
         }
