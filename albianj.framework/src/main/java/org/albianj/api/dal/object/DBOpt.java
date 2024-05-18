@@ -46,4 +46,6 @@ public class DBOpt {
     public final static int MySql = 1;
     public final static int Oracle = 2;
     public final static int SqlServer = 3;
+    public final static int PgSql = 4;
+    public final static int RedShift = 5;
 }

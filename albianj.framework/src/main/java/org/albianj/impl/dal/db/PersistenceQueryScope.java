@@ -46,6 +46,7 @@ import org.albianj.api.dal.db.PCmd;
 import org.albianj.api.dal.db.SqlPara;
 import org.albianj.api.dal.object.AblEntityFieldAttr;
 import org.albianj.api.dal.object.AblEntityAttr;
+import org.albianj.impl.dal.sqlpara.DbValueFormatter;
 import org.albianj.impl.dal.toolkit.SetConv;
 import org.albianj.impl.dal.toolkit.RstConv;
 import org.albianj.api.kernel.logger.LogLevel;
@@ -59,6 +60,7 @@ import org.albianj.api.dal.service.AlbianEntityMetadata;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
 
 import java.sql.*;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -100,7 +102,7 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
 
                         statement.setNull(i, para.getSqlType());
                     } else {
-                        statement.setObject(i, para.getValue(), para.getSqlType());
+                        statement.setObject(i, DbValueFormatter.toSqlValue(para.getValue()), para.getSqlType());
                     }
                 } catch (SQLException e) {
                     ServRouter.logAndThrowAgain(sessionId,LogLevel.Error,e,
@@ -217,12 +219,20 @@ public class PersistenceQueryScope extends FreePersistenceQueryScope implements 
                             continue;
                         }
 
-                        Object v = result.getObject(fAttr.getPropertyName());
-                        if (null != v) {
-                            Object rc = RstConv.toBoxValue(fAttr.getEntityField().getType(), v);
+                        Instant curr = RstConv.getDateTime(result,fAttr.getPropertyName());
+                        if (null != curr) {
+                            Object rc = RstConv.toBoxValue(fAttr.getEntityField().getType(), curr);
                             fAttr.getEntityField().set(obj, rc);
                             obj.setOldAlbianObject(fAttr.getPropertyName(), rc);
+                        } else {
+                            Object v = result.getObject(fAttr.getPropertyName());
+                            if (null != v) {
+                                Object rc = RstConv.toBoxValue(fAttr.getEntityField().getType(), v);
+                                fAttr.getEntityField().set(obj, rc);
+                                obj.setOldAlbianObject(fAttr.getPropertyName(), rc);
+                            }
                         }
+
                     }
                     obj.setIsAlbianNew(false);
                     list.add(obj);

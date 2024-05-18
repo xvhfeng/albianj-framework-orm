@@ -38,13 +38,13 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.impl.kernel.security;
 
 import org.albianj.ServRouter;
+import org.albianj.api.kernel.attr.GlobalSettings;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.kernel.attr.ApplicationSettings;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.security.IAlbianSecurityService;
+import org.albianj.api.kernel.security.IAblSecurityServ;
 import org.albianj.api.kernel.security.SecurityOpt;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.anno.serv.AblServRant;
+import org.albianj.api.kernel.service.FreeAblServ;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.*;
@@ -53,8 +53,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 
-@AlbianServiceRant(Id = IAlbianSecurityService.Name, Interface = IAlbianSecurityService.class)
-public class AlbianSecurityService extends FreeAlbianService implements IAlbianSecurityService {
+@AblServRant(Id = IAblSecurityServ.Name, Interface = IAblSecurityServ.class)
+public class AblSecuritySecurityServ extends FreeAblServ implements IAblSecurityServ {
 
     //donot try in my system,we not use this key
     private String DEFAULT_SHA_KEY = "oskey:sdfgrgeyt*&43543dfgsdfgs6454";
@@ -70,7 +70,7 @@ public class AlbianSecurityService extends FreeAlbianService implements IAlbianS
     @Override
     public void init()  {
         super.init();
-        String mkey = ApplicationSettings.getGlobalSettings().getPropValue("MachineKey",machineKey);
+        String mkey = GlobalSettings.getInst().getPropValue("MachineKey",machineKey);
         if (StringsUtil.isNullOrEmptyOrAllSpace(mkey)) {
             return;
         }

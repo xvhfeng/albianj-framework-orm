@@ -54,10 +54,10 @@ public class StgAttr {
     private int minSize = 5;
     private int maxSize = 10;
     private int timeout = 30;
-    private String charset = null;
+    private String charset = "utf8";
     private boolean transactional = true;
     private String server = null;
-    private int port = 0;
+    private int port = 3306;
     private int transactionLevel = 0;
     private String options = null;
     private int idelTime = 180;
@@ -70,5 +70,6 @@ public class StgAttr {
     private int maxRequestTimeMs = 60000;
 
     private String urlParaments;
+    private String templateName;
 
 }

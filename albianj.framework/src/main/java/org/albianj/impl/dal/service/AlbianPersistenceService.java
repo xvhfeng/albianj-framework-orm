@@ -37,6 +37,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.impl.dal.service;
 
+import org.albianj.api.dal.service.IAlbianPersistenceService;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.api.dal.object.OdrBy;
 import org.albianj.impl.dal.context.*;
@@ -44,8 +45,8 @@ import org.albianj.impl.dal.db.IPersistenceQueryScope;
 import org.albianj.impl.dal.db.IPersistenceTransactionClusterScope;
 import org.albianj.impl.dal.db.PersistenceQueryScope;
 import org.albianj.impl.dal.db.PersistenceTransactionClusterScope;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.anno.serv.AblServRant;
+import org.albianj.api.kernel.service.FreeAblServ;
 import org.albianj.api.dal.context.ICompensateNotify;
 import org.albianj.api.dal.context.IDalNotify;
 import org.albianj.api.dal.context.RdrJob;
@@ -54,15 +55,15 @@ import org.albianj.api.dal.db.CmdOpt;
 import org.albianj.api.dal.object.IAblObj;
 import org.albianj.api.dal.object.IFltCdt;
 import org.albianj.api.dal.object.filter.IChaExpr;
-import org.albianj.api.dal.service.IAlbianPersistenceService;
 import org.albianj.api.dal.service.DrOpt;
+import  org.albianj.api.kernel.service.IAblServ;
 
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-@AlbianServiceRant(Id = IAlbianPersistenceService.Name, Interface = IAlbianPersistenceService.class)
-public class AlbianPersistenceService extends FreeAlbianService implements IAlbianPersistenceService {
+@AblServRant(Id = IAlbianPersistenceService.Name, Interface = IAlbianPersistenceService.class)
+public class AlbianPersistenceService extends FreeAblServ implements IAlbianPersistenceService {
 
     @Deprecated
     protected static <T extends IAblObj> T doLoadObject(String sessionId,

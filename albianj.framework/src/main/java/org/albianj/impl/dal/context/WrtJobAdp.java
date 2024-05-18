@@ -51,6 +51,8 @@ import org.albianj.api.dal.context.WrtTask;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
+import org.albianj.impl.dal.db.localize.mysql.UpsertMysqlCommandAdapter;
+import org.albianj.impl.dal.db.localize.pgsql.UpsertPgSqlCommandAdapter;
 
 import java.util.*;
 
@@ -230,6 +232,10 @@ public class WrtJobAdp extends FreeWrtJobAdp {
                     ? objAttr.getImplClzz().getSimpleName()
                     : tableAlias;
             StgAttr stgAttr = asps.getStorageAttribute(storageAlias);
+            if(null == cmd) {
+                cmd = stgAttr.getDatabaseStyle() == DBOpt.RedShift || stgAttr.getDatabaseStyle() == DBOpt.PgSql ?
+                        new UpsertPgSqlCommandAdapter() : new UpsertMysqlCommandAdapter();
+            }
             PCmd pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
                     tableName, entity, objAttr, sqlParaVals, job.isRollbackOnError());
             addWrtTsk(job, stgAttr, stgAttr.getDatabase(), pstCmd);
@@ -244,13 +250,17 @@ public class WrtJobAdp extends FreeWrtJobAdp {
                 StgAttr stgAttr = asps.getStorageAttribute(storageName);
                 String database = parserRoutingDatabase(job.getId(), entity, stgAttr,
                         drouter, objAttr);
-
                 String tableName = drouter.mappingWriterTable(drtAttr, entity);
+
+                if(null == cmd) {
+                    cmd = stgAttr.getDatabaseStyle() == DBOpt.RedShift || stgAttr.getDatabaseStyle() == DBOpt.PgSql ?
+                            new UpsertPgSqlCommandAdapter() : new UpsertMysqlCommandAdapter();
+                }
 
                 PCmd pstCmd = cmd.buildPstCmd(job.getId(), stgAttr.getDatabaseStyle(),
                         tableName, entity, objAttr, sqlParaVals, job.isRollbackOnError());
-                if (null == cmd)
-                    continue;// no the upload operator
+//                if (null == cmd)
+//                    continue;// no the upload operator
 
                 addWrtTsk(job, stgAttr, database, pstCmd);
             }

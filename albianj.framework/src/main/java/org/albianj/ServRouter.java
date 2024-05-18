@@ -41,7 +41,7 @@ import org.albianj.common.utils.LangUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.api.kernel.logger.IAlbianLoggerService;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.api.kernel.attr.ServiceContainer;
 
 import java.io.IOException;
@@ -76,7 +76,7 @@ public class ServRouter extends ServiceContainer {
      * @return 返回获取的service
      * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
      */
-    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, String id, boolean isThrowIfException) {
+    public static <T extends IAblServ> T getService(Object sessionId, Class<T> cla, String id, boolean isThrowIfException) {
         String servId = id;
         if (StringsUtil.isNullOrEmptyOrAllSpace(servId)) {
             if (null == cla) {
@@ -111,15 +111,15 @@ public class ServRouter extends ServiceContainer {
      * @return 返回获取的service，在获取service出错或者没有获取service时候抛出异常
      * @throws IllegalArgumentException id在service.xml中找不到或者是获取的service不能转换陈cla提供的class信息，将抛出遗产
      */
-    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, String id) {
+    public static <T extends IAblServ> T getService(Object sessionId, Class<T> cla, String id) {
         return getService(sessionId, cla, id, false);
     }
 
-    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla, boolean isThrowIfException) {
+    public static <T extends IAblServ> T getService(Object sessionId, Class<T> cla, boolean isThrowIfException) {
         return getService(sessionId, cla, null, isThrowIfException);
     }
 
-    public static <T extends IAlbianService> T getService(Object sessionId, Class<T> cla) {
+    public static <T extends IAblServ> T getService(Object sessionId, Class<T> cla) {
         return getService(sessionId, cla, null, false);
     }
 

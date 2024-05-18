@@ -39,6 +39,7 @@ package org.albianj.impl.dal.storage;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
+import org.albianj.api.dal.object.StgTempAttr;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
@@ -53,11 +54,13 @@ import org.dom4j.Element;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class FreeAlbianStorageParserService extends FreeAlbianParserService
     implements IAlbianStorageParserService {
 
     private final static String tagName = "Storages/Storage";
+    private final static String templateTagName = "Storages/Templates/Template";
     private String file = "storage.xml";
     private HashMap<String, StgAttr> cached = null;
 
@@ -81,6 +84,10 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append(":").append(stgAttr.getPort());
                 }
                 sb.append(":").append(rsa.getDatabase());
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                    sb.append("?").append(rsa.getStgAttr().getUrlParaments());
+                }
+                break;
             }
             case (DBOpt.SqlServer): {
                 sb.append("microsoft:sqlserver://").append(
@@ -89,6 +96,22 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append(":").append(stgAttr.getPort());
                 }
                 sb.append(";").append(rsa.getDatabase());
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                    sb.append("?").append(rsa.getStgAttr().getUrlParaments());
+                }
+                break;
+            }
+            case (DBOpt.RedShift) : {
+                sb.append("redshift://").append(
+                        stgAttr.getServer());
+                if (0 != stgAttr.getPort()) {
+                    sb.append(":").append(stgAttr.getPort());
+                }
+                sb.append("/").append(rsa.getDatabase());
+                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                    sb.append("?").append(rsa.getStgAttr().getUrlParaments());
+                }
+                break;
             }
             case (DBOpt.MySql):
             default: {
@@ -110,6 +133,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                 if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
                     sb.append("&").append(rsa.getStgAttr().getUrlParaments());
                 }
+                break;
 //                sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull");
             }
         }
@@ -158,20 +182,31 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
             }
         }
 
+        Map<String,StgTempAttr> maps = new HashMap<>();
+        List tpltNodes = XmlUtil.selectNodes(doc,templateTagName);
+        if(!SetUtil.isNullOrEmpty(tpltNodes)){
+            for(Object ele : tpltNodes){
+                StgTempAttr stgTempAttr =  parserStgTemp((Element) ele);
+                maps.putIfAbsent(stgTempAttr.getName(), stgTempAttr);
+            }
+        }
+
         @SuppressWarnings("rawtypes")
         List objNodes = XmlUtil.selectNodes(doc, tagName);
         if (SetUtil.isNullOrEmpty(objNodes)) {
             throw new AblThrowable("parser the node tags:" + tagName
                 + " in the storage.xml is error. the node of the tags is null or empty.");
         }
-        parserStorages(objNodes);
+        parserStorages(objNodes,maps);
         return;
     }
 
     protected abstract void parserStorages(
-            @SuppressWarnings("rawtypes") List nodes);
+            @SuppressWarnings("rawtypes") List nodes, Map<String,StgTempAttr> maps);
 
-    protected abstract StgAttr parserStorage(Element node);
+    protected abstract StgAttr parserStorage(Element node, Map<String,StgTempAttr> maps);
+
+    protected abstract StgTempAttr parserStgTemp(Element node);
 
     public void addStorageAttribute(String name, StgAttr sa) {
         cached.put(name, sa);

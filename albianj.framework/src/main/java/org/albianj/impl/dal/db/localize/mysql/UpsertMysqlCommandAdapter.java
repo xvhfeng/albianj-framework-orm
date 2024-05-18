@@ -6,11 +6,10 @@ import org.albianj.api.dal.db.PCmd;
 import org.albianj.api.dal.db.SqlPara;
 import org.albianj.api.dal.object.AblEntityAttr;
 import org.albianj.api.dal.object.AblEntityFieldAttr;
-import org.albianj.api.dal.object.DBOpt;
 import org.albianj.api.dal.object.IAblObj;
 import org.albianj.impl.dal.db.IDMLCmd;
 import org.albianj.impl.dal.db.PersistenceNamedParameter;
-import org.albianj.impl.dal.db.RemoveCommandAdapter;
+import org.albianj.impl.dal.db.SqlField;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +37,7 @@ import java.util.Map;
 
 
  */
-public class IstOrUpdCommandAdapter implements IDMLCmd {
+public class UpsertMysqlCommandAdapter implements IDMLCmd {
 
     public static Map<String, SqlPara> makeIstOrUpdCommand(String sessionId, int dbStyle, String tableName,
                                                          AblEntityAttr objAttr, Map<String, Object> sqlParaVals,
@@ -47,7 +46,7 @@ public class IstOrUpdCommandAdapter implements IDMLCmd {
         StringBuilder paras = new StringBuilder();
         StringBuilder upd = new StringBuilder();
 
-        sqlText.append("INSERT INTO ").append("`").append(tableName).append("`");
+        sqlText.append("INSERT INTO ").append(SqlField.nonKeywords(dbStyle,tableName));
 
         Map<String, AblEntityFieldAttr> fieldsAttr = objAttr.getFields();
 
@@ -71,10 +70,10 @@ public class IstOrUpdCommandAdapter implements IDMLCmd {
             sqlParas.put(String.format("#%1$s#", member.getSqlFieldName()),
                     para);
 
-            cols.append("`").append(member.getSqlFieldName()).append("`");
+            cols.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()));
 
-            upd.append("`").append(member.getSqlFieldName()).append("`")
-                    .append("=VALUES").append("(`").append(member.getSqlFieldName()).append("`),");
+            upd.append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName()))
+                    .append("=VALUES").append("(").append(SqlField.nonKeywords(dbStyle,member.getSqlFieldName())).append("),");
 
             cols.append(",");
             paras.append("#").append(member.getSqlFieldName()).append("# ,");
@@ -113,16 +112,6 @@ public class IstOrUpdCommandAdapter implements IDMLCmd {
         cmd.setCommandText(sqlText.toString());
         cmd.setCommandType(CmdOpt.Text);
         cmd.setParameters(sqlParas);
-
-//        if (rbkOnError) {
-//            StringBuilder rollbackText = new StringBuilder();
-//
-//            Map<String, SqlPara> rollbackParas = RemoveCommandAdapter.makeRemoveCommand(sessionId,
-//                    dbStyle, tableName, objAttr, mapValue, rollbackText);
-//            cmd.setRollbackCommandText(rollbackText.toString());
-//            cmd.setRollbackCommandType(CmdOpt.Text);
-//            cmd.setRollbackParameters(rollbackParas);
-//        }
 
         PersistenceNamedParameter.parseSql(cmd);
         return cmd;

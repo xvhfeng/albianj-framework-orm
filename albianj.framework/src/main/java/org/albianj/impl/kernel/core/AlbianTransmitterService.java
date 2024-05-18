@@ -39,12 +39,13 @@ package org.albianj.impl.kernel.core;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
+import org.albianj.api.kernel.anno.AblObjScanRant;
+import org.albianj.api.kernel.anno.AblServScanRant;
 import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.impl.kernel.service.FreeAlbianServiceParser;
-import org.albianj.api.kernel.attr.ApplicationSettings;
 import org.albianj.api.kernel.attr.GlobalSettings;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.api.kernel.attr.ServiceAttributeMap;
 import org.albianj.api.kernel.attr.ServiceContainer;
 import org.albianj.loader.IAlbianTransmitterService;
@@ -63,8 +64,11 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
     @Override
     public void start(Class<?> mainClzz,String configurtionFolder)  {
 
-        GlobalSettings globalSettings = new GlobalSettings(mainClzz,configurtionFolder);
-        ApplicationSettings.setGlobalSettings(globalSettings);
+//        GlobalSettings globalSettings = new GlobalSettings(mainClzz,configurtionFolder);
+//        ApplicationSettings.setGlobalSettings(globalSettings);
+        GlobalSettings.getInst().setMainClzz(mainClzz);
+        GlobalSettings.getInst().setConfigurtionFolder(configurtionFolder);
+        parserMainClassAnno(mainClzz);
 
         // first load logger
         // 必须开始第一件事情就是起logger service，以保证后续日志可以被记录
@@ -104,7 +108,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
             for (Map.Entry<String, AlbianServiceAttribute> entry : mapAttr.entrySet())
                 try {
                     AlbianServiceAttribute serviceAttr = entry.getValue();
-                    IAlbianService service = AlbianServiceLoader.makeupService(serviceAttr, mapAttr);
+                    IAblServ service = AlbianServiceLoader.makeupService(serviceAttr, mapAttr);
                     ServiceContainer.addService(serviceAttr.getId(), service);
                 } catch (Exception exc) {
                     e = exc;
@@ -155,6 +159,16 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
                 "set fieds in the service over .Startup albianJ is success!");
     }
 
+    private void parserMainClassAnno(Class<?> mainClzz){
+        if(mainClzz.isAnnotationPresent(AblServScanRant.class)) {
+            AblServScanRant ss = mainClzz.getAnnotation(AblServScanRant.class);
+            GlobalSettings.getInst().setServAnnoPkgs(ss.Paths());
+        }
+        if(mainClzz.isAnnotationPresent(AblObjScanRant.class)) {
+            AblObjScanRant ss = mainClzz.getAnnotation(AblObjScanRant.class);
+            GlobalSettings.getInst().setEntityAnnoPkgs(ss.Paths());
+        }
+    }
 
 
     /* (non-Javadoc)
@@ -165,7 +179,7 @@ public class AlbianTransmitterService implements IAlbianTransmitterService {
         Set<String> keys = ServiceContainer.getAllServiceNames();
         for (String key : keys) {
             try {
-                IAlbianService service = ServiceContainer.getService(key);
+                IAblServ service = ServiceContainer.getService(key);
                 service.beforeUnload();
                 service.unload();
                 service.afterUnload();

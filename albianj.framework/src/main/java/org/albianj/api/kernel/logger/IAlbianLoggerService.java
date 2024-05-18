@@ -2,13 +2,13 @@ package org.albianj.api.kernel.logger;
 
 import org.albianj.AblBltinServsNames;
 import org.albianj.common.comment.Comments;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 
 /**
  * Created by xuhaifeng on 17/2/9.
  */
 @Comments("logger service的v2版本，解决log-v1中无法正确标识文件位置问题")
-public interface IAlbianLoggerService extends IAlbianService {
+public interface IAlbianLoggerService extends IAblServ {
 
     @Comments("Albianj Logger Service2在server.xml中的标识")
     String Name = AblBltinServsNames.AlbianLoggerServiceName;

@@ -1,9 +1,9 @@
 package Albian.Test.Services;
 
 
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 
-public interface IUTF8M64Service extends IAlbianService {
+public interface IUTF8M64Service extends IAblServ {
 
     public static String ServiceId = "UTF8M64Service";
 

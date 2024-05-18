@@ -1,26 +1,46 @@
 package Albian.Test;
 
+import Albian.Test.Model.Impl.Event;
+import Albian.Test.Services.IEventServ;
 import Albian.Test.Services.IOrgUserService;
 import Albian.Test.Services.IUserService;
 import org.albianj.ServRouter;
+import org.albianj.api.kernel.anno.AblObjScanRant;
+import org.albianj.api.kernel.anno.AblServScanRant;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.loader.AlbianjApplication;
+import org.albianj.loader.AblApp;
 import org.albianj.AblServRouter;
-import org.albianj.loader.IAlbianCommandLineApplication;
-import org.albianj.loader.annos.AblScanRant;
+import org.albianj.loader.IAblCommandLine;
 
-@AblScanRant(value = {"dsdss","dsdscsds"})
-public class DoTest implements IAlbianCommandLineApplication {
+import java.util.List;
+
+@AblServScanRant(Paths = "Albian.Test.Services.Impl")
+@AblObjScanRant(Paths = "Albian.Test.Model.Impl")
+public class DoTest implements IAblCommandLine {
     public static void main(String[] argv) {
         try {
 
-            AlbianjApplication.run(DoTest.class,argv[0]);
+            AblApp.run(DoTest.class,null);
+//            for(int i = 0; i < 10000; i++ ) {
+//
+//                testRedShift();
+//            }
             test1();
             return;
 
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private static void testRedShift(){
+
+        IEventServ eServ = ServRouter.getService("",IEventServ.class);
+        eServ.insert();
+
+        List<Event> events = eServ.load();
+        AblServRouter.log("Test redshift",LogLevel.Info,"load action;{}",events.size());
+      //
     }
 
     private static void test1()  {

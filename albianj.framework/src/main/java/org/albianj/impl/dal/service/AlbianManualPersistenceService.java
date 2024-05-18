@@ -1,14 +1,14 @@
 package org.albianj.impl.dal.service;
 
 import org.albianj.api.dal.context.ManualCtx;
+import org.albianj.api.dal.service.IAlbianManualPersistenceService;
 import org.albianj.impl.dal.db.IManualCommandAdapter;
 import org.albianj.impl.dal.db.IManualTransactionScope;
 import org.albianj.impl.dal.db.ManualCommandAdapter;
 import org.albianj.impl.dal.db.ManualTransactionScope;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.anno.serv.AblServRant;
+import org.albianj.api.kernel.service.FreeAblServ;
 import org.albianj.api.dal.context.ManualCmd;
-import org.albianj.api.dal.service.IAlbianManualPersistenceService;
 
 import java.util.List;
 import java.util.Vector;
@@ -17,8 +17,8 @@ import java.util.Vector;
 /**
  * Created by xuhaifeng on 17/8/17.
  */
-@AlbianServiceRant(Id = IAlbianManualPersistenceService.Name, Interface = IAlbianManualPersistenceService.class)
-public class AlbianManualPersistenceService extends FreeAlbianService implements IAlbianManualPersistenceService {
+@AblServRant(Id = IAlbianManualPersistenceService.Name, Interface = IAlbianManualPersistenceService.class)
+public class AlbianManualPersistenceService extends FreeAblServ implements IAlbianManualPersistenceService {
 
     public String getServiceName() {
         return Name;

@@ -7,10 +7,10 @@ import Albian.Test.Services.Metadata.StorageInfo;
 import org.albianj.api.dal.object.filter.FltGExpr;
 import org.albianj.api.dal.object.filter.IFltGExpr;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.anno.serv.AlbianServiceFieldRant;
-import org.albianj.api.kernel.anno.serv.AlbianServiceFieldType;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.anno.serv.AblServFieldRant;
+import org.albianj.api.kernel.anno.serv.AblServFieldType;
+import org.albianj.api.kernel.anno.serv.AblServRant;
+import org.albianj.api.kernel.service.FreeAblServ;
 import org.albianj.api.dal.context.dactx.IDMLCtx;
 import org.albianj.api.dal.context.dactx.IDQLCtx;
 import org.albianj.api.dal.context.dactx.QryOpt;
@@ -25,14 +25,14 @@ import java.math.BigInteger;
 import java.util.List;
 
 // service必须使用此特性进行标注，否则albianj不对其进行解析
-@AlbianServiceRant(Id = "UserService", Interface = IUserService.class)
-public class UserService extends FreeAlbianService implements IUserService {
+@AblServRant(Id = "UserService", Interface = IUserService.class)
+public class UserService extends FreeAblServ implements IUserService {
 
     int idx = 0;
     //在没有确认与把握的情况下，慎用之慎用之慎用之（重要的话说三遍）
     //使用albianj的ioc直接对其属性进行赋值
     // 注意，所有使用AlbianServiceFieldRant赋值的值都是单利模式，故在albianj中会自动提升为静态变量状态
-    @AlbianServiceFieldRant(Type = AlbianServiceFieldType.Ref, Value = "AlbianDataAccessService")
+    @AblServFieldRant(Type = AblServFieldType.Ref, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override
@@ -109,8 +109,8 @@ public class UserService extends FreeAlbianService implements IUserService {
 //        user.setPassword("batcher");
 //        user.setUserName("batcher");
         //同时使用数据路由与单数据库保存
-        boolean success =  dctx.add(QryOpt.IstOrUpd, mu1)
-                .add(QryOpt.IstOrUpd, mu2)
+        boolean success =  dctx.add(QryOpt.Upsert, mu1)
+                .add(QryOpt.Upsert, mu2)
 //                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
 
@@ -121,8 +121,8 @@ public class UserService extends FreeAlbianService implements IUserService {
 
         mu2.setUserName("user2 name");
         mu2.setPassword("mu2pwd");
-        success =  dctx.add(QryOpt.IstOrUpd, mu1)
-                .add(QryOpt.IstOrUpd, mu2)
+        success =  dctx.add(QryOpt.Upsert, mu1)
+                .add(QryOpt.Upsert, mu2)
 //                .add(AlbianDataAccessOpt.Save, user, StorageInfo.SingleUserStorageName)
                 .commit("sessionId");
         return success;

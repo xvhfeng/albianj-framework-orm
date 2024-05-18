@@ -39,6 +39,7 @@ package org.albianj.impl.dal.mapping;
 
 import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
+import org.albianj.api.kernel.attr.GlobalSettings;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.utils.XmlUtil;
@@ -51,6 +52,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import java.beans.PropertyDescriptor;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,7 +65,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
     public void init()  {
         _bpd = new HashMap<>();
         try {
-            parserFile(file);
+            parserFile(GlobalSettings.getInst().getEntityAnnoPkgs(), file);
         } catch (Throwable e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
            "loading the persisten.xml is error.");
@@ -71,71 +73,98 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
         return;
     }
 
-    private void parserFile(String filename) throws Throwable {
+    private HashMap<String, Object>  parserPkgsFromAnno(String[] pkgs) throws Throwable{
+        HashMap<String, Object> total = new HashMap<>();
+        if(null != pkgs) {
+            for(String  pkg : pkgs) {
+                HashMap<String, Object> pkgMap = AlbianEntityRantScaner.scanPackage(pkg);
+                if(null != pkgMap){
+                    pkgMap.entrySet().forEach(e -> total.putIfAbsent(e.getKey(),e.getValue()));
+                }
+            }
+        }
+        return total;
+    }
+
+    private void parserFile(String[] pkgs,String filename) throws Throwable {
         Document doc = null;
         try {
             String fname = findConfigFile(filename);
-            doc = XmlUtil.load(fname);
+            if(!StringsUtil.isNullOrEmptyOrAllSpace(fname) && new File(fname).exists()) {
+                doc = XmlUtil.load(fname);
+            }
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "loading the persisten.xml is error.");
 
         }
-        if (null == doc) {
-            throw new AblThrowable("loading the persisten.xml is error.");
-        }
 
-        @SuppressWarnings("rawtypes")
-        List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-        if (!SetUtil.isNullOrEmpty(nodes)) {
-            for (Object node : nodes) {
-                Element elt = XmlUtil.toElement(node);
-                String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
-                parserFile(path);
-            }
-        }
+        HashMap<String, Object> mapOfObjAnno =  parserPkgsFromAnno(pkgs);
+        HashMap<String, Object> pkgMapTotal = new HashMap<>();
 
-        // add rant scaner
-        List pkgNodes = XmlUtil.selectNodes(doc, "AlbianObjects/Packages/Package");
-        if (!SetUtil.isNullOrEmpty(pkgNodes)) {
-            for (Object node : pkgNodes) {
-                Element elt = XmlUtil.toElement(node);
-
-                String enable = XmlUtil.getAttributeValue(elt, "Enable");
-                String pkg = XmlUtil.getAttributeValue(elt, "Path");
-
-                if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
-                    boolean b = Boolean.parseBoolean(enable);
-                    if (!b) {
-                        ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
-                                "Path -> :{} in the Package enable is false,so not load it.",
-                            StringsUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
-                        continue;// not load pkg
-                    }
+        if (null != doc) {
+            @SuppressWarnings("rawtypes")
+            List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
+            if (!SetUtil.isNullOrEmpty(nodes)) {
+                for (Object node : nodes) {
+                    Element elt = XmlUtil.toElement(node);
+                    String path = XmlUtil.getAttributeValue(elt, "Filename");
+                    if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                    parserFile(null,path);
                 }
+            }
 
-                if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
-                    throw new AblThrowable(
-                        "loading the persistence.xml is error. 'Path' attribute in  Package config-item is null or empty.");
-                } else {
-                    try {
-                        HashMap<String, Object> pkgMap = AlbianEntityRantScaner.scanPackage(pkg);
-                        if (null != pkgMap) {
-                            AlbianEntityMetadata.putAll(pkgMap);//merger the metedata
+            // add rant scaner
+            List pkgNodes = XmlUtil.selectNodes(doc, "AlbianObjects/Packages/Package");
+            if (!SetUtil.isNullOrEmpty(pkgNodes)) {
+                for (Object node : pkgNodes) {
+                    Element elt = XmlUtil.toElement(node);
+
+                    String enable = XmlUtil.getAttributeValue(elt, "Enable");
+                    String pkg = XmlUtil.getAttributeValue(elt, "Path");
+
+                    if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
+                        boolean b = Boolean.parseBoolean(enable);
+                        if (!b) {
+                            ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Warn,
+                                    "Path -> :{} in the Package enable is false,so not load it.",
+                                    StringsUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+                            continue;// not load pkg
                         }
-                    } catch (Exception e) {
-                        ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
-                                "loading the persisten.xml is error.path:{} ",pkg);
+                    }
+
+                    if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
+                        throw new AblThrowable(
+                                "loading the persistence.xml is error. 'Path' attribute in  Package config-item is null or empty.");
+                    } else {
+                        try {
+                            HashMap<String, Object> pkgMap = AlbianEntityRantScaner.scanPackage(pkg);
+                            if (null != pkgMap) {
+                                pkgMap.entrySet().forEach(e -> pkgMapTotal.putIfAbsent(e.getKey(),e.getValue()));
+//                                AlbianEntityMetadata.putAll(pkgMap);//merger the metedata
+                            }
+                        } catch (Exception e) {
+                            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId, LogLevel.Error, e,
+                                    "loading the persisten.xml is error.path:{} ", pkg);
+                        }
                     }
                 }
-
             }
         }
 
-        List objNodes = XmlUtil.selectNodes(doc, tagName);
-        if (!SetUtil.isNullOrEmpty(objNodes)) {
-            parserAlbianObjects(objNodes);
+        if(null != mapOfObjAnno){
+            mapOfObjAnno.entrySet().forEach(e -> pkgMapTotal.putIfAbsent(e.getKey(),e.getValue()));
+        }
+
+        if(null != pkgMapTotal) {
+            AlbianEntityMetadata.putAll(pkgMapTotal);
+        }
+
+        if(null != doc) {
+            List objNodes = XmlUtil.selectNodes(doc, tagName);
+            if (!SetUtil.isNullOrEmpty(objNodes)) {
+                parserAlbianObjects(objNodes);
+            }
         }
         return;
     }

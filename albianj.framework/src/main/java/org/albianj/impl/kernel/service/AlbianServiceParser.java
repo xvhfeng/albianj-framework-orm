@@ -46,7 +46,7 @@ import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServRant;
 import org.albianj.api.kernel.service.parser.IAlbianParserService;
 import org.albianj.loader.AlbianClassLoader;
 import org.dom4j.Element;
@@ -56,7 +56,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AlbianServiceRant(Id = AblBltinServsNames.AlbianServiceParserName, Interface = IAlbianParserService.class)
+@AblServRant(Id = AblBltinServsNames.AlbianServiceParserName, Interface = IAlbianParserService.class)
 public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     private final static String ID_ATTRBUITE_NAME = "Id";
@@ -96,12 +96,17 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         }
         AlbianServiceAttribute serviceAttr = new AlbianServiceAttribute();
         String id = XmlUtil.getAttributeValue(elt, ID_ATTRBUITE_NAME);
-        if (StringsUtil.isNullOrEmptyOrAllSpace(id)) {
+        String sitf = XmlUtil.getAttributeValue(elt, "Interface");
+        if (!StringsUtil.isNullOrEmptyOrAllSpace(sitf)) {
+            serviceAttr.setItf(sitf);
+        }
+        if(StringsUtil.isNullOrEmptyOrAllSpace(id) && StringsUtil.isNullOrEmptyOrAllSpace(sitf)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
-                    "parser service node id is null or empty ,the node next id:{}", name);
+                    "parser service node id and interface are bose null or empty ,the node next id:{}", name);
             return null;
         }
-        serviceAttr.setId(id);
+
+        serviceAttr.setId(StringsUtil.isNullOrEmptyOrAllSpace(id) ? sitf : id);
         String type = XmlUtil.getAttributeValue(elt, TYPE_ATTRBUITE_NAME);
         if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
             ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
@@ -120,11 +125,6 @@ public class AlbianServiceParser extends FreeAlbianServiceParser {
         }
 
         serviceAttr.setServiceClass(clzz);
-
-        String sitf = XmlUtil.getAttributeValue(elt, "Interface");
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(sitf)) {
-            serviceAttr.setItf(sitf);
-        }
 
         String enable = XmlUtil.getAttributeValue(elt, "Enable");
         if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
