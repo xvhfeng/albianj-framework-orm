@@ -123,34 +123,34 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
         if (null != doc) {
             @SuppressWarnings("rawtypes")
             List nodes = XmlUtil.selectNodes(doc, "Services/IncludeSet/Include");
-            if (!SetUtil.isNullOrEmpty(nodes)) {
+            if (!SetUtil.isEmpty(nodes)) {
                 for (Object node : nodes) {
                     Element elt = XmlUtil.toElement(node);
                     String path = XmlUtil.getAttributeValue(elt, "Filename");
-                    if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                    if (StringsUtil.isNullEmptyTrimmed(path)) continue;
                     parserFile(map, null, path);
                 }
             }
 
             List pkgNodes = XmlUtil.selectNodes(doc, pkgTagName);
-            if (!SetUtil.isNullOrEmpty(pkgNodes)) {
+            if (!SetUtil.isEmpty(pkgNodes)) {
                 for (Object node : pkgNodes) {
                     Element elt = XmlUtil.toElement(node);
                     String enable = XmlUtil.getAttributeValue(elt, "Enable");
                     String pkg = XmlUtil.getAttributeValue(elt, "Path");
 
-                    if (!StringsUtil.isNullOrEmptyOrAllSpace(enable)) {
+                    if (!StringsUtil.isNullEmptyTrimmed(enable)) {
                         boolean b = Boolean.parseBoolean(enable);
                         if (!b) {
                             ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Warn,
                                     "Path:{} in the Package enable is false,so not load it.",
-                                    StringsUtil.isNullOrEmptyOrAllSpace(pkg) ? "NoPath" : pkg);
+                                    StringsUtil.isNullEmptyTrimmed(pkg) ? "NoPath" : pkg);
 
                             continue;// not load pkg
                         }
                     }
 
-                    if (StringsUtil.isNullOrEmptyOrAllSpace(pkg)) {
+                    if (StringsUtil.isNullEmptyTrimmed(pkg)) {
                         throw new AblThrowable(
                                 "loading the service.xml is error. 'Path' attribute in  Package config-item is null or empty.");
                     } else {
@@ -170,7 +170,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
             }
 
             List serviceNodes = XmlUtil.selectNodes(doc, "Services/Service");
-            if (!SetUtil.isNullOrEmpty(serviceNodes)) {
+            if (!SetUtil.isEmpty(serviceNodes)) {
                 parserServices(attrMap, tagName, serviceNodes);
             }
         }
@@ -229,10 +229,10 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
             Map<String, AlbianServiceFieldAttribute> asaFieldAttr = asa.getServiceFields();
             Map<String, AlbianServiceFieldAttribute> pkgFieldAttr = asaPkg.getServiceFields();
 
-            if (SetUtil.isNullOrEmpty(asaFieldAttr)) {
+            if (SetUtil.isEmpty(asaFieldAttr)) {
                 asa.setServiceFields(pkgFieldAttr);
             } else {
-                if (!SetUtil.isNullOrEmpty(pkgFieldAttr)) {
+                if (!SetUtil.isEmpty(pkgFieldAttr)) {
                     // merger field attribute
                     // base on service.xml and merger field from pkg
                     // if exist in service.xml not merger field from pkg
@@ -246,10 +246,10 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
             Map<String, AlbianServiceAopAttribute> asaAopAttr = asa.getAopAttributes();
             Map<String, AlbianServiceAopAttribute> pkgAopAttr = asaPkg.getAopAttributes();
-            if (SetUtil.isNullOrEmpty(asaAopAttr)) {
+            if (SetUtil.isEmpty(asaAopAttr)) {
                 asa.setAopAttributes(pkgAopAttr);
             } else {
-                if (!SetUtil.isNullOrEmpty(pkgAopAttr)) {
+                if (!SetUtil.isEmpty(pkgAopAttr)) {
                     // merger field attribute
                     // base on service.xml and merger field from pkg
                     // if exist in service.xml not merger field from pkg

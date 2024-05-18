@@ -39,7 +39,7 @@ public class AlbianServiceLoader {
             }
 
             Class<?> itf = null;
-            if (!StringsUtil.isNullOrEmptyOrAllSpace(sInterface)) {
+            if (!StringsUtil.isNullEmptyTrimmed(sInterface)) {
                 itf = AlbianClassLoader.getInstance().loadClass(sInterface);
                 if (!itf.isAssignableFrom(cla)) {
                     ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
@@ -61,7 +61,7 @@ public class AlbianServiceLoader {
             service.loading();
             setServiceFields(service, serviceAttr, AblServFieldSetterOpt.AfterLoading, servAttrs);
             service.afterLoading();
-            if (SetUtil.isNullOrEmpty(serviceAttr.getAopAttributes())) {
+            if (SetUtil.isEmpty(serviceAttr.getAopAttributes())) {
                 rtnService = service;
             } else {
                 AlbianServiceAopProxy proxy = new AlbianServiceAopProxy();
@@ -80,7 +80,7 @@ public class AlbianServiceLoader {
     }
 
     public static void setServiceFields(IAblServ serv, AlbianServiceAttribute servAttr, AblServFieldSetterOpt lifetime, Map<String, AlbianServiceAttribute> servAttrs)  {
-        if(SetUtil.isNullOrEmpty(servAttr.getServiceFields())) {
+        if(SetUtil.isEmpty(servAttr.getServiceFields())) {
             return;
         }
         for (AlbianServiceFieldAttribute fAttr : servAttr.getServiceFields().values()) {

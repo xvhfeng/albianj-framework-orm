@@ -58,7 +58,7 @@ public class WrtJob {
 
     public WrtJob(String sessionId) {
         // TODO Auto-generated constructor stub
-        if (StringsUtil.isNullOrEmptyOrAllSpace(sessionId)) {
+        if (StringsUtil.isNullEmptyTrimmed(sessionId)) {
             this.id = ServRouter.make32UUID();
         } else {
             this.id = sessionId;

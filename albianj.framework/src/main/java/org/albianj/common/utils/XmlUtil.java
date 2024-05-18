@@ -46,7 +46,7 @@ import java.util.List;
 
 public final class XmlUtil {
     public static Document load(String path) throws DocumentException {
-        if (StringsUtil.isNullOrEmptyOrAllSpace(path)) {
+        if (StringsUtil.isNullEmptyTrimmed(path)) {
             throw new IllegalArgumentException("path");
         }
         try {
@@ -70,7 +70,7 @@ public final class XmlUtil {
             throw new IllegalArgumentException("doc");
         }
 
-        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName)) {
+        if (StringsUtil.isNullEmptyTrimmed(tagName)) {
             throw new IllegalArgumentException("tagName");
         }
         return doc.selectNodes(tagName);
@@ -87,7 +87,7 @@ public final class XmlUtil {
         if (null == doc) {
             throw new IllegalArgumentException("doc");
         }
-        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName)) {
+        if (StringsUtil.isNullEmptyTrimmed(tagName)) {
             throw new IllegalArgumentException("tagName");
         }
         @SuppressWarnings("rawtypes") List nodes = selectNodes(doc, tagName);
@@ -101,7 +101,7 @@ public final class XmlUtil {
         if (null == elt) {
             throw new IllegalArgumentException("elt");
         }
-        if (StringsUtil.isNullOrEmptyOrAllSpace(attributeName)) {
+        if (StringsUtil.isNullEmptyTrimmed(attributeName)) {
             throw new IllegalArgumentException("attributeName");
         }
         Attribute attr = elt.attribute(attributeName);
@@ -113,9 +113,9 @@ public final class XmlUtil {
     public static String getAttributeValue(Document doc, String tagName, String attributeName) {
         if (null == doc)
             throw new IllegalArgumentException("doc");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName))
+        if (StringsUtil.isNullEmptyTrimmed(tagName))
             throw new IllegalArgumentException("tagName");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(attributeName))
+        if (StringsUtil.isNullEmptyTrimmed(attributeName))
             throw new IllegalArgumentException("attributeName");
         Element elt = selectNode(doc, tagName);
         if (null == elt)
@@ -138,7 +138,7 @@ public final class XmlUtil {
     public static String getNodeValue(Document doc, String tagName) {
         if (null == doc)
             throw new IllegalArgumentException("doc");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(tagName))
+        if (StringsUtil.isNullEmptyTrimmed(tagName))
             throw new IllegalArgumentException("tagName");
         Element ele = selectNode(doc, tagName);
         if (null == ele)
@@ -149,7 +149,7 @@ public final class XmlUtil {
     public static String getAttributeValue(Node node, String attributeName) {
         if (null == node)
             throw new IllegalArgumentException("node");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(attributeName))
+        if (StringsUtil.isNullEmptyTrimmed(attributeName))
             throw new IllegalArgumentException("attributeName");
         return getAttributeValue((Element)node, attributeName);
     }
@@ -157,7 +157,7 @@ public final class XmlUtil {
     public static String getSingleChildNodeValue(Element elt, String childTagName) {
         if (null == elt)
             throw new IllegalArgumentException("elt");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(childTagName))
+        if (StringsUtil.isNullEmptyTrimmed(childTagName))
             throw new IllegalArgumentException("childTagName");
         Node chird = elt.selectSingleNode(childTagName);
         if (null == chird)
@@ -176,7 +176,7 @@ public final class XmlUtil {
         Validate.notNull(elt, "the element of xml-doc is null.");
         Validate.notBlank(childTagName, "the childTagName of element is blank.");
         List chirds = elt.selectNodes(childTagName);
-        if (SetUtil.isNullOrEmpty(chirds))
+        if (SetUtil.isEmpty(chirds))
             return null;
         return (Node)chirds.get(0);
     }

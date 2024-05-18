@@ -72,7 +72,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     private static void parserEntityField(String type, Element elt, Map<String, AblEntityFieldAttr> map) {
         String name = XmlUtil.getAttributeValue(elt, "Name");
-        if (StringsUtil.isNullOrEmpty(name)) {
+        if (StringsUtil.isNullEmptyTrimmed(name)) {
             throw new AblThrowable(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML());
         }
@@ -88,29 +88,29 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         String dbType = XmlUtil.getAttributeValue(elt, "DbType");
         String isSave = XmlUtil.getAttributeValue(elt, "IsSave");
 
-        if (!StringsUtil.isNullOrEmpty(fieldName)) {
+        if (!StringsUtil.isNullEmptyTrimmed(fieldName)) {
             fieldAttr.setSqlFieldName(fieldName);
         }
-        if (!StringsUtil.isNullOrEmpty(allowNull)) {
+        if (!StringsUtil.isNullEmptyTrimmed(allowNull)) {
             fieldAttr.setAllowNull( Boolean.parseBoolean(allowNull));
         }
-        if (!StringsUtil.isNullOrEmpty(length)) {
+        if (!StringsUtil.isNullEmptyTrimmed(length)) {
             fieldAttr.setLength( Integer.parseInt(length));
         }
-        if (!StringsUtil.isNullOrEmpty(primaryKey)) {
+        if (!StringsUtil.isNullEmptyTrimmed(primaryKey)) {
             fieldAttr.setPrimaryKey( Boolean.parseBoolean(primaryKey));
         }
-        if (!StringsUtil.isNullOrEmpty(dbType)) {
+        if (!StringsUtil.isNullEmptyTrimmed(dbType)) {
             fieldAttr.setDatabaseType(SqlTypeConv.toSqlType(dbType));
         }
-        if (!StringsUtil.isNullOrEmpty(isSave)) {
+        if (!StringsUtil.isNullEmptyTrimmed(isSave)) {
             fieldAttr.setSave( Boolean.parseBoolean(isSave));
         }
     }
 
     private static void parserAlbianObjectMember(String type, Element elt, Map<String, AblEntityFieldAttr> map) {
         String name = XmlUtil.getAttributeValue(elt, "Name");
-        if (StringsUtil.isNullOrEmpty(name)) {
+        if (StringsUtil.isNullEmptyTrimmed(name)) {
             throw new AblThrowable(
                 "the persisten node name is null or empty.type:" + type + ",node xml:" + elt.asXML() + ".");
         }
@@ -127,30 +127,30 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         String isSave = XmlUtil.getAttributeValue(elt, "IsSave");
         String varField = XmlUtil.getAttributeValue(elt, "VarField");
         String autoGenKey = XmlUtil.getAttributeValue(elt, "AutoGenKey");
-        if (!StringsUtil.isNullOrEmpty(fieldName)) {
+        if (!StringsUtil.isNullEmptyTrimmed(fieldName)) {
             member.setSqlFieldName(fieldName);
         }
-        if (!StringsUtil.isNullOrEmpty(allowNull)) {
+        if (!StringsUtil.isNullEmptyTrimmed(allowNull)) {
             member.setAllowNull(Boolean.parseBoolean(allowNull));
         }
-        if (!StringsUtil.isNullOrEmpty(length)) {
+        if (!StringsUtil.isNullEmptyTrimmed(length)) {
             member.setLength( Integer.parseInt(length));
         }
-        if (!StringsUtil.isNullOrEmpty(primaryKey)) {
+        if (!StringsUtil.isNullEmptyTrimmed(primaryKey)) {
             member.setPrimaryKey( Boolean.parseBoolean(primaryKey));
         }
-        if (!StringsUtil.isNullOrEmpty(dbType)) {
+        if (!StringsUtil.isNullEmptyTrimmed(dbType)) {
             member.setDatabaseType(SqlTypeConv.toSqlType(dbType));
         }
-        if (!StringsUtil.isNullOrEmpty(isSave)) {
+        if (!StringsUtil.isNullEmptyTrimmed(isSave)) {
             member.setSave( Boolean.parseBoolean(isSave));
         }
-        if (StringsUtil.isNullOrEmptyOrAllSpace(varField)) {
+        if (StringsUtil.isNullEmptyTrimmed(varField)) {
             member.setVarField(StringsUtil.lowercasingFirstLetter(name));
         } else {
             member.setVarField(varField);
         }
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(autoGenKey)) {
+        if (!StringsUtil.isNullEmptyTrimmed(autoGenKey)) {
             member.setAutoGenKey( Boolean.parseBoolean(autoGenKey));
         }
     }
@@ -164,7 +164,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     @Override
     protected void parserAlbianObjects(@SuppressWarnings("rawtypes") List nodes)  {
-        if (SetUtil.isNullOrEmpty(nodes)) {
+        if (SetUtil.isEmpty(nodes)) {
             throw new IllegalArgumentException("nodes");
         }
         String inter = null;
@@ -182,7 +182,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 
     protected void parserAlbianObject(Element node)  {
         String type = XmlUtil.getAttributeValue(node, "Type");
-        if (StringsUtil.isNullOrEmptyOrAllSpace(type)) {
+        if (StringsUtil.isNullEmptyTrimmed(type)) {
             throw new AblThrowable("The AlbianObject's type is empty in persistence.xml");
         }
 
@@ -232,7 +232,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
 
         Map<String, AblEntityFieldAttr> entityFieldAttr = null;
-        if (SetUtil.isNullOrEmpty(pkgEntityAttr.getFields())) {
+        if (SetUtil.isEmpty(pkgEntityAttr.getFields())) {
             entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz);
             pkgEntityAttr.setFields(entityFieldAttr);
         } else {
@@ -240,7 +240,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
         }
         @SuppressWarnings("rawtypes")
         List nodes = node.selectNodes(memberTagName);
-        if (!SetUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isEmpty(nodes)) {
             parserEntityFields(type, nodes, entityFieldAttr);
         }
 
@@ -269,7 +269,7 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
 //        if (null != attr) {
 //            member.setName(propertyDescriptor.getName());
 //
-//            if (StringsUtil.isNullOrEmptyOrAllSpace(attr.FieldName())) {
+//            if (StringsUtil.isNullEmptyTrimmed(attr.FieldName())) {
 //                member.setSqlFieldName(propertyDescriptor.getName());
 //            } else {
 //                member.setSqlFieldName(attr.FieldName());

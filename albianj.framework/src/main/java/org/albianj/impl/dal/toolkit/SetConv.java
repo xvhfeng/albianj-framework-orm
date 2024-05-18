@@ -69,12 +69,12 @@ public class SetConv {
 
     public static String decideFieldName(OdrBy expr){
         String fieldName = null;
-        if(StringsUtil.isNullOrEmptyOrAllSpace(expr.getFieldName())) {
+        if(StringsUtil.isNullEmptyTrimmed(expr.getFieldName())) {
             fieldName = AlbianEntityMetadata.getFieldNameByGetter(expr.getGetter());
             expr.setFieldName(fieldName);
         }
 
-        if(!StringsUtil.isNullOrEmptyOrAllSpace(expr.getAliasName())) {
+        if(!StringsUtil.isNullEmptyTrimmed(expr.getAliasName())) {
             return expr.getAliasName();
         }
 
@@ -92,7 +92,7 @@ public class SetConv {
         }
         Map<String, T> map = new LinkedHashMap<String, T>(size);
         for (T filter : filters) {
-            map.put(StringsUtil.isNullOrEmptyOrAllSpace(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
+            map.put(StringsUtil.isNullEmptyTrimmed(filter.getAliasName()) ? filter.getFieldName() : filter.getAliasName(), filter);
         }
         return map;
     }

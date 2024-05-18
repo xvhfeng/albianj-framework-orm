@@ -33,7 +33,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
         List<ItlManualCmd> imcs = mctx.getInternalCommands();
         IAlbianStorageParserService asps = ServRouter.getService(mctx.getSessionId(),IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
         StgAttr storage = asps.getStorageAttribute(mctx.getStorageName());
-        if (StringsUtil.isNullOrEmptyOrAllSpace(mctx.getDatabaseName())) {
+        if (StringsUtil.isNullEmptyTrimmed(mctx.getDatabaseName())) {
             mctx.setDatabaseName(storage.getDatabase());
         }
         RStgAttr rsa = new RStgAttr(storage, mctx.getDatabaseName());
@@ -47,7 +47,7 @@ public class ManualTransactionScope extends FreeManualTransactionScope {
                 PreparedStatement prepareStatement =
                         conn.prepareStatement(imc.getSqlText());
                 Map<Integer, String> map = imc.getParameterMapper();
-                if (SetUtil.isNullOrEmpty(map)) {
+                if (SetUtil.isEmpty(map)) {
                     continue;
                 } else {
                     for (int i = 1; i <= map.size(); i++) {

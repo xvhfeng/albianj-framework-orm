@@ -14,7 +14,7 @@ public class AblDrDef extends FreeAblDr {
     public List<DrAttr> mappingWriterRouting(
             Map<String, DrAttr> routings, IAblObj obj) {
         // TODO Auto-generated method stub
-        if (SetUtil.isNullOrEmpty(routings)) return null;
+        if (SetUtil.isEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;
@@ -34,7 +34,7 @@ public class AblDrDef extends FreeAblDr {
             Map<String, IFltCdt> wheres,
             Map<String, OdrBy> orderbys) {
         // TODO Auto-generated method stub
-        if (SetUtil.isNullOrEmpty(routings)) return null;
+        if (SetUtil.isEmpty(routings)) return null;
         if (1 == routings.size()) {
             Set<String> keys = routings.keySet();
             if (null == keys || 1 != keys.size()) return null;

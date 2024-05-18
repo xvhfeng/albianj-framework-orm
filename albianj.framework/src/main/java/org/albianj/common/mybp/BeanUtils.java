@@ -67,7 +67,7 @@ public final class BeanUtils {
      * @return 返回转换后的 bean 列表
      */
     public static <T> List<Map<String, Object>> beansToMaps(List<T> beans) {
-        if (SetUtil.isNullOrEmpty(beans)) {
+        if (SetUtil.isEmpty(beans)) {
             return Collections.emptyList();
         }
         return beans.stream().map(BeanUtils::beanToMap).collect(toList());
@@ -81,7 +81,7 @@ public final class BeanUtils {
      * @return 返回转换后的 bean 集合
      */
     public static <T> List<T> mapsToBeans(List<? extends Map<String, ?>> maps, Class<T> clazz) {
-        if (SetUtil.isNullOrEmpty(maps)) {
+        if (SetUtil.isEmpty(maps)) {
             return Collections.emptyList();
         }
         return maps.stream().map(e -> mapToBean(e, clazz)).collect(toList());

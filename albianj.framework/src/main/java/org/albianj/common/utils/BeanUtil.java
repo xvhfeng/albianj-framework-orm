@@ -24,19 +24,19 @@ public class BeanUtil {
             }
 
             Field[] fFields = src.getClass().getDeclaredFields();
-            if(SetUtil.isNullOrEmpty(fFields)) {
+            if(SetUtil.isEmpty(fFields)) {
                 return;
             }
             for (Field f : fFields){
                 String fName = f.getName();
                 String tName = null;
-                if(!SetUtil.isNullOrEmpty(fieldMapping) && fieldMapping.containsKey(fName)) {
+                if(!SetUtil.isEmpty(fieldMapping) && fieldMapping.containsKey(fName)) {
                     tName = fieldMapping.get(fName);
                 } else {
                     tName = fName;
                 }
 
-                if(!SetUtil.isNullOrEmpty(excptFields) && excptFields.contains(tName)){
+                if(!SetUtil.isEmpty(excptFields) && excptFields.contains(tName)){
                     continue;
                 }
 

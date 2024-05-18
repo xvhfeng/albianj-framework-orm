@@ -71,7 +71,7 @@ public class AblSecuritySecurityServ extends FreeAblServ implements IAblSecurity
     public void init()  {
         super.init();
         String mkey = GlobalSettings.getInst().getPropValue("MachineKey",machineKey);
-        if (StringsUtil.isNullOrEmptyOrAllSpace(mkey)) {
+        if (StringsUtil.isNullEmptyTrimmed(mkey)) {
             return;
         }
         if (40 <= mkey.length()) {

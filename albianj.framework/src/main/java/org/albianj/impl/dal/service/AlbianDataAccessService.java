@@ -136,7 +136,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
             {
 
         List<T> list = doLoadObjects(sessionId, cls, DrOpt.Wtr == loadType, rountingName, 0, 0, wheres, null, null);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
 
@@ -200,7 +200,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
                                                    int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys)
             {
         List<T> list = doLoadObjects(sessionId, cls, DrOpt.Wtr == loadType, rountingName, start, step, wheres, orderbys, null);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list;
 
@@ -322,7 +322,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
     public <T extends IAblObj> T loadObject(String sessionId, Class<T> cls, CmdOpt cmdType,
                                             Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
     }
@@ -330,7 +330,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
     public <T extends IAblObj> List<T> loadObjects(String sessionId, Class<T> cls, CmdOpt cmdType,
                                                    Statement statement)  {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list;
     }
@@ -348,7 +348,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
                                                  CmdOpt cmdType, Statement statement)
             {
         List<T> list = doLoadObjects(sessionId, cls, cmdType, statement);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
     }
@@ -358,7 +358,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
                                                  String routingName, IChaExpr wheres)
             {
         List<T> list = doLoadObjects(sessionId, cls, isExact, routingName, 0, 0, wheres, null, null);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
     }
@@ -418,7 +418,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
                                             DrOpt loadType, String rountingName, IChaExpr wheres, String idxName)
             {
         List<T> list = doLoadObjects(sessionId, cls, DrOpt.Wtr == loadType, rountingName, 0, 0, wheres, null, idxName);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list.get(0);
 
@@ -482,7 +482,7 @@ public class AlbianDataAccessService extends FreeAblServ implements IAlbianDataA
                                                    int start, int step, IChaExpr wheres, LinkedList<OdrBy> orderbys, String idxName)
             {
         List<T> list = doLoadObjects(sessionId, cls, DrOpt.Wtr == loadType, rountingName, start, step, wheres, orderbys, idxName);
-        if (SetUtil.isNullOrEmpty(list))
+        if (SetUtil.isEmpty(list))
             return null;
         return list;
 //        if (LoadType.exact == loadType) {

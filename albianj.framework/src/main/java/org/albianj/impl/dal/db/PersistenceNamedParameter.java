@@ -67,7 +67,7 @@ public class PersistenceNamedParameter {
         cmd.setCommandText(cmdText);
         cmd.setParameterMapper(paramsMap);
 
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(cmd.getRollbackCommandText())) {
+        if (!StringsUtil.isNullEmptyTrimmed(cmd.getRollbackCommandText())) {
             String rollbackText = cmd.getRollbackCommandText();
             Matcher rm = p.matcher(rollbackText);
             Map<Integer, String> rollbackParamsMap = new HashMap<Integer, String>();

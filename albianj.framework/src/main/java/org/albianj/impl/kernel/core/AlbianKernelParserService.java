@@ -66,7 +66,7 @@ public class AlbianKernelParserService extends FreeAlbianParserService {
     public void init()  {
         try {
             String filename = findConfigFile(file);
-            if(!StringsUtil.isNullOrEmptyOrAllSpace(filename)) {
+            if(!StringsUtil.isNullEmptyTrimmed(filename)) {
                 File file = new File(filename);
                 if (file.exists()) {
                     Properties props = PropUtil.load(filename);
