@@ -37,7 +37,6 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.impl.dal.routing;
 
-import org.albianj.AblThrowable;
 import org.albianj.ServRouter;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
@@ -47,10 +46,10 @@ import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.service.parser.FreeAlbianParserService;
 import org.albianj.api.dal.object.DrsAttr;
 import org.albianj.api.dal.service.IAlbianDataRouterParserService;
-import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,41 +82,39 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         Document doc = null;
         try {
             String fname = findConfigFile(filename);
-            //配置文件不存在则不用加载，不报错
-            if(StringUtils.isBlank(fname)){
-                ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Warn,
-                        "loading the drouter.xml is error. drouter.xml is not exist");
+            if(StringsUtil.isNullOrEmptyOrAllSpace(fname)) {
                 return;
             }
-            doc = XmlUtil.load(fname);
+            File f = new File(fname);
+            if(f.exists()) {
+                doc = XmlUtil.load(fname);
+            }
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
                     "loading the drouter.xml is error.");
         }
-        if (null == doc) {
-            throw new AblThrowable("loading the drouter.xml is error.");
-        }
-
-        @SuppressWarnings("rawtypes")
-        List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-        if (!SetUtil.isNullOrEmpty(nodes)) {
-            for (Object node : nodes) {
-                Element elt = XmlUtil.toElement(node);
-                String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
-                parserFile(path);
+        if (null != doc) {
+            @SuppressWarnings("rawtypes")
+            List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
+            if (!SetUtil.isNullOrEmpty(nodes)) {
+                for (Object node : nodes) {
+                    Element elt = XmlUtil.toElement(node);
+                    String path = XmlUtil.getAttributeValue(elt, "Filename");
+                    if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                    parserFile(path);
+                }
             }
-        }
 
-        @SuppressWarnings("rawtypes")
-        List objNodes = XmlUtil.selectNodes(doc, tagName);
-        if (SetUtil.isNullOrEmpty(objNodes)) {
-            ServRouter.log(ServRouter.__StartupSessionId,LogLevel.Warn,
-                    "parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
-                tagName);
-            return;
+            @SuppressWarnings("rawtypes")
+            List objNodes = XmlUtil.selectNodes(doc, tagName);
+            if (SetUtil.isNullOrEmpty(objNodes)) {
+                ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Warn,
+                        "parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
+                        tagName);
+                return;
+            }
+            parserRoutings(objNodes);
         }
-        parserRoutings(objNodes);
     }
 
     protected abstract Map<String, DrAttr> parserRoutings(

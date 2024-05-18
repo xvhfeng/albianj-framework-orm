@@ -40,7 +40,6 @@ package org.albianj.api.dal.service;
 import org.albianj.AblBltinServsNames;
 import org.albianj.api.dal.object.filter.IChaExpr;
 import org.albianj.api.dal.object.OdrBy;
-import org.albianj.api.kernel.service.IAlbianService;
 import org.albianj.api.dal.context.ICompensateNotify;
 import org.albianj.api.dal.context.IDalNotify;
 import org.albianj.api.dal.db.CmdOpt;
@@ -88,7 +87,7 @@ import java.util.List;
  * @author seapeak
  * @since v2.0
  */
-public interface IAlbianPersistenceService extends IAlbianService {
+public interface IAlbianPersistenceService extends org.albianj.api.kernel.service.IAblServ {
     /**
      * 此service在service.xml中的id
      */

@@ -1,6 +1,6 @@
 package org.albianj.api.kernel.anno.serv;
 
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 
 import java.lang.annotation.*;
 
@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 @Documented
-public @interface AlbianServiceRant {
+public @interface AblServRant {
     /*
      * service id,it must not be null or empty.
      */
@@ -35,5 +35,5 @@ public @interface AlbianServiceRant {
     /*
      * Class object format for service's interface
      */
-    Class<? extends IAlbianService> Interface() default IAlbianService.class;
+    Class<? extends IAblServ> Interface() default IAblServ.class;
 }

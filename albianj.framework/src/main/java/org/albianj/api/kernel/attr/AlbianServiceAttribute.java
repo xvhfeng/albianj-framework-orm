@@ -39,7 +39,7 @@ package org.albianj.api.kernel.attr;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 
 import java.util.Map;
 
@@ -52,7 +52,7 @@ public class AlbianServiceAttribute {
     private String id = "";
     private String type = "";
     private String itf;
-    private Class<? extends IAlbianService> serviceClass = null;
+    private Class<? extends IAblServ> serviceClass = null;
     private boolean enable = true;
 
 

@@ -35,54 +35,46 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 偶发性、特殊性、惩罚性或任何结果的损害（包括但不限于替代商品或劳务之购用、使用损失、资料损失、利益损失、业务中断等等），
 不负任何责任，即在该种使用已获事前告知可能会造成此类损害的情形下亦然。
 */
-package org.albianj.api.kernel.service;
+package org.albianj.api.kernel.security;
 
-import org.albianj.api.kernel.anno.proxy.AlbianProxyIgnoreRant;
-import org.albianj.common.comment.Comments;
-import org.albianj.api.kernel.attr.AlbianServiceLifetime;
-//import org.albianj.kernel.core.AlbianKernel;
+import org.albianj.AblBltinServsNames;
+import org.albianj.api.kernel.service.IAblServ;
 
-/**
- * ??????albianj???service??????????????????????????????FreeAlbianService???????
- * ????????????????????
- *
- * @author Seapeak
- */
-public interface IAlbianService {
+public interface IAblSecurityServ extends IAblServ {
 
-    String FullName = "org.albianj.service.IAlbianService";
+    final String Name = AblBltinServsNames.AlbianSecurityServiceName;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public AlbianServiceLifetime getAlbianServiceState();
+    public String decryptDES(Object sessionId,String message) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public void beforeLoad() throws RuntimeException;
+    public String decryptDES(Object sessionId,String key, String message) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public void loading() ;
+    public String encryptDES(Object sessionId,String message) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public void afterLoading() throws RuntimeException;
+    public String encryptDES(Object sessionId,String key, String message) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public void beforeUnload() throws RuntimeException;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public void unload() throws RuntimeException;
+    public byte[] decryptBASE64(Object sessionId,String key) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public void afterUnload() throws RuntimeException;
+    public String encryptBASE64(Object sessionId,byte[] key) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public boolean enableProxy();
+    public String encryptMD5(Object sessionId,String data) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public IAlbianService getRealService();
+    public String encryptSHA(Object sessionId,String data) ;
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    public void setRealService(IAlbianService service);
 
-    @AlbianProxyIgnoreRant(ignore = true)
-    @Comments("得到当前service的名字，service的子类必须实现该方法，并且值必须和service.xml中配置的Id一致。默认为当前类的名称。")
-    public String getServiceName();
+    public String initMacKey(Object sessionId) ;
+
+    public String initMacKey(Object sessionId, SecurityOpt style) ;
+
+    public String encryptHMAC(Object sessionId, String key, SecurityOpt style, byte[] data)
+            ;
+
+    public String encryptHMAC(Object sessionId, String key, SecurityOpt style, String data)
+            ;
+
+    public String encryptHMAC(Object sessionId,String key, byte[] data) ;
+
+    public String encryptHMAC(Object sessionId,String key, String data) ;
+
+
 }

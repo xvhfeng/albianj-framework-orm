@@ -11,19 +11,19 @@ import org.albianj.api.dal.object.filter.FltExpr;
 import org.albianj.api.dal.object.filter.IChaExpr;
 import org.albianj.api.dal.service.DrOpt;
 import org.albianj.api.dal.service.IAlbianDataAccessService;
-import org.albianj.api.kernel.anno.serv.AlbianServiceFieldRant;
-import org.albianj.api.kernel.anno.serv.AlbianServiceFieldType;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServFieldRant;
+import org.albianj.api.kernel.anno.serv.AblServFieldType;
+import org.albianj.api.kernel.anno.serv.AblServRant;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.service.FreeAblServ;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 
-@AlbianServiceRant
-public class EventServ extends FreeAlbianService implements IEventServ {
-    @AlbianServiceFieldRant(Type = AlbianServiceFieldType.Ref, Value = "AlbianDataAccessService")
+@AblServRant
+public class EventServ extends FreeAblServ implements IEventServ {
+    @AblServFieldRant(Type = AblServFieldType.Ref, Value = "AlbianDataAccessService")
     private IAlbianDataAccessService da;
 
     @Override

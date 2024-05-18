@@ -7,14 +7,14 @@
 6.  加强异常、log信息，启动信息
 7.  增加select时候的指定列
 8.  delete、update增加where条件（非主键依赖）的能力
-9.  去掉启动时一定需要配置文件的存在
-10. 将配置文件中的package配置用annotation取代
+9.
+10.
 11. 增加对敏感信息加密功能，并能自定义key
 12. 增加对list保存时候，是否需要update的test方法
 13. 具有DataRouterRant配置的object自动默认为AblEntityRant支持
 14. 增加groupby，having功能
 15. 重写serivce结构，支持init等功能
-16. stoage配置文件增加template功能
+16.
 17. 开放的storage storage寻址和管理，framework仅为一个链接管理器，剩下的sql你只要写得出来，请随意
 18. exist，not in ，not exist，子查询。。。是否也考虑一下
 
@@ -54,4 +54,9 @@
 31. 重新设置了AblEntityRant，去掉了接口的配置，增加了对于数据库名字的控制
 32. DataRouter的Rant从AblEntityRant中脱离而独立出来
 33. 原先kernel config的必须读取设计改为了prop的map模式，不再强求配置信息
+34. 去掉启动时一定需要配置文件的存在，但是storage必须存在
+35. 将配置文件中的package配置用annotation取代
+36. stoage配置文件增加template功能
+37. upsert功能
+38. 增加LocaleDateTime，增加LocaleDate，增加ZoneDateTime，推荐
 

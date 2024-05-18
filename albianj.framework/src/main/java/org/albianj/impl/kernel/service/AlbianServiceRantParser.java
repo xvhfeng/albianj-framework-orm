@@ -1,11 +1,11 @@
 package org.albianj.impl.kernel.service;
 
 import org.albianj.ServRouter;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.api.kernel.anno.serv.AlbianServiceFieldRant;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServFieldRant;
+import org.albianj.api.kernel.anno.serv.AblServRant;
 import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
 import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRant;
 import org.albianj.api.kernel.anno.proxy.AlbianServiceProxyRants;
@@ -28,8 +28,8 @@ public class AlbianServiceRantParser {
                     public boolean verify(Class<?> cls) {
                         //must flag with anno and extends IAlbianService
                         // extends interface is compatibling the last version
-                        return cls.isAnnotationPresent(AlbianServiceRant.class)
-                                && IAlbianService.class.isAssignableFrom(cls)
+                        return cls.isAnnotationPresent(AblServRant.class)
+                                && IAblServ.class.isAssignableFrom(cls)
                                 && !cls.isInterface()
                                 && !Modifier.isAbstract(cls.getModifiers());
                     }
@@ -43,19 +43,19 @@ public class AlbianServiceRantParser {
                 });
     }
 
-    public static String lookupServId(Class<?> implClzz,AlbianServiceRant rant) {
+    public static String lookupServId(Class<?> implClzz, AblServRant rant) {
         if(!StringsUtil.isNullOrEmptyOrAllSpace(rant.Id())) {
             return rant.Id();
         }
 
-        if(IAlbianService.class != rant.Interface()){
+        if(IAblServ.class != rant.Interface()){
             return rant.Interface().getName();
         }
 
            Class<?>[] itfs =  implClzz.getInterfaces();
            if(null != itfs && 0 != itfs.length){
                for(Class<?> itf : itfs){
-                   if(IAlbianService.class.isAssignableFrom(itf) && itf != IAlbianService.class){
+                   if(IAblServ.class.isAssignableFrom(itf) && itf != IAblServ.class){
                         return itf.getName();
                    }
                }
@@ -65,7 +65,7 @@ public class AlbianServiceRantParser {
 
     public static AlbianServiceAttribute scanAlbianService(Class<?> implClzz) {
         AlbianServiceAttribute asa = new AlbianServiceAttribute();
-        AlbianServiceRant rant = implClzz.getAnnotation(AlbianServiceRant.class);
+        AblServRant rant = implClzz.getAnnotation(AblServRant.class);
 //        asa.setId(rant.Id());
 //        if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
 //            asa.setItf(IAlbianService.class.getName());
@@ -83,12 +83,12 @@ public class AlbianServiceRantParser {
 //        if (StringsUtil.isNullOrEmptyOrAllSpace(rant.sInterface()) && null == rant.Interface()) {
 //            asa.setItf(IAlbianService.class.getName());
 //        } else {
-            asa.setItf(null != rant.Interface() ? rant.Interface().getName() : IAlbianService.class.getName());
+            asa.setItf(null != rant.Interface() ? rant.Interface().getName() : IAblServ.class.getName());
 //        }
 
         asa.setEnable(rant.Enable());
         asa.setType(implClzz.getName());
-        asa.setServiceClass(implClzz.asSubclass(IAlbianService.class));
+        asa.setServiceClass(implClzz.asSubclass(IAblServ.class));
 
         if (implClzz.isAnnotationPresent(AlbianServiceProxyRants.class)) {
             AlbianServiceProxyRants prants = implClzz.getAnnotation(AlbianServiceProxyRants.class);
@@ -145,10 +145,10 @@ public class AlbianServiceRantParser {
         }
         Map<String, AlbianServiceFieldAttribute> fieldsAttr = new HashMap<>();
         for (Field f : fields) {
-            if (f.isAnnotationPresent(AlbianServiceFieldRant.class)) {
+            if (f.isAnnotationPresent(AblServFieldRant.class)) {
                 f.setAccessible(true);
                 AlbianServiceFieldAttribute aspa = new AlbianServiceFieldAttribute();
-                AlbianServiceFieldRant frant = f.getAnnotation(AlbianServiceFieldRant.class);
+                AblServFieldRant frant = f.getAnnotation(AblServFieldRant.class);
                 aspa.setName(f.getName());
                 aspa.setType(frant.Type().name());
                 aspa.setValue(frant.Value());

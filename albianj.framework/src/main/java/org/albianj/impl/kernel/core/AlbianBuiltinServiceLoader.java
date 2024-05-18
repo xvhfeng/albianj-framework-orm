@@ -9,7 +9,7 @@ import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.impl.kernel.service.AlbianServiceRantParser;
 import org.albianj.api.kernel.attr.AlbianBuiltinServiceAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.api.kernel.attr.ServiceContainer;
 import org.albianj.loader.AlbianClassLoader;
 
@@ -82,7 +82,7 @@ public class AlbianBuiltinServiceLoader {
                 id = bltSerAttr.getId();
                 try {
                     AlbianServiceAttribute attr = bltServMap.get(id);
-                    IAlbianService service = AlbianServiceLoader.makeupService(attr,bltServMap);
+                    IAblServ service = AlbianServiceLoader.makeupService(attr,bltServMap);
                     ServiceContainer.addService(id, service);
                     bltSerAttr.setLoadOK(true);
                 } catch (Exception e) {
@@ -180,7 +180,7 @@ public class AlbianBuiltinServiceLoader {
     public void loadLoggerService()  {
         KeyValuePair<String,AlbianServiceAttribute>  logServAttr =  sacnService(new AlbianBuiltinServiceAttribute(AblBltinServsNames.AlbianLoggerServicePair[0],
                                                                     AblBltinServsNames.AlbianLoggerServicePair[1],true));
-        IAlbianService service = AlbianServiceLoader.makeupService(logServAttr.getValue(),null);
+        IAblServ service = AlbianServiceLoader.makeupService(logServAttr.getValue(),null);
         ServiceContainer.addService(logServAttr.getKey(), service);
     }
 

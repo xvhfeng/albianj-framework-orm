@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class AlbianjApplication {
-    private static final Logger logger = LoggerFactory.getLogger(AlbianjApplication.class);
+public class AblApp {
+    private static final Logger logger = LoggerFactory.getLogger(AblApp.class);
     private static final String AlbianStarter = "org.albianj.impl.kernel.core.AlbianTransmitterService";
 
     private static String lookupLoggerConfigFile(String configPath){
@@ -78,7 +78,7 @@ public class AlbianjApplication {
 
         String cfPath = configurtionFolder;
         if(null == configurtionFolder ||  configurtionFolder.trim().isEmpty()) {
-            cfPath = AlbianClassLoader.getResourcePath();
+            cfPath =  mainClass.getClassLoader().getResource(".").getPath();
         }
 
         String cfFileName = lookupLoggerConfigFile(cfPath);
@@ -101,7 +101,7 @@ public class AlbianjApplication {
             logger.info("load albianj start class:{}",AlbianStarter);
             Class<?> clss = AlbianClassLoader.getInstance().loadClass(AlbianStarter);
             IAlbianTransmitterService abs = (IAlbianTransmitterService) clss.newInstance();
-            abs.start(mainClass,configurtionFolder);
+            abs.start(mainClass,cfPath);
         } catch (Throwable e) {
             // TODO Auto-generated catch block
             logger.error("AlbianBootService start is error ",e);
@@ -110,13 +110,13 @@ public class AlbianjApplication {
         return true;
     }
 
-    public static void runBlock(Class<?> mainClass,String configPath,String...paras) {
-        if(!IAlbianCommandLineApplication.class.isAssignableFrom(mainClass)) {
+    public static void daemonRun(Class<?> mainClass,String configPath,String...paras) {
+        if(!IAblCommandLine.class.isAssignableFrom(mainClass)) {
             throw new RuntimeException(mainClass.getName() + " must assignable from IAlbianCommandLine ");
         }
         run(mainClass,configPath);
         try {
-            IAlbianCommandLineApplication cmdFunc = (IAlbianCommandLineApplication) mainClass.getConstructor().newInstance();
+            IAblCommandLine cmdFunc = (IAblCommandLine) mainClass.getConstructor().newInstance();
             cmdFunc.run(paras);
         } catch (Throwable e) {
             throw new RuntimeException(e);

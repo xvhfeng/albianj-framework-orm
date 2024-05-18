@@ -46,7 +46,7 @@ import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.kernel.attr.AlbianServiceAttribute;
 import org.albianj.api.kernel.attr.AlbianServiceFieldAttribute;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
+import org.albianj.api.kernel.anno.serv.AblServRant;
 import org.albianj.api.kernel.service.parser.IAlbianParserService;
 import org.albianj.loader.AlbianClassLoader;
 import org.dom4j.Element;
@@ -56,7 +56,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AlbianServiceRant(Id = AblBltinServsNames.AlbianServiceParserName, Interface = IAlbianParserService.class)
+@AblServRant(Id = AblBltinServsNames.AlbianServiceParserName, Interface = IAlbianParserService.class)
 public class AlbianServiceParser extends FreeAlbianServiceParser {
 
     private final static String ID_ATTRBUITE_NAME = "Id";

@@ -37,8 +37,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.api.kernel.service.parser;
 
-import org.albianj.api.kernel.service.IAlbianService;
+import org.albianj.api.kernel.service.IAblServ;
 
-public interface IAlbianParserService extends IAlbianParser, IAlbianService {
+public interface IAlbianParserService extends IAlbianParser, IAblServ {
 
 }

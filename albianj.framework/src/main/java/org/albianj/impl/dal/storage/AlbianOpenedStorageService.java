@@ -3,14 +3,14 @@ package org.albianj.impl.dal.storage;
 
 import org.albianj.AblServRouter;
 import org.albianj.api.dal.object.StgAttr;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.service.FreeAblServ;
 import org.albianj.api.dal.object.RStgAttr;
 import org.albianj.api.dal.service.IAlbianOpenedStorageService;
 import org.albianj.api.dal.service.IAlbianStorageParserService;
 
 import java.sql.Connection;
 
-public class AlbianOpenedStorageService extends FreeAlbianService implements IAlbianOpenedStorageService {
+public class AlbianOpenedStorageService extends FreeAblServ implements IAlbianOpenedStorageService {
 
     @Override
     public RStgAttr getStorage(String sessionId, String storageName){

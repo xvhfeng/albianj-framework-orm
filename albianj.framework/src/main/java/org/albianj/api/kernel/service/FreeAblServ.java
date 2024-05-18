@@ -40,8 +40,9 @@ package org.albianj.api.kernel.service;
 import org.albianj.ServRouter;
 import org.albianj.api.kernel.anno.proxy.AlbianProxyIgnoreRant;
 import org.albianj.api.kernel.attr.AlbianServiceLifetime;
-import org.albianj.api.kernel.attr.ApplicationSettings;
+import org.albianj.api.kernel.attr.GlobalSettings;
 import org.albianj.api.kernel.logger.LogLevel;
+import org.albianj.common.utils.StringsUtil;
 
 import java.io.File;
 
@@ -51,10 +52,10 @@ import java.io.File;
  * @author Seapeak
  */
 //@AlbianKernel
-public abstract class FreeAlbianService implements IAlbianService {
+public abstract class FreeAblServ implements IAblServ {
 
     boolean enableProxy = false;
-    IAlbianService service = null;
+    IAblServ service = null;
     private AlbianServiceLifetime state = AlbianServiceLifetime.Normal;
 
     @AlbianProxyIgnoreRant(ignore = true)
@@ -112,12 +113,12 @@ public abstract class FreeAlbianService implements IAlbianService {
     }
 
     @AlbianProxyIgnoreRant(ignore = true)
-    public IAlbianService getRealService() {
+    public IAblServ getRealService() {
         return null == service ? this : service;
     }
 
     @AlbianProxyIgnoreRant(ignore = true)
-    public void setRealService(IAlbianService service) {
+    public void setRealService(IAblServ service) {
         if (null != service) {
             this.service = service;
             enableProxy = true;
@@ -166,7 +167,10 @@ public abstract class FreeAlbianService implements IAlbianService {
             if (f.exists()){
                 return filename;
             }
-            String folder = ApplicationSettings.getGlobalSettings().getConfigurtionFolder();
+            String folder = GlobalSettings.getInst().getConfigurtionFolder();
+//            if(StringsUtil.isNullOrEmptyOrAllSpace(folder)) {
+//                folder = this.getClass().getClassLoader().getResource("resource").getPath();
+//            }
             String tmpName = null;
             if(folder.endsWith(File.separator)) {
                 tmpName = folder + filename;
@@ -178,7 +182,7 @@ public abstract class FreeAlbianService implements IAlbianService {
                 return f.getAbsolutePath();
             }
 
-            ServRouter.logAndThrowNew(ServRouter.__StartupSessionId, LogLevel.Error,
+            ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Error,
                     "not found the config filename:{}", filename);
             return null;
         } catch (Exception e) {

@@ -2,7 +2,7 @@ package org.albianj.api.kernel.attr;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.albianj.api.kernel.anno.serv.AlbianServiceFieldSetterLifetime;
+import org.albianj.api.kernel.anno.serv.AblServFieldSetterOpt;
 
 import java.lang.reflect.Field;
 
@@ -15,5 +15,5 @@ public class AlbianServiceFieldAttribute   {
     private Field field;
     private boolean allowNull = false;
     private boolean ready = false;
-    private AlbianServiceFieldSetterLifetime setterLifetime = AlbianServiceFieldSetterLifetime.AfterLoading;
+    private AblServFieldSetterOpt setterLifetime = AblServFieldSetterOpt.AfterLoading;
 }

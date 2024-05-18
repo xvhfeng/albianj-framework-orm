@@ -1,6 +1,6 @@
 package org.albianj.api.kernel.anno.serv;
 
-public enum AlbianServiceFieldSetterLifetime {
+public enum AblServFieldSetterOpt {
     AfterNew,
     BeforeLoading,
     AfterLoading,

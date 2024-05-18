@@ -7,8 +7,8 @@ import org.albianj.common.utils.StringsUtil;
 import org.albianj.common.langs.StackFrame;
 import org.albianj.api.kernel.logger.IAlbianLoggerService;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.anno.serv.AlbianServiceRant;
-import org.albianj.api.kernel.service.FreeAlbianService;
+import org.albianj.api.kernel.anno.serv.AblServRant;
+import org.albianj.api.kernel.service.FreeAblServ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +18,8 @@ import java.util.Formatter;
  * Created by xuhaifeng on 17/2/9.
  */
 @Comments("新的logger日志类，解决log-v1中无法正确标识文件位置问题")
-@AlbianServiceRant(Id = IAlbianLoggerService.Name, Interface = IAlbianLoggerService.class)
-public class AlbianLoggerService extends FreeAlbianService implements IAlbianLoggerService {
+@AblServRant(Id = IAlbianLoggerService.Name, Interface = IAlbianLoggerService.class)
+public class AlbianLoggerService extends FreeAblServ implements IAlbianLoggerService {
 
     static {
         ServRouter._FilterStackFrameClasses.add(AlbianLoggerService.class.getName());

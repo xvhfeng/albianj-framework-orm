@@ -15,10 +15,7 @@
  */
 package org.albianj.common.mybp;
 
-import com.mysql.cj.log.Log;
-import com.mysql.cj.log.LogFactory;
 import org.albianj.common.utils.StringsUtil;
-import org.albianj.loader.AlbianjApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

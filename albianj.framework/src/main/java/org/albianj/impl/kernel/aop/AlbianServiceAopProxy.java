@@ -5,12 +5,12 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.albianj.ServRouter;
 import org.albianj.api.kernel.aop.AlbianAopContext;
-import org.albianj.api.kernel.aop.IAlbianAopService;
+import org.albianj.api.kernel.aop.IAblServProxy;
+import org.albianj.api.kernel.service.IAblServ;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.api.kernel.anno.proxy.AlbianProxyIgnoreRant;
 import org.albianj.api.kernel.attr.AlbianServiceAopAttribute;
 import org.albianj.api.kernel.logger.LogLevel;
-import org.albianj.api.kernel.service.IAlbianService;
 import org.albianj.loader.AlbianClassLoader;
 
 import java.lang.reflect.Method;
@@ -21,12 +21,12 @@ import java.util.Map;
  */
 public class AlbianServiceAopProxy implements MethodInterceptor {
 
-    IAlbianService _service = null;
+    IAblServ _service = null;
     Map<String, AlbianServiceAopAttribute> _aopAttributes = null;
     String sessionId = null;
 
 
-    public Object newInstance(String sessionId, IAlbianService service, Map<String, AlbianServiceAopAttribute> aopAttributes)  {
+    public Object newInstance(String sessionId, IAblServ service, Map<String, AlbianServiceAopAttribute> aopAttributes)  {
         this._service = service;
         this._aopAttributes = aopAttributes;
         try {
@@ -74,8 +74,8 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
 
         Object rc = null;
         for (AlbianServiceAopAttribute asaa : _aopAttributes.values()) {
-            IAlbianAopService aas = ServRouter.getService(sessionId,
-                    IAlbianAopService.class, asaa.getServiceName(), false);
+            IAblServProxy aas = ServRouter.getService(sessionId,
+                    IAblServProxy.class, asaa.getServiceName(), false);
             if (null == aas) continue;
 
             if (asaa.matches(mName)) {
@@ -100,8 +100,8 @@ public class AlbianServiceAopProxy implements MethodInterceptor {
         }
 
         for (AlbianServiceAopAttribute asaa : _aopAttributes.values()) {
-            IAlbianAopService aas = ServRouter.getService(sessionId,
-                    IAlbianAopService.class, asaa.getServiceName(), false);
+            IAblServProxy aas = ServRouter.getService(sessionId,
+                    IAblServProxy.class, asaa.getServiceName(), false);
             if (null == aas) continue;
 
             if (asaa.matches(mName)) {
