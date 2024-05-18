@@ -104,7 +104,7 @@ public class WrtJobAdp extends FreeWrtJobAdp {
                 albianObject.getType(), dra.getName());
             useRoutings.add(dra);
         } else {
-            if (SetUtil.isNullOrEmpty(routings.getWriterRouters())) {
+            if (SetUtil.isEmpty(routings.getWriterRouters())) {
                 DrAttr dra = albianObject.getDefaultRouting();
                 ServRouter.log(sessionId,  LogLevel.Warn,
                         "albian-object:{} writer-data-routers are null then use default storage:{}.",
@@ -131,7 +131,7 @@ public class WrtJobAdp extends FreeWrtJobAdp {
                         List<DrAttr> writerRoutings = hashMapping
                                 .mappingWriterRouting(
                                         routings.getWriterRouters(), object);
-                        if (SetUtil.isNullOrEmpty(writerRoutings)) {
+                        if (SetUtil.isEmpty(writerRoutings)) {
                             DrAttr dra = albianObject.getDefaultRouting();
                             ServRouter.log(sessionId,  LogLevel.Warn,
                                 "albian-object:{} writer-data-router arithmetic is null then use default storage:{}.",
@@ -143,7 +143,7 @@ public class WrtJobAdp extends FreeWrtJobAdp {
                                     useRoutings.add(writerRouting);
                                 }
                             }
-                            if (SetUtil.isNullOrEmpty(useRoutings)) {
+                            if (SetUtil.isEmpty(useRoutings)) {
                                 DrAttr dra = albianObject.getDefaultRouting();
                                 ServRouter.log(sessionId,  LogLevel.Warn,
                                     "albian-object:{} writer-data-router arithmetic is disable then use default storage:{}.",
@@ -172,7 +172,7 @@ public class WrtJobAdp extends FreeWrtJobAdp {
             return name;
         } else {
             String name = hashMapping.mappingWriterRoutingStorage(routing, obj);
-            if (StringsUtil.isNullOrEmpty(name)) {
+            if (StringsUtil.isNotEmptyTrimmed(name)) {
                 String dname = routing.getStorageName();
                 ServRouter.log(jobId,  LogLevel.Warn,
                         "albian-object:{} writer-data-router is not found by arithmetic and use default storage:{}.",
@@ -199,7 +199,7 @@ public class WrtJobAdp extends FreeWrtJobAdp {
             return name;
         } else {
             String name = hashMapping.mappingWriterRoutingDatabase(storage, obj);
-            if (StringsUtil.isNullOrEmpty(name)) {
+            if (StringsUtil.isNotEmptyTrimmed(name)) {
                 String dname = storage.getDatabase();
                 ServRouter.log(jobId,  LogLevel.Warn,
                         "albian-object:{} writer-data-router is not found by arithmetic and use default database:{}.",
@@ -220,15 +220,15 @@ public class WrtJobAdp extends FreeWrtJobAdp {
         AblEntityAttr objAttr = AlbianEntityMetadata.getEntityMetadata(cls);
 
         Map<String, AblEntityFieldAttr> fieldsAttr = objAttr.getFields();
-        if (SetUtil.isNullOrEmpty(fieldsAttr)) {
+        if (SetUtil.isEmpty(fieldsAttr)) {
             throw new AblThrowable("albian-object:" + className + " PropertyDescriptor is not found.");
         }
         Map<String, Object> sqlParaVals = buildSqlParameter(job.getId(), entity,
                 objAttr, fieldsAttr);
 
         IAlbianStorageParserService asps = ServRouter.getService(sessionId,IAlbianStorageParserService.class, IAlbianStorageParserService.Name);
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(storageAlias)) {
-            String tableName = StringsUtil.isNullOrEmptyOrAllSpace(tableAlias)
+        if (!StringsUtil.isNullEmptyTrimmed(storageAlias)) {
+            String tableName = StringsUtil.isNullEmptyTrimmed(tableAlias)
                     ? objAttr.getImplClzz().getSimpleName()
                     : tableAlias;
             StgAttr stgAttr = asps.getStorageAttribute(storageAlias);

@@ -84,7 +84,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append(":").append(stgAttr.getPort());
                 }
                 sb.append(":").append(rsa.getDatabase());
-                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                if(!StringsUtil.isNullEmptyTrimmed(rsa.getStgAttr().getUrlParaments())){
                     sb.append("?").append(rsa.getStgAttr().getUrlParaments());
                 }
                 break;
@@ -96,7 +96,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append(":").append(stgAttr.getPort());
                 }
                 sb.append(";").append(rsa.getDatabase());
-                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                if(!StringsUtil.isNullEmptyTrimmed(rsa.getStgAttr().getUrlParaments())){
                     sb.append("?").append(rsa.getStgAttr().getUrlParaments());
                 }
                 break;
@@ -108,7 +108,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append(":").append(stgAttr.getPort());
                 }
                 sb.append("/").append(rsa.getDatabase());
-                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                if(!StringsUtil.isNullEmptyTrimmed(rsa.getStgAttr().getUrlParaments())){
                     sb.append("?").append(rsa.getStgAttr().getUrlParaments());
                 }
                 break;
@@ -130,7 +130,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
                     sb.append("&connectTimeout=").append(timeout * 1000).append("&socketTimeout=").append(timeout * 1000);
                 }
                 sb.append("&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&maxReconnect=3&autoReconnectForPools=true&rewriteBatchedStatements=true&useSSL=true&serverTimezone=CTT");
-                if(!StringsUtil.isNullOrEmptyOrAllSpace(rsa.getStgAttr().getUrlParaments())){
+                if(!StringsUtil.isNullEmptyTrimmed(rsa.getStgAttr().getUrlParaments())){
                     sb.append("&").append(rsa.getStgAttr().getUrlParaments());
                 }
                 break;
@@ -173,18 +173,18 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
 
         @SuppressWarnings("rawtypes")
         List nodes = XmlUtil.selectNodes(doc, "Storages/IncludeSet/Include");
-        if (!SetUtil.isNullOrEmpty(nodes)) {
+        if (!SetUtil.isEmpty(nodes)) {
             for (Object node : nodes) {
                 Element elt = XmlUtil.toElement(node);
                 String path = XmlUtil.getAttributeValue(elt, "Filename");
-                if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                if (StringsUtil.isNullEmptyTrimmed(path)) continue;
                 parserFile(path);
             }
         }
 
         Map<String,StgTempAttr> maps = new HashMap<>();
         List tpltNodes = XmlUtil.selectNodes(doc,templateTagName);
-        if(!SetUtil.isNullOrEmpty(tpltNodes)){
+        if(!SetUtil.isEmpty(tpltNodes)){
             for(Object ele : tpltNodes){
                 StgTempAttr stgTempAttr =  parserStgTemp((Element) ele);
                 maps.putIfAbsent(stgTempAttr.getName(), stgTempAttr);
@@ -193,7 +193,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
 
         @SuppressWarnings("rawtypes")
         List objNodes = XmlUtil.selectNodes(doc, tagName);
-        if (SetUtil.isNullOrEmpty(objNodes)) {
+        if (SetUtil.isEmpty(objNodes)) {
             throw new AblThrowable("parser the node tags:" + tagName
                 + " in the storage.xml is error. the node of the tags is null or empty.");
         }

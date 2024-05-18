@@ -148,7 +148,7 @@ public class AlbianBuiltinServiceLoader {
                 }
             }
         }
-        if(SetUtil.isNullOrEmpty(bltSrvAttrs))  return null;
+        if(SetUtil.isEmpty(bltSrvAttrs))  return null;
         return bltSrvAttrs;
     }
 

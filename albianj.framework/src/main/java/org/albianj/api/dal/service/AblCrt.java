@@ -19,7 +19,7 @@ public class AblCrt {
 //                    "can not found interface:{} attribute,please lookup persistence config.",itf);
 //        }
         String className = attr.getType();
-        if (StringsUtil.isNullOrEmptyOrAllSpace(className)) {
+        if (StringsUtil.isNullEmptyTrimmed(className)) {
             ServRouter.logAndThrowNew(sessionId,  LogLevel.Error,
                     " can not found impl-class for interface:{},please lookup persistence config.", className);
         }

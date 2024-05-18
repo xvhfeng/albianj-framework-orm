@@ -23,14 +23,14 @@ public class AlbianServiceAopAttribute {
 
     public boolean matches(String name) {
         if (all) return true;
-        return StringsUtil.isNullOrEmptyOrAllSpace(this.fullName)
+        return StringsUtil.isNullEmptyTrimmed(this.fullName)
                 ?
-                StringsUtil.isNullOrEmptyOrAllSpace(this.beginWith) ? true : name.startsWith(this.beginWith)
-                        && StringsUtil.isNullOrEmptyOrAllSpace(this.notBeginWith) ? true : !name.startsWith(this.notBeginWith)
-                        && StringsUtil.isNullOrEmptyOrAllSpace(this.endWith) ? true : name.endsWith(this.endWith)
-                        && StringsUtil.isNullOrEmptyOrAllSpace(this.notEndWith) ? true : !name.endsWith(this.notEndWith)
-                        && StringsUtil.isNullOrEmptyOrAllSpace(this.contain) ? true : name.contains(this.contain)
-                        && StringsUtil.isNullOrEmptyOrAllSpace(this.notContain) ? true : !name.contains(this.notContain)
+                StringsUtil.isNullEmptyTrimmed(this.beginWith) ? true : name.startsWith(this.beginWith)
+                        && StringsUtil.isNullEmptyTrimmed(this.notBeginWith) ? true : !name.startsWith(this.notBeginWith)
+                        && StringsUtil.isNullEmptyTrimmed(this.endWith) ? true : name.endsWith(this.endWith)
+                        && StringsUtil.isNullEmptyTrimmed(this.notEndWith) ? true : !name.endsWith(this.notEndWith)
+                        && StringsUtil.isNullEmptyTrimmed(this.contain) ? true : name.contains(this.contain)
+                        && StringsUtil.isNullEmptyTrimmed(this.notContain) ? true : !name.contains(this.notContain)
                 : name.equals(this.fullName);
 
     }

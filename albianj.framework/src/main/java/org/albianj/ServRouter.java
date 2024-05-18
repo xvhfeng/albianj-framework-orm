@@ -78,7 +78,7 @@ public class ServRouter extends ServiceContainer {
      */
     public static <T extends IAblServ> T getService(Object sessionId, Class<T> cla, String id, boolean isThrowIfException) {
         String servId = id;
-        if (StringsUtil.isNullOrEmptyOrAllSpace(servId)) {
+        if (StringsUtil.isNullEmptyTrimmed(servId)) {
             if (null == cla) {
                 ServRouter.throwIfTrue(isThrowIfException, "Service Id is nullOrEmpty and interface is Null.");
                 return null;

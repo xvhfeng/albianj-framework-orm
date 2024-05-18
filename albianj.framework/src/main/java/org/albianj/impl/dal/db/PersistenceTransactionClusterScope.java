@@ -66,7 +66,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void preExecute(WrtJob wrtJob)  {
         wrtJob.setWriterJobLifeTime(WrtLfcOpt.Opening);
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty.");
         }
 
@@ -90,7 +90,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         storage.getName());
             }
             List<PCmd> cmds = t.getCommands();
-            if (SetUtil.isNullOrEmpty(cmds)) {
+            if (SetUtil.isEmpty(cmds)) {
                 throw new AblThrowable("The commands for task is empty or null");
             }
 
@@ -110,7 +110,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                             psDb.addBatch();
                         }
                         Map<Integer, String> map = cmd.getParameterMapper();
-                        if (SetUtil.isNullOrEmpty(map)) {
+                        if (SetUtil.isEmpty(map)) {
                             continue;
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
@@ -130,7 +130,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                         PreparedStatement prepareStatement = t
                                 .getConnection().prepareStatement(cmdTxt);
                         Map<Integer, String> map = cmd.getParameterMapper();
-                        if (SetUtil.isNullOrEmpty(map)) {
+                        if (SetUtil.isEmpty(map)) {
                             continue;
                         } else {
                             for (int i = 1; i <= map.size(); i++) {
@@ -160,7 +160,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void executeHandler(WrtJob wrtJob)  {
         wrtJob.setWriterJobLifeTime(WrtLfcOpt.Running);
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
@@ -206,7 +206,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void commit(WrtJob wrtJob)  {
         wrtJob.setWriterJobLifeTime(WrtLfcOpt.Commiting);
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
         for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
@@ -228,7 +228,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void exceptionHandler(WrtJob wrtJob)   {
         boolean isThrow = false;
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
         for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {
@@ -266,7 +266,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
     protected void unLoadExecute(WrtJob wrtJob)   {
         boolean isThrow = false;
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
         WrtTask t = null;
@@ -297,7 +297,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     private void manualRollbackPreExecute(WrtJob wrtJob)  {
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new AblThrowable("the task for the job is null or empty when manual rollbacking.");
         }
 
@@ -306,7 +306,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
             if (!t.isCommit()) continue;// not commit then use auto rollback
 
             List<PCmd> cmds = t.getCommands();
-            if (SetUtil.isNullOrEmpty(cmds)) {
+            if (SetUtil.isEmpty(cmds)) {
                 throw new AblThrowable("The commands for task is empty or null when manual rollbacking.");
             }
             List<Statement> statements = new Vector<Statement>();
@@ -317,7 +317,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                     PreparedStatement prepareStatement = t
                             .getConnection().prepareStatement(cmd.getRollbackCommandText());
                     Map<Integer, String> map = cmd.getRollbackParameterMapper();
-                    if (SetUtil.isNullOrEmpty(map)) {
+                    if (SetUtil.isEmpty(map)) {
                         continue;
                     } else {
                         for (int i = 1; i <= map.size(); i++) {
@@ -338,7 +338,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
                 ServRouter.logAndThrowAgain(wrtJob.getId(),  LogLevel.Info,e,
                     "make sql command for task is empty or null when maunal rollbacking.");
             }
-            if (!SetUtil.isNullOrEmpty(statements)) {
+            if (!SetUtil.isEmpty(statements)) {
                 t.setRollbackStatements(statements);
                 t.setRollbackCommands(rbkCmds);
                 t.setCompensating(true);
@@ -348,7 +348,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     private void manualRollbackExecuteHandler(WrtJob wrtJob)  {
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new AblThrowable("The task is null or empty.");
         }
 
@@ -359,7 +359,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
             List<Statement> statements = t.getRollbackStatements();
             List<PCmd> cmds = t.getRollbackCommands();
-            if (SetUtil.isNullOrEmpty(statements)) continue;
+            if (SetUtil.isEmpty(statements)) continue;
             ;
             for (int i = 0; i < statements.size(); i++) {
                 try {
@@ -380,7 +380,7 @@ public class PersistenceTransactionClusterScope extends FreePersistenceTransacti
 
     private void manualRollbackCommit(WrtJob wrtJob)  {
         Map<String, WrtTask> tasks = wrtJob.getWriterTasks();
-        if (SetUtil.isNullOrEmpty(tasks)) {
+        if (SetUtil.isEmpty(tasks)) {
             throw new RuntimeException("The task is null or empty.");
         }
         for (Map.Entry<String, WrtTask> task : tasks.entrySet()) {

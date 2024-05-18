@@ -73,11 +73,11 @@ public class ChaExprPrs {
 
     public static String decideFieldName(IFltExpr expr){
         String fieldName = null;
-        if(StringsUtil.isNullOrEmptyOrAllSpace(expr.getFieldName())) {
+        if(StringsUtil.isNullEmptyTrimmed(expr.getFieldName())) {
             fieldName = AlbianEntityMetadata.getFieldNameByGetter(expr.getGetter());
             expr.setFieldName(fieldName);
         }
-        if(!StringsUtil.isNullOrEmptyOrAllSpace(expr.getAliasName())) {
+        if(!StringsUtil.isNullEmptyTrimmed(expr.getAliasName())) {
             return expr.getAliasName();
         }
         return expr.getFieldName();
@@ -153,7 +153,7 @@ public class ChaExprPrs {
                     sb.append(fe.getOperatorOpt().getWord()).append(" ( ");
                     for(int i = 0 ; i <  inParas.length;i++){
                         String sqlFieldName =StringsUtil.nonIdxFmt("{}_{}",
-                        StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fieldAttr.getSqlFieldName() : fe.getAliasName() , i);
+                        StringsUtil.isNullEmptyTrimmed(fe.getAliasName()) ? fieldAttr.getSqlFieldName() : fe.getAliasName() , i);
                         sb.append(" #").append(sqlFieldName).append("#,");
 
                         SqlPara para = new SqlPara();
@@ -176,7 +176,7 @@ public class ChaExprPrs {
                     sb.append(" ) ");
                 } else {
                     sb.append(fe.getOperatorOpt().getWord()).append("#")
-                            .append(StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName()) ? fieldAttr.getSqlFieldName()
+                            .append(StringsUtil.isNullEmptyTrimmed(fe.getAliasName()) ? fieldAttr.getSqlFieldName()
                                     : fe.getAliasName())
                             .append("# ");
 
@@ -192,7 +192,7 @@ public class ChaExprPrs {
                         para.setArray(true);
                     }
                     para.setValue(fe.getValue());
-                    paras.put(String.format("#%1$s#", StringsUtil.isNullOrEmptyOrAllSpace(fe.getAliasName())
+                    paras.put(String.format("#%1$s#", StringsUtil.isNullEmptyTrimmed(fe.getAliasName())
                             ? fieldAttr.getSqlFieldName() : fe.getAliasName()), para);
                     }
             }

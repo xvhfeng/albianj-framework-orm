@@ -120,7 +120,7 @@ public abstract class FreeAblObj implements IAblObj {
         }
 
         Map<String, AblEntityFieldAttr> fields = entiryAttr.getFields();
-        if (SetUtil.isNullOrEmpty(fields)) {
+        if (SetUtil.isEmpty(fields)) {
             throw new AblThrowable(
                 "PersistenceService is error. albian-object:" + className + " PropertyDescriptor is not found.");
         }

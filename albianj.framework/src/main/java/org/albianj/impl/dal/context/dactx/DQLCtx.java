@@ -70,7 +70,7 @@ public class DQLCtx implements IDQLCtx {
     @Override
     public <T extends IAblObj> T loadObject(String sessionId, Class<T> itfClzz, DrOpt loadType, IChaExpr wheres)  {
         List<T> entities = loadObjects(sessionId, itfClzz, loadType, wheres);
-        if (SetUtil.isNullOrEmpty(entities)) {
+        if (SetUtil.isEmpty(entities)) {
             return null;
         }
         return entities.get(0);
@@ -82,10 +82,10 @@ public class DQLCtx implements IDQLCtx {
         this.loadType = loadType;
         this.wheres = wheres;
 
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) || !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
+        if (!StringsUtil.isNullEmptyTrimmed(this.drouterAlias) && (!StringsUtil.isNullEmptyTrimmed(storageAlias) || !StringsUtil.isNullEmptyTrimmed(tableAlias))) {
             throw new AblThrowable("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
-        if (StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) && !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
+        if (StringsUtil.isNullEmptyTrimmed(storageAlias) && !StringsUtil.isNullEmptyTrimmed(tableAlias)) {
             throw new AblThrowable("tableAlias exist but storageAlias is not exist.");
         }
 
@@ -103,10 +103,10 @@ public class DQLCtx implements IDQLCtx {
         this.loadType = loadType;
         this.wheres = wheres;
 
-        if (!StringsUtil.isNullOrEmptyOrAllSpace(this.drouterAlias) && (!StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) || !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias))) {
+        if (!StringsUtil.isNullEmptyTrimmed(this.drouterAlias) && (!StringsUtil.isNullEmptyTrimmed(storageAlias) || !StringsUtil.isNullEmptyTrimmed(tableAlias))) {
             throw new AblThrowable("drouterAlias is not coexist with storageAlias or tableAlias.");
         }
-        if (StringsUtil.isNullOrEmptyOrAllSpace(storageAlias) && !StringsUtil.isNullOrEmptyOrAllSpace(tableAlias)) {
+        if (StringsUtil.isNullEmptyTrimmed(storageAlias) && !StringsUtil.isNullEmptyTrimmed(tableAlias)) {
             throw new AblThrowable("tableAlias exist but storageAlias is not exist.");
         }
 

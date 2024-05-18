@@ -84,7 +84,7 @@ public class MysqlClientSection implements IDBClientSection {
                 case '\u20a9':
                     Charset charset = null;
                     try {
-                        if(!StringsUtil.isNullOrEmptyOrAllSpace(charsetName)) {
+                        if(!StringsUtil.isNullEmptyTrimmed(charsetName)) {
                             charset = Charset.forName(charsetName);
                         }
                     }catch (Exception e){

@@ -168,7 +168,7 @@ public abstract class FreeAblServ implements IAblServ {
                 return filename;
             }
             String folder = GlobalSettings.getInst().getConfigurtionFolder();
-//            if(StringsUtil.isNullOrEmptyOrAllSpace(folder)) {
+//            if(StringsUtil.isNullEmptyTrimmed(folder)) {
 //                folder = this.getClass().getClassLoader().getResource("resource").getPath();
 //            }
             String tmpName = null;

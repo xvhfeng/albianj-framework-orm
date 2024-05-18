@@ -16,7 +16,6 @@
 
 package org.albianj.common.mybp;
 
-import org.albianj.common.mybp.ExceptionUtils;
 import org.albianj.common.utils.SetUtil;
 import org.albianj.common.utils.StringsUtil;
 
@@ -85,7 +84,7 @@ public final class Assert {
      * @param message 消息
      */
     public static void notEmpty(String value, String message, Object... params) {
-        isTrue(!StringsUtil.isNullOrEmpty(value), message, params);
+        isTrue(!StringsUtil.isNullEmptyTrimmed(value), message, params);
     }
 
     /**
@@ -96,7 +95,7 @@ public final class Assert {
      * @param message    消息
      */
     public static void notEmpty(Collection<?> collection, String message, Object... params) {
-        isTrue(!SetUtil.isNullOrEmpty(collection), message, params);
+        isTrue(!SetUtil.isEmpty(collection), message, params);
     }
 
     /**
@@ -107,7 +106,7 @@ public final class Assert {
      * @param message 消息
      */
     public static void notEmpty(Map<?, ?> map, String message, Object... params) {
-        isTrue(!SetUtil.isNullOrEmpty(map), message, params);
+        isTrue(!SetUtil.isEmpty(map), message, params);
     }
 
     /**
@@ -118,7 +117,7 @@ public final class Assert {
      * @param message 消息
      */
     public static void isEmpty(Map<?, ?> map, String message, Object... params) {
-        isTrue(!SetUtil.isNullOrEmpty(map), message, params);
+        isTrue(!SetUtil.isEmpty(map), message, params);
     }
 
     /**
@@ -129,6 +128,12 @@ public final class Assert {
      * @param message 消息
      */
     public static void notEmpty(Object[] array, String message, Object... params) {
-        isTrue(!SetUtil.isNullOrEmpty(array), message, params);
+        isTrue(!SetUtil.isEmpty(array), message, params);
+    }
+
+    public static void isRaise(Throwable t, String message, Object... params) {
+        if (t != null) {
+            throw ExceptionUtils.mpe(message,t, params);
+        }
     }
 }

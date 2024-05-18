@@ -82,7 +82,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         Document doc = null;
         try {
             String fname = findConfigFile(filename);
-            if(StringsUtil.isNullOrEmptyOrAllSpace(fname)) {
+            if(StringsUtil.isNullEmptyTrimmed(fname)) {
                 return;
             }
             File f = new File(fname);
@@ -96,18 +96,18 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
         if (null != doc) {
             @SuppressWarnings("rawtypes")
             List nodes = XmlUtil.selectNodes(doc, "AlbianObjects/IncludeSet/Include");
-            if (!SetUtil.isNullOrEmpty(nodes)) {
+            if (!SetUtil.isEmpty(nodes)) {
                 for (Object node : nodes) {
                     Element elt = XmlUtil.toElement(node);
                     String path = XmlUtil.getAttributeValue(elt, "Filename");
-                    if (StringsUtil.isNullOrEmptyOrAllSpace(path)) continue;
+                    if (StringsUtil.isNullEmptyTrimmed(path)) continue;
                     parserFile(path);
                 }
             }
 
             @SuppressWarnings("rawtypes")
             List objNodes = XmlUtil.selectNodes(doc, tagName);
-            if (SetUtil.isNullOrEmpty(objNodes)) {
+            if (SetUtil.isEmpty(objNodes)) {
                 ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Warn,
                         "parser the node tags:{} in the drouter.xml is error. the node of the tags is null or empty.",
                         tagName);
