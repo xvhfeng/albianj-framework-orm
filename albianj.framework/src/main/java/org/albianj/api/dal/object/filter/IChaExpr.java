@@ -39,7 +39,7 @@ package org.albianj.api.dal.object.filter;
 
 import org.albianj.api.dal.object.OOpt;
 import org.albianj.api.dal.object.BOpt;
-import org.albianj.common.mybp.support.SFunction;
+import org.albianj.common.mybp.support.MybpSFunction;
 
 import java.util.List;
 
@@ -144,7 +144,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr and(String fieldName, OOpt lo, Object value);
-    <T,R> IChaExpr  and(SFunction<T,R> getter, OOpt lo, Object value);
+    <T,R> IChaExpr  and(MybpSFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 前一个表达式项and上当前的表达式
@@ -158,7 +158,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr and(String fieldName, String aliasName, OOpt lo, Object value);
-    <T,R> IChaExpr and(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr and(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * * 前一个表达式项or上当前的表达式fe
@@ -178,7 +178,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr or(String fieldName, OOpt lo, Object value);
-    <T,R> IChaExpr or(SFunction<T,R> getter, OOpt lo, Object value);
+    <T,R> IChaExpr or(MybpSFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 前一个表达式项or上当前的表达式
@@ -192,7 +192,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr or(String fieldName, String aliasName, OOpt lo, Object value);
-    <T,R> IChaExpr or(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr or(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -211,7 +211,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr addAddition(String fieldName, OOpt lo, Object value);
-    <T,R> IChaExpr addAddition(SFunction<T,R> getter, OOpt lo, Object value);
+    <T,R> IChaExpr addAddition(MybpSFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 加上做为数据路由的依据的条件，但是当前的表达式项不会加入到sql语句的where条件中
@@ -225,7 +225,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr addAddition(String fieldName, String aliasName, OOpt lo, Object value);
-    <T,R> IChaExpr addAddition(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr addAddition(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -249,7 +249,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr add(String fieldName, OOpt lo, Object value);
-    <T,R> IChaExpr add(SFunction<T,R> getter, OOpt lo, Object value);
+    <T,R> IChaExpr add(MybpSFunction<T,R> getter, OOpt lo, Object value);
 
     /**
      * 加上当前的过滤表达式项。该表达式项会被加入到sql语句的where条件中
@@ -265,7 +265,7 @@ public interface IChaExpr {
      */
     @Deprecated(since = "自从你看见开始，不再推荐使用，优先使用getter版本")
     IChaExpr add(String fieldName, String aliasName, OOpt lo, Object value);
-    <T,R> IChaExpr add(SFunction<T,R> getter, String aliasName, OOpt lo, Object value);
+    <T,R> IChaExpr add(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value);
 
     /**
      * and 当前的表达式组项。该表达式组项会被加入到sql语句的where条件中

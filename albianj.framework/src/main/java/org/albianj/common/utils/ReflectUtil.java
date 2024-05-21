@@ -38,8 +38,8 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.common.utils;
 
 import org.albianj.ServRouter;
-import org.albianj.common.langs.UtilClassLoader;
-import org.albianj.common.spring.ReflectionUtils;
+import org.albianj.common.langs.AspectjUtilClassLoader;
+import org.albianj.common.spring.SpringReflectionUtils;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -55,7 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class ReflectUtil extends ReflectionUtils {
+public class ReflectUtil extends SpringReflectionUtils {
 
     public static final Class<?>[] MAIN_PARM_TYPES = new Class[]{String[].class};
 
@@ -470,7 +470,7 @@ public class ReflectUtil extends ReflectionUtils {
                 urls = libUrls;
             }
         }
-        UtilClassLoader loader = new UtilClassLoader(urls, dirs);
+        AspectjUtilClassLoader loader = new AspectjUtilClassLoader(urls, dirs);
         Class<?> targetClass = null;
         try {
             targetClass = loader.loadClass(className);

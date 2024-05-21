@@ -2,12 +2,11 @@ package org.albianj.api.dal.service;
 
 import org.albianj.api.dal.object.AblEntityAttr;
 import org.albianj.api.dal.object.AblEntityFieldAttr;
-import org.albianj.common.mybp.LambdaUtils;
-import org.albianj.common.mybp.support.LambdaMeta;
-import org.albianj.common.mybp.support.SFunction;
+import org.albianj.common.mybp.MybpLambdaUtils;
+import org.albianj.common.mybp.support.MybpLambdaMeta;
+import org.albianj.common.mybp.support.MybpSFunction;
 import org.albianj.common.utils.StringsUtil;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,8 +54,8 @@ public final class AlbianEntityMetadata {
         return StringsUtil.nonIdxFmt("{}.{}",clzz.getName(),getterName);
     }
 
-    public static <T,R> AblEntityFieldAttr findFieldAttrByGetter(SFunction<T,R> getter){
-        LambdaMeta meta = LambdaUtils.extract(getter);
+    public static <T,R> AblEntityFieldAttr findFieldAttrByGetter(MybpSFunction<T,R> getter){
+        MybpLambdaMeta meta = MybpLambdaUtils.extract(getter);
         String getterFullName = buildGetterFullName(meta.getInstantiatedClass(),meta.getImplMethodName());
         return getterLinkFieldAttrMetadata.get(getterFullName);
     }
@@ -66,7 +65,7 @@ public final class AlbianEntityMetadata {
         getterLinkFieldAttrMetadata.put(getterFullName,fieldAttr);
     }
 
-    public static <T,R> String getFieldNameByGetter(SFunction<T,R> getter) {
+    public static <T,R> String getFieldNameByGetter(MybpSFunction<T,R> getter) {
         AblEntityFieldAttr fieldAttr = findFieldAttrByGetter(getter);
         if(null == fieldAttr) return null;
         return fieldAttr.getName();
