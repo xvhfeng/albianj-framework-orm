@@ -89,7 +89,7 @@ public abstract class FreeAlbianMappingParserService extends FreeAlbianParserSer
     private void parserFile(String[] pkgs,String filename) throws Throwable {
         Document doc = null;
         try {
-            String fname = findConfigFile(filename);
+            String fname = findConfigFile(filename,false);
             if(!StringsUtil.isNullEmptyTrimmed(fname) && new File(fname).exists()) {
                 doc = XmlUtil.load(fname);
             }

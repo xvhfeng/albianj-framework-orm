@@ -51,14 +51,9 @@ public class AblApp {
 
     private static String lookupLoggerConfigFile(String configPath){
         String[] filenames = {
-                "log4j2.xml",
                 "log4j2.properties",
+                "log4j2.xml",
                 "log4j2.yaml",
-                "log4j2.prop",
-                "log4j.xml",
-                "log4j.properties",
-                "log4j.yaml",
-                "log4j.prop",
         };
 
         for (String filename : filenames) {

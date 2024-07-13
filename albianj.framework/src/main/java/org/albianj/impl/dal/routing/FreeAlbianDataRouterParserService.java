@@ -81,7 +81,7 @@ public abstract class FreeAlbianDataRouterParserService extends FreeAlbianParser
     private void parserFile(String filename)  {
         Document doc = null;
         try {
-            String fname = findConfigFile(filename);
+            String fname = findConfigFile(filename,false);
             if(StringsUtil.isNullEmptyTrimmed(fname)) {
                 return;
             }
