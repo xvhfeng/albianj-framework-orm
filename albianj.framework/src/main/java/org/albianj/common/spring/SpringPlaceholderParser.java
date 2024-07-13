@@ -495,4 +495,11 @@ final class SpringPlaceholderParser {
 
 	}
 
+	public static void main(String[] args) {
+		Map<String,String> params = new HashMap<>(2);
+		params.put("name", "黄晓明");
+		params.put("age", "32");
+		SpringPlaceholderParser helper1 = new SpringPlaceholderParser("${", "}", ":", '$',false);
+		System.out.println(helper1.replacePlaceholders("text: 姓名：${name:张三}， 年龄：${age}", params::get));
+	}
 }

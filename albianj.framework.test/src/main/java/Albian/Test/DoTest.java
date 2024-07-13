@@ -20,7 +20,7 @@ public class DoTest implements IAblCommandLine {
     public static void main(String[] argv) {
         try {
 
-            AblApp.run(DoTest.class,null);
+            AblApp.daemonRun(DoTest.class,argv[0]);
 //            for(int i = 0; i < 10000; i++ ) {
 //
 //                testRedShift();

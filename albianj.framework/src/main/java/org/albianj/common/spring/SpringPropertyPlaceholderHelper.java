@@ -17,6 +17,8 @@
 package org.albianj.common.spring;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -131,6 +133,14 @@ public class SpringPropertyPlaceholderHelper {
 		 */
 		
 		String resolvePlaceholder(String placeholderName);
+	}
+
+	public static void main(String[] args) {
+		Map<String,String> params = new HashMap<>(2);
+		params.put("name", "黄晓明");
+		params.put("age", "32");
+		SpringPropertyPlaceholderHelper helper1 = new SpringPropertyPlaceholderHelper("${", "}", ":", false);
+		System.out.println(helper1.replacePlaceholders("text: 姓名：${name:张三}， 年龄：${age}", params::get));
 	}
 
 }

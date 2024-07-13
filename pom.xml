@@ -6,7 +6,7 @@
 
     <artifactId>albianj</artifactId>
     <groupId>albianj-framework</groupId>
-    <version>10015-SNAPSHOT</version>
+    <version>10017-SNAPSHOT</version>
     <modules>
         <module>albianj.framework.loader</module>
         <module>albianj.framework</module>
@@ -129,17 +129,27 @@
         </plugins>
     </build>
 
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>release</id>-->
+<!--            <name>new-toy-company</name>-->
+<!--            <url>https://nexusdev.canfengtech.com:8443/repository/maven-releases/</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>snapshot</id>-->
+<!--            <name>new-toy-company</name>-->
+<!--            <url>https://nexusdev.canfengtech.com:8443/repository/maven-snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
     <distributionManagement>
-        <repository>
-            <id>release</id>
-            <name>new-toy-company</name>
-            <url>https://nexusdev.canfengtech.com:8443/repository/maven-releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>snapshot</id>
-            <name>new-toy-company</name>
+            <id>localnexus</id>
             <url>https://nexusdev.canfengtech.com:8443/repository/maven-snapshots/</url>
         </snapshotRepository>
+        <repository>
+            <id>localnexus</id>
+            <url>https://nexusdev.canfengtech.com:8443/repository/maven-releases/</url>
+        </repository>
     </distributionManagement>
 
 </project>

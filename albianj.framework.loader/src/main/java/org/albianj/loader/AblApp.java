@@ -37,6 +37,9 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 */
 package org.albianj.loader;
 
+import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +47,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 public class AblApp {
-    private static final Logger logger = LoggerFactory.getLogger(AblApp.class);
     private static final String AlbianStarter = "org.albianj.impl.kernel.core.AlbianTransmitterService";
 
     private static String lookupLoggerConfigFile(String configPath){
@@ -82,15 +84,24 @@ public class AblApp {
         }
 
         String cfFileName = lookupLoggerConfigFile(cfPath);
+        LoggerContext context = null;
         if (null != cfFileName) {
             try {
-                System.setProperty("log4j2.configurationFile", cfFileName);
-                Configurator.initialize(null, cfFileName);
+//                System.setProperty("log4j2.configurationFile", cfFileName);
+//                Configurator.initialize(null, cfFileName);
+
+                File file = new File(cfFileName);
+
+                 context = (LoggerContext) LogManager.getContext(false);
+                context.setConfigLocation(file.toURI());
+
             }catch (Throwable t){
-                logger.error("set configurationFile fail.",t);
+//                logger.error("set configurationFile fail.",t);
                 throw new RuntimeException(t);
             }
         }
+
+        Logger logger = LoggerFactory.getLogger(AblApp.class);
 
         logger.info("The sun rises in the east and the lighthouse is no more!");
         logger.info(AlbianAsciiArt.Images);
