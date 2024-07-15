@@ -161,33 +161,32 @@ public abstract class FreeAblServ implements IAblServ {
      * @return
      */
     @AlbianProxyIgnoreRant(ignore = true)
-    protected String findConfigFile(String filename)  {
+    protected String findConfigFile(String filename,boolean isMustExist)  {
         try {
             File f = new File(filename);
-            if (f.exists()){
+            if (f.exists()) {
                 return filename;
             }
             String folder = GlobalSettings.getInst().getConfigurtionFolder();
-//            if(StringsUtil.isNullEmptyTrimmed(folder)) {
-//                folder = this.getClass().getClassLoader().getResource("resource").getPath();
-//            }
             String tmpName = null;
-            if(folder.endsWith(File.separator)) {
+            if (folder.endsWith(File.separator)) {
                 tmpName = folder + filename;
             } else {
                 tmpName = folder + File.separator + filename;
             }
             f = new File(tmpName);
-            if (f.exists()){
+            if (f.exists()) {
                 return f.getAbsolutePath();
             }
 
-            ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Error,
-                    "not found the config filename:{}", filename);
+            if (isMustExist) {
+                ServRouter.log(ServRouter.__StartupSessionId, LogLevel.Warn,
+                        "not found the config filename:{}", filename);
+            }
             return null;
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,
-                    "not found the config filename:{}", filename);
+                    "found the config filename:{} broken", filename);
         }
         return filename;
     }

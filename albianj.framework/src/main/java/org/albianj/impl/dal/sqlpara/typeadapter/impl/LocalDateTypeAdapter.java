@@ -14,6 +14,8 @@ public  class LocalDateTypeAdapter  implements ITypeAdapter<LocalDate> {
 
     private final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
             .appendPattern("yyyy-MM-dd")
+            .appendOptional(DateTimeFormatter.ISO_DATE_TIME)
+            .appendOptional(DateTimeFormatter.ISO_LOCAL_DATE)
             .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
             .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
             .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)

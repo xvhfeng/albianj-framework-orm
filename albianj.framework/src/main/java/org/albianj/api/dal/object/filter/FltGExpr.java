@@ -39,7 +39,7 @@ package org.albianj.api.dal.object.filter;
 
 import org.albianj.api.dal.object.OOpt;
 import org.albianj.api.dal.object.BOpt;
-import org.albianj.common.mybp.support.SFunction;
+import org.albianj.common.mybp.support.MybpSFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +139,7 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
-    public <T,R> IFltGExpr and(SFunction<T,R> getter, OOpt lo, Object value) {
+    public <T,R> IFltGExpr and(MybpSFunction<T,R> getter, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, lo, value);
         this.and(fe);
@@ -158,7 +158,7 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
-    public <T,R> IFltGExpr and(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+    public <T,R> IFltGExpr and(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.and(fe);
@@ -176,7 +176,7 @@ public class FltGExpr implements IFltGExpr {
         this.or(fe);
         return this;
     }
-    public <T,R> IFltGExpr or(SFunction<T,R> getter, OOpt lo, Object value) {
+    public <T,R> IFltGExpr or(MybpSFunction<T,R> getter, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, lo, value);
         this.or(fe);
@@ -195,7 +195,7 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
-    public <T,R> IFltGExpr or(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+    public <T,R> IFltGExpr or(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.or(fe);
@@ -214,7 +214,7 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
-    public <T,R> IFltGExpr addAddition(SFunction<T,R> getter, OOpt lo, Object value) {
+    public <T,R> IFltGExpr addAddition(MybpSFunction<T,R> getter, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, lo, value);
         this.addAddition(fe);
@@ -233,7 +233,7 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
-    public <T,R> IFltGExpr addAddition(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+    public <T,R> IFltGExpr addAddition(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.addAddition(fe);
@@ -296,7 +296,7 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
-    public <T,R> IFltGExpr add(SFunction<T,R> getter, OOpt lo, Object value) {
+    public <T,R> IFltGExpr add(MybpSFunction<T,R> getter, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, lo, value);
         this.add(fe);
@@ -316,7 +316,7 @@ public class FltGExpr implements IFltGExpr {
         return this;
     }
 
-    public <T,R> IFltGExpr add(SFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
+    public <T,R> IFltGExpr add(MybpSFunction<T,R> getter, String aliasName, OOpt lo, Object value) {
         // TODO Auto-generated method stub
         IFltExpr fe = new FltExpr(getter, aliasName, lo, value);
         this.add(fe);

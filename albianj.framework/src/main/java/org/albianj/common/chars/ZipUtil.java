@@ -21,15 +21,14 @@ public class ZipUtil {
         try {
             GZIPOutputStream gzip = new GZIPOutputStream(obj);
             gzip.write(str.getBytes(encoder));
-        }catch (Throwable t){
+        } catch (Throwable t) {
 
-        }finally {
-            if(null != obj){
-                    obj.close();
+        } finally {
+            if (null != obj) {
+                obj.close();
             }
         }
-        byte[] bytes = obj.toByteArray();
-        return new String(bytes, encoder);
+        return obj.toString(encoder);
     }
 
     public static String decompress(String str, String encoder) throws Exception {
@@ -47,14 +46,14 @@ public class ZipUtil {
     }
 
     public static String compress(String str) throws Exception {
-        return  compress(str,"UTF-8");
+        return compress(str, "UTF-8");
     }
 
     public static String decompress(String str) throws Exception {
         return decompress(str, "UTF-8");
     }
 
-    public static void zipFiles(String srcFilename,String destFilename) {
+    public static void zipFiles(String srcFilename, String destFilename) {
         Path sourceFile = Path.of(srcFilename); // 要压缩的文件路径
         Path zipFile = Path.of(destFilename); // 输出的zip文件路径
 
@@ -78,4 +77,34 @@ public class ZipUtil {
         }
     }
 
+
+    public static String compressStringBuffer(String str, String inEncoding) throws IOException {
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             GZIPOutputStream gzip = new GZIPOutputStream(out)) {
+            gzip.write(str.getBytes(inEncoding));
+            return out.toString(inEncoding);
+        }
+
+    }
+
+    public static String uncompressStringBuffer(String str, String outEncoding) throws IOException {
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             ByteArrayInputStream in = new ByteArrayInputStream(str.getBytes(outEncoding));
+             GZIPInputStream gunzip = new GZIPInputStream(in)
+        ) {
+
+            byte[] buffer = new byte[256];
+            int n;
+            while ((n = gunzip.read(buffer)) >= 0) {
+                out.write(buffer, 0, n);
+            }
+            return out.toString(outEncoding);
+        }
+    }
 }
