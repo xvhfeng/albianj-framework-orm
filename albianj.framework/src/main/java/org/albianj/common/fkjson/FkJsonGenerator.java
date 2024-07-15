@@ -29,7 +29,7 @@ class FkJsonGenerator {
         ClassFieldType type;
         Field field;
         Method getMethod;
-        FkJsonDateTimeFormatter okjsonDateTimeFormatter;
+        FkJsonDateTimeFormatter fkjsonDateTimeFormatter;
     }
 
     private static ThreadLocal<HashMap<String, LinkedList<OkJsonClassField>>> classMapFieldListCache;
@@ -44,8 +44,8 @@ class FkJsonGenerator {
     private Integer errorCode;
     private String errorDesc;
 
-    final public static int OKJSON_ERROR_EXCEPTION = -8;
-    final public static int OKJSON_ERROR_NEW_OBJECT = -31;
+    final public static int FKJSON_ERROR_EXCEPTION = -8;
+    final public static int FKJSON_ERROR_NEW_OBJECT = -31;
 
     final private static char SEPFIELD_CHAR = ',';
     final private static char[] SEPFIELD_CHAR_PRETTY = " ,\n".toCharArray();
@@ -88,8 +88,8 @@ class FkJsonGenerator {
                         LocalDate localDate;
                         String defaultDateTimeFormatter;
                         localDate = (LocalDate) object;
-                        if (classField.okjsonDateTimeFormatter != null) {
-                            defaultDateTimeFormatter = classField.okjsonDateTimeFormatter.format();
+                        if (classField.fkjsonDateTimeFormatter != null) {
+                            defaultDateTimeFormatter = classField.fkjsonDateTimeFormatter.format();
                         } else {
                             defaultDateTimeFormatter = "yyyy-MM-dd";
                         }
@@ -99,8 +99,8 @@ class FkJsonGenerator {
                         LocalTime localTime;
                         String defaultDateTimeFormatter;
                         localTime = (LocalTime) object;
-                        if (classField.okjsonDateTimeFormatter != null) {
-                            defaultDateTimeFormatter = classField.okjsonDateTimeFormatter.format();
+                        if (classField.fkjsonDateTimeFormatter != null) {
+                            defaultDateTimeFormatter = classField.fkjsonDateTimeFormatter.format();
                         } else {
                             defaultDateTimeFormatter = "yyyy-MM-dd";
                         }
@@ -110,8 +110,8 @@ class FkJsonGenerator {
                         LocalDateTime localDateTime;
                         String defaultDateTimeFormatter;
                         localDateTime = (LocalDateTime) object;
-                        if (classField.okjsonDateTimeFormatter != null) {
-                            defaultDateTimeFormatter = classField.okjsonDateTimeFormatter.format();
+                        if (classField.fkjsonDateTimeFormatter != null) {
+                            defaultDateTimeFormatter = classField.fkjsonDateTimeFormatter.format();
                         } else {
                             defaultDateTimeFormatter = "yyyy-MM-dd";
                         }
@@ -152,7 +152,7 @@ class FkJsonGenerator {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return OKJSON_ERROR_EXCEPTION;
+            return FKJSON_ERROR_EXCEPTION;
         }
 
         if (prettyFormatEnable) {
@@ -302,13 +302,13 @@ class FkJsonGenerator {
                     ;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
 
                 if (f.isAnnotationPresent(FkJsonDateTimeFormatter.class)) {
-                    classField.okjsonDateTimeFormatter = f.getAnnotation(FkJsonDateTimeFormatter.class);
+                    classField.fkjsonDateTimeFormatter = f.getAnnotation(FkJsonDateTimeFormatter.class);
                 } else {
-                    classField.okjsonDateTimeFormatter = null;
+                    classField.fkjsonDateTimeFormatter = null;
                 }
 
                 if (Modifier.isPublic(f.getModifiers())) {
@@ -338,14 +338,14 @@ class FkJsonGenerator {
                             string = (String) (classField.getMethod.invoke(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     } else {
                         try {
                             string = (String) (classField.field.get(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     }
                     string = unfoldEscape((String) string);
@@ -370,14 +370,14 @@ class FkJsonGenerator {
                             value = classField.getMethod.invoke(object);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     } else {
                         try {
                             value = classField.field.get(object);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     }
                     if (value != null) {
@@ -402,18 +402,18 @@ class FkJsonGenerator {
                             localDate = (LocalDate) (classField.getMethod.invoke(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     } else {
                         try {
                             localDate = (LocalDate) (classField.field.get(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     }
-                    if (classField.okjsonDateTimeFormatter != null) {
-                        defaultDateTimeFormatter = classField.okjsonDateTimeFormatter.format();
+                    if (classField.fkjsonDateTimeFormatter != null) {
+                        defaultDateTimeFormatter = classField.fkjsonDateTimeFormatter.format();
                     } else {
                         defaultDateTimeFormatter = "yyyy-MM-dd";
                     }
@@ -439,18 +439,18 @@ class FkJsonGenerator {
                             localTime = (LocalTime) (classField.getMethod.invoke(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     } else {
                         try {
                             localTime = (LocalTime) (classField.field.get(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     }
-                    if (classField.okjsonDateTimeFormatter != null) {
-                        defaultDateTimeFormatter = classField.okjsonDateTimeFormatter.format();
+                    if (classField.fkjsonDateTimeFormatter != null) {
+                        defaultDateTimeFormatter = classField.fkjsonDateTimeFormatter.format();
                     } else {
                         defaultDateTimeFormatter = "HH:mm:ss";
                     }
@@ -476,18 +476,18 @@ class FkJsonGenerator {
                             localDateTime = (LocalDateTime) (classField.getMethod.invoke(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     } else {
                         try {
                             localDateTime = (LocalDateTime) (classField.field.get(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     }
-                    if (classField.okjsonDateTimeFormatter != null) {
-                        defaultDateTimeFormatter = classField.okjsonDateTimeFormatter.format();
+                    if (classField.fkjsonDateTimeFormatter != null) {
+                        defaultDateTimeFormatter = classField.fkjsonDateTimeFormatter.format();
                     } else {
                         defaultDateTimeFormatter = "yyyy-MM-dd HH:mm:ss";
                     }
@@ -513,14 +513,14 @@ class FkJsonGenerator {
                             array = (List<Object>) (classField.getMethod.invoke(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     } else {
                         try {
                             array = (List<Object>) (classField.field.get(object));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     }
                     if (array != null) {
@@ -555,14 +555,14 @@ class FkJsonGenerator {
                             subObject = classField.getMethod.invoke(object);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     } else {
                         try {
                             subObject = classField.field.get(object);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return OKJSON_ERROR_EXCEPTION;
+                            return FKJSON_ERROR_EXCEPTION;
                         }
                     }
                     if (subObject != null) {
@@ -617,7 +617,7 @@ class FkJsonGenerator {
             classMapFieldListCache = new ThreadLocal<HashMap<String, LinkedList<OkJsonClassField>>>();
             if (classMapFieldListCache == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             classMapFieldListCache.set(new HashMap<String, LinkedList<OkJsonClassField>>());
@@ -627,13 +627,13 @@ class FkJsonGenerator {
             jsonByteArrayBuilderCache = new ThreadLocal<FkJsonCharArrayBuilder>();
             if (jsonByteArrayBuilderCache == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             jsonCharArrayBuilder = new FkJsonCharArrayBuilder(1024);
             if (jsonCharArrayBuilder == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             jsonByteArrayBuilderCache.set(jsonCharArrayBuilder);
@@ -646,13 +646,13 @@ class FkJsonGenerator {
             fieldByteArrayBuilderCache = new ThreadLocal<FkJsonCharArrayBuilder>();
             if (fieldByteArrayBuilderCache == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             fieldCharArrayBuilder = new FkJsonCharArrayBuilder(1024);
             if (fieldCharArrayBuilder == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             fieldByteArrayBuilderCache.set(fieldCharArrayBuilder);
@@ -662,13 +662,13 @@ class FkJsonGenerator {
             basicTypeClassMapBooleanCache = new ThreadLocal<HashMap<Class, Boolean>>();
             if (basicTypeClassMapBooleanCache == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             basicTypeClassMapString = new HashMap<Class, Boolean>();
             if (basicTypeClassMapString == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             basicTypeClassMapString.put(String.class, new Boolean(true));

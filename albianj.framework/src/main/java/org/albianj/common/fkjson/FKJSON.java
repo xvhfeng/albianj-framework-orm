@@ -1,5 +1,5 @@
 /*
- * okjson - A small efficient flexible JSON parser/generator for Java
+ * fkjson - A small efficient flexible JSON parser/generator for Java
  * author	: calvin
  * email	: calvinwilliams@163.com
  *
@@ -18,20 +18,20 @@ public class FKJSON {
 	final public static int	OPTIONS_PRETTY_FORMAT_ENABLE = 2 ;
 	final public static int	OPTIONS_STRICT_POLICY = 4 ;
 	
-	final public static int	OKJSON_ERROR_END_OF_BUFFER = FkJsonParser.OKJSON_ERROR_END_OF_BUFFER ;
-	final public static int	OKJSON_ERROR_UNEXPECT = FkJsonParser.OKJSON_ERROR_UNEXPECT ;
-	final public static int	OKJSON_ERROR_EXCEPTION = FkJsonParser.OKJSON_ERROR_EXCEPTION ;
-	final public static int	OKJSON_ERROR_INVALID_BYTE = FkJsonParser.OKJSON_ERROR_INVALID_BYTE ;
-	final public static int	OKJSON_ERROR_FIND_FIRST_LEFT_BRACE = FkJsonParser.OKJSON_ERROR_FIND_FIRST_LEFT_BRACE ;
-	final public static int	OKJSON_ERROR_NAME_INVALID = FkJsonParser.OKJSON_ERROR_NAME_INVALID ;
-	final public static int	OKJSON_ERROR_EXPECT_COLON_AFTER_NAME = FkJsonParser.OKJSON_ERROR_EXPECT_COLON_AFTER_NAME ;
-	final public static int	OKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE = FkJsonParser.OKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE ;
-	final public static int	OKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT = FkJsonParser.OKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT ;
-	final public static int	OKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT = FkJsonParser.OKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT ;
-	final public static int	OKJSON_ERROR_NEW_OBJECT = FkJsonParser.OKJSON_ERROR_NEW_OBJECT ;
+	final public static int	FKJSON_ERROR_END_OF_BUFFER = FkJsonParser.FKJSON_ERROR_END_OF_BUFFER ;
+	final public static int	FKJSON_ERROR_UNEXPECT = FkJsonParser.FKJSON_ERROR_UNEXPECT ;
+	final public static int	FKJSON_ERROR_EXCEPTION = FkJsonParser.FKJSON_ERROR_EXCEPTION ;
+	final public static int	FKJSON_ERROR_INVALID_BYTE = FkJsonParser.FKJSON_ERROR_INVALID_BYTE ;
+	final public static int	FKJSON_ERROR_FIND_FIRST_LEFT_BRACE = FkJsonParser.FKJSON_ERROR_FIND_FIRST_LEFT_BRACE ;
+	final public static int	FKJSON_ERROR_NAME_INVALID = FkJsonParser.FKJSON_ERROR_NAME_INVALID ;
+	final public static int	FKJSON_ERROR_EXPECT_COLON_AFTER_NAME = FkJsonParser.FKJSON_ERROR_EXPECT_COLON_AFTER_NAME ;
+	final public static int	FKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE = FkJsonParser.FKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE ;
+	final public static int	FKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT = FkJsonParser.FKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT ;
+	final public static int	FKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT = FkJsonParser.FKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT ;
+	final public static int	FKJSON_ERROR_NEW_OBJECT = FkJsonParser.FKJSON_ERROR_NEW_OBJECT ;
 	
-	private static ThreadLocal<FkJsonGenerator>			okjsonGeneratorCache ;
-	private static ThreadLocal<FkJsonParser>			okjsonParserCache ;
+	private static ThreadLocal<FkJsonGenerator>			fkjsonGeneratorCache ;
+	private static ThreadLocal<FkJsonParser>			fkjsonParserCache ;
 	
 	private static ThreadLocal<Integer>	errorCode = new ThreadLocal<Integer>() ;
 	private static ThreadLocal<String>	errorDesc = new ThreadLocal<String>() ;
@@ -55,39 +55,39 @@ public class FKJSON {
 	}
 	
 	public static String objectToString( Object object, int options ) {
-		FkJsonGenerator okjsonGenerator ;
+		FkJsonGenerator fkjsonGenerator ;
 		
-		if( okjsonGeneratorCache == null ) {
-			okjsonGeneratorCache = new ThreadLocal<FkJsonGenerator>() ;
-			if( okjsonGeneratorCache == null ) {
+		if( fkjsonGeneratorCache == null ) {
+			fkjsonGeneratorCache = new ThreadLocal<FkJsonGenerator>() ;
+			if( fkjsonGeneratorCache == null ) {
 				errorDesc.set("New object failed for ThreadLocal<OkJsonGenerator>") ;
-				errorCode.set(OKJSON_ERROR_NEW_OBJECT);
+				errorCode.set(FKJSON_ERROR_NEW_OBJECT);
 				return null;
 			}
-			okjsonGenerator = new FkJsonGenerator() ;
-			if( okjsonGenerator == null ) {
+			fkjsonGenerator = new FkJsonGenerator() ;
+			if( fkjsonGenerator == null ) {
 				errorDesc.set("New object failed for OkJsonGenerator") ;
-				errorCode.set(OKJSON_ERROR_NEW_OBJECT);
+				errorCode.set(FKJSON_ERROR_NEW_OBJECT);
 				return null;
 			}
-			okjsonGeneratorCache.set(okjsonGenerator);
+			fkjsonGeneratorCache.set(fkjsonGenerator);
 		} else {
-			okjsonGenerator = okjsonGeneratorCache.get();
+			fkjsonGenerator = fkjsonGeneratorCache.get();
 		}
 		
 		if( (options&OPTIONS_DIRECT_ACCESS_PROPERTY_ENABLE) != 0 )
-			okjsonGenerator.setDirectAccessPropertyEnable(true);
+			fkjsonGenerator.setDirectAccessPropertyEnable(true);
 		else
-			okjsonGenerator.setDirectAccessPropertyEnable(false);
+			fkjsonGenerator.setDirectAccessPropertyEnable(false);
 		if( (options&OPTIONS_PRETTY_FORMAT_ENABLE) != 0 )
-			okjsonGenerator.setPrettyFormatEnable(true);
+			fkjsonGenerator.setPrettyFormatEnable(true);
 		else
-			okjsonGenerator.setPrettyFormatEnable(false);
+			fkjsonGenerator.setPrettyFormatEnable(false);
 		
-		String string = okjsonGenerator.objectToString(object) ;
+		String string = fkjsonGenerator.objectToString(object) ;
 		
-		errorCode.set(okjsonGenerator.getErrorCode());
-		errorDesc.set(okjsonGenerator.getErrorDesc());
+		errorCode.set(fkjsonGenerator.getErrorCode());
+		errorDesc.set(fkjsonGenerator.getErrorDesc());
 		
 		return string;
 	}
@@ -105,34 +105,34 @@ public class FKJSON {
 	}
 	
 	public static <T> T stringToObject( String jsonString, Class<T> clazz, int options ) {
-		FkJsonParser okjsonParser ;
+		FkJsonParser fkjsonParser ;
 		
-		if( okjsonParserCache == null ) {
-			okjsonParserCache = new ThreadLocal<FkJsonParser>() ;
-			if( okjsonParserCache == null ) {
+		if( fkjsonParserCache == null ) {
+			fkjsonParserCache = new ThreadLocal<FkJsonParser>() ;
+			if( fkjsonParserCache == null ) {
 				errorDesc.set("New object failed for ThreadLocal<OkJsonParser>") ;
-				errorCode.set(OKJSON_ERROR_NEW_OBJECT);
+				errorCode.set(FKJSON_ERROR_NEW_OBJECT);
 				return null;
 			}
-			okjsonParser = new FkJsonParser() ;
-			if( okjsonParser == null ) {
-				errorDesc.set("New object failed for okjsonParser") ;
-				errorCode.set(OKJSON_ERROR_NEW_OBJECT);
+			fkjsonParser = new FkJsonParser() ;
+			if( fkjsonParser == null ) {
+				errorDesc.set("New object failed for fkjsonParser") ;
+				errorCode.set(FKJSON_ERROR_NEW_OBJECT);
 				return null;
 			}
-			okjsonParserCache.set(okjsonParser);
+			fkjsonParserCache.set(fkjsonParser);
 		} else {
-			okjsonParser = okjsonParserCache.get();
+			fkjsonParser = fkjsonParserCache.get();
 		}
 		
 		if( (options&OPTIONS_DIRECT_ACCESS_PROPERTY_ENABLE) != 0 )
-			okjsonParser.setDirectAccessPropertyEnable(true);
+			fkjsonParser.setDirectAccessPropertyEnable(true);
 		else
-			okjsonParser.setDirectAccessPropertyEnable(false);
+			fkjsonParser.setDirectAccessPropertyEnable(false);
 		if( (options&OPTIONS_STRICT_POLICY) != 0 )
-			okjsonParser.setStrictPolicyEnable(true);
+			fkjsonParser.setStrictPolicyEnable(true);
 		else
-			okjsonParser.setStrictPolicyEnable(false);
+			fkjsonParser.setStrictPolicyEnable(false);
 		
 		T object ;
 		try {
@@ -142,10 +142,10 @@ public class FKJSON {
 			return null;
 		}
 		
-		object = okjsonParser.stringToObject(jsonString, object);
+		object = fkjsonParser.stringToObject(jsonString, object);
 		
-		errorCode.set(okjsonParser.getErrorCode());
-		errorDesc.set(okjsonParser.getErrorDesc());
+		errorCode.set(fkjsonParser.getErrorCode());
+		errorDesc.set(fkjsonParser.getErrorDesc());
 		
 		return object;
 	}

@@ -44,17 +44,17 @@ class FkJsonParser {
     private int endOffset;
     private boolean booleanValue;
 
-    final public static int OKJSON_ERROR_END_OF_BUFFER = 1;
-    final public static int OKJSON_ERROR_UNEXPECT = -4;
-    final public static int OKJSON_ERROR_EXCEPTION = -8;
-    final public static int OKJSON_ERROR_INVALID_BYTE = -11;
-    final public static int OKJSON_ERROR_FIND_FIRST_LEFT_BRACE = -21;
-    final public static int OKJSON_ERROR_NAME_INVALID = -22;
-    final public static int OKJSON_ERROR_EXPECT_COLON_AFTER_NAME = -23;
-    final public static int OKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE = -24;
-    final public static int OKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT = -26;
-    final public static int OKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT = -28;
-    final public static int OKJSON_ERROR_NEW_OBJECT = -31;
+    final public static int FKJSON_ERROR_END_OF_BUFFER = 1;
+    final public static int FKJSON_ERROR_UNEXPECT = -4;
+    final public static int FKJSON_ERROR_EXCEPTION = -8;
+    final public static int FKJSON_ERROR_INVALID_BYTE = -11;
+    final public static int FKJSON_ERROR_FIND_FIRST_LEFT_BRACE = -21;
+    final public static int FKJSON_ERROR_NAME_INVALID = -22;
+    final public static int FKJSON_ERROR_EXPECT_COLON_AFTER_NAME = -23;
+    final public static int FKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE = -24;
+    final public static int FKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT = -26;
+    final public static int FKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT = -28;
+    final public static int FKJSON_ERROR_NEW_OBJECT = -31;
 
     private int tokenJsonString(char[] jsonCharArray) {
         StringBuilder fieldStringBuilder;
@@ -78,7 +78,7 @@ class FkJsonParser {
             } else if (ch == '\\') {
                 jsonOffset++;
                 if (jsonOffset >= jsonLength) {
-                    return OKJSON_ERROR_END_OF_BUFFER;
+                    return FKJSON_ERROR_END_OF_BUFFER;
                 }
                 ch = jsonCharArray[jsonOffset];
                 if (ch == '"') {
@@ -126,25 +126,25 @@ class FkJsonParser {
                         fieldStringBuilder.append(jsonCharArray, beginOffset, jsonOffset - beginOffset - 1);
                     jsonOffset++;
                     if (jsonOffset >= jsonLength) {
-                        return OKJSON_ERROR_END_OF_BUFFER;
+                        return FKJSON_ERROR_END_OF_BUFFER;
                     }
                     ch = jsonCharArray[jsonOffset];
                     if (('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')) {
                         jsonOffset++;
                         if (jsonOffset >= jsonLength) {
-                            return OKJSON_ERROR_END_OF_BUFFER;
+                            return FKJSON_ERROR_END_OF_BUFFER;
                         }
                         ch = jsonCharArray[jsonOffset];
                         if (('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')) {
                             jsonOffset++;
                             if (jsonOffset >= jsonLength) {
-                                return OKJSON_ERROR_END_OF_BUFFER;
+                                return FKJSON_ERROR_END_OF_BUFFER;
                             }
                             ch = jsonCharArray[jsonOffset];
                             if (('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')) {
                                 jsonOffset++;
                                 if (jsonOffset >= jsonLength) {
-                                    return OKJSON_ERROR_END_OF_BUFFER;
+                                    return FKJSON_ERROR_END_OF_BUFFER;
                                 }
                                 ch = jsonCharArray[jsonOffset];
                                 if (('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')) {
@@ -183,7 +183,7 @@ class FkJsonParser {
             jsonOffset++;
         }
 
-        return OKJSON_ERROR_END_OF_BUFFER;
+        return FKJSON_ERROR_END_OF_BUFFER;
     }
 
     private int tokenJsonNumber(char[] jsonCharArray) {
@@ -208,7 +208,7 @@ class FkJsonParser {
             } else if (ch == 'e' || ch == 'E') {
                 jsonOffset++;
                 if (jsonOffset >= jsonLength) {
-                    return OKJSON_ERROR_END_OF_BUFFER;
+                    return FKJSON_ERROR_END_OF_BUFFER;
                 }
                 ch = jsonCharArray[jsonOffset];
                 if (ch == '-' || ch == '+') {
@@ -226,7 +226,7 @@ class FkJsonParser {
             }
         }
 
-        return OKJSON_ERROR_END_OF_BUFFER;
+        return FKJSON_ERROR_END_OF_BUFFER;
     }
 
     private int tokenJsonWord(char[] jsonCharArray) {
@@ -280,19 +280,19 @@ class FkJsonParser {
                 beginOffset = jsonOffset;
                 jsonOffset++;
                 if (jsonOffset >= jsonLength) {
-                    return OKJSON_ERROR_END_OF_BUFFER;
+                    return FKJSON_ERROR_END_OF_BUFFER;
                 }
                 ch = jsonCharArray[jsonOffset];
                 if (ch == 'r') {
                     jsonOffset++;
                     if (jsonOffset >= jsonLength) {
-                        return OKJSON_ERROR_END_OF_BUFFER;
+                        return FKJSON_ERROR_END_OF_BUFFER;
                     }
                     ch = jsonCharArray[jsonOffset];
                     if (ch == 'u') {
                         jsonOffset++;
                         if (jsonOffset >= jsonLength) {
-                            return OKJSON_ERROR_END_OF_BUFFER;
+                            return FKJSON_ERROR_END_OF_BUFFER;
                         }
                         ch = jsonCharArray[jsonOffset];
                         if (ch == 'e') {
@@ -308,25 +308,25 @@ class FkJsonParser {
                 beginOffset = jsonOffset;
                 jsonOffset++;
                 if (jsonOffset >= jsonLength) {
-                    return OKJSON_ERROR_END_OF_BUFFER;
+                    return FKJSON_ERROR_END_OF_BUFFER;
                 }
                 ch = jsonCharArray[jsonOffset];
                 if (ch == 'a') {
                     jsonOffset++;
                     if (jsonOffset >= jsonLength) {
-                        return OKJSON_ERROR_END_OF_BUFFER;
+                        return FKJSON_ERROR_END_OF_BUFFER;
                     }
                     ch = jsonCharArray[jsonOffset];
                     if (ch == 'l') {
                         jsonOffset++;
                         if (jsonOffset >= jsonLength) {
-                            return OKJSON_ERROR_END_OF_BUFFER;
+                            return FKJSON_ERROR_END_OF_BUFFER;
                         }
                         ch = jsonCharArray[jsonOffset];
                         if (ch == 's') {
                             jsonOffset++;
                             if (jsonOffset >= jsonLength) {
-                                return OKJSON_ERROR_END_OF_BUFFER;
+                                return FKJSON_ERROR_END_OF_BUFFER;
                             }
                             ch = jsonCharArray[jsonOffset];
                             if (ch == 'e') {
@@ -343,19 +343,19 @@ class FkJsonParser {
                 beginOffset = jsonOffset;
                 jsonOffset++;
                 if (jsonOffset >= jsonLength) {
-                    return OKJSON_ERROR_END_OF_BUFFER;
+                    return FKJSON_ERROR_END_OF_BUFFER;
                 }
                 ch = jsonCharArray[jsonOffset];
                 if (ch == 'u') {
                     jsonOffset++;
                     if (jsonOffset >= jsonLength) {
-                        return OKJSON_ERROR_END_OF_BUFFER;
+                        return FKJSON_ERROR_END_OF_BUFFER;
                     }
                     ch = jsonCharArray[jsonOffset];
                     if (ch == 'l') {
                         jsonOffset++;
                         if (jsonOffset >= jsonLength) {
-                            return OKJSON_ERROR_END_OF_BUFFER;
+                            return FKJSON_ERROR_END_OF_BUFFER;
                         }
                         ch = jsonCharArray[jsonOffset];
                         if (ch == 'l') {
@@ -369,11 +369,11 @@ class FkJsonParser {
                 }
             } else {
                 errorDesc = "Invalid byte '" + ch + "'";
-                return OKJSON_ERROR_INVALID_BYTE;
+                return FKJSON_ERROR_INVALID_BYTE;
             }
         }
 
-        return OKJSON_ERROR_END_OF_BUFFER;
+        return FKJSON_ERROR_END_OF_BUFFER;
     }
 
     private int addArrayObject(char[] jsonCharArray, TokenType valueTokenType, int valueBeginOffset, int valueEndOffset, Object object, Field field) {
@@ -441,12 +441,12 @@ class FkJsonParser {
                     }
                 } else if (typeClass == LocalDate.class) {
                     if (valueTokenType == TokenType.TOKEN_TYPE_STRING) {
-                        FkJsonDateTimeFormatter okjsonDateTimeFormatter;
+                        FkJsonDateTimeFormatter fkjsonDateTimeFormatter;
                         String defaultDateTimeFormatter;
                         LocalDate localDate;
                         if (field.isAnnotationPresent(FkJsonDateTimeFormatter.class)) {
-                            okjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
-                            defaultDateTimeFormatter = okjsonDateTimeFormatter.format();
+                            fkjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
+                            defaultDateTimeFormatter = fkjsonDateTimeFormatter.format();
                         } else {
                             defaultDateTimeFormatter = "yyyy-MM-dd";
                         }
@@ -457,12 +457,12 @@ class FkJsonParser {
                     }
                 } else if (typeClass == LocalTime.class) {
                     if (valueTokenType == TokenType.TOKEN_TYPE_STRING) {
-                        FkJsonDateTimeFormatter okjsonDateTimeFormatter;
+                        FkJsonDateTimeFormatter fkjsonDateTimeFormatter;
                         String defaultDateTimeFormatter;
                         LocalTime localTime;
                         if (field.isAnnotationPresent(FkJsonDateTimeFormatter.class)) {
-                            okjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
-                            defaultDateTimeFormatter = okjsonDateTimeFormatter.format();
+                            fkjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
+                            defaultDateTimeFormatter = fkjsonDateTimeFormatter.format();
                         } else {
                             defaultDateTimeFormatter = "HH:mm:ss";
                         }
@@ -473,12 +473,12 @@ class FkJsonParser {
                     }
                 } else if (typeClass == LocalDateTime.class) {
                     if (valueTokenType == TokenType.TOKEN_TYPE_STRING) {
-                        FkJsonDateTimeFormatter okjsonDateTimeFormatter;
+                        FkJsonDateTimeFormatter fkjsonDateTimeFormatter;
                         String defaultDateTimeFormatter;
                         LocalDateTime localDateTime;
                         if (field.isAnnotationPresent(FkJsonDateTimeFormatter.class)) {
-                            okjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
-                            defaultDateTimeFormatter = okjsonDateTimeFormatter.format();
+                            fkjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
+                            defaultDateTimeFormatter = fkjsonDateTimeFormatter.format();
                         } else {
                             defaultDateTimeFormatter = "yyyy-MM-dd HH:mm:ss";
                         }
@@ -491,15 +491,15 @@ class FkJsonParser {
                     ;
                 } else {
                     if (strictPolicyEnable == true)
-                        return OKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT;
+                        return FKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT;
                 }
             } else {
                 if (strictPolicyEnable == true)
-                    return OKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT;
+                    return FKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return OKJSON_ERROR_EXCEPTION;
+            return FKJSON_ERROR_EXCEPTION;
         }
 
         return 0;
@@ -516,7 +516,7 @@ class FkJsonParser {
         while (true) {
             // token "value" or '{'
             nret = tokenJsonWord(jsonCharArray);
-            if (nret == OKJSON_ERROR_END_OF_BUFFER) {
+            if (nret == FKJSON_ERROR_END_OF_BUFFER) {
                 break;
             }
             if (nret != 0) {
@@ -545,7 +545,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             } else if (tokenType == TokenType.TOKEN_TYPE_STRING || tokenType == TokenType.TOKEN_TYPE_INTEGER || tokenType == TokenType.TOKEN_TYPE_DECIMAL || tokenType == TokenType.TOKEN_TYPE_BOOL) {
                 ;
@@ -554,7 +554,7 @@ class FkJsonParser {
                 if (beginPos < 0)
                     beginPos = 0;
                 errorDesc = "unexpect \"" + String.copyValueOf(jsonCharArray, beginOffset, endOffset - beginOffset + 1) + "\"";
-                return OKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE;
+                return FKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE;
             }
 
             valueTokenType = tokenType;
@@ -563,7 +563,7 @@ class FkJsonParser {
 
             // token ',' or ']'
             nret = tokenJsonWord(jsonCharArray);
-            if (nret == OKJSON_ERROR_END_OF_BUFFER) {
+            if (nret == FKJSON_ERROR_END_OF_BUFFER) {
                 break;
             }
             if (nret != 0) {
@@ -581,7 +581,7 @@ class FkJsonParser {
                     break;
             } else {
                 errorDesc = "unexpect \"" + String.copyValueOf(jsonCharArray, beginOffset, endOffset - beginOffset + 1) + "\"";
-                return OKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE;
+                return FKJSON_ERROR_UNEXPECT_TOKEN_AFTER_LEFT_BRACE;
             }
         }
 
@@ -610,7 +610,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == Byte.class) {
@@ -624,7 +624,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == Short.class) {
@@ -638,7 +638,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == Integer.class) {
@@ -652,7 +652,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == Long.class) {
@@ -666,7 +666,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == Float.class) {
@@ -680,7 +680,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == Double.class) {
@@ -694,7 +694,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == Boolean.class) {
@@ -708,7 +708,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType().getName().equals("byte") && valueTokenType == TokenType.TOKEN_TYPE_INTEGER) {
@@ -721,7 +721,7 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else if (field.getType().getName().equals("short") && valueTokenType == TokenType.TOKEN_TYPE_INTEGER) {
             try {
@@ -733,7 +733,7 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else if (field.getType().getName().equals("int") && valueTokenType == TokenType.TOKEN_TYPE_INTEGER) {
             try {
@@ -745,7 +745,7 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else if (field.getType().getName().equals("long") && valueTokenType == TokenType.TOKEN_TYPE_INTEGER) {
             try {
@@ -757,7 +757,7 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else if (field.getType().getName().equals("float") && valueTokenType == TokenType.TOKEN_TYPE_DECIMAL) {
             try {
@@ -769,7 +769,7 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else if (field.getType().getName().equals("double") && valueTokenType == TokenType.TOKEN_TYPE_DECIMAL) {
             try {
@@ -781,7 +781,7 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else if (field.getType().getName().equals("boolean") && valueTokenType == TokenType.TOKEN_TYPE_BOOL) {
             try {
@@ -792,17 +792,17 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else if (field.getType() == LocalDate.class) {
             if (valueTokenType == TokenType.TOKEN_TYPE_STRING) {
                 try {
-                    FkJsonDateTimeFormatter okjsonDateTimeFormatter;
+                    FkJsonDateTimeFormatter fkjsonDateTimeFormatter;
                     String defaultDateTimeFormatter;
                     LocalDate localDate;
                     if (field.isAnnotationPresent(FkJsonDateTimeFormatter.class)) {
-                        okjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
-                        defaultDateTimeFormatter = okjsonDateTimeFormatter.format();
+                        fkjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
+                        defaultDateTimeFormatter = fkjsonDateTimeFormatter.format();
                     } else {
                         defaultDateTimeFormatter = "yyyy-MM-dd";
                     }
@@ -818,18 +818,18 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == LocalTime.class) {
             if (valueTokenType == TokenType.TOKEN_TYPE_STRING) {
                 try {
-                    FkJsonDateTimeFormatter okjsonDateTimeFormatter;
+                    FkJsonDateTimeFormatter fkjsonDateTimeFormatter;
                     String defaultDateTimeFormatter;
                     LocalTime localTime;
                     if (field.isAnnotationPresent(FkJsonDateTimeFormatter.class)) {
-                        okjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
-                        defaultDateTimeFormatter = okjsonDateTimeFormatter.format();
+                        fkjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
+                        defaultDateTimeFormatter = fkjsonDateTimeFormatter.format();
                     } else {
                         defaultDateTimeFormatter = "HH:mm:ss";
                     }
@@ -845,18 +845,18 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (field.getType() == LocalDateTime.class) {
             if (valueTokenType == TokenType.TOKEN_TYPE_STRING) {
                 try {
-                    FkJsonDateTimeFormatter okjsonDateTimeFormatter;
+                    FkJsonDateTimeFormatter fkjsonDateTimeFormatter;
                     String defaultDateTimeFormatter;
                     LocalDateTime localDateTime;
                     if (field.isAnnotationPresent(FkJsonDateTimeFormatter.class)) {
-                        okjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
-                        defaultDateTimeFormatter = okjsonDateTimeFormatter.format();
+                        fkjsonDateTimeFormatter = field.getAnnotation(FkJsonDateTimeFormatter.class);
+                        defaultDateTimeFormatter = fkjsonDateTimeFormatter.format();
                     } else {
                         defaultDateTimeFormatter = "yyyy-MM-dd HH:mm:ss";
                     }
@@ -872,7 +872,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             }
         } else if (valueTokenType == TokenType.TOKEN_TYPE_NULL) {
@@ -884,11 +884,11 @@ class FkJsonParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return OKJSON_ERROR_EXCEPTION;
+                return FKJSON_ERROR_EXCEPTION;
             }
         } else {
             if (strictPolicyEnable == true)
-                return OKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT;
+                return FKJSON_ERROR_PORPERTY_TYPE_NOT_MATCH_IN_OBJECT;
         }
 
         return 0;
@@ -961,7 +961,7 @@ class FkJsonParser {
         while (true) {
             // token "name"
             nret = tokenJsonWord(jsonCharArray);
-            if (nret == OKJSON_ERROR_END_OF_BUFFER) {
+            if (nret == FKJSON_ERROR_END_OF_BUFFER) {
                 break;
             }
             if (nret != 0) {
@@ -977,7 +977,7 @@ class FkJsonParser {
                 field = stringMapFields.get(fieldName);
                 if (field == null) {
                     if (strictPolicyEnable == true)
-                        return OKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT;
+                        return FKJSON_ERROR_NAME_NOT_FOUND_IN_OBJECT;
                 }
 
                 method = stringMapMethods.get(fieldName);
@@ -988,12 +988,12 @@ class FkJsonParser {
 
             if (tokenType != TokenType.TOKEN_TYPE_STRING) {
                 errorDesc = "expect a name but \"" + String.copyValueOf(jsonCharArray, beginOffset, endOffset - beginOffset + 1) + "\"";
-                return OKJSON_ERROR_NAME_INVALID;
+                return FKJSON_ERROR_NAME_INVALID;
             }
 
             // token ':' or ',' or '}' or ']'
             nret = tokenJsonWord(jsonCharArray);
-            if (nret == OKJSON_ERROR_END_OF_BUFFER) {
+            if (nret == FKJSON_ERROR_END_OF_BUFFER) {
                 break;
             }
             if (nret != 0) {
@@ -1016,12 +1016,12 @@ class FkJsonParser {
                 break;
             } else {
                 errorDesc = "expect ':' but \"" + String.copyValueOf(jsonCharArray, beginOffset, endOffset - beginOffset + 1) + "\"";
-                return OKJSON_ERROR_EXPECT_COLON_AFTER_NAME;
+                return FKJSON_ERROR_EXPECT_COLON_AFTER_NAME;
             }
 
             // token '{' or '[' or "value"
             nret = tokenJsonWord(jsonCharArray);
-            if (nret == OKJSON_ERROR_END_OF_BUFFER) {
+            if (nret == FKJSON_ERROR_END_OF_BUFFER) {
                 break;
             }
             if (nret != 0) {
@@ -1039,7 +1039,7 @@ class FkJsonParser {
                     if (field != null) {
                         childObject = field.getType().newInstance();
                         if (childObject == null)
-                            return OKJSON_ERROR_UNEXPECT;
+                            return FKJSON_ERROR_UNEXPECT;
                     } else {
                         childObject = null;
                     }
@@ -1057,7 +1057,7 @@ class FkJsonParser {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return OKJSON_ERROR_EXCEPTION;
+                    return FKJSON_ERROR_EXCEPTION;
                 }
             } else {
                 if (object != null && field != null) {
@@ -1069,7 +1069,7 @@ class FkJsonParser {
 
             // token ',' or '}' or ']'
             nret = tokenJsonWord(jsonCharArray);
-            if (nret == OKJSON_ERROR_END_OF_BUFFER) {
+            if (nret == FKJSON_ERROR_END_OF_BUFFER) {
                 break;
             }
             if (nret != 0) {
@@ -1084,7 +1084,7 @@ class FkJsonParser {
                 break;
             } else {
                 errorDesc = "expect ',' or '}' or ']' but \"" + String.copyValueOf(jsonCharArray, beginOffset, endOffset - beginOffset + 1) + "\"";
-                return OKJSON_ERROR_EXPECT_COLON_AFTER_NAME;
+                return FKJSON_ERROR_EXPECT_COLON_AFTER_NAME;
             }
         }
 
@@ -1114,7 +1114,7 @@ class FkJsonParser {
             stringMapFieldsCache = new ThreadLocal<HashMap<String, HashMap<String, Field>>>();
             if (stringMapFieldsCache == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             stringMapFieldsCache.set(new HashMap<String, HashMap<String, Field>>());
@@ -1124,7 +1124,7 @@ class FkJsonParser {
             stringMapMethodsCache = new ThreadLocal<HashMap<String, HashMap<String, Method>>>();
             if (stringMapMethodsCache == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             stringMapMethodsCache.set(new HashMap<String, HashMap<String, Method>>());
@@ -1134,7 +1134,7 @@ class FkJsonParser {
             fieldStringBuilderCache = new ThreadLocal<StringBuilder>();
             if (fieldStringBuilderCache == null) {
                 errorDesc = "New object failed for clazz";
-                errorCode = OKJSON_ERROR_NEW_OBJECT;
+                errorCode = FKJSON_ERROR_NEW_OBJECT;
                 return null;
             }
             fieldStringBuilderCache.set(new StringBuilder(1024));
@@ -1146,7 +1146,7 @@ class FkJsonParser {
         }
 
         if (tokenType != TokenType.TOKEN_TYPE_LEFT_BRACE) {
-            errorCode = OKJSON_ERROR_FIND_FIRST_LEFT_BRACE;
+            errorCode = FKJSON_ERROR_FIND_FIRST_LEFT_BRACE;
             return null;
         }
 

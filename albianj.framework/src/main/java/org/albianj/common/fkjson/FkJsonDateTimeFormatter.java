@@ -1,5 +1,5 @@
 /*
- * okjson - A small efficient flexible JSON parser/generator for Java
+ * fkjson - A small efficient flexible JSON parser/generator for Java
  * author	: calvin
  * email	: calvinwilliams@163.com
  *
