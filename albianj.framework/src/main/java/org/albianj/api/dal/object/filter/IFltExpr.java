@@ -38,7 +38,7 @@ Copyright (c) 2016 著作权由上海阅文信息技术有限公司所有。著�
 package org.albianj.api.dal.object.filter;
 
 import org.albianj.api.dal.object.OOpt;
-import org.albianj.common.mybp.support.SFunction;
+import org.albianj.common.mybp.support.MybpSFunction;
 
 /**
  * 链式表达式过滤项的接口定义，该类是IChainExpression的子接口
@@ -62,7 +62,7 @@ public interface IFltExpr extends IChaExpr {
      */
     public void setFieldName(String fieldName);
 
-    public SFunction getGetter();
+    public MybpSFunction getGetter();
 
     /**
      * 当前过滤字段的类型信息

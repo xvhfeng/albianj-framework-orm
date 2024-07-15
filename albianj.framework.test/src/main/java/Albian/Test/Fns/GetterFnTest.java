@@ -1,8 +1,8 @@
 package Albian.Test.Fns;
 
-import org.albianj.common.mybp.LambdaUtils;
-import org.albianj.common.mybp.support.LambdaMeta;
-import org.albianj.common.mybp.support.SFunction;
+import org.albianj.common.mybp.MybpLambdaUtils;
+import org.albianj.common.mybp.support.MybpLambdaMeta;
+import org.albianj.common.mybp.support.MybpSFunction;
 import org.albianj.common.utils.ReflectUtil;
 
 import java.beans.PropertyDescriptor;
@@ -11,8 +11,8 @@ import java.lang.reflect.Method;
 
 public class GetterFnTest {
 
-    public <T,R> String getGetterFn(SFunction<T,R> fn){
-      LambdaMeta meta = LambdaUtils.extract(fn);
+    public <T,R> String getGetterFn(MybpSFunction<T,R> fn){
+      MybpLambdaMeta meta = MybpLambdaUtils.extract(fn);
       String methodFullName = meta.getInstantiatedClass().getName() + "." +  meta.getImplMethodName();
       System.out.println("fn fullname -> " + methodFullName);
       String name =    fn.getClass().getName();

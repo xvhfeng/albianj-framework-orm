@@ -73,7 +73,7 @@ public abstract class FreeAlbianServiceParser extends FreeAlbianParserService {
 
         Map<String, AlbianServiceAttribute> map = new LinkedHashMap<>();
         try {
-            String cfname = findConfigFile(filename);
+            String cfname = findConfigFile(filename,false);
             parserFile(map, GlobalSettings.getInst().getServAnnoPkgs(), cfname);
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,  LogLevel.Error,e,

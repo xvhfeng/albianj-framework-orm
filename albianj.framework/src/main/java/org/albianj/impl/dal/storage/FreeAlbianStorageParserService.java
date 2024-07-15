@@ -161,7 +161,7 @@ public abstract class FreeAlbianStorageParserService extends FreeAlbianParserSer
         Document doc = null;
         cached = new HashMap<String, StgAttr>();
         try {
-            String fname = findConfigFile(filename);
+            String fname = findConfigFile(filename,true);
             doc = XmlUtil.load(fname);
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
