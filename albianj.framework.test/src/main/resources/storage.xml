@@ -18,6 +18,7 @@
 			<Transactional>true</Transactional>
 			<AliveTime>300</AliveTime>
 			<PoolStyle>SpxDBCP</PoolStyle>
+			<InitSql><![CDATA[SET timezone = 'Asia/Tokyo';]]></InitSql>
 		</Template>
 	</Templates>
 
@@ -25,6 +26,7 @@
 		<Name>SingleUserStorage</Name>
 		<Database>userdb</Database>
 		<Template>local-mysql</Template>
+		<InitSql><![CDATA[SET timezone = 'Asia/Tokyo';]]></InitSql>
 	</Storage>
 
 	<Storage>
@@ -44,6 +46,7 @@
 		<AliveTime>300</AliveTime>
 		<PoolStyle>HIKARICP</PoolStyle>
 		<UrlParaments><![CDATA[autosave=always&enableFetchRingBuffer=false&reWriteBatchedInserts=true]]></UrlParaments>
+		<InitSql><![CDATA[SET timezone = 'Asia/Tokyo';]]></InitSql>
 	</Storage>
 
 
@@ -52,6 +55,8 @@
 		<Template>local-mysql</Template>
 		<Database>Muserdb_1</Database>
 		<PoolStyle>HIKARICP</PoolStyle>
+		<InitSql><![CDATA[SET timezone = 'Asia/Tokyo';]]></InitSql>
+
 	</Storage>
 
 	<Storage>
@@ -70,6 +75,8 @@
 		<Transactional>true</Transactional>
 		<AliveTime>300</AliveTime>
 		<PoolStyle>HIKARICP</PoolStyle>
+		<InitSql><![CDATA[SET timezone = 'Asia/Tokyo';]]></InitSql>
+
 	</Storage>
 
 	<Storage>
@@ -94,6 +101,8 @@
 		<MaxRemedyConnectionCount>80</MaxRemedyConnectionCount><!-- 池中连接不够用时，补救生成的直接连接最大量 -->
 		<!--<CleanupTimestampMs>30000</CleanupTimestampMs>&lt;!&ndash; 链接池清理时间间隔，单位毫秒 &ndash;&gt;-->
 		<MaxRequestTimeMs>60000</MaxRequestTimeMs><!-- 连接每次执行sql的最大时间，单位毫秒 -->
+		<InitSql><![CDATA[SET timezone = 'Asia/Tokyo';]]></InitSql>
+
 	</Storage>
 
 	<Storage>
@@ -118,6 +127,8 @@
 		<MaxRemedyConnectionCount>80</MaxRemedyConnectionCount><!-- 池中连接不够用时，补救生成的直接连接最大量 -->
 		<!--<CleanupTimestampMs>30000</CleanupTimestampMs>&lt;!&ndash; 链接池清理时间间隔，单位毫秒 &ndash;&gt;-->
 		<MaxRequestTimeMs>60000</MaxRequestTimeMs><!-- 连接每次执行sql的最大时间，单位毫秒 -->
+		<InitSql><![CDATA[SET timezone = 'Asia/Tokyo';]]></InitSql>
+
 	</Storage>
 
 </Storages>

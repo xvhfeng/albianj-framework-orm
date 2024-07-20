@@ -2,11 +2,13 @@ package org.albianj.impl.dal.storage;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.albianj.AblServRouter;
 import org.albianj.ServRouter;
 import org.albianj.api.dal.object.DBOpt;
 import org.albianj.api.dal.object.StgAttr;
 import org.albianj.api.kernel.logger.LogLevel;
 import org.albianj.api.dal.object.RStgAttr;
+import org.albianj.common.utils.StringsUtil;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -47,6 +49,16 @@ public class HCPWapper extends FreeDBP {
             if (Connection.TRANSACTION_NONE != sa.getTransactionLevel()) {
                 conn.setTransactionIsolation(sa.getTransactionLevel());
             }
+            // 不需要在这里设置，HCP有initsql的接口
+//            String initSql = rsa.getStgAttr().getInitSql();
+//            if(StringsUtil.isNotEmptyTrimmed(initSql)) {
+//                AblServRouter.log(sessionId,LogLevel.Debug,
+//                        "Storage:{} exec init sql:{}",rsa.getStgAttr().getName(),initSql);
+//                if(!conn.prepareStatement(initSql).execute()) {
+//                    AblServRouter.logAndThrowNew(sessionId,LogLevel.Error,
+//                            "fail in Storage:{} exec init sql:{}",rsa.getStgAttr().getName(),initSql);
+//                }
+//            }
             conn.setAutoCommit(isAutoCommit);
             return conn;
         } catch (SQLException e) {
@@ -94,6 +106,17 @@ public class HCPWapper extends FreeDBP {
                 config.setConnectionTimeout(2 * 1000);
             }
             config.setValidationTimeout(1000);
+            String initSql = rsa.getStgAttr().getInitSql();
+            if(StringsUtil.isNotEmptyTrimmed(initSql)) {
+                AblServRouter.log(sessionid,LogLevel.Debug,
+                        "Storage:{} set init sql:{}",rsa.getStgAttr().getName(),initSql);
+                config.setConnectionInitSql(initSql);
+//                if(!conn.prepareStatement(initSql).execute()) {
+//                    AblServRouter.logAndThrowNew(sessionId,LogLevel.Error,
+//                            "fail in Storage:{} exec init sql:{}",rsa.getStgAttr().getName(),initSql);
+//                }
+            }
+
 
         } catch (Exception e) {
             ServRouter.logAndThrowAgain(sessionid,LogLevel.Error,e,

@@ -30,4 +30,5 @@ public class StgTempAttr {
     private int cleanupTimestampMs = 30000;
     private int maxRequestTimeMs = 60000;
     private String urlParaments;
+    private String initSql;
 }

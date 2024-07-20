@@ -246,6 +246,11 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
             tempAttr.setUrlParaments(sUrlParaments);
         }
 
+        String initSql = XmlUtil.getSingleChildNodeValue(node, "InitSql");
+        if(StringsUtil.isNotEmptyTrimmed(initSql)) {
+            tempAttr.setInitSql(initSql);
+        }
+
         String sWaitTimeWhenGetMs = XmlUtil.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");
         String sLifeCycleTime = XmlUtil.getSingleChildNodeValue(node, "LifeCycleTime");
         String sWaitInFreePoolMs = XmlUtil.getSingleChildNodeValue(node, "WaitInFreePoolMs");
@@ -421,6 +426,11 @@ public class AlbianStorageParserService extends FreeAlbianStorageParserService {
         String sUrlParaments = XmlUtil.getSingleChildNodeValue(node, "UrlParaments");
         if(!StringsUtil.isNullEmptyTrimmed(sUrlParaments)) {
             storage.setUrlParaments(sUrlParaments);
+        }
+
+        String initSql = XmlUtil.getSingleChildNodeValue(node, "InitSql");
+        if(StringsUtil.isNotEmptyTrimmed(initSql)) {
+            storage.setInitSql(initSql);
         }
 
         String sWaitTimeWhenGetMs = XmlUtil.getSingleChildNodeValue(node, "WaitTimeWhenGetMs");

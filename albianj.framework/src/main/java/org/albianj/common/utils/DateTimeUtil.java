@@ -40,6 +40,7 @@ package org.albianj.common.utils;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -223,5 +224,54 @@ public class DateTimeUtil {
         cal.set(Calendar.MILLISECOND,0);
         cal.add(Calendar.DATE,1);
         return new java.sql.Date(cal.getTimeInMillis());
+    }
+
+    public static Date toDate(LocalDateTime ldt) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = ldt.atZone(zoneId);
+        Date date = Date.from(zdt.toInstant());
+        return date;
+    }
+
+    public static LocalDateTime toLocalDateTime(Date dt) {
+        Instant instant = dt.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+        return localDateTime;
+    }
+
+    public static Date toDate(LocalDate ldt) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDate localDate = LocalDate.now();
+        ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
+
+        Date date = Date.from(zdt.toInstant());
+        return date;
+    }
+
+    public static LocalDate toLocalDate(Date dt) {
+        Instant instant = dt.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        // atZone()方法返回在指定时区从此Instant生成的ZonedDateTime。
+        LocalDate localDate = instant.atZone(zoneId).toLocalDate();
+        return localDate;
+    }
+
+
+    public static Date nowDate() {
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        Date date = Date.from(zdt.toInstant());
+        return date;
+    }
+
+    public static LocalDateTime nowLocalDateTime() {
+        Date date = new Date();
+        Instant instant = date.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+        return localDateTime;
     }
 }

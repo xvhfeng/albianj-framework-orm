@@ -1,6 +1,5 @@
 package org.albianj.common.config;
 
-
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -10,4 +9,6 @@ import java.lang.annotation.*;
 public @interface ConfigItem {
     String Name() default "";
     String Desc() default "";
+    boolean MaybeEmpty() default true;
+    boolean IsSkip() default false;
 }

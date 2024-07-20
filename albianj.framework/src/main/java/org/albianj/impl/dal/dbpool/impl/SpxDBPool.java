@@ -1,6 +1,8 @@
 package org.albianj.impl.dal.dbpool.impl;
 
+import org.albianj.AblServRouter;
 import org.albianj.ServRouter;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.dal.dbpool.IPoolingConnection;
 import org.albianj.impl.dal.dbpool.ISpxDBPool;
 import org.albianj.impl.dal.dbpool.ISpxDBPoolConfig;
@@ -43,7 +45,7 @@ public class SpxDBPool implements ISpxDBPool {
 
         for (int i = 0; i < pool.cf.getMinConnections(); i++) {
             try {
-                IPoolingConnection conn = pool.newConnection(true);
+                IPoolingConnection conn = pool.newConnection(sessionId,true);
                 pool.freeConnections.add(conn);
             } catch (SQLException e) {
                 ServRouter.log(sessionId, LogLevel.Error,e,
@@ -141,7 +143,7 @@ public class SpxDBPool implements ISpxDBPool {
         }
     }
 
-    private IPoolingConnection newConnection(boolean isPooling) throws SQLException {
+    private IPoolingConnection newConnection(String sessionId,boolean isPooling) throws SQLException {
         IPoolingConnection pconn = null;
         long now = System.currentTimeMillis();
         if (this.cf != null) {
@@ -151,6 +153,15 @@ public class SpxDBPool implements ISpxDBPool {
             pconn = new PoolingConnection(conn, System.currentTimeMillis(), isPooling);
             pconn.setLastUsedTimeMs(now);
             pconn.setStartupTimeMs(now);
+            String initSql = cf.getConnectionInitSql();
+            if(StringsUtil.isNotEmptyTrimmed(initSql)) {
+                ServRouter.log(sessionId,LogLevel.Debug,
+                        "database:{} exec init sql:{}",cf.getUrl(),initSql);
+                if(!conn.prepareStatement(initSql).execute()) {
+                    ServRouter.logAndThrowNew(sessionId,LogLevel.Error,
+                            "fail in database:{} exec init sql:{}",cf.getUrl(),initSql);
+                }
+            }
         }
         return pconn;
     }
@@ -190,7 +201,7 @@ public class SpxDBPool implements ISpxDBPool {
                     pconn.getLastUsedTimeMs(), pconn.getStartupTimeMs(), pconn.getReuseTimes(),
                     (now - pconn.getLastUsedTimeMs() - cf.getWaitInFreePoolMs()), pconn.isValid() ? "true" : "false");
                 pconn.close();
-                pconn = newConnection(true);
+                pconn = newConnection(sessionId,true);
             }
             usePoolingConnection(sessionId, pconn);
             return pconn;
@@ -201,7 +212,7 @@ public class SpxDBPool implements ISpxDBPool {
         if (this.getBusyCount() < this.cf.getMaxConnections()) { // maybe not threadsafe but soso
             ServRouter.log(sessionId,  LogLevel.Info,
                     "DBPOOL :{}.not have free connection and new pooling one.", cf.getPoolName());
-            pconn = newConnection(true);
+            pconn = newConnection(sessionId,true);
             usePoolingConnection(sessionId, pconn);
             return pconn;
         }
@@ -212,7 +223,7 @@ public class SpxDBPool implements ISpxDBPool {
                 ServRouter.log(sessionId,  LogLevel.Warn,
                         "DBPOOL :{}.all connection is busy,the config is not waitting and new remedy one.",
                     cf.getPoolName());
-                pconn = newConnection(false);
+                pconn = newConnection(sessionId,false);
                 useRemedyConnection(sessionId, pconn);
                 if (this.getRemedyCount() >= cf.getMaxRemedyConnectionCount() / 2) {
                     ServRouter.log(sessionId,  LogLevel.Info,
@@ -252,7 +263,7 @@ public class SpxDBPool implements ISpxDBPool {
             ServRouter.log(sessionId,  LogLevel.Error,
                     "DBPOOL :{}.all connection is busy and wait timeout.try new remedy connection.",
                 cf.getPoolName());
-            pconn = newConnection(false);
+            pconn = newConnection(sessionId,false);
             useRemedyConnection(sessionId, pconn);
             if (this.getRemedyCount() >= cf.getMaxRemedyConnectionCount() / 2) {
                 ServRouter.log(sessionId,  LogLevel.Info,
@@ -485,7 +496,7 @@ public class SpxDBPool implements ISpxDBPool {
                         int sub = cf.getMinConnections() - currConnsCount;
                         for (int i = 0; i < sub; i++) {
                             try {
-                                IPoolingConnection pconn = pool.newConnection(true);
+                                IPoolingConnection pconn = pool.newConnection(ServRouter.__StartupSessionId,true);
                                 pushFreeConnection(pconn);
                             } catch (SQLException e) {
                                 ServRouter.log(ServRouter.__StartupSessionId,  LogLevel.Info,e,

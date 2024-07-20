@@ -52,4 +52,8 @@ public interface ISpxDBPoolConfig {
     public long getMaxRequestTimeMs();
 
     public void setMaxRequestTimeMs(long maxRequestTimeMs);
+
+    String getConnectionInitSql();
+
+    void setConnectionInitSql(String connectionInitSql);
 }

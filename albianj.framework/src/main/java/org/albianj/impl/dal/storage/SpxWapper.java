@@ -1,6 +1,8 @@
 package org.albianj.impl.dal.storage;
 
+import org.albianj.AblServRouter;
 import org.albianj.ServRouter;
+import org.albianj.common.utils.StringsUtil;
 import org.albianj.impl.dal.dbpool.ISpxDBPool;
 import org.albianj.impl.dal.dbpool.ISpxDBPoolConfig;
 import org.albianj.impl.dal.dbpool.impl.SpxDBPool;
@@ -36,6 +38,7 @@ public class SpxWapper extends FreeDBP {
                 conn.setTransactionIsolation(sa.getTransactionLevel());
             }
             conn.setAutoCommit(isAutoCommit);
+
             return conn;
         } catch (SQLException e) {
             ServRouter.log(sessionId,  LogLevel.Error,e,
@@ -59,6 +62,9 @@ public class SpxWapper extends FreeDBP {
             String url = FreeAlbianStorageParserService.generateConnectionUrl(rsa);
             cf.setDriverName(DRIVER_CLASSNAME);
             cf.setUrl(url);
+            if(StringsUtil.isNotEmptyTrimmed(rsa.getStgAttr().getInitSql())) {
+                cf.setConnectionInitSql(rsa.getStgAttr().getInitSql());
+            }
 //            if (AlbianLevel.Debug == KernelSetting.getAlbianLevel()) {
                 cf.setUsername(stgAttr.getUser());
                 cf.setPassword(stgAttr.getPassword());

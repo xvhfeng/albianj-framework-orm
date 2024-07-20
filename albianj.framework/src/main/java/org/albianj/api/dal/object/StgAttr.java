@@ -68,6 +68,7 @@ public class StgAttr {
     private int maxRemedyConnectionCount = 50;
     private int cleanupTimestampMs = 30000;
     private int maxRequestTimeMs = 60000;
+    private String initSql;
 
     private String urlParaments;
     private String templateName;

@@ -184,11 +184,20 @@ public class RdrJobAdp extends FreeRdrJobAdp implements IRdrJobAdp {
         if (!sbOrderby.isEmpty()) {
             sbCmdTxt.append(" ORDER BY ").append(sbOrderby);
         }
-        if (0 <= start && 0 < step) {
-            sbCmdTxt.append(" LIMIT ").append(start).append(", ").append(step);
-        }
-        if (0 > start && 0 < step) {
-            sbCmdTxt.append(" LIMIT ").append(step);
+        if (DBOpt.MySql == sbStyle) {
+            if (0 <= start && 0 < step) {
+                sbCmdTxt.append(" LIMIT ").append(start).append(", ").append(step);
+            }
+            if (0 > start && 0 < step) {
+                sbCmdTxt.append(" LIMIT ").append(step);
+            }
+        } else if (DBOpt.RedShift == sbStyle) {
+            if (0 <= start && 0 < step) {
+                sbCmdTxt.append(" OFFSET ").append(start).append(" LIMIT ").append(step);
+            }
+            if (0 > start && 0 < step) {
+                sbCmdTxt.append(" LIMIT ").append(step);
+            }
         }
         return sbCmdTxt;
     }

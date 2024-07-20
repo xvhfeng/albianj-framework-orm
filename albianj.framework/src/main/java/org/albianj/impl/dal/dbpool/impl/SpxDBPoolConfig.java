@@ -37,6 +37,8 @@ public class SpxDBPoolConfig implements ISpxDBPoolConfig {
     //timestamp for startup cleanup connection;
     private long cleanupTimestampMs = 30 * 1000;
 
+    private String connectionInitSql;
+
 
     public long getCleanupTimestampMs() {
         return cleanupTimestampMs;
@@ -165,5 +167,14 @@ public class SpxDBPoolConfig implements ISpxDBPoolConfig {
         this.maxRequestTimeMs = maxRequestTimeMs;
     }
 
+    @Override
+    public String getConnectionInitSql(){
+        return this.connectionInitSql;
+    }
+
+    @Override
+    public void setConnectionInitSql(String connectionInitSql){
+        this.connectionInitSql = connectionInitSql;
+    }
 
 }
