@@ -8,6 +8,7 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface AblObjRant {
+    String TableName() default "";
     boolean SqlFieldUseUnderline() default false;
     boolean TableNameUseUnderline() default false;
 }

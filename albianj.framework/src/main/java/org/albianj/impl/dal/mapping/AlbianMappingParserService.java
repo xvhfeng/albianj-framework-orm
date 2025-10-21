@@ -200,6 +200,19 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
             AlbianEntityMetadata.put(type, pkgEntityAttr);
         }
 
+
+        String tblNameToUnderLine = XmlUtil.getAttributeValue(node, "TableNameToUnderLine");
+        String fieldNameToUnderLine = XmlUtil.getAttributeValue(node, "FieldNameToUnderLine");
+        String tblName = XmlUtil.getAttributeValue(node, "TableName");
+        boolean isTblNameToUnderLine = pkgEntityAttr.isTableNameUseUnderline();
+        boolean isFieldNameToUnderLine = pkgEntityAttr.isSqlFieldUseUnderline();
+        if(StringsUtil.isNotEmptyTrimmed(tblNameToUnderLine)) {
+            isTblNameToUnderLine = Boolean.parseBoolean(tblNameToUnderLine);
+        }
+        if(StringsUtil.isNotEmptyTrimmed(fieldNameToUnderLine)) {
+            isFieldNameToUnderLine = Boolean.parseBoolean(fieldNameToUnderLine);
+        }
+
         Class<?> implClzz = null;
         try {
             implClzz = AlbianClassLoader.getInstance().loadClass(type);
@@ -213,27 +226,34 @@ public class AlbianMappingParserService extends FreeAlbianMappingParserService {
                     "the type:{} is not found",type);
         }
 
+
+
         pkgEntityAttr.setImplClzz(implClzz);
 
         DrAttr defaultRouting = new DrAttr();
         defaultRouting.setName(AlbianDataRouterParserService.DEFAULT_ROUTING_NAME);
         defaultRouting.setOwner("dbo");
         defaultRouting.setStorageName(AlbianStorageParserService.DEFAULT_STORAGE_NAME);
-        String csn = null;
-        try {
-            csn = ReflectUtil.getClassSimpleName(AlbianClassLoader.getInstance(), type);
-        } catch (ClassNotFoundException e) {
-            ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId,LogLevel.Error,e,
+        if(StringsUtil.isNotEmptyTrimmed(tblName)) {
+            defaultRouting.setTableName(tblName);
+        } else {
+            String csn = null;
+            try {
+                csn = ReflectUtil.getClassSimpleName(AlbianClassLoader.getInstance(), type);
+            } catch (ClassNotFoundException e) {
+                ServRouter.logAndThrowAgain(ServRouter.__StartupSessionId, LogLevel.Error, e,
 
-                    "the type:{} is not found",type);
-        }
-        if (null != csn) {
+                        "the type:{} is not found", type);
+            }
+            if (StringsUtil.isNotEmptyTrimmed(csn) && isTblNameToUnderLine ) {
+                csn = StringsUtil.camelToUnderline(csn);
+            }
             defaultRouting.setTableName(csn);
         }
 
         Map<String, AblEntityFieldAttr> entityFieldAttr = null;
         if (SetUtil.isEmpty(pkgEntityAttr.getFields())) {
-            entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz);
+            entityFieldAttr = AlbianEntityRantScaner.scanFields(implClzz,isFieldNameToUnderLine);
             pkgEntityAttr.setFields(entityFieldAttr);
         } else {
             entityFieldAttr = pkgEntityAttr.getFields();

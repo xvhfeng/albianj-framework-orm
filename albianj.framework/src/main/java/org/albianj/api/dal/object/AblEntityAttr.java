@@ -53,6 +53,4 @@ public class AblEntityAttr {
     private Class<?> implClzz = null;
     private boolean tableNameUseUnderline = false;
     private boolean sqlFieldUseUnderline = false;
-
-
 }

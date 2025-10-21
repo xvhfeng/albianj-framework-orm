@@ -18,6 +18,7 @@ import org.albianj.api.dal.object.rants.AblDrRant;
 import org.albianj.api.dal.object.rants.AblDrsRant;
 import org.albianj.api.dal.object.rants.AblObjRant;
 import org.albianj.api.dal.service.AlbianEntityMetadata;
+import org.apache.logging.log4j.util.Strings;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -60,7 +61,7 @@ public class AlbianEntityRantScaner {
 
                         objAttr.setImplClzz(clzz);
 
-                        Map<String, AblEntityFieldAttr> fields = scanFields(clzz);
+                        Map<String, AblEntityFieldAttr> fields = scanFields(clzz,or.SqlFieldUseUnderline());
                         if (!SetUtil.isEmpty(fields)) {
                             objAttr.setFields(fields);
                         }
@@ -68,12 +69,12 @@ public class AlbianEntityRantScaner {
                         objAttr.setSqlFieldUseUnderline(or.SqlFieldUseUnderline());
                         objAttr.setTableNameUseUnderline(or.TableNameUseUnderline());
 
-                        DrAttr defaultRouting = makeDefaultDataRouter(clzz);
+                        DrAttr defaultRouting = makeDefaultDataRouter(clzz,or.TableNameUseUnderline(),or.TableName());
                         objAttr.setDefaultRouting(defaultRouting);
 
 //                        clzz.getAnnotation(AlbianObjectDataRoutersRant.class);
                         AblDrsRant drr =  clzz.getAnnotation(AblDrsRant.class);
-                        DrsAttr pkgDataRouterAttr = scanRouters(clzz, drr);
+                        DrsAttr pkgDataRouterAttr = scanRouters(clzz, drr,or.TableNameUseUnderline(),or.TableName());
                         //set data router
                         if (null != pkgDataRouterAttr) {
                             DrsAttr cfgDataRouterAttr = objAttr.getDataRouters();
@@ -107,7 +108,7 @@ public class AlbianEntityRantScaner {
                 });
     }
 
-    private static DrsAttr scanRouters(Class<?> clzz, AblDrsRant drr)  {
+    private static DrsAttr scanRouters(Class<?> clzz, AblDrsRant drr,boolean isTblNameUseUnderLine,String tblName)  {
         if (null == drr) {
             return null;
         }
@@ -131,16 +132,16 @@ public class AlbianEntityRantScaner {
         drsAttr.setReaderRouterEnable(drr.ReaderRoutersEnable());
         drsAttr.setWriterRouterEnable(drr.WriterRoutersEnable());
 
-        Map<String, DrAttr> rMap = scanRouter(clzz, drr.ReaderRouters());
+        Map<String, DrAttr> rMap = scanRouter(clzz, drr.ReaderRouters(),isTblNameUseUnderLine,tblName);
         drsAttr.setReaderRouters(rMap);
 
-        Map<String, DrAttr> wMap = scanRouter(clzz, drr.WriterRouters());
+        Map<String, DrAttr> wMap = scanRouter(clzz, drr.WriterRouters(),isTblNameUseUnderLine,tblName);
         drsAttr.setWriterRouters(wMap);
         return drsAttr;
 
     }
 
-    private static Map<String, DrAttr> scanRouter(Class<?> clzz, AblDrRant[] rrs) {
+    private static Map<String, DrAttr> scanRouter(Class<?> clzz, AblDrRant[] rrs,boolean isTblNameUseUnderLine,String tblNameDef) {
         Map<String, DrAttr> map = new HashMap<>();
         for (AblDrRant odrr : rrs) {
             if (odrr.Enable()) {
@@ -152,11 +153,21 @@ public class AlbianEntityRantScaner {
                 if (!StringsUtil.isNullEmptyTrimmed(odrr.TableOwner())) {
                     dra.setOwner(odrr.TableOwner());
                 }
-                if (!StringsUtil.isNullEmptyTrimmed(odrr.TableName())) {
-                    dra.setTableName(odrr.TableName());
-                } else {
-                    dra.setTableName(clzz.getSimpleName());
+
+                String tblName = StringsUtil.isNullEmptyTrimmed(odrr.TableName()) ? tblNameDef : odrr.TableName() ;
+                if(StringsUtil.isNullEmptyTrimmed(tblName)) {
+                    tblName = clzz.getSimpleName();
+                    if(isTblNameUseUnderLine){
+                        tblName =  StringsUtil.camelToUnderline(tblName);
+                    }
                 }
+                dra.setTableName(tblName);
+
+//                if (!StringsUtil.isNullEmptyTrimmed()) {
+//                    dra.setTableName(odrr.TableName());
+//                } else {
+//
+//                }
                 map.put(dra.getName(), dra);
 
             }
@@ -165,7 +176,7 @@ public class AlbianEntityRantScaner {
     }
 
 
-    public static Map<String, AblEntityFieldAttr> scanFields(Class<?> clzz) {
+    public static Map<String, AblEntityFieldAttr> scanFields(Class<?> clzz,boolean isFieldNameUseUnderLine) {
 
         Class tempClass = clzz;
         List<Field> fields = new ArrayList<>() ;
@@ -195,12 +206,26 @@ public class AlbianEntityRantScaner {
                     fAttr.setPropertyName(propertyName);
                 }
 
+                String fieldName = fr.FieldName();
+                do {
+                    if(StringsUtil.isNullEmptyTrimmed(fieldName)) {
+                        fieldName = f.getName();
+                        if (fr.IgnoreToUnderLine()) {
+                            break;
+                        }
+                        if (isFieldNameUseUnderLine) {
+                            fieldName = StringsUtil.camelToUnderline(fieldName);
+                            break;
+                        }
+                    }
+                }while (false);
+                fAttr.setSqlFieldName(fieldName);
 
-                if (StringsUtil.isNullEmptyTrimmed(fr.FieldName())) {
-                    fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
-                } else {
-                    fAttr.setSqlFieldName(fr.FieldName());
-                }
+//                if (StringsUtil.isNullEmptyTrimmed()) {
+//                    fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
+//                } else {
+//                    fAttr.setSqlFieldName(fr.FieldName());
+//                }
 
 
                 fAttr.setAllowNull(fr.IsAllowNull());
@@ -235,7 +260,13 @@ public class AlbianEntityRantScaner {
                 fAttr.setName(f.getName());
                 String propertyName = FieldConvert.fieldName2PropertyName(f.getName());
                 fAttr.setPropertyName(propertyName);
-                fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
+                String fieldName = f.getName();
+                if (isFieldNameUseUnderLine) {
+                    fieldName = StringsUtil.camelToUnderline(fieldName);
+                }
+                fAttr.setSqlFieldName(fieldName);
+
+//                fAttr.setSqlFieldName(StringsUtil.uppercasingFirstLetter(propertyName));
                 fAttr.setDatabaseType(SqlTypeConv.toSqlType(f.getType()));
                 fAttr.setEntityField(f);
                 try {
@@ -261,12 +292,17 @@ public class AlbianEntityRantScaner {
     }
 
 
-    private static DrAttr makeDefaultDataRouter(Class<?> implClzz) {
+    private static DrAttr makeDefaultDataRouter(Class<?> implClzz,boolean isTableNameUseUnderline,String tblNameDef) {
         DrAttr defaultRouting = new DrAttr();
         defaultRouting.setName(AlbianDataRouterParserService.DEFAULT_ROUTING_NAME);
         defaultRouting.setOwner("dbo");
         defaultRouting.setStorageName(AlbianStorageParserService.DEFAULT_STORAGE_NAME);
-        defaultRouting.setTableName(implClzz.getSimpleName());
+        String tblName = StringsUtil.isNullEmptyTrimmed(tblNameDef) ? implClzz.getSimpleName() : tblNameDef ;
+        if(isTableNameUseUnderline) {
+            String tn = StringsUtil.lowercasingFirstLetter(implClzz.getSimpleName());
+            tblName = StringsUtil.camelToUnderline(tn);
+        }
+        defaultRouting.setTableName(tblName);
         return defaultRouting;
     }
 

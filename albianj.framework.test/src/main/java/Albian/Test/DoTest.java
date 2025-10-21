@@ -45,8 +45,8 @@ public class DoTest implements IAblCommandLine {
 
     private static void test1()  {
         IUserService us = ServRouter.getService("",IUserService.class, IUserService.Name);
-        AblServRouter.log("Test app",LogLevel.Debug,"in expr load count:{}",us.testInExpr());
-        AblServRouter.log("Test app",LogLevel.Debug,"like expr load count:{}",us.testLikeExpr());
+//        AblServRouter.log("Test app",LogLevel.Debug,"in expr load count:{}",us.testInExpr());
+//        AblServRouter.log("Test app",LogLevel.Debug,"like expr load count:{}",us.testLikeExpr());
 
         if(us.batchAddUser()){
                 AblServRouter.log("Test Application", LogLevel.Debug, "batch add users success");

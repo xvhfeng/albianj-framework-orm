@@ -209,7 +209,8 @@ public class StringsUtil extends StringUtils {
     }
 
     public static String camelToUnderline(String str) {
-        Matcher matcher = HUMP_PATTERN.matcher(str);
+        String lowStr = lowercasingFirstLetter(str);
+        Matcher matcher = HUMP_PATTERN.matcher(lowStr);
         StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
             matcher.appendReplacement(sb, UNDERLINE + matcher.group(0).toLowerCase());
