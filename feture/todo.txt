@@ -2,7 +2,6 @@
 1.  join 功能
 3.  支持DDL语言 可以根据albianj object的注解自动创建表
 4.  查询不用非要制定class result支持map
-5.  不需要load即可进行insert or update功能，且支持区分null是否被使用
 6.  加强异常、log信息，启动信息
 7.  增加select时候的指定列
 8.  delete、update增加where条件（非主键依赖）的能力
@@ -57,4 +56,5 @@
 38. 增加LocaleDateTime，增加LocaleDate，增加ZoneDateTime，推荐
 39. 数据库链接增加了initsql的功能
 40. 自动驼峰转下划线(首字母小写）
+41.  不需要load即可进行insert or update功能，且支持区分null是否被使用 --upsert功能
 
